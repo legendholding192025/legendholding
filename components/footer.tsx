@@ -13,6 +13,20 @@ import {
   ArrowRight,
 } from "lucide-react"
 
+const TikTokIcon = ({ size = 20, className = "" }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    className={className}
+  >
+    <path d="M16.6 5.82s.51.5 0 0A4.278 4.278 0 015.9 5.82s-.51.5 0 0z" />
+    <path d="M19 10.5v4.6a7.1 7.1 0 11-7.1-7.1v4.6a2.5 2.5 0 102.5 2.5V5h4.6z" />
+  </svg>
+)
+
 export function Footer() {
   const currentYear = new Date().getFullYear()
 
@@ -25,11 +39,11 @@ export function Footer() {
           <div className="space-y-6">
             <Link href="/" className="inline-block">
               <Image
-                src="/images/legend-logo-white.png"
+                src="https://res.cloudinary.com/dosxengut/image/upload/v1746802991/image_ummqsj.png"
                 alt="Legend Holding Group"
-                width={180}
-                height={60}
-                className="h-12 w-auto"
+                width={450}
+                height={200}
+                className="h-16 w-auto"
               />
             </Link>
             <p className="text-gray-400 text-sm leading-relaxed">
@@ -81,6 +95,15 @@ export function Footer() {
               >
                 <span className="sr-only">YouTube</span>
                 <Youtube size={20} />
+              </Link>
+              <Link
+                href="https://tiktok.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-400 hover:text-white transition-colors"
+              >
+                <span className="sr-only">TikTok</span>
+                <TikTokIcon size={20} />
               </Link>
             </div>
           </div>
@@ -174,17 +197,19 @@ export function Footer() {
               <li className="flex items-start">
                 <MapPin size={20} className="text-secondary flex-shrink-0 mr-3 mt-1" />
                 <span className="text-gray-400">
-                  Legend Holding Group Headquarters
+                  Jebel Ali Freezone,
                   <br />
-                  Sheikh Zayed Road, Dubai
+                  Plot No. S30502 – opposite Redington,
+                  <br />
+                  Gate5 – Mina Jebel Ali – Dubai
                   <br />
                   United Arab Emirates
                 </span>
               </li>
               <li className="flex items-center">
                 <Phone size={20} className="text-secondary flex-shrink-0 mr-3" />
-                <Link href="tel:+97144123456" className="text-gray-400 hover:text-white transition-colors">
-                  +971 4 412 3456
+                <Link href="tel:+97142340738" className="text-gray-400 hover:text-white transition-colors">
+                  +971 4 234 0738
                 </Link>
               </li>
               <li className="flex items-center">

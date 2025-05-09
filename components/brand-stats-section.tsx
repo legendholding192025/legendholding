@@ -11,9 +11,10 @@ interface CounterProps {
   duration: number
   suffix?: string
   isInView: boolean
+  format?: string
 }
 
-const Counter = ({ end, duration, suffix = "", isInView }: CounterProps) => {
+const Counter = ({ end, duration, suffix = "", isInView, format }: CounterProps) => {
   const [count, setCount] = useState(0)
 
   useEffect(() => {
@@ -41,6 +42,10 @@ const Counter = ({ end, duration, suffix = "", isInView }: CounterProps) => {
     }
   }, [end, duration, isInView])
 
+  if (format === "million" && count === 1) {
+    return <span>1 Million{suffix}</span>
+  }
+
   return (
     <span>
       {count}
@@ -55,68 +60,37 @@ export function BrandStatsSection() {
 
   const stats = [
     {
-      icon: <Users className="h-7 w-7" />,
-      value: 500,
+      icon: <Building2 className="h-7 w-7" />,
+      value: 20,
       suffix: "+",
-      label: "Employees",
+      label: "Brands",
       color: "bg-primary",
       delay: 0,
     },
     {
-      icon: <Globe className="h-7 w-7" />,
-      value: 35,
+      icon: <Users className="h-7 w-7" />,
+      value: 1,
       suffix: "+",
-      label: "Countries",
+      label: "Customers",
       color: "bg-secondary",
       delay: 0.1,
+      format: "million"
     },
     {
-      icon: <Building2 className="h-7 w-7" />,
-      value: 20,
+      icon: <Globe className="h-7 w-7" />,
+      value: 10,
       suffix: "+",
-      label: "Business",
+      label: "Countries",
       color: "bg-primary",
       delay: 0.2,
     },
     {
-      icon: <Clock className="h-7 w-7" />,
-      value: 20,
-      suffix: "+",
-      label: "Years",
+      icon: <Building2 className="h-7 w-7" />,
+      value: 1,
+      suffix: "B USD",
+      label: "Revenue",
       color: "bg-secondary",
       delay: 0.3,
-    },
-    {
-      icon: <Car className="h-7 w-7" />,
-      value: 20,
-      suffix: "+",
-      label: "Car Brands",
-      color: "bg-primary",
-      delay: 0.4,
-    },
-    {
-      icon: <Users className="h-7 w-7" />,
-      value: 34,
-      suffix: "+",
-      label: "Nationalites",
-      color: "bg-secondary",
-      delay: 0.5,
-    },
-    {
-      icon: <CarTaxiFront className="h-7 w-7" />,
-      value: 4000,
-      suffix: "+",
-      label: "Vehicles on road",
-      color: "bg-primary",
-      delay: 0.6,
-    },
-    {
-      icon: <Handshake className="h-7 w-7" />,
-      value: 70,
-      suffix: "+",
-      label: "Partners",
-      color: "bg-secondary",
-      delay: 0.7,
     },
   ]
 
@@ -175,7 +149,7 @@ export function BrandStatsSection() {
           </motion.p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10">
           {stats.map((stat, index) => (
             <motion.div
               key={index}
@@ -190,7 +164,13 @@ export function BrandStatsSection() {
                   <div className={cn("p-3 rounded-lg text-white", stat.color)}>{stat.icon}</div>
                   <div>
                     <h3 className="text-3xl font-bold text-gray-900 mb-1 flex items-center">
-                      <Counter end={stat.value} duration={2000} suffix={stat.suffix} isInView={isInView} />
+                      <Counter 
+                        end={stat.value} 
+                        duration={2000} 
+                        suffix={stat.suffix} 
+                        isInView={isInView}
+                        format={stat.format}
+                      />
                     </h3>
                     <p className="text-gray-600">{stat.label}</p>
                   </div>
