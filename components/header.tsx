@@ -268,9 +268,9 @@ export function Header() {
           <Image
             src={logoUrl || "/placeholder.svg"}
             alt="Legend Holding Group"
-            width={180}
-            height={60}
-            className="h-8 md:h-10 lg:h-12 w-auto"
+            width={220}
+            height={80}
+            className="h-10 md:h-12 lg:h-14 w-auto"
             priority
           />
         </Link>
