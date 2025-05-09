@@ -20,12 +20,7 @@ const brandLogos: BrandLogo[] = [
     url: "/business/legend-motors",
   },
   
-  {
-    id: "miramotors",
-    name: "Miramotors",
-    logo: "/images/brands/miramotors.png",
-    url: "/business/miramotors",
-  },
+
   {
     id: "skywell",
     name: "Skywell",
@@ -53,13 +48,13 @@ const brandLogos: BrandLogo[] = [
   {
     id: "212",
     name: "212",
-    logo: "/images/brands/212.png",
+    logo: "https://res.cloudinary.com/dosxengut/image/upload/v1746788883/Legend-automobile-service-centre-01-1024x471_me8mnh.png",
     url: "/business/212",
   },
   {
     id: "rental-services",
     name: "Legend Rental",
-    logo: "/images/brands/rental.png",
+    logo: "https://res.cloudinary.com/dosxengut/image/upload/v1746794059/Legend-world-rent-a-car-Logo-1_oqrb2x.webp",
     url: "/business/rental",
   },
   {
@@ -71,19 +66,19 @@ const brandLogos: BrandLogo[] = [
   {
     id: "facility-services",
     name: "Legend Facility",
-    logo: "/images/brands/facility.png",
+    logo: "https://res.cloudinary.com/dosxengut/image/upload/v1746793661/WhatsApp_Image_2025-05-09_at_4.26.34_PM_p8xzld.jpg",
     url: "/business/facility",
   },
   {
     id: "travel-services",
     name: "Legend Travel",
-    logo: "/images/brands/travel.png",
+    logo: "https://res.cloudinary.com/dosxengut/image/upload/v1746791315/ltt1_epvsac.png",
     url: "/business/travel",
   },
   {
     id: "tech-solutions",
     name: "Legend Tech",
-    logo: "/images/brands/tech.png",
+    logo: "https://res.cloudinary.com/dosxengut/image/upload/v1746793661/WhatsApp_Image_2025-05-09_at_4.26.15_PM_qnt87i.jpg",
     url: "/business/technology",
   },
 ]
@@ -161,13 +156,21 @@ export function BrandLogoCarousel() {
                   isMobile ? "w-1/2" : isTablet ? "w-1/4" : "w-1/6",
                 )}
               >
-                <div className="bg-white rounded-lg p-6 h-32 flex items-center justify-center border border-gray-100 hover:border-gray-200 hover:shadow-md transition-all duration-300 mx-2">
+                <div className={cn(
+                  "rounded-lg p-6 h-32 flex items-center justify-center border transition-all duration-300 mx-2",
+                  // Add dark background for specific logos that are white
+                  brand.id === "jidu" || brand.id === "kaiyi" ? "bg-gray-900" : "bg-white",
+                  "hover:shadow-md border-gray-200"
+                )}>
                   <Image
                     src={brand.logo || "/placeholder.svg"}
                     alt={brand.name}
                     width={160}
                     height={80}
-                    className="max-h-16 w-auto object-contain opacity-90 hover:opacity-100 transition-opacity duration-300"
+                    className={cn(
+                      "max-h-16 w-auto object-contain transition-opacity duration-300",
+                      (brand.id === "jidu" || brand.id === "kaiyi") ? "opacity-100" : "opacity-90 hover:opacity-100"
+                    )}
                   />
                 </div>
               </div>

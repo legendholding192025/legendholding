@@ -3,6 +3,7 @@ import { HeroSection } from "@/components/hero-section"
 import { Newsroom } from "@/components/news-section"
 import { CSRSection } from "@/components/csr-section"
 import { BrandLogoCarousel } from "@/components/brand-logo-carousel"
+import { BrandStatsSection } from "@/components/brand-stats-section"
 import { Footer } from "@/components/footer"
 
 export default function Home() {
@@ -13,6 +14,7 @@ export default function Home() {
         videoUrl="https://res.cloudinary.com/dosxengut/video/upload/v1746786385/LEGEND0416_1_x0nlfv.mp4"
       />
       <BrandLogoCarousel />
+      <BrandStatsSection />
       <CSRSection />
       <Newsroom />
       <Footer />

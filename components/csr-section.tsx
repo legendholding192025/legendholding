@@ -22,7 +22,7 @@ const csrInitiatives: CSRInitiative[] = [
     title: "Environmental Sustainability",
     description:
       "Our commitment to reducing carbon footprint through renewable energy adoption, waste reduction, and sustainable business practices.",
-    image: "https://res.cloudinary.com/dosxengut/image/upload/v1746785857/20-KW-DC-Charger-Home-EV-Charger_zhfwwl.webp",
+    image: "https://res.cloudinary.com/dosxengut/image/upload/v1746797599/iStock-1009934102_cre0yr.webp",
     icon: <Leaf className="h-6 w-6" />,
     url: "/csr/environmental-sustainability",
   },
@@ -40,7 +40,7 @@ const csrInitiatives: CSRInitiative[] = [
     title: "Humanitarian Relief",
     description:
       "Providing aid and support during crises and natural disasters, ensuring essential resources reach those in need.",
-    image: "https://res.cloudinary.com/dosxengut/image/upload/v1746786003/Emergency-Relief-Initiative-796x372-1_xktqfm.webp",
+    image: "https://res.cloudinary.com/dosxengut/image/upload/v1746797713/blog-corporate-social-responsibility-program_olhz5m.webp",
     icon: <Heart className="h-6 w-6" />,
     url: "/csr/humanitarian-relief",
   },
@@ -201,25 +201,7 @@ export function CSRSection() {
           </div>
         </div>
 
-        {/* Impact numbers */}
-        <div className="mt-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="bg-white p-6 rounded-lg shadow-md text-center">
-            <div className="text-4xl font-bold text-primary mb-2">$2.5M+</div>
-            <p className="text-gray-600">Invested in CSR initiatives</p>
-          </div>
-          <div className="bg-white p-6 rounded-lg shadow-md text-center">
-            <div className="text-4xl font-bold text-primary mb-2">15+</div>
-            <p className="text-gray-600">Community projects completed</p>
-          </div>
-          <div className="bg-white p-6 rounded-lg shadow-md text-center">
-            <div className="text-4xl font-bold text-primary mb-2">30%</div>
-            <p className="text-gray-600">Carbon footprint reduction</p>
-          </div>
-          <div className="bg-white p-6 rounded-lg shadow-md text-center">
-            <div className="text-4xl font-bold text-primary mb-2">10,000+</div>
-            <p className="text-gray-600">Lives positively impacted</p>
-          </div>
-        </div>
+      
       </div>
     </section>
   )
