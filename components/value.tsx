@@ -13,42 +13,6 @@ import {
 } from "@heroicons/react/24/outline"
 import Image from "next/image"
 
-// Animation variants for Lumo
-const lumoVariants = {
-  hidden: { 
-    opacity: 0,
-    scale: 0.8,
-    y: 20
-  },
-  visible: { 
-    opacity: 1,
-    scale: 1,
-    y: 0,
-    transition: {
-      duration: 0.8,
-      ease: [0.22, 1, 0.36, 1]
-    }
-  },
-  float: {
-    y: [-10, 10],
-    transition: {
-      y: {
-        duration: 2,
-        repeat: Infinity,
-        repeatType: "reverse",
-        ease: "easeInOut"
-      }
-    }
-  },
-  hover: {
-    scale: 1.1,
-    rotate: [0, -5, 5, 0],
-    transition: {
-      duration: 0.5
-    }
-  }
-}
-
 export default function CompanyValuesInfographic() {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, amount: 0.2, margin: "100px" })
@@ -181,28 +145,6 @@ export default function CompanyValuesInfographic() {
           ))}
         </div>
       </div>
-
-      {/* Lumo Character */}
-      <motion.div
-        className="absolute left-4 lg:left-8 bottom-4 lg:bottom-8 w-[120px] h-[120px] lg:w-[150px] lg:h-[150px] cursor-pointer z-20"
-        variants={lumoVariants}
-        initial="hidden"
-        animate={isInView ? ["visible", "float"] : "hidden"}
-        whileHover="hover"
-        style={{
-          x: mousePosition.x / 25,
-          y: mousePosition.y / 25,
-        }}
-      >
-        <Image
-          src="https://res.cloudinary.com/dosxengut/image/upload/v1747740934/lumo-with-logo_c9fly3.png"
-          alt="Lumo - Our Brand Mascot"
-          fill
-          className="object-contain"
-          priority
-          sizes="(max-width: 768px) 120px, 150px"
-        />
-      </motion.div>
     </section>
   )
 }
