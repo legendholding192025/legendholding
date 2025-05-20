@@ -86,7 +86,7 @@ export function Newsroom() {
       <div className="container mx-auto px-4">
         <div className="flex flex-col md:flex-row md:items-center justify-between mb-10">
           <div>
-            <h2 className="text-3xl font-bold text-primary mb-2">Latest News</h2>
+            <h2 className="text-3xl sm:text-4xl font-bold text-primary mb-2">Latest News</h2>
             <p className="text-gray-600 max-w-2xl">
               Stay updated with the latest developments, announcements, and achievements from Legend Holding Group.
             </p>

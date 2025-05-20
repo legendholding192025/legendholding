@@ -140,7 +140,7 @@ export function BrandLogoCarousel() {
   return (
     <section className="py-16 bg-white">
       <div className="container mx-auto px-4">
-        <h2 className="text-3xl font-bold text-primary mb-12 text-center">Our Brands</h2>
+        <h2 className="text-3xl sm:text-4xl font-bold text-primary mb-12 text-center">Our Brands</h2>
 
         <div
           className="relative overflow-hidden"

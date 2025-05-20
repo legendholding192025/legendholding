@@ -43,6 +43,7 @@ type ServiceItem = {
   hasSubmenu: boolean
   brandLogo?: string
   brandLogos?: { [key: string]: string }
+  brandLogoStyles?: { [key: string]: string }
   submenuItems: string[]
 }
 
@@ -81,10 +82,14 @@ const motorServices: (ServiceItem | MotorService)[] = [
                                             hasSubmenu: true,
                                             submenuItems: ["SKYWELL", "KAIYI", "LI AUTO", "212"],
                                             brandLogos: {
-                                              "SKYWELL": "https://res.cloudinary.com/dosxengut/image/upload/v1747661840/skywell-logo_aqwmzf.png",
-                                              "KAIYI": "https://res.cloudinary.com/dosxengut/image/upload/v1747661840/kaiyi-logo_nxhfvt.png",
-                                              "LI AUTO": "https://res.cloudinary.com/dosxengut/image/upload/v1747661840/li-auto-logo_kxqwvn.png",
-                                              "212": "https://res.cloudinary.com/dosxengut/image/upload/v1747661840/212-logo_lmn3xt.png"
+                                              "SKYWELL": "https://res.cloudinary.com/dosxengut/image/upload/v1746788882/logo_sisnn9.png",
+                                              "KAIYI": "https://res.cloudinary.com/dosxengut/image/upload/v1746788951/download_wmkc6s.png",
+                                              "LI AUTO": "https://res.cloudinary.com/dosxengut/image/upload/v1746788883/logo-text-black-en.e6782a94_chlojl.svg",
+                                              "212": "https://res.cloudinary.com/dosxengut/image/upload/v1746788882/logo212b_qk5xsj.png"
+                                            },
+                                            brandLogoStyles: {
+                                              "KAIYI": "bg-black p-1 rounded",
+                                              "212": "bg-black p-1 rounded"
                                             }
                                           },
   {
@@ -758,13 +763,15 @@ export function Header() {
                                                     <span className="font-medium">{item}</span>
                                                   </div>
                                                                                                      {hasLogo(service) && getLogoForItem(service, item) && (
-                                                     <Image
-                                                       src={getLogoForItem(service, item)}
-                                                       alt={`${item} Logo`}
-                                                       width={40}
-                                                       height={20}
-                                                       className="object-contain opacity-80 group-hover/brand:opacity-100 transition-opacity"
-                                                     />
+                                                     <div className={service.brandLogoStyles?.[item] || ""}>
+                                                       <Image
+                                                         src={getLogoForItem(service, item)}
+                                                         alt={`${item} Logo`}
+                                                         width={40}
+                                                         height={20}
+                                                         className="object-contain opacity-80 group-hover/brand:opacity-100 transition-opacity"
+                                                       />
+                                                     </div>
                                                    )}
                                                 </Link>
                                               ))}
@@ -1042,23 +1049,37 @@ export function Header() {
                                             hasSubmenu: true,
                                             brandLogo: "https://res.cloudinary.com/dosxengut/image/upload/v1747660840/Lifan-Logo_behsab.png",
                                             submenuItems: ["LIFAN"]
-                                          },
+                                          } as ServiceItem,
                                           {
                                             title: "Legend Motors Trading",
-                                            hasSubmenu: false
-                                          },
+                                            hasSubmenu: false,
+                                            submenuItems: []
+                                          } as ServiceItem,
                                           {
                                             title: "Legend Motors Dealership",
-                                            hasSubmenu: false
-                                          },
+                                            hasSubmenu: true,
+                                            submenuItems: ["SKYWELL", "KAIYI", "LI AUTO", "212"],
+                                            brandLogos: {
+                                              "SKYWELL": "https://res.cloudinary.com/dosxengut/image/upload/v1746788882/logo_sisnn9.png",
+                                              "KAIYI": "https://res.cloudinary.com/dosxengut/image/upload/v1746788951/download_wmkc6s.png",
+                                              "LI AUTO": "https://res.cloudinary.com/dosxengut/image/upload/v1746788883/logo-text-black-en.e6782a94_chlojl.svg",
+                                              "212": "https://res.cloudinary.com/dosxengut/image/upload/v1746788882/logo212b_qk5xsj.png"
+                                            },
+                                            brandLogoStyles: {
+                                              "KAIYI": "bg-black p-1 rounded",
+                                              "212": "bg-black p-1 rounded"
+                                            }
+                                          } as ServiceItem,
                                           {
                                             title: "Legend Commercial",
-                                            hasSubmenu: false
-                                          },
+                                            hasSubmenu: false,
+                                            submenuItems: []
+                                          } as ServiceItem,
                                           {
                                             title: "Legend Pre Owned Vehicles",
-                                            hasSubmenu: false
-                                          }
+                                            hasSubmenu: false,
+                                            submenuItems: []
+                                          } as ServiceItem
                                         ].map((service, index) => (
                                           <div key={index}>
                                             {service.hasSubmenu ? (
@@ -1093,13 +1114,15 @@ export function Header() {
                                                         <span className="font-medium">{item}</span>
                                                       </div>
                                                       {hasLogo(service) && getLogoForItem(service, item) && (
-                                                        <Image
-                                                          src={getLogoForItem(service, item) || ""}
-                                                          alt={`${item} Logo`}
-                                                          width={32}
-                                                          height={16}
-                                                          className="object-contain opacity-80"
-                                                        />
+                                                        <div className={service.brandLogoStyles?.[item] || ""}>
+                                                          <Image
+                                                            src={getLogoForItem(service, item) || ""}
+                                                            alt={`${item} Logo`}
+                                                            width={32}
+                                                            height={16}
+                                                            className="object-contain opacity-80"
+                                                          />
+                                                        </div>
                                                       )}
                                                     </Link>
                                                   ))}
