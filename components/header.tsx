@@ -1,29 +1,20 @@
 "use client"
 
 import type React from "react"
-
 import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import {
   ChevronDown,
-  Menu,
   X,
+  ChevronRight,
   History,
   Users,
   Briefcase,
   Handshake,
-  Car,
   Building2,
-  CarTaxiFront,
-  Zap,
-  Wrench,
-  Plane,
-  Cpu,
-  ChevronRight,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
-
 import { useMediaQuery } from "@/hooks/use-media-query"
 
 const logoUrl = "/images/legend-logo.png"
@@ -31,18 +22,82 @@ const logoUrl = "/images/legend-logo.png"
 type SubMenuItem = {
   title: string
   url: string
+  image: string
+  description: string
   icon?: React.ReactNode
-  image?: string
-  description?: string
 }
 
 type BusinessCategory = {
   title: string
-  icon: React.ReactNode
-  image?: string
-  description?: string
-  items: SubMenuItem[]
+  description: string
+  items: {
+    title: string
+    url: string
+    image: string
+    description: string
+  }[]
 }
+
+type ServiceItem = {
+  title: string
+  hasSubmenu: boolean
+  brandLogo?: string
+  brandLogos?: { [key: string]: string }
+  submenuItems: string[]
+}
+
+type MotorService = ServiceItem & {
+  brandLogo: string
+}
+
+function hasLogo(service: ServiceItem): boolean {
+  return 'brandLogo' in service || 'brandLogos' in service;
+}
+
+function getLogoForItem(service: ServiceItem, item: string): string {
+  if ('brandLogo' in service && service.brandLogo) {
+    return service.brandLogo;
+  }
+  if ('brandLogos' in service && service.brandLogos && service.brandLogos[item]) {
+    return service.brandLogos[item];
+  }
+  return "";
+}
+
+const motorServices: (ServiceItem | MotorService)[] = [
+  {
+    title: "Legend Motorcycles",
+    hasSubmenu: true,
+    brandLogo: "https://res.cloudinary.com/dosxengut/image/upload/v1747660840/Lifan-Logo_behsab.png",
+    submenuItems: ["LIFAN"]
+  },
+  {
+    title: "Legend Motors Trading",
+    hasSubmenu: false,
+    submenuItems: []
+  },
+                                            {
+                                            title: "Legend Motors Dealership",
+                                            hasSubmenu: true,
+                                            submenuItems: ["SKYWELL", "KAIYI", "LI AUTO", "212"],
+                                            brandLogos: {
+                                              "SKYWELL": "https://res.cloudinary.com/dosxengut/image/upload/v1747661840/skywell-logo_aqwmzf.png",
+                                              "KAIYI": "https://res.cloudinary.com/dosxengut/image/upload/v1747661840/kaiyi-logo_nxhfvt.png",
+                                              "LI AUTO": "https://res.cloudinary.com/dosxengut/image/upload/v1747661840/li-auto-logo_kxqwvn.png",
+                                              "212": "https://res.cloudinary.com/dosxengut/image/upload/v1747661840/212-logo_lmn3xt.png"
+                                            }
+                                          },
+  {
+    title: "Legend Commercial",
+    hasSubmenu: false,
+    submenuItems: []
+  },
+  {
+    title: "Legend Pre Owned Vehicles",
+    hasSubmenu: false,
+    submenuItems: []
+  }
+];
 
 type MenuItem = {
   title: string
@@ -54,103 +109,107 @@ type MenuItem = {
 
 const menuItems: MenuItem[] = [
   {
-    title: "About Us",
+    title: "Who We Are",
     url: "/about",
     hasSubmenu: true,
     submenu: [
       {
-        title: "Our Journey",
+        title: "Vision, Mission & Values",
         url: "/about/journey",
-        icon: <History className="w-5 h-5" />,
-        image: "/images/about/journey.png",
+        image: "https://res.cloudinary.com/dosxengut/image/upload/v1747649702/mission-values-lead_ch3qfe.webp",
         description: "Discover the story of Legend Holding Group and our path to success.",
+        icon: <History className="w-5 h-5" />
       },
       {
-        title: "Our Team",
+        title: "The Team",
         url: "/about/team",
-        icon: <Users className="w-5 h-5" />,
-        image: "/images/about/team.png",
+        image: "https://res.cloudinary.com/dosxengut/image/upload/v1747650256/1744992098296_cqtkjo.jpg",
         description: "Meet the dedicated professionals behind our continued growth and innovation.",
+        icon: <Users className="w-5 h-5" />
       },
       {
-        title: "Capabilities",
+        title: "Brand Story",
         url: "/about/capabilities",
-        icon: <Briefcase className="w-5 h-5" />,
-        image: "/images/about/capabilities.png",
+        image: "https://res.cloudinary.com/dosxengut/image/upload/v1747649828/lumo-with-logo_crratq.png",
         description: "Explore our diverse range of expertise across multiple industries.",
+        icon: <Briefcase className="w-5 h-5" />
       },
       {
-        title: "Partners",
+        title: "Our Partners",
         url: "/about/partners",
-        icon: <Handshake className="w-5 h-5" />,
-        image: "/images/about/partners.png",
+        image: "https://res.cloudinary.com/dosxengut/image/upload/v1747650381/1746961012298_hxmgin.jpg",
         description: "Learn about our strategic partnerships that drive mutual success.",
+        icon: <Handshake className="w-5 h-5" />
+      },
+      {
+        title: "CSR",
+        url: "/about/csr",
+        image: "https://res.cloudinary.com/dosxengut/image/upload/v1746797713/blog-corporate-social-responsibility-program_olhz5m.webp",
+        description: "Our commitment to corporate social responsibility and community impact.",
+        icon: <Handshake className="w-5 h-5" />
       },
     ],
   },
   {
-    title: "Our Business",
+    title: "Our Brands",
     url: "/business",
     hasSubmenu: true,
     businessCategories: [
       {
-        title: "Automotive Trading",
-        icon: <Car className="w-5 h-5" />,
-        image: "/images/business/automotive-trading.png",
-        description: "Premium automotive trading solutions with a focus on quality and customer satisfaction.",
+        title: "Our Brands",
+        description: "Discover our diverse portfolio of innovative brands across multiple sectors.",
         items: [
-          { title: "Legend Motors", url: "/business/legend-motors" },
-          { title: "Automatic Motors", url: "/business/automatic-motors" },
-          { title: "Miramotors", url: "/business/miramotors" },
+          { 
+            title: "Zul Energy",
+            url: "/business/zul-energy",
+            image: "https://res.cloudinary.com/dosxengut/image/upload/v1747645931/1681896024283_sl22tw.jpg",
+            description: "Pioneering sustainable energy solutions for a brighter future."
+          },
+          { 
+            title: "Legend Motors",
+            url: "/business/legend-motors",
+            image: "https://res.cloudinary.com/dosxengut/image/upload/v1747649304/Official-Car-Dealers-in-Dubai-Cover-180620210841_ldmnuq.jpg",
+            description: "Premium automotive solutions and services."
+          },
+          { 
+            title: "Legend Logistics",
+            url: "/business/legend-logistics",
+            image: "https://res.cloudinary.com/dosxengut/image/upload/v1747647684/NYK-CURRENTLY-HAS-A-STAKE-IN-OVER-40-COMPANIES-ALL-OVER-THE-WORLD-PROVIDING-FINISHED-CAR-INLAND-LOGISTICS_h8kfgk.webp",
+            description: "Efficient and reliable logistics solutions for global trade."
+          },
+          { 
+            title: "Legend Mobility",
+            url: "/business/legend-mobility",
+            image: "https://res.cloudinary.com/dosxengut/image/upload/v1747648445/csm_cruising_visual_43e29fa7bb_ruiloc.jpg",
+            description: "Comprehensive mobility solutions for modern transportation needs."
+          },
+          
+          { 
+            title: "Legend Global Media",
+            url: "/business/legend-global-media",
+            image: "https://res.cloudinary.com/dosxengut/image/upload/v1747648530/Stock_Photo_Digital_Media_otoogv.jpg",
+            description: "Innovative media solutions for the digital age."
+          },
+          { 
+            title: "Legend x",
+            url: "/business/legend-x",
+            image: "https://res.cloudinary.com/dosxengut/image/upload/v1747649548/the-importance-of-modern-technology-in-business_bd28rl.webp",
+            description: "Cutting-edge technology and innovation hub."
+          },
+         
+          { 
+            title: "Legend Travel and Tourism",
+            url: "/business/legend-travel",
+            image: "https://res.cloudinary.com/dosxengut/image/upload/v1747648726/bliss_travels_and_tours_cover_p7t8ma.jpg",
+            description: "Exceptional travel experiences and tourism services."
+          },
+          { 
+            title: "Legend Green Energy Solutions",
+            url: "/business/legend-green-energy",
+            image: "https://res.cloudinary.com/dosxengut/image/upload/v1747648852/in-copy-about-charging-green_qjoyjk.jpg",
+            description: "Sustainable energy solutions for a greener future."
+          },
         ],
-      },
-      {
-        title: "Dealerships",
-        icon: <Building2 className="w-5 h-5" />,
-        image: "/images/business/dealerships.png",
-        description: "Authorized dealerships for premium automotive brands across the region.",
-        items: [
-          { title: "Skywell", url: "/business/skywell" },
-          { title: "Kaiyi", url: "/business/kaiyi" },
-          { title: "Li Auto", url: "/business/li-auto" },
-          { title: "JIDU", url: "/business/jidu" },
-          { title: "212", url: "/business/212" },
-        ],
-      },
-      {
-        title: "Automotive Rental",
-        icon: <CarTaxiFront className="w-5 h-5" />,
-        image: "/images/business/automotive-rental.png",
-        description: "Flexible and reliable automotive rental services for all your transportation needs.",
-        items: [{ title: "Rental Services", url: "/business/rental" }],
-      },
-      {
-        title: "Energy",
-        icon: <Zap className="w-5 h-5" />,
-        image: "/images/business/energy.png",
-        description: "Innovative energy solutions focused on sustainability and efficiency.",
-        items: [{ title: "Energy Solutions", url: "/business/energy" }],
-      },
-      {
-        title: "Facility Management",
-        icon: <Wrench className="w-5 h-5" />,
-        image: "/images/business/facility-management.png",
-        description: "Comprehensive facility management services to optimize your operations.",
-        items: [{ title: "Facility Services", url: "/business/facility" }],
-      },
-      {
-        title: "Tours and Travels",
-        icon: <Plane className="w-5 h-5" />,
-        image: "/images/business/tours-travels.png",
-        description: "Exceptional travel experiences with personalized service and attention to detail.",
-        items: [{ title: "Travel Services", url: "/business/travel" }],
-      },
-      {
-        title: "Technology",
-        icon: <Cpu className="w-5 h-5" />,
-        image: "/images/business/technology.png",
-        description: "Cutting-edge technology solutions to drive digital transformation and innovation.",
-        items: [{ title: "Tech Solutions", url: "/business/technology" }],
       },
     ],
   },
@@ -172,19 +231,181 @@ export function Header() {
   const [activeMenu, setActiveMenu] = useState<string | null>(null)
   const [isScrolled, setIsScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [searchQuery, setSearchQuery] = useState("")
+  const [isSearchFocused, setIsSearchFocused] = useState(false)
+  const [searchResults, setSearchResults] = useState<{
+    menuItems: typeof menuItems,
+    brands: {
+      category: string;
+      items: SubMenuItem[];
+    }[];
+  } | null>(null)
   const isMobile = useMediaQuery("(max-width: 1023px)")
   const isTablet = useMediaQuery("(min-width: 768px) and (max-width: 1023px)")
   const headerRef = useRef<HTMLElement>(null)
+  const searchInputRef = useRef<HTMLInputElement>(null)
   const submenuTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const [hoveredItem, setHoveredItem] = useState<string | null>(null)
+  const [touchStartY, setTouchStartY] = useState<number | null>(null)
+  const [lastScrollTop, setLastScrollTop] = useState(0)
 
+  // Handle scroll direction for header visibility
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10)
+      const st = window.scrollY;
+      if (st > lastScrollTop && st > 100) {
+        // Scrolling down & past threshold - hide header
+        headerRef.current?.classList.add('-translate-y-full');
+      } else {
+        // Scrolling up or at top - show header
+        headerRef.current?.classList.remove('-translate-y-full');
+      }
+      setLastScrollTop(st);
+      setIsScrolled(st > 10);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [lastScrollTop]);
+
+  // Handle touch events for swipe to close
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStartY(e.touches[0].clientY);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (touchStartY === null) return;
+    
+    const touchDiff = e.touches[0].clientY - touchStartY;
+    if (touchDiff > 50) { // Swipe down threshold
+      setMobileMenuOpen(false);
+      setTouchStartY(null);
     }
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
+  };
+
+  const handleTouchEnd = () => {
+    setTouchStartY(null);
+  };
+
+  // Focus trap for mobile menu
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      const focusableElements = headerRef.current?.querySelectorAll(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+      
+      if (focusableElements && focusableElements.length > 0) {
+        const firstElement = focusableElements[0] as HTMLElement;
+        const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
+        
+        const handleTabKey = (e: KeyboardEvent) => {
+          if (e.key === 'Tab') {
+            if (e.shiftKey) {
+              if (document.activeElement === firstElement) {
+                e.preventDefault();
+                lastElement.focus();
+              }
+            } else {
+              if (document.activeElement === lastElement) {
+                e.preventDefault();
+                firstElement.focus();
+              }
+            }
+          }
+        };
+        
+        document.addEventListener('keydown', handleTabKey);
+        return () => document.removeEventListener('keydown', handleTabKey);
+      }
+    }
+  }, [mobileMenuOpen]);
+
+  // Close menu on escape key
+  useEffect(() => {
+    const handleEscapeKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setMobileMenuOpen(false);
+        setActiveMenu(null);
+      }
+    };
+    
+    document.addEventListener('keydown', handleEscapeKey);
+    return () => document.removeEventListener('keydown', handleEscapeKey);
+  }, []);
+
+  // Search functionality
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+
+    // Clear existing timeout
+    if (searchTimeoutRef.current) {
+      clearTimeout(searchTimeoutRef.current);
+    }
+
+    // Debounce search
+    searchTimeoutRef.current = setTimeout(() => {
+      if (query.trim() === "") {
+        setSearchResults(null);
+        return;
+      }
+
+      const searchTerms = query.toLowerCase().split(" ");
+      
+      // Search through main menu items
+      const filteredMenuItems = menuItems.filter(item => {
+        const titleMatch = item.title.toLowerCase().includes(query.toLowerCase());
+        if (titleMatch) return true;
+
+        // Search through submenu items
+        if (item.submenu) {
+          return item.submenu.some(subItem => 
+            subItem.title.toLowerCase().includes(query.toLowerCase()) ||
+            (subItem.description && subItem.description.toLowerCase().includes(query.toLowerCase()))
+          );
+        }
+
+        // Search through business categories
+        if (item.businessCategories) {
+          return item.businessCategories.some(category =>
+            category.items.some(business =>
+              business.title.toLowerCase().includes(query.toLowerCase())
+            )
+          );
+        }
+
+        return false;
+      });
+
+      // Search through brands specifically
+      const brandResults = menuItems
+        .filter(item => item.businessCategories)
+        .map(item => item.businessCategories![0])
+        .map(category => ({
+          category: category.title,
+          items: category.items.filter(business =>
+            searchTerms.every(term =>
+              business.title.toLowerCase().includes(term)
+            )
+          )
+        }))
+        .filter(result => result.items.length > 0);
+
+      setSearchResults({
+        menuItems: filteredMenuItems,
+        brands: brandResults
+      });
+    }, 300); // Debounce delay
+  };
+
+  // Clear search timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (searchTimeoutRef.current) {
+        clearTimeout(searchTimeoutRef.current);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     if (!isMobile && mobileMenuOpen) {
@@ -214,6 +435,17 @@ export function Header() {
       }
     }
   }, [])
+
+  useEffect(() => {
+    if (activeMenu) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [activeMenu]);
 
   const handleMenuHover = (menuTitle: string) => {
     // Set the hovered item immediately for visual feedback
@@ -256,307 +488,699 @@ export function Header() {
   }
 
   return (
-    <header
-      ref={headerRef}
-      className={cn(
-        "fixed top-0 left-0 w-full z-50 transition-all duration-300",
-        isScrolled ? "bg-white shadow-md py-2" : "bg-white/95 backdrop-blur-sm py-3 md:py-4",
-      )}
-    >
-      <div className="container mx-auto px-4 flex items-center justify-between">
-        <Link href="/" className="relative z-10">
-          <Image
-            src={logoUrl || "/placeholder.svg"}
-            alt="Legend Holding Group"
-            width={220}
-            height={80}
-            className="h-10 md:h-12 lg:h-14 w-auto"
-            priority
-          />
-        </Link>
-
-        <button
-          className="lg:hidden text-primary focus:outline-none p-2 -mr-2"
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
-          aria-expanded={mobileMenuOpen}
-          aria-controls="mobile-menu"
-        >
-          {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-        </button>
-
-        <nav className="hidden lg:flex items-center space-x-6 xl:space-x-8">
-          {menuItems.map((item) => (
-            <div
-              key={item.title}
-              className="relative"
-              onMouseEnter={() => item.hasSubmenu && handleMenuHover(item.title)}
-              onMouseLeave={handleMenuLeave}
+    <>
+      <header
+        ref={headerRef}
+        className={cn(
+          "fixed top-0 left-0 w-full z-[9999]",
+          "transition-all duration-300 transform",
+          "touch-pan-y",
+          isScrolled ? "bg-white shadow-md py-2" : "bg-white/95 backdrop-blur-sm py-3 md:py-4",
+          mobileMenuOpen && "bg-white py-2"
+        )}
+        role="banner"
+      >
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-between relative h-10 md:h-12 lg:h-14">
+            {/* Logo */}
+            <Link 
+              href="/" 
+              className="relative z-[9999]"
             >
-              <Link
-                href={item.url}
-                className={cn(
-                  "text-gray-800 font-medium text-base hover:text-primary transition-colors duration-200 flex items-center py-2 px-1 relative group",
-                  (activeMenu === item.title || hoveredItem === item.title) && "text-primary",
-                )}
-              >
-                <span className="relative">
-                  {item.title}
-                  <span
-                    className={cn(
-                      "absolute -bottom-1 left-0 w-0 h-0.5 bg-secondary transition-all duration-300 group-hover:w-full",
-                      (activeMenu === item.title || hoveredItem === item.title) && "w-full",
-                    )}
-                  ></span>
-                </span>
-                {item.hasSubmenu && (
-                  <ChevronDown
-                    className={cn(
-                      "ml-1 h-4 w-4 transition-transform duration-200",
-                      activeMenu === item.title && "rotate-180",
-                    )}
-                  />
-                )}
-              </Link>
+              <Image
+                src={logoUrl || "/placeholder.svg"}
+                alt="Legend Holding Group"
+                width={220}
+                height={80}
+                className="h-10 md:h-12 lg:h-14 w-auto"
+                priority
+              />
+            </Link>
 
-              {/* About Us Submenu with Images */}
-              {item.hasSubmenu && item.submenu && activeMenu === item.title && (
-                <div
-                  className="fixed left-0 right-0 top-[calc(100%_+_1px)] bg-white shadow-md border-t-2 border-primary z-50 animate-submenu-slide-down max-h-[80vh] overflow-y-auto"
-                  onMouseEnter={cancelMenuClose}
-                  onMouseLeave={handleMenuLeave}
-                >
-                  <div className="container mx-auto py-8 px-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                      {item.submenu.map((subItem) => (
-                        <Link
-                          key={subItem.title}
-                          href={subItem.url}
-                          className="group overflow-hidden rounded-lg border border-gray-100 hover:border-gray-200 hover:shadow-md transition-all duration-300"
-                        >
-                          <div className="relative h-40 overflow-hidden">
-                            <Image
-                              src={subItem.image || "/placeholder.svg?height=160&width=320&query=corporate office"}
-                              alt={subItem.title}
-                              width={320}
-                              height={160}
-                              className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
-                            <div className="absolute bottom-0 left-0 p-4 flex items-center space-x-3">
-                              <div className="flex-shrink-0 w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white">
-                                {subItem.icon}
-                              </div>
-                              <h3 className="text-white font-semibold text-lg">{subItem.title}</h3>
-                            </div>
-                          </div>
-                          <div className="p-4">
-                            <p className="text-gray-600 text-sm">{subItem.description}</p>
-                            <div className="mt-3 flex items-center text-secondary font-medium text-sm">
-                              <span>Learn more</span>
-                              <ChevronRight className="h-4 w-4 ml-1" />
-                            </div>
-                          </div>
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                </div>
+            {/* Mobile Menu Button */}
+            <button
+              className={cn(
+                "lg:hidden text-primary focus:outline-none relative z-[9999]",
+                "w-10 h-10 flex items-center justify-center",
+                "rounded-lg hover:bg-gray-100 active:bg-gray-200",
+                "transition-colors duration-200"
               )}
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+              aria-expanded={mobileMenuOpen}
+              aria-controls="mobile-menu"
+            >
+              <div className="relative w-6 h-6">
+                <span
+                  className={cn(
+                    "absolute left-0 block h-0.5 rounded-full bg-current transition-all duration-300",
+                    mobileMenuOpen ? "top-2.5 w-6 -rotate-45" : "top-2 w-6"
+                  )}
+                />
+                <span
+                  className={cn(
+                    "absolute left-0 block h-0.5 rounded-full bg-current transition-all duration-300",
+                    mobileMenuOpen ? "top-2.5 w-6 rotate-45" : "top-4 w-4"
+                  )}
+                />
+              </div>
+            </button>
 
-              {/* Our Business Submenu with Images */}
-              {item.hasSubmenu && item.businessCategories && activeMenu === item.title && (
-                <div
-                  className="fixed left-0 right-0 top-[calc(100%_+_1px)] bg-white shadow-md border-t-2 border-primary z-50 animate-submenu-slide-down max-h-[80vh] overflow-y-auto"
-                  onMouseEnter={cancelMenuClose}
-                  onMouseLeave={handleMenuLeave}
-                >
-                  <div className="container mx-auto py-8 px-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                      {item.businessCategories.map((category) => (
-                        <div
-                          key={category.title}
-                          className="overflow-hidden rounded-lg border border-gray-100 hover:border-gray-200 hover:shadow-md transition-all duration-300 group"
-                        >
-                          <div className="relative h-40 overflow-hidden">
-                            <Image
-                              src={category.image || "/placeholder.svg?height=160&width=320&query=business"}
-                              alt={category.title}
-                              width={320}
-                              height={160}
-                              className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
-                            <div className="absolute bottom-0 left-0 p-4 flex items-center space-x-3">
-                              <div className="flex-shrink-0 w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white">
-                                {category.icon}
-                              </div>
-                              <h3 className="text-white font-semibold text-lg">{category.title}</h3>
-                            </div>
-                          </div>
-                          <div className="p-4">
-                            <p className="text-gray-600 text-sm mb-4">{category.description}</p>
-                            <div className="space-y-1">
-                              {category.items.map((business) => (
-                                <Link
-                                  key={business.title}
-                                  href={business.url}
-                                  className="text-gray-700 hover:text-secondary transition-colors duration-200 py-1 flex items-center group/item"
-                                >
-                                  <ChevronRight className="h-4 w-4 mr-1 text-gray-400 group-hover/item:text-secondary transition-colors duration-200" />
-                                  <span>{business.title}</span>
-                                </Link>
-                              ))}
-                            </div>
-                            <Link
-                              href={`/business/${category.title.toLowerCase().replace(/\s+/g, "-")}`}
-                              className="mt-4 inline-flex items-center text-primary font-medium text-sm hover:text-secondary transition-colors duration-200"
-                            >
-                              <span>View all</span>
-                              <ChevronRight className="h-4 w-4 ml-1" />
-                            </Link>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-          ))}
-
-          <Link
-            href="/contact"
-            className="bg-primary hover:bg-primary/90 text-white px-5 py-2 rounded-md transition-all duration-300 hover:shadow-lg transform hover:-translate-y-0.5 active:translate-y-0 text-sm md:text-base md:px-6"
-          >
-            Get in Touch
-          </Link>
-        </nav>
-
-        <div
-          id="mobile-menu"
-          className={cn(
-            "fixed inset-0 bg-white z-40 lg:hidden transition-all duration-300 ease-in-out overflow-hidden",
-            mobileMenuOpen ? "translate-x-0 opacity-100" : "translate-x-full opacity-0",
-          )}
-        >
-          <div className="container mx-auto px-4 pt-20 pb-16 h-full overflow-y-auto">
-            <nav className="flex flex-col space-y-4">
+            {/* Desktop Navigation Menu */}
+            <nav className="hidden lg:flex items-center space-x-6 xl:space-x-8">
               {menuItems.map((item) => (
-                <div key={item.title} className="border-b border-gray-100 pb-4">
-                  {item.hasSubmenu ? (
-                    <details className="group">
-                      <summary className="flex justify-between items-center cursor-pointer list-none p-3 -mx-3 rounded-lg hover:bg-gray-50">
-                        <span className="text-lg md:text-xl font-medium text-gray-800">{item.title}</span>
-                        <ChevronDown className="h-5 w-5 text-primary group-open:rotate-180 transition-transform duration-300" />
-                      </summary>
-                      <div className="mt-4 pl-2 md:pl-4 space-y-4">
-                        {item.submenu && (
-                          <div className="grid grid-cols-1 gap-4">
-                            {item.submenu.map((subItem) => (
+                <div
+                  key={item.title}
+                  className="relative"
+                  onMouseEnter={() => item.hasSubmenu && handleMenuHover(item.title)}
+                  onMouseLeave={handleMenuLeave}
+                >
+                  <Link
+                    href={item.url}
+                    className={cn(
+                      "text-gray-800 font-medium text-base hover:text-primary transition-colors duration-200 flex items-center py-2 px-1 relative group",
+                      (activeMenu === item.title || hoveredItem === item.title) && "text-primary",
+                    )}
+                  >
+                    <span className="relative">
+                      {item.title}
+                      <span
+                        className={cn(
+                          "absolute -bottom-1 left-0 w-0 h-0.5 bg-secondary transition-all duration-300 group-hover:w-full",
+                          (activeMenu === item.title || hoveredItem === item.title) && "w-full",
+                        )}
+                      ></span>
+                    </span>
+                    {item.hasSubmenu && (
+                      <ChevronDown
+                        className={cn(
+                          "ml-1 h-4 w-4 transition-transform duration-200",
+                          activeMenu === item.title && "rotate-180",
+                        )}
+                      />
+                    )}
+                  </Link>
+
+                  {/* About Us Submenu with Images */}
+                  {item.hasSubmenu && item.submenu && activeMenu === item.title && (
+                    <div
+                      className="absolute left-0 right-0 top-full bg-white/95 backdrop-blur-sm shadow-lg border-t-2 border-primary z-[9998] animate-submenu-slide-down w-screen"
+                      onMouseEnter={cancelMenuClose}
+                      onMouseLeave={handleMenuLeave}
+                      style={{
+                        position: 'fixed',
+                        top: isScrolled ? '66px' : '80px',
+                        maxHeight: 'calc(100vh - 80px)',
+                        overflowY: 'auto'
+                      }}
+                    >
+                      <div className="container mx-auto py-8 px-4">
+                        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                          {item.submenu.map((subItem) => (
+                            <Link
+                              key={subItem.title}
+                              href={subItem.url}
+                              className="group overflow-hidden rounded-lg border border-gray-100 hover:border-gray-200 hover:shadow-md transition-all duration-300"
+                            >
+                              <div className="relative h-40 overflow-hidden">
+                                <Image
+                                  src={subItem.image}
+                                  alt={subItem.title}
+                                  width={320}
+                                  height={160}
+                                  className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                                <div className="absolute bottom-0 left-0 p-4">
+                                  <h3 className="text-white font-semibold text-lg">{subItem.title}</h3>
+                                </div>
+                              </div>
+                              <div className="p-4">
+                                <p className="text-gray-600 text-sm">{subItem.description}</p>
+                                <div className="mt-3 flex items-center text-secondary font-medium text-sm">
+                                  <span>Learn more</span>
+                                  <ChevronRight className="h-4 w-4 ml-1" />
+                                </div>
+                              </div>
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Our Business Submenu with Images */}
+                  {item.hasSubmenu && item.businessCategories && activeMenu === item.title && (
+                    <div
+                      className="absolute left-0 right-0 top-full bg-white/95 backdrop-blur-sm shadow-lg border-t-2 border-primary z-[9998] animate-submenu-slide-down w-screen"
+                      onMouseEnter={cancelMenuClose}
+                      onMouseLeave={handleMenuLeave}
+                      style={{
+                        position: 'fixed',
+                        top: isScrolled ? '66px' : '80px',
+                        maxHeight: 'calc(100vh - 80px)',
+                        overflowY: 'auto'
+                      }}
+                    >
+                      <div className="container mx-auto py-6 px-4 md:py-8">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6">
+                          {item.businessCategories[0].items.map((business) => (
+                            <div key={business.title} className="relative group">
                               <Link
-                                key={subItem.title}
-                                href={subItem.url}
-                                className="block rounded-lg overflow-hidden border border-gray-100"
-                                onClick={() => setMobileMenuOpen(false)}
+                                href={business.url}
+                                className="block overflow-hidden rounded-lg border border-gray-100 hover:border-gray-200 hover:shadow-md transition-all duration-300 bg-white h-full"
                               >
-                                <div className="relative h-32">
+                                <div className="relative h-40 overflow-hidden">
                                   <Image
-                                    src={
-                                      subItem.image || "/placeholder.svg?height=128&width=256&query=corporate office"
-                                    }
-                                    alt={subItem.title}
-                                    width={256}
-                                    height={128}
-                                    className="object-cover w-full h-full"
+                                    src={business.image}
+                                    alt={business.title}
+                                    width={320}
+                                    height={180}
+                                    className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
                                   />
-                                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
-                                  <div className="absolute bottom-0 left-0 p-3 flex items-center space-x-2">
-                                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white">
-                                      {subItem.icon}
-                                    </div>
-                                    <h3 className="text-white font-semibold">{subItem.title}</h3>
+                                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                                  <div className="absolute bottom-0 left-0 p-4">
+                                    <h3 className="text-white font-semibold text-lg">{business.title}</h3>
                                   </div>
                                 </div>
-                                <div className="p-3">
-                                  <p className="text-gray-600 text-sm line-clamp-2">{subItem.description}</p>
+                                <div className="p-4">
+                                  <p className="text-gray-600 text-sm">{business.description}</p>
+                                  <div className="mt-3 flex items-center text-secondary font-medium text-sm">
+                                    <span>Learn more</span>
+                                    <ChevronRight className="h-4 w-4 ml-1" />
+                                  </div>
                                 </div>
                               </Link>
-                            ))}
-                          </div>
-                        )}
-                        {item.businessCategories && (
-                          <div className="grid grid-cols-1 gap-4">
-                            {item.businessCategories.map((category) => (
-                              <div key={category.title} className="rounded-lg overflow-hidden border border-gray-100">
-                                <div className="relative h-32">
-                                  <Image
-                                    src={category.image || "/placeholder.svg?height=128&width=256&query=business"}
-                                    alt={category.title}
-                                    width={256}
-                                    height={128}
-                                    className="object-cover w-full h-full"
-                                  />
-                                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
-                                  <div className="absolute bottom-0 left-0 p-3 flex items-center space-x-2">
-                                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white">
-                                      {category.icon}
+
+                              {/* Legend Mobility Services Popup */}
+                              {business.title === "Legend Mobility" && (
+                                <div className="absolute z-[9999] transition-all duration-300 lg:left-full lg:top-0 lg:ml-2 lg:opacity-0 lg:invisible group-hover:opacity-100 group-hover:visible w-[300px] lg:w-[400px]">
+                                  <div className="bg-white rounded-lg shadow-xl border border-gray-100 p-3 md:p-4 space-y-1 md:space-y-2 w-full">
+                                    <div className="flex items-center justify-between border-b border-gray-100 pb-2 mb-2 md:mb-3">
+                                      <h4 className="font-semibold text-primary text-sm md:text-base">Our Services</h4>
+                                      <Image
+                                        src="/images/legend-logo.png"
+                                        alt="Legend Logo"
+                                        width={20}
+                                        height={20}
+                                        className="object-contain"
+                                      />
                                     </div>
-                                    <h3 className="text-white font-semibold">{category.title}</h3>
-                                  </div>
-                                </div>
-                                <div className="p-3">
-                                  <p className="text-gray-600 text-sm line-clamp-2 mb-2">{category.description}</p>
-                                  <div className="space-y-1">
-                                    {category.items.map((business) => (
+                                    {[
+                                      "Legend World Rent a Car",
+                                      "Legend Automobile Services",
+                                      "Legend Technical Services"
+                                    ].map((service, index) => (
                                       <Link
-                                        key={business.title}
-                                        href={business.url}
-                                        className="text-gray-700 hover:text-secondary transition-colors duration-200 py-1 flex items-center text-sm"
-                                        onClick={() => setMobileMenuOpen(false)}
+                                        key={index}
+                                        href={`/business/${service.toLowerCase().replace(/\s+/g, "-")}`}
+                                        className="flex items-center text-gray-600 hover:text-primary transition-colors p-2 rounded-lg hover:bg-gray-50 group/item text-sm md:text-base"
                                       >
-                                        <ChevronRight className="h-3 w-3 mr-1 text-gray-400" />
-                                        <span>{business.title}</span>
+                                        <ChevronRight className="w-4 h-4 mr-2 group-hover/item:translate-x-1 transition-transform" />
+                                        <span>{service}</span>
                                       </Link>
                                     ))}
                                   </div>
                                 </div>
-                              </div>
-                            ))}
-                          </div>
-                        )}
+                              )}
+
+                              {/* Legend Motors Services Popup */}
+                              {business.title === "Legend Motors" && (
+                                <div className="absolute z-[9999] transition-all duration-300 lg:left-full lg:top-0 lg:ml-2 lg:opacity-0 lg:invisible group-hover:opacity-100 group-hover:visible w-[300px] lg:w-[400px]">
+                                  <div className="bg-white rounded-lg shadow-xl border border-gray-100 p-3 md:p-4 space-y-1 md:space-y-2 w-full">
+                                    <div className="flex items-center justify-between border-b border-gray-100 pb-2 mb-2 md:mb-3">
+                                      <h4 className="font-semibold text-primary text-sm md:text-base">Our Services</h4>
+                                      <Image
+                                        src="/images/legend-logo.png"
+                                        alt="Legend Logo"
+                                        width={20}
+                                        height={20}
+                                        className="object-contain"
+                                      />
+                                    </div>
+                                                                        {motorServices.map((service, index) => (
+                                      <div key={index} className="relative group/submenu">
+                                        <Link
+                                          href={service.hasSubmenu ? "#" : `/business/${service.title.toLowerCase().replace(/\s+/g, "-")}`}
+                                          className="flex items-center justify-between text-gray-600 hover:text-primary transition-colors p-2 rounded-lg hover:bg-gray-50 group/item text-sm md:text-base w-full"
+                                        >
+                                          <div className="flex items-center">
+                                            <ChevronRight className="w-4 h-4 mr-2 group-hover/item:translate-x-1 transition-transform" />
+                                            <span>{service.title}</span>
+                                          </div>
+                                          {service.hasSubmenu && (
+                                            <ChevronRight className="w-4 h-4 ml-2 opacity-50 group-hover/submenu:opacity-100" />
+                                          )}
+                                        </Link>
+                                        
+                                        {/* Nested Submenu */}
+                                        {service.hasSubmenu && (
+                                          <div className="absolute left-full top-0 ml-2 opacity-0 invisible group-hover/submenu:opacity-100 group-hover/submenu:visible transition-all duration-200 w-[350px] lg:w-[450px]">
+                                            <div className="bg-white rounded-lg shadow-xl border border-gray-100 p-4 space-y-3">
+                                              <div className="flex items-center justify-between border-b border-gray-100 pb-2">
+                                                <h4 className="font-semibold text-primary text-sm md:text-base">Our Brands</h4>
+                                                <Image
+                                                  src="/images/legend-logo.png"
+                                                  alt="Legend Logo"
+                                                  width={20}
+                                                  height={20}
+                                                  className="object-contain"
+                                                />
+                                              </div>
+                                              {service.submenuItems?.map((item, subIndex) => (
+                                                <Link
+                                                  key={subIndex}
+                                                  href={`/business/motorcycles/${item.toLowerCase().replace(/\s+/g, "-")}`}
+                                                  className="flex items-center justify-between text-gray-600 hover:text-primary transition-colors p-2 rounded-lg hover:bg-gray-50 text-sm md:text-base w-full group/brand"
+                                                >
+                                                  <div className="flex items-center">
+                                                    <ChevronRight className="w-4 h-4 mr-2 group-hover/brand:translate-x-1 transition-transform" />
+                                                    <span className="font-medium">{item}</span>
+                                                  </div>
+                                                                                                     {hasLogo(service) && getLogoForItem(service, item) && (
+                                                     <Image
+                                                       src={getLogoForItem(service, item)}
+                                                       alt={`${item} Logo`}
+                                                       width={40}
+                                                       height={20}
+                                                       className="object-contain opacity-80 group-hover/brand:opacity-100 transition-opacity"
+                                                     />
+                                                   )}
+                                                </Link>
+                                              ))}
+                                            </div>
+                                          </div>
+                                        )}
+                                      </div>
+                                    ))}
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                          ))}
+                        </div>
                       </div>
-                    </details>
-                  ) : (
-                    <Link
-                      href={item.url}
-                      className="text-lg md:text-xl font-medium text-gray-800 hover:text-primary transition-colors duration-200 block p-3 -mx-3 rounded-lg hover:bg-gray-50"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      {item.title}
-                    </Link>
+                    </div>
                   )}
                 </div>
               ))}
+
               <Link
                 href="/contact"
-                className="bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-md transition-all duration-300 text-center font-medium text-lg shadow-md mt-4"
-                onClick={() => setMobileMenuOpen(false)}
+                className="bg-primary hover:bg-primary/90 text-white px-5 py-2 rounded-md transition-all duration-300 hover:shadow-lg transform hover:-translate-y-0.5 active:translate-y-0 text-sm md:text-base md:px-6"
               >
                 Get in Touch
               </Link>
             </nav>
           </div>
-
-          <button
-            className="absolute top-4 right-4 text-primary focus:outline-none p-2 bg-white/80 backdrop-blur-sm rounded-full"
-            onClick={() => setMobileMenuOpen(false)}
-            aria-label="Close menu"
-          >
-            <X className="h-6 w-6" />
-          </button>
         </div>
-      </div>
-    </header>
+
+        {/* Mobile Navigation Menu - Slides in from top */}
+        <div
+          id="mobile-menu"
+          role="navigation"
+          aria-label="Mobile navigation menu"
+          className={cn(
+            "fixed inset-0 bg-white z-[9998] lg:hidden",
+            "transition-transform duration-300 ease-in-out",
+            mobileMenuOpen ? "translate-y-0" : "-translate-y-full",
+          )}
+          style={{
+            top: '60px', // Height of the header
+            height: 'calc(100vh - 60px)',
+            WebkitOverflowScrolling: 'touch',
+            touchAction: 'pan-y pinch-zoom'
+          }}
+        >
+          <div className="h-full flex flex-col">
+            {/* Search Bar */}
+            <div 
+              className={cn(
+                "px-4 py-3 bg-white border-b border-gray-100",
+                "transition-opacity duration-300",
+                mobileMenuOpen ? "opacity-100" : "opacity-0"
+              )}
+            >
+              <div className="relative">
+                <input
+                  ref={searchInputRef}
+                  type="search"
+                  placeholder="Search menu items and brands..."
+                  value={searchQuery}
+                  onChange={handleSearch}
+                  onFocus={() => setIsSearchFocused(true)}
+                  onBlur={() => setIsSearchFocused(false)}
+                  className={cn(
+                    "w-full px-4 py-3 rounded-lg",
+                    "border border-gray-200",
+                    "focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary",
+                    "text-base appearance-none",
+                    "transition-all duration-200",
+                    isSearchFocused ? "bg-white" : "bg-gray-50"
+                  )}
+                  aria-label="Search menu items and brands"
+                  tabIndex={mobileMenuOpen ? 0 : -1}
+                />
+                <button
+                  className="absolute right-3 top-1/2 -translate-y-1/2 p-2"
+                  onClick={() => {
+                    searchInputRef.current?.focus();
+                    setSearchQuery("");
+                    setSearchResults(null);
+                  }}
+                  aria-label={searchQuery ? "Clear search" : "Focus search"}
+                  tabIndex={mobileMenuOpen ? 0 : -1}
+                >
+                  {searchQuery ? (
+                    <X className="h-5 w-5 text-gray-400" />
+                  ) : (
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                  )}
+                </button>
+              </div>
+            </div>
+
+            {/* Search Results or Regular Menu */}
+            <div 
+              className={cn(
+                "flex-1 overflow-y-auto px-4 py-2",
+                "transition-opacity duration-300 delay-150",
+                mobileMenuOpen ? "opacity-100" : "opacity-0"
+              )}
+            >
+              {searchResults ? (
+                // Search Results
+                <div className="space-y-6">
+                  {/* Menu Item Results */}
+                  {searchResults.menuItems.length > 0 && (
+                    <div className="space-y-3">
+                      <h3 className="text-sm font-medium text-gray-500 px-1">Menu Items</h3>
+                      <nav className="flex flex-col space-y-1">
+                        {searchResults.menuItems.map((item) => (
+                          <Link
+                            key={item.title}
+                            href={item.url}
+                            className={cn(
+                              "flex items-center p-4 rounded-lg",
+                              "text-base font-medium text-gray-800",
+                              "hover:bg-gray-50 active:bg-gray-100",
+                              "transition-colors duration-200"
+                            )}
+                            onClick={() => {
+                              setMobileMenuOpen(false);
+                              setSearchQuery("");
+                              setSearchResults(null);
+                            }}
+                          >
+                            {item.title}
+                          </Link>
+                        ))}
+                      </nav>
+                    </div>
+                  )}
+
+                  {/* Brand Results */}
+                  {searchResults.brands.length > 0 && (
+                    <div className="space-y-3">
+                      <h3 className="text-sm font-medium text-gray-500 px-1">Brands</h3>
+                      <div className="grid grid-cols-1 gap-3">
+                        {searchResults.brands.map(category => 
+                          category.items.map(brand => (
+                            <Link
+                              key={brand.title}
+                              href={brand.url}
+                              className="block overflow-hidden rounded-lg hover:shadow-lg transition-all duration-300"
+                              onClick={() => {
+                                setMobileMenuOpen(false);
+                                setSearchQuery("");
+                                setSearchResults(null);
+                              }}
+                            >
+                              <div className="relative aspect-[16/9] overflow-hidden">
+                                <Image
+                                  src={brand.image}
+                                  alt={brand.title}
+                                  fill
+                                  className="object-cover transition-transform duration-300 hover:scale-105"
+                                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                                <div className="absolute bottom-0 left-0 right-0 p-4">
+                                  <h4 className="text-lg font-semibold text-white mb-1">
+                                    {brand.title}
+                                  </h4>
+                                  {brand.description && (
+                                    <p className="text-sm text-white/90 line-clamp-2">
+                                      {brand.description}
+                                    </p>
+                                  )}
+                                </div>
+                              </div>
+                            </Link>
+                          ))
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* No Results */}
+                  {searchResults && searchResults.menuItems.length === 0 && searchResults.brands.length === 0 && (
+                    <div className="text-center py-8">
+                      <p className="text-gray-500">No results found for "{searchQuery}"</p>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                // Regular Menu Items
+                <nav className="flex flex-col space-y-1">
+                  {menuItems.map((item) => (
+                    <div 
+                      key={item.title} 
+                      className="border-b border-gray-100"
+                    >
+                      {item.hasSubmenu ? (
+                        <details 
+                          className="group" 
+                          open={activeMenu === item.title}
+                        >
+                          <summary 
+                            className="flex justify-between items-center p-4 cursor-pointer"
+                          >
+                            <span className="text-lg font-medium text-gray-800">{item.title}</span>
+                            <ChevronDown className="h-5 w-5 text-primary" />
+                          </summary>
+
+                          <div className="bg-gray-50 p-4">
+                            {item.submenu && (
+                              <div className="space-y-2">
+                                {item.submenu.map((subItem) => (
+                                  <Link
+                                    key={subItem.title}
+                                    href={subItem.url}
+                                    className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-100"
+                                    onClick={() => setMobileMenuOpen(false)}
+                                  >
+                                    <div className="flex-shrink-0 w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                                      {subItem.icon}
+                                    </div>
+                                    <div>
+                                      <h3 className="font-medium text-gray-800">{subItem.title}</h3>
+                                      <p className="text-sm text-gray-500">{subItem.description}</p>
+                                    </div>
+                                  </Link>
+                                ))}
+                              </div>
+                            )}
+
+                            {item.businessCategories && (
+                              <div className="space-y-4">
+                                {item.businessCategories[0].items.map((business) => (
+                                  <div key={business.title}>
+                                    <Link
+                                      href={business.url}
+                                      className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-100"
+                                      onClick={() => setMobileMenuOpen(false)}
+                                    >
+                                      <div className="flex-shrink-0 w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                                        <Building2 className="w-5 h-5" />
+                                      </div>
+                                      <div>
+                                        <h3 className="font-medium text-gray-800">{business.title}</h3>
+                                        <p className="text-sm text-gray-500">{business.description}</p>
+                                      </div>
+                                    </Link>
+
+                                    {/* Legend Mobility Submenu */}
+                                    {business.title === "Legend Mobility" && (
+                                      <div className="mt-2 ml-12 pl-4 border-l-2 border-primary/20 space-y-2">
+                                        {[
+                                          "Legend World Rent a Car",
+                                          "Legend Automobile Services",
+                                          "Legend Technical Services"
+                                        ].map((service, index) => (
+                                          <Link
+                                            key={index}
+                                            href={`/business/${service.toLowerCase().replace(/\s+/g, "-")}`}
+                                            className="flex items-center space-x-2 p-2 text-sm text-gray-600 hover:text-primary hover:bg-gray-50 rounded-lg transition-colors"
+                                            onClick={() => setMobileMenuOpen(false)}
+                                          >
+                                            <ChevronRight className="w-4 h-4 flex-shrink-0" />
+                                            <span>{service}</span>
+                                          </Link>
+                                        ))}
+                                      </div>
+                                    )}
+
+                                    {/* Legend Motors Submenu */}
+                                    {business.title === "Legend Motors" && (
+                                      <div className="mt-2 ml-12 pl-4 border-l-2 border-primary/20 space-y-2">
+                                        {[
+                                          {
+                                            title: "Legend Motorcycles",
+                                            hasSubmenu: true,
+                                            brandLogo: "https://res.cloudinary.com/dosxengut/image/upload/v1747660840/Lifan-Logo_behsab.png",
+                                            submenuItems: ["LIFAN"]
+                                          },
+                                          {
+                                            title: "Legend Motors Trading",
+                                            hasSubmenu: false
+                                          },
+                                          {
+                                            title: "Legend Motors Dealership",
+                                            hasSubmenu: false
+                                          },
+                                          {
+                                            title: "Legend Commercial",
+                                            hasSubmenu: false
+                                          },
+                                          {
+                                            title: "Legend Pre Owned Vehicles",
+                                            hasSubmenu: false
+                                          }
+                                        ].map((service, index) => (
+                                          <div key={index}>
+                                            {service.hasSubmenu ? (
+                                              <details className="group">
+                                                <summary className="flex items-center justify-between p-2 text-sm text-gray-600 hover:text-primary hover:bg-gray-50 rounded-lg transition-colors cursor-pointer">
+                                                  <div className="flex items-center space-x-2">
+                                                    <ChevronRight className="w-4 h-4 flex-shrink-0" />
+                                                    <span>{service.title}</span>
+                                                  </div>
+                                                  <ChevronDown className="w-4 h-4 transition-transform group-open:rotate-180" />
+                                                </summary>
+                                                <div className="mt-2 ml-6 pl-4 border-l-2 border-primary/10 space-y-3">
+                                                  <div className="flex items-center justify-between p-3 border-b border-gray-100">
+                                                    <h4 className="text-sm font-medium text-primary">Our Brands</h4>
+                                                    <Image
+                                                      src="/images/legend-logo.png"
+                                                      alt="Legend Logo"
+                                                      width={16}
+                                                      height={16}
+                                                      className="object-contain"
+                                                    />
+                                                  </div>
+                                                  {service.submenuItems?.map((item, subIndex) => (
+                                                    <Link
+                                                      key={subIndex}
+                                                      href={`/business/motorcycles/${item.toLowerCase().replace(/\s+/g, "-")}`}
+                                                      className="flex items-center justify-between p-2 text-sm text-gray-600 hover:text-primary hover:bg-gray-50 rounded-lg transition-colors"
+                                                      onClick={() => setMobileMenuOpen(false)}
+                                                    >
+                                                      <div className="flex items-center space-x-2">
+                                                        <ChevronRight className="w-4 h-4 flex-shrink-0" />
+                                                        <span className="font-medium">{item}</span>
+                                                      </div>
+                                                      {hasLogo(service) && getLogoForItem(service, item) && (
+                                                        <Image
+                                                          src={getLogoForItem(service, item) || ""}
+                                                          alt={`${item} Logo`}
+                                                          width={32}
+                                                          height={16}
+                                                          className="object-contain opacity-80"
+                                                        />
+                                                      )}
+                                                    </Link>
+                                                  ))}
+                                                </div>
+                                              </details>
+                                            ) : (
+                                              <Link
+                                                href={`/business/${service.title.toLowerCase().replace(/\s+/g, "-")}`}
+                                                className="flex items-center space-x-2 p-2 text-sm text-gray-600 hover:text-primary hover:bg-gray-50 rounded-lg transition-colors"
+                                                onClick={() => setMobileMenuOpen(false)}
+                                              >
+                                                <ChevronRight className="w-4 h-4 flex-shrink-0" />
+                                                <span>{service.title}</span>
+                                              </Link>
+                                            )}
+                                          </div>
+                                        ))}
+                                      </div>
+                                    )}
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        </details>
+                      ) : (
+                        <Link
+                          href={item.url}
+                          className="block p-4 text-lg font-medium text-gray-800 hover:bg-gray-50"
+                          onClick={() => setMobileMenuOpen(false)}
+                        >
+                          {item.title}
+                        </Link>
+                      )}
+                    </div>
+                  ))}
+                </nav>
+              )}
+            </div>
+
+            {/* Bottom CTA */}
+            <div 
+              className={cn(
+                "px-4 py-3 bg-white border-t border-gray-100",
+                "transition-opacity duration-300 delay-200",
+                mobileMenuOpen ? "opacity-100" : "opacity-0"
+              )}
+            >
+              <Link
+                href="/contact"
+                className={cn(
+                  "block w-full bg-primary text-white text-center",
+                  "px-6 py-4 rounded-lg font-medium",
+                  "hover:bg-primary/90 active:bg-primary/80",
+                  "transition-colors duration-200",
+                  "shadow-lg"
+                )}
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  setSearchQuery("");
+                  setSearchResults(null);
+                }}
+                tabIndex={mobileMenuOpen ? 0 : -1}
+              >
+                Get in Touch
+              </Link>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* Page Dimming Overlay */}
+      <div
+        className={cn(
+          "fixed inset-0 bg-black/20 backdrop-blur-sm z-[9997] lg:hidden",
+          "transition-opacity duration-300",
+          mobileMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+        )}
+        aria-hidden="true"
+        onClick={() => setMobileMenuOpen(false)}
+      />
+    </>
   )
 }
