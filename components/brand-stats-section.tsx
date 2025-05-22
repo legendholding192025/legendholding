@@ -96,14 +96,14 @@ export function BrandStatsSection() {
       value: 20,
       suffix: "+",
       label: "Brands",
-      color: "bg-primary",
+      color: "bg-[#5E366D]",
     },
     {
       icon: <Users className="h-7 w-7" />,
       value: 1,
       suffix: "+",
       label: "Customers a year",
-      color: "bg-secondary",
+      color: "bg-[#F39200]",
       format: "million"
     },
     {
@@ -111,40 +111,28 @@ export function BrandStatsSection() {
       value: 10,
       suffix: "+",
       label: "Countries",
-      color: "bg-primary",
+      color: "bg-[#5E366D]",
     },
     {
       icon: <Building2 className="h-7 w-7" />,
       value: 1,
       suffix: "B USD",
       label: "Sales Turnover",
-      color: "bg-secondary",
+      color: "bg-[#F39200]",
     },
   ]
 
   return (
-    <section ref={ref} className="py-20 relative overflow-hidden bg-gray-50">
-      {/* Background elements */}
-      <div className="absolute inset-0 bg-gradient-to-br from-white to-gray-100 z-0 transition-opacity duration-1000"></div>
-
-      {/* Animated gradient orbs */}
-      <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0">
-        <div className="absolute top-[-10%] right-[-5%] w-[30%] h-[30%] bg-primary/5 rounded-full blur-[80px] animate-pulse transition-all duration-1000"></div>
-        <div className="absolute bottom-[-10%] left-[-5%] w-[30%] h-[30%] bg-secondary/5 rounded-full blur-[80px] animate-pulse transition-all duration-1000"></div>
-      </div>
-
-      {/* Subtle pattern */}
-      <div className="absolute inset-0 bg-[url('/subtle-pattern.png')] bg-repeat opacity-5 mix-blend-overlay z-0 transition-opacity duration-1000"></div>
-
+    <section ref={ref} className="py-20 relative overflow-hidden bg-white">
       <div className="container relative z-10">
         <div className="flex flex-col items-center mb-12">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4 text-center"
+            className="text-3xl sm:text-4xl font-bold text-[#5E366D] mb-4 text-center"
           >
-            <span className="text-primary">
+            <span className="text-[#5E366D]">
               Capabilities
             </span>
           </motion.h2>
@@ -153,7 +141,7 @@ export function BrandStatsSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
-            className="text-gray-600 max-w-2xl mx-auto text-center"
+            className="text-[#5E366D]/80 max-w-2xl mx-auto text-center"
           >
             For over two decades, Legend Holding Group has been pioneering innovation and excellence across automotive,
             energy, facility management, and technology sectors.
@@ -170,14 +158,20 @@ export function BrandStatsSection() {
             <motion.div
               key={index}
               variants={cardVariants}
-              className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-500 hover:-translate-y-2 group will-change-transform"
+              className="bg-[rgb(234,226,214)]/20 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-500 hover:-translate-y-2 group will-change-transform relative"
             >
+              <div 
+                className="absolute inset-0 bg-gradient-to-br from-[rgb(234,226,214)]/50 to-white opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                aria-hidden="true"
+              />
               <div className={cn("h-2 transition-all duration-300 group-hover:h-3", stat.color)}></div>
-              <div className="p-6">
+              <div className="p-6 relative">
                 <div className="flex items-start gap-4">
-                  <div className={cn("p-3 rounded-lg text-white transition-transform duration-300 group-hover:scale-110", stat.color)}>{stat.icon}</div>
+                  <div className={cn("p-3 rounded-lg text-white transition-transform duration-300 group-hover:scale-110 shadow-lg", stat.color)}>
+                    {stat.icon}
+                  </div>
                   <div>
-                    <h3 className="text-3xl font-bold text-gray-900 mb-1 flex items-center">
+                    <h3 className="text-3xl font-bold text-[#5E366D] mb-1 flex items-center">
                       <Counter 
                         end={stat.value} 
                         duration={2500} 
@@ -186,16 +180,16 @@ export function BrandStatsSection() {
                         format={stat.format}
                       />
                     </h3>
-                    <p className="text-gray-600">{stat.label}</p>
+                    <p className="text-[#5E366D]/80">{stat.label}</p>
                   </div>
                 </div>
 
-                <div className="mt-4 pt-4 border-t border-gray-100">
+                <div className="mt-4 pt-4 border-t border-[#5E366D]/10">
                   <motion.div
                     initial={{ width: 0 }}
                     animate={isInView ? { width: "100%" } : {}}
                     transition={{ duration: 1.8, delay: 0.5, ease: "easeOut" }}
-                    className="h-1 bg-gradient-to-r from-primary/30 to-secondary/30 rounded-full"
+                    className={cn("h-1 rounded-full", stat.color + "/30")}
                   />
                 </div>
               </div>
@@ -209,8 +203,8 @@ export function BrandStatsSection() {
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.8 }}
           className="mt-16 text-center"
         >
-          <div className="inline-flex items-center px-6 py-3 rounded-full bg-gradient-to-r from-primary/10 to-secondary/10 text-gray-700 text-sm backdrop-blur-sm border border-gray-200 hover:from-primary/20 hover:to-secondary/20 transition-all duration-300">
-            <span className="w-2 h-2 rounded-full bg-secondary mr-2 animate-pulse"></span>
+          <div className="inline-flex items-center px-6 py-3 rounded-full bg-[rgb(234,226,214)]/20 text-[#5E366D] text-sm border border-[#5E366D]/20 hover:shadow-md transition-all duration-300 group">
+            <span className="w-2 h-2 rounded-full bg-[#F39200] mr-2 animate-pulse"></span>
             Committed to excellence and innovation since 2008
           </div>
         </motion.div>

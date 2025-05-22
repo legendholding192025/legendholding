@@ -31,7 +31,7 @@ export function Footer() {
   const currentYear = new Date().getFullYear()
 
   return (
-    <footer className="bg-gray-900 text-white pt-16 pb-8">
+    <footer className="bg-[rgb(43,28,72)] text-white pt-16 pb-8">
       <div className="container mx-auto px-4">
         {/* Main Footer Content */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 mb-12">
@@ -46,7 +46,7 @@ export function Footer() {
                 className="h-16 w-auto"
               />
             </Link>
-            <p className="text-gray-400 text-sm leading-relaxed">
+            <p className="text-white/80 text-sm leading-relaxed">
               Legend Holding Group is a diversified business conglomerate with interests spanning automotive, energy,
               facility management, travel, and technology sectors, committed to excellence and innovation.
             </p>
@@ -55,7 +55,7 @@ export function Footer() {
                 href="https://facebook.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-400 hover:text-white transition-colors"
+                className="text-white/80 hover:text-white transition-colors"
               >
                 <span className="sr-only">Facebook</span>
                 <Facebook size={20} />
@@ -64,7 +64,7 @@ export function Footer() {
                 href="https://twitter.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-400 hover:text-white transition-colors"
+                className="text-white/80 hover:text-white transition-colors"
               >
                 <span className="sr-only">Twitter</span>
                 <Twitter size={20} />
@@ -73,7 +73,7 @@ export function Footer() {
                 href="https://instagram.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-400 hover:text-white transition-colors"
+                className="text-white/80 hover:text-white transition-colors"
               >
                 <span className="sr-only">Instagram</span>
                 <Instagram size={20} />
@@ -82,7 +82,7 @@ export function Footer() {
                 href="https://linkedin.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-400 hover:text-white transition-colors"
+                className="text-white/80 hover:text-white transition-colors"
               >
                 <span className="sr-only">LinkedIn</span>
                 <Linkedin size={20} />
@@ -91,7 +91,7 @@ export function Footer() {
                 href="https://youtube.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-400 hover:text-white transition-colors"
+                className="text-white/80 hover:text-white transition-colors"
               >
                 <span className="sr-only">YouTube</span>
                 <Youtube size={20} />
@@ -100,7 +100,7 @@ export function Footer() {
                 href="https://tiktok.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-400 hover:text-white transition-colors"
+                className="text-white/80 hover:text-white transition-colors"
               >
                 <span className="sr-only">TikTok</span>
                 <TikTokIcon size={20} />
@@ -110,19 +110,19 @@ export function Footer() {
 
           {/* Column 2: Quick Links */}
           <div>
-            <h3 className="text-lg font-semibold mb-6 relative">
+            <h3 className="text-lg font-semibold mb-6 relative text-white">
               <span className="relative z-10">Quick Links</span>
-              <span className="absolute bottom-0 left-0 w-12 h-0.5 bg-[#F08900]"></span>
+              <span className="absolute bottom-0 left-0 w-12 h-0.5 bg-secondary"></span>
             </h3>
             <ul className="space-y-3">
               <li>
                 <Link
                   href="/about"
-                  className="text-gray-400 hover:text-white transition-colors flex items-center group"
+                  className="text-white/80 hover:text-white transition-colors flex items-center group"
                 >
                   <ChevronRight
                     size={16}
-                    className="mr-2 text-[#F08900] group-hover:translate-x-1 transition-transform"
+                    className="mr-2 text-secondary group-hover:translate-x-1 transition-transform"
                   />
                   About Us
                 </Link>
@@ -130,11 +130,11 @@ export function Footer() {
               <li>
                 <Link
                   href="/business"
-                  className="text-gray-400 hover:text-white transition-colors flex items-center group"
+                  className="text-white/80 hover:text-white transition-colors flex items-center group"
                 >
                   <ChevronRight
                     size={16}
-                    className="mr-2 text-[#F08900] group-hover:translate-x-1 transition-transform"
+                    className="mr-2 text-secondary group-hover:translate-x-1 transition-transform"
                   />
                   Our Business
                 </Link>
@@ -142,20 +142,23 @@ export function Footer() {
               <li>
                 <Link
                   href="/newsroom"
-                  className="text-gray-400 hover:text-white transition-colors flex items-center group"
+                  className="text-white/80 hover:text-white transition-colors flex items-center group"
                 >
                   <ChevronRight
                     size={16}
-                    className="mr-2 text-[#F08900] group-hover:translate-x-1 transition-transform"
+                    className="mr-2 text-secondary group-hover:translate-x-1 transition-transform"
                   />
                   Newsroom
                 </Link>
               </li>
               <li>
-                <Link href="/csr" className="text-gray-400 hover:text-white transition-colors flex items-center group">
+                <Link 
+                  href="/csr" 
+                  className="text-white/80 hover:text-white transition-colors flex items-center group"
+                >
                   <ChevronRight
                     size={16}
-                    className="mr-2 text-[#F08900] group-hover:translate-x-1 transition-transform"
+                    className="mr-2 text-secondary group-hover:translate-x-1 transition-transform"
                   />
                   CSR Initiatives
                 </Link>
@@ -163,11 +166,11 @@ export function Footer() {
               <li>
                 <Link
                   href="/careers"
-                  className="text-gray-400 hover:text-white transition-colors flex items-center group"
+                  className="text-white/80 hover:text-white transition-colors flex items-center group"
                 >
                   <ChevronRight
                     size={16}
-                    className="mr-2 text-[#F08900] group-hover:translate-x-1 transition-transform"
+                    className="mr-2 text-secondary group-hover:translate-x-1 transition-transform"
                   />
                   Careers
                 </Link>
@@ -175,11 +178,11 @@ export function Footer() {
               <li>
                 <Link
                   href="/contact"
-                  className="text-gray-400 hover:text-white transition-colors flex items-center group"
+                  className="text-white/80 hover:text-white transition-colors flex items-center group"
                 >
                   <ChevronRight
                     size={16}
-                    className="mr-2 text-[#F08900] group-hover:translate-x-1 transition-transform"
+                    className="mr-2 text-secondary group-hover:translate-x-1 transition-transform"
                   />
                   Contact Us
                 </Link>
@@ -189,14 +192,14 @@ export function Footer() {
 
           {/* Column 3: Contact Info */}
           <div>
-            <h3 className="text-lg font-semibold mb-6 relative">
+            <h3 className="text-lg font-semibold mb-6 relative text-white">
               <span className="relative z-10">Contact Us</span>
-              <span className="absolute bottom-0 left-0 w-12 h-0.5 bg-[#F08900]"></span>
+              <span className="absolute bottom-0 left-0 w-12 h-0.5 bg-secondary"></span>
             </h3>
             <ul className="space-y-4">
               <li className="flex items-start">
-                <MapPin size={20} className="text-[#F08900] flex-shrink-0 mr-3 mt-1" />
-                <span className="text-gray-400">
+                <MapPin size={20} className="text-secondary flex-shrink-0 mr-3 mt-1" />
+                <span className="text-white/80">
                   Jebel Ali Freezone,
                   <br />
                   Plot No. S30502 – opposite Redington,
@@ -207,14 +210,14 @@ export function Footer() {
                 </span>
               </li>
               <li className="flex items-center">
-                <Phone size={20} className="text-[#F08900] flex-shrink-0 mr-3" />
-                <Link href="tel:+97142340738" className="text-gray-400 hover:text-white transition-colors">
+                <Phone size={20} className="text-secondary flex-shrink-0 mr-3" />
+                <Link href="tel:+97142340738" className="text-white/80 hover:text-white transition-colors">
                   +971 4 234 0738
                 </Link>
               </li>
               <li className="flex items-center">
-                <Mail size={20} className="text-[#F08900] flex-shrink-0 mr-3" />
-                <Link href="mailto:info@legendholding.com" className="text-gray-400 hover:text-white transition-colors">
+                <Mail size={20} className="text-secondary flex-shrink-0 mr-3" />
+                <Link href="mailto:info@legendholding.com" className="text-white/80 hover:text-white transition-colors">
                   info@legendholding.com
                 </Link>
               </li>
@@ -223,11 +226,11 @@ export function Footer() {
 
           {/* Column 4: Newsletter */}
           <div>
-            <h3 className="text-lg font-semibold mb-6 relative">
+            <h3 className="text-lg font-semibold mb-6 relative text-white">
               <span className="relative z-10">Newsletter</span>
-              <span className="absolute bottom-0 left-0 w-12 h-0.5 bg-[#F08900]"></span>
+              <span className="absolute bottom-0 left-0 w-12 h-0.5 bg-secondary"></span>
             </h3>
-            <p className="text-gray-400 text-sm mb-4">
+            <p className="text-white/80 text-sm mb-4">
               Subscribe to our newsletter to receive the latest updates and news.
             </p>
             <form className="space-y-3">
@@ -235,13 +238,13 @@ export function Footer() {
                 <input
                   type="email"
                   placeholder="Your Email Address"
-                  className="w-full bg-gray-800 border border-gray-700 rounded-md py-3 px-4 text-gray-300 focus:outline-none focus:ring-2 focus:ring-[#5E366D] focus:border-transparent"
+                  className="w-full bg-white/10 border border-white/20 rounded-md py-3 px-4 text-white placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
                   required
                 />
               </div>
               <button
                 type="submit"
-                className="bg-[#F08900] hover:bg-[#F08900]/90 text-white px-5 py-3 rounded-md transition-all duration-300 hover:shadow-lg flex items-center justify-center w-full"
+                className="bg-secondary hover:bg-secondary/90 text-white px-5 py-3 rounded-md transition-all duration-300 hover:shadow-lg flex items-center justify-center w-full"
               >
                 Subscribe
                 <ArrowRight size={16} className="ml-2" />
@@ -251,24 +254,24 @@ export function Footer() {
         </div>
 
         {/* Divider */}
-        <div className="border-t border-gray-800 my-8"></div>
+        <div className="border-t border-white/10 my-8"></div>
 
         {/* Bottom Footer */}
         <div className="flex flex-col md:flex-row justify-between items-center">
-          <div className="text-gray-500 text-sm mb-4 md:mb-0">
+          <div className="text-white/70 text-sm mb-4 md:mb-0">
             © {currentYear} Legend Holding Group. All Rights Reserved.
           </div>
           <div className="flex flex-wrap justify-center gap-4 text-sm">
-            <Link href="/privacy-policy" className="text-gray-500 hover:text-white transition-colors">
+            <Link href="/privacy-policy" className="text-white/70 hover:text-white transition-colors">
               Privacy Policy
             </Link>
-            <Link href="/terms-of-service" className="text-gray-500 hover:text-white transition-colors">
+            <Link href="/terms-of-service" className="text-white/70 hover:text-white transition-colors">
               Terms of Service
             </Link>
-            <Link href="/cookie-policy" className="text-gray-500 hover:text-white transition-colors">
+            <Link href="/cookie-policy" className="text-white/70 hover:text-white transition-colors">
               Cookie Policy
             </Link>
-            <Link href="/sitemap" className="text-gray-500 hover:text-white transition-colors">
+            <Link href="/sitemap" className="text-white/70 hover:text-white transition-colors">
               Sitemap
             </Link>
           </div>

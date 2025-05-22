@@ -131,7 +131,7 @@ export function CSRSection() {
                 <div
                   className={cn(
                     "p-3 rounded-full flex-shrink-0 transition-colors duration-300",
-                    activeInitiative === initiative.id ? "bg-primary text-white" : "bg-gray-100 text-gray-500",
+                    activeInitiative === initiative.id ? "bg-secondary text-white" : "bg-gray-100 text-gray-500",
                   )}
                 >
                   {initiative.icon}

@@ -9,7 +9,9 @@ import {
   StarIcon,
   HandRaisedIcon,
   BoltIcon,
-  UsersIcon
+  UsersIcon,
+  EyeIcon,
+  FlagIcon
 } from "@heroicons/react/24/outline"
 import Image from "next/image"
 
@@ -38,43 +40,37 @@ export default function CompanyValuesInfographic() {
     {
       title: "Loyalty",
       description: "We are loyal to our partners and companies, regardless of the circumstances.",
-      Icon: HeartIcon,
-      color: "#F39200",
+      letter: "L",
       ariaLabel: "Loyalty value card"
     },
     {
       title: "Excellence",
       description: "We aim for excellence so that everyone works well together.",
-      Icon: StarIcon,
-      color: "#5E366D",
+      letter: "E",
       ariaLabel: "Excellence value card"
     },
     {
       title: "Growth",
       description: "Our focus is to promote continuous growth and development.",
-      Icon: ArrowTrendingUpIcon,
-      color: "#F39200",
+      letter: "G",
       ariaLabel: "Growth value card"
     },
     {
       title: "Empathy",
       description: "We recognize potential and acknowledge everyone's potential.",
-      Icon: HandRaisedIcon,
-      color: "#5E366D",
+      letter: "E",
       ariaLabel: "Empathy value card"
     },
     {
       title: "Nimble",
       description: "We believe in quick minds, being fast in our thinking and actions.",
-      Icon: BoltIcon,
-      color: "#F39200",
+      letter: "N",
       ariaLabel: "Nimble value card"
     },
     {
       title: "Diversity",
       description: "We create opportunities for people of all sectors.",
-      Icon: UsersIcon,
-      color: "#5E366D",
+      letter: "D",
       ariaLabel: "Diversity value card"
     }
   ]
@@ -115,46 +111,142 @@ export default function CompanyValuesInfographic() {
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
+        {/* Main Heading */}
         <motion.div
           ref={ref}
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="text-center mb-20"
+          className="text-center mb-16"
         >
-          <span className="text-[#F39200] font-medium mb-2 block">Our Foundation</span>
-          <h2 id="values-heading" className="text-3xl sm:text-4xl font-bold text-[#5E366D] mb-6">Our Values</h2>
-          <div className="h-1 w-40 md:w-48 bg-gradient-to-r from-[#5E366D] to-[#F39200] mx-auto rounded-full mb-8"></div>
-          <p className="text-gray-600 max-w-2xl mx-auto text-lg">
-            Our core values shape who we are and guide everything we do
-          </p>
+          <span className="text-[#F39200] font-medium mb-2 block">Who We Are</span>
+          <h1 id="values-heading" className="text-3xl sm:text-4xl font-bold text-[#5E366D] mb-6">Vision, Mission & Values</h1>
+          <div className="h-1 w-40 md:w-48 bg-[#F39200] mx-auto rounded-full"></div>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6 max-w-7xl mx-auto">
+        {/* Vision & Mission Cards */}
+        <motion.div 
+          className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-7xl mx-auto mb-20"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={{
+            visible: {
+              transition: {
+                staggerChildren: 0.2
+              }
+            }
+          }}
+        >
+          {/* Vision Card */}
+          <motion.div
+            variants={{
+              hidden: { opacity: 0, x: -50 },
+              visible: { 
+                opacity: 1, 
+                x: 0,
+                transition: {
+                  type: "spring",
+                  duration: 0.8,
+                  bounce: 0.35
+                }
+              }
+            }}
+            className="bg-[rgb(234,226,214)]/20 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 group relative overflow-hidden"
+          >
+            <div 
+              className="absolute inset-0 rounded-2xl bg-gradient-to-br from-[rgb(234,226,214)]/50 to-white opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+              aria-hidden="true"
+            />
+            <div className="flex items-center mb-6 relative">
+              <div className="w-16 h-16 flex items-center justify-center rounded-full bg-[#5E366D] mr-4 group-hover:bg-[#F39200] transition-all duration-300 shadow-lg">
+                <EyeIcon className="w-8 h-8 text-white" />
+              </div>
+              <h2 className="text-2xl font-bold text-[#5E366D] group-hover:text-[#F39200] transition-colors duration-300">Our Vision</h2>
+            </div>
+            <p className="text-gray-600 text-lg leading-relaxed relative">
+              To be the leading diversified business group in the region, setting new standards of excellence and innovation while creating sustainable value for our stakeholders and communities.
+            </p>
+          </motion.div>
+
+          {/* Mission Card */}
+          <motion.div
+            variants={{
+              hidden: { opacity: 0, x: 50 },
+              visible: { 
+                opacity: 1, 
+                x: 0,
+                transition: {
+                  type: "spring",
+                  duration: 0.8,
+                  bounce: 0.35
+                }
+              }
+            }}
+            className="bg-[rgb(234,226,214)]/20 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 group relative overflow-hidden"
+          >
+            <div 
+              className="absolute inset-0 rounded-2xl bg-gradient-to-br from-[rgb(234,226,214)]/50 to-white opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+              aria-hidden="true"
+            />
+            <div className="flex items-center mb-6 relative">
+              <div className="w-16 h-16 flex items-center justify-center rounded-full bg-[#5E366D] mr-4 group-hover:bg-[#F39200] transition-all duration-300 shadow-lg">
+                <FlagIcon className="w-8 h-8 text-white" />
+              </div>
+              <h2 className="text-2xl font-bold text-[#5E366D] group-hover:text-[#F39200] transition-colors duration-300">Our Mission</h2>
+            </div>
+            <p className="text-gray-600 text-lg leading-relaxed relative">
+              To deliver exceptional products and services through operational excellence, innovative solutions, and sustainable practices while fostering growth, empowering our people, and contributing to society's advancement.
+            </p>
+          </motion.div>
+        </motion.div>
+
+        {/* Values Section */}
+        <motion.div 
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6 max-w-7xl mx-auto"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={{
+            visible: {
+              transition: {
+                staggerChildren: 0.2
+              }
+            }
+          }}
+        >
           {values.map((value, index) => (
             <motion.div
               key={value.title}
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: index * 0.1 }}
-              className="group relative bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
-              style={{
-                background: `linear-gradient(to bottom right, white, ${value.color}05)`
+              variants={{
+                hidden: { 
+                  opacity: 0, 
+                  y: 50,
+                  scale: 0.9
+                },
+                visible: { 
+                  opacity: 1, 
+                  y: 0,
+                  scale: 1,
+                  transition: {
+                    type: "spring",
+                    duration: 0.8,
+                    bounce: 0.35
+                  }
+                }
               }}
+              className="group relative bg-[rgb(234,226,214)]/20 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
               role="article"
               aria-label={value.ariaLabel}
             >
               <div 
-                className="absolute inset-0 rounded-2xl bg-gradient-to-br from-white/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                className="absolute inset-0 rounded-2xl bg-gradient-to-br from-[rgb(234,226,214)]/50 to-white opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                 aria-hidden="true"
               />
               
               <div className="flex flex-col items-center text-center mb-4 relative">
                 <motion.div 
-                  className="w-16 h-16 mb-6 flex items-center justify-center rounded-xl transition-all duration-300"
-                  style={{ 
-                    backgroundColor: `${value.color}10`,
-                  }}
+                  className="w-16 h-16 mb-6 flex items-center justify-center rounded-full transition-all duration-300 group-hover:bg-[#F39200] bg-[#5E366D] shadow-lg"
                   whileHover={{ scale: 1.05 }}
                   animate={{
                     x: mousePosition.x / 100,
@@ -167,24 +259,45 @@ export default function CompanyValuesInfographic() {
                     }
                   }}
                 >
-                  <value.Icon 
-                    className="w-8 h-8 transition-all duration-300 group-hover:scale-110"
-                    style={{ color: value.color }}
-                  />
+                  <span 
+                    className="text-3xl font-bold text-white transition-all duration-300 group-hover:scale-110"
+                  >
+                    {value.letter}
+                  </span>
                 </motion.div>
-                <h3 
-                  className="text-xl font-semibold mb-3 transition-all duration-300"
-                  style={{ color: value.color }}
+                <motion.div
+                  variants={{
+                    hidden: { opacity: 0, y: 10 },
+                    visible: { 
+                      opacity: 1, 
+                      y: 0,
+                      transition: { delay: 0.2 }
+                    }
+                  }}
                 >
-                  {value.title}
-                </h3>
+                  <h3 
+                    className="text-xl font-semibold mb-3 text-[#5E366D] group-hover:text-[#F39200] transition-all duration-300"
+                  >
+                    {value.title}
+                  </h3>
+                </motion.div>
               </div>
-              <p className="text-gray-600 text-base leading-relaxed">
+              <motion.p 
+                className="text-gray-600 text-base leading-relaxed"
+                variants={{
+                  hidden: { opacity: 0, y: 10 },
+                  visible: { 
+                    opacity: 1, 
+                    y: 0,
+                    transition: { delay: 0.3 }
+                  }
+                }}
+              >
                 {value.description}
-              </p>
+              </motion.p>
             </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   )

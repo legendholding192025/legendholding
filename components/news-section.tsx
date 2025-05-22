@@ -82,18 +82,18 @@ export function Newsroom() {
   const visibleNews = dummyNews.slice(currentIndex, currentIndex + itemsPerPage)
 
   return (
-    <section className="py-16 bg-gray-50">
+    <section className="py-16 bg-white">
       <div className="container mx-auto px-4">
         <div className="flex flex-col md:flex-row md:items-center justify-between mb-10">
           <div>
-            <h2 className="text-3xl sm:text-4xl font-bold text-primary mb-2">Latest News</h2>
-            <p className="text-gray-600 max-w-2xl">
+            <h2 className="text-3xl sm:text-4xl font-bold text-[#5E366D] mb-2">Latest News</h2>
+            <p className="text-[#5E366D]/80 max-w-2xl">
               Stay updated with the latest developments, announcements, and achievements from Legend Holding Group.
             </p>
           </div>
           <Link
             href="/newsroom"
-            className="mt-4 md:mt-0 inline-flex items-center text-secondary font-medium hover:text-secondary/80 transition-colors group"
+            className="mt-4 md:mt-0 inline-flex items-center text-[#F39200] font-medium hover:text-[#F39200]/80 transition-colors group"
           >
             View All News
             <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
@@ -106,8 +106,12 @@ export function Newsroom() {
               <Link
                 key={news.id}
                 href={news.url}
-                className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 flex flex-col h-full group"
+                className="bg-[rgb(234,226,214)]/20 rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex flex-col h-full group relative"
               >
+                <div 
+                  className="absolute inset-0 bg-gradient-to-br from-[rgb(234,226,214)]/50 to-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg"
+                  aria-hidden="true"
+                />
                 <div className="relative h-48 overflow-hidden">
                   <Image
                     src={news.image || "/placeholder.svg"}
@@ -116,20 +120,20 @@ export function Newsroom() {
                     height={240}
                     className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
                   />
-                  <div className="absolute top-0 left-0 bg-secondary text-white text-xs font-semibold px-3 py-1 m-3 rounded">
+                  <div className="absolute top-0 left-0 bg-[#F39200] text-white text-xs font-semibold px-3 py-1 m-3 rounded">
                     {news.category}
                   </div>
                 </div>
-                <div className="p-5 flex flex-col flex-grow">
-                  <div className="flex items-center text-gray-500 text-sm mb-3">
+                <div className="p-5 flex flex-col flex-grow relative">
+                  <div className="flex items-center text-[#5E366D]/70 text-sm mb-3">
                     <Calendar className="h-4 w-4 mr-1" />
                     {news.date}
                   </div>
-                  <h3 className="text-lg font-semibold mb-3 text-gray-800 group-hover:text-primary transition-colors duration-300 line-clamp-2">
+                  <h3 className="text-lg font-semibold mb-3 text-[#5E366D] group-hover:text-[#F39200] transition-colors duration-300 line-clamp-2">
                     {news.title}
                   </h3>
-                  <p className="text-gray-600 mb-4 line-clamp-3 flex-grow">{news.excerpt}</p>
-                  <div className="text-primary font-medium text-sm flex items-center group-hover:text-secondary transition-colors duration-300">
+                  <p className="text-[#5E366D]/80 mb-4 line-clamp-3 flex-grow">{news.excerpt}</p>
+                  <div className="text-[#5E366D] font-medium text-sm flex items-center group-hover:text-[#F39200] transition-colors duration-300">
                     Read More
                     <ArrowRight className="ml-1 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                   </div>
@@ -142,7 +146,7 @@ export function Newsroom() {
             <div className="flex justify-center mt-8 gap-2">
               <button
                 onClick={prevSlide}
-                className="p-2 rounded-full bg-white border border-gray-200 text-gray-600 hover:bg-primary hover:text-white transition-colors duration-300"
+                className="p-2 rounded-full bg-[rgb(234,226,214)]/20 border border-[#5E366D]/20 text-[#5E366D] hover:bg-[#5E366D] hover:text-white transition-colors duration-300"
                 aria-label="Previous news"
               >
                 <ChevronLeft className="h-5 w-5" />
@@ -155,8 +159,8 @@ export function Newsroom() {
                     className={cn(
                       "w-2 h-2 rounded-full transition-all duration-300",
                       Math.floor(currentIndex / itemsPerPage) === index
-                        ? "bg-primary w-6"
-                        : "bg-gray-300 hover:bg-gray-400",
+                        ? "bg-[#5E366D] w-6"
+                        : "bg-[rgb(234,226,214)] hover:bg-[rgb(234,226,214)]/70",
                     )}
                     aria-label={`Go to page ${index + 1}`}
                   />
@@ -164,7 +168,7 @@ export function Newsroom() {
               </div>
               <button
                 onClick={nextSlide}
-                className="p-2 rounded-full bg-white border border-gray-200 text-gray-600 hover:bg-primary hover:text-white transition-colors duration-300"
+                className="p-2 rounded-full bg-[rgb(234,226,214)]/20 border border-[#5E366D]/20 text-[#5E366D] hover:bg-[#5E366D] hover:text-white transition-colors duration-300"
                 aria-label="Next news"
               >
                 <ChevronRight className="h-5 w-5" />

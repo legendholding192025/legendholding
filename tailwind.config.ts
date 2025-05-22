@@ -31,6 +31,9 @@ const config: Config = {
           DEFAULT: "#F08900",
           foreground: "#FFFFFF",
         },
+        cream: {
+          DEFAULT: "rgb(234 226 214)",
+        },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -82,6 +85,14 @@ const config: Config = {
           from: { transform: "translateY(10px)", opacity: "0" },
           to: { transform: "translateY(0)", opacity: "1" },
         },
+        float: {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-10px)' },
+        },
+        "float-delayed": {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-5px)' },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -91,6 +102,8 @@ const config: Config = {
         "slide-down": "slide-down 0.3s ease-out",
         "slide-up": "slide-up 0.3s ease-out",
         "submenu-slide-down": "submenuSlideDown 0.25s cubic-bezier(0.25, 1, 0.5, 1) forwards",
+        "float": "float 3s ease-in-out infinite",
+        "float-delayed": "float-delayed 3s ease-in-out infinite 0.5s",
       },
       typography: {
         DEFAULT: {

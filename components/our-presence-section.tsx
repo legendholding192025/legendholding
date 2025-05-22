@@ -59,7 +59,7 @@ const itemVariants = {
 
 export function OurPresenceSection() {
   return (
-    <section className="py-16 bg-gray-50 relative overflow-hidden">
+    <section className="py-16 bg-white relative overflow-hidden">
       {/* Background decorative image */}
       <div className="absolute -bottom-10 -left-5 w-[250px] h-[250px] opacity-25 pointer-events-none">
         <Image
