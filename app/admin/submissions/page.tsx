@@ -60,34 +60,47 @@ export default function ContactManagement() {
 
   const fetchData = async () => {
     try {
+      if (!supabase) {
+        throw new Error("Supabase client not initialized")
+      }
+
       setLoading(true)
       
       // Fetch submissions with error handling
-      const { data: submissionsData, error: submissionsError } = await supabase
+      const submissionsPromise = supabase
         .from("contact_submissions")
         .select("*")
         .order("created_at", { ascending: false })
-
-      if (submissionsError) {
-        console.error("Error fetching submissions:", submissionsError)
-        toast.error("Failed to fetch submissions")
-        setSubmissions([])
-      } else {
-        setSubmissions(submissionsData || [])
-      }
+        .throwOnError()
 
       // Fetch messages with error handling
-      const { data: messagesData, error: messagesError } = await supabase
+      const messagesPromise = supabase
         .from("messages")
         .select("*")
         .order("created_at", { ascending: false })
+        .throwOnError()
 
-      if (messagesError) {
-        console.error("Error fetching messages:", messagesError)
+      const [submissionsResult, messagesResult] = await Promise.allSettled([
+        submissionsPromise,
+        messagesPromise
+      ])
+
+      // Handle submissions result
+      if (submissionsResult.status === 'fulfilled') {
+        setSubmissions(submissionsResult.value.data || [])
+      } else {
+        console.error("Error fetching submissions:", submissionsResult.reason)
+        toast.error("Failed to fetch submissions")
+        setSubmissions([])
+      }
+
+      // Handle messages result
+      if (messagesResult.status === 'fulfilled') {
+        setMessages(messagesResult.value.data || [])
+      } else {
+        console.error("Error fetching messages:", messagesResult.reason)
         toast.error("Failed to fetch messages")
         setMessages([])
-      } else {
-        setMessages(messagesData || [])
       }
 
     } catch (error) {

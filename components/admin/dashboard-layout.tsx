@@ -55,9 +55,9 @@ const menuItems = [
     href: "/admin/news"
   },
   {
-    title: "Career Applications",
+    title: "Jobs Management",
     icon: FileText,
-    href: "/admin/applications"
+    href: "/admin/jobs"
   },
   {
     title: "Team Management",

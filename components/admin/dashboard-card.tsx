@@ -33,16 +33,7 @@ export function DashboardCards({ submissions }: DashboardCardsProps) {
       icon: Newspaper,
       color: "primary",
       description: "Published articles this month"
-    },
-    {
-      title: "CV Applications",
-      value: 38,
-      change: "+24.5%",
-      trend: "up",
-      icon: FileText,
-      color: "secondary",
-      description: "New applications this week"
-    },
+    }
   ]
 
   return (

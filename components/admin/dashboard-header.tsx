@@ -2,12 +2,17 @@ import { Button } from "@/components/ui/button"
 import { Calendar, Bell, Search } from "lucide-react"
 import { Input } from "@/components/ui/input"
 
-export function DashboardHeader() {
+interface DashboardHeaderProps {
+  title?: string
+  description?: string
+}
+
+export function DashboardHeader({ title = "Welcome back", description = "Here's what's happening with your dashboard today." }: DashboardHeaderProps) {
   return (
     <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between bg-white rounded-lg border shadow-sm p-6 min-w-0">
       <div className="flex-1 min-w-0">
-        <h1 className="text-2xl font-bold tracking-tight text-gray-900">Welcome back</h1>
-        <p className="text-sm text-gray-500 mt-1">Here's what's happening with your dashboard today.</p>
+        <h1 className="text-2xl font-bold tracking-tight text-gray-900">{title}</h1>
+        <p className="text-sm text-gray-500 mt-1">{description}</p>
       </div>
       
       <div className="flex flex-col sm:flex-row items-center gap-3 shrink-0">
