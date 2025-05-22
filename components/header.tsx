@@ -11,13 +11,15 @@ import {
   History,
   Users,
   Briefcase,
-  Handshake,
   Building2,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useMediaQuery } from "@/hooks/use-media-query"
 
 const logoUrl = "/images/legend-logo.png"
+
+// Add ReturnType<typeof setTimeout> type for timeouts
+type TimeoutType = ReturnType<typeof setTimeout>;
 
 type SubMenuItem = {
   title: string
@@ -144,14 +146,14 @@ const menuItems: MenuItem[] = [
         url: "/about/partners",
         image: "https://res.cloudinary.com/dosxengut/image/upload/v1747650381/1746961012298_hxmgin.jpg",
         description: "Learn about our strategic partnerships that drive mutual success.",
-        icon: <Handshake className="w-5 h-5" />
+        icon: <Building2 className="w-5 h-5" />
       },
       {
         title: "CSR",
         url: "/about/csr",
         image: "https://res.cloudinary.com/dosxengut/image/upload/v1746797713/blog-corporate-social-responsibility-program_olhz5m.webp",
         description: "Our commitment to corporate social responsibility and community impact.",
-        icon: <Handshake className="w-5 h-5" />
+        icon: <Building2 className="w-5 h-5" />
       },
     ],
   },
@@ -249,8 +251,8 @@ export function Header() {
   const isTablet = useMediaQuery("(min-width: 768px) and (max-width: 1023px)")
   const headerRef = useRef<HTMLElement>(null)
   const searchInputRef = useRef<HTMLInputElement>(null)
-  const submenuTimeoutRef = useRef<NodeJS.Timeout | null>(null)
-  const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const submenuTimeoutRef = useRef<TimeoutType | null>(null)
+  const searchTimeoutRef = useRef<TimeoutType | null>(null)
   const [hoveredItem, setHoveredItem] = useState<string | null>(null)
   const [touchStartY, setTouchStartY] = useState<number | null>(null)
   const [lastScrollTop, setLastScrollTop] = useState(0)
