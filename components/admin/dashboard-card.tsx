@@ -46,9 +46,9 @@ export function DashboardCards({ submissions }: DashboardCardsProps) {
   ]
 
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 min-w-0">
       {cards.map((card, index) => (
-        <Card key={index} className="relative overflow-hidden">
+        <Card key={index} className="relative overflow-hidden min-w-0">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div className={`p-2 rounded-lg bg-${card.color}/10`}>

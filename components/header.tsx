@@ -794,7 +794,7 @@ export function Header() {
 
               <Link
                 href="/contact"
-                className="bg-primary hover:bg-primary/90 text-white px-5 py-2 rounded-md transition-all duration-300 hover:shadow-lg transform hover:-translate-y-0.5 active:translate-y-0 text-sm md:text-base md:px-6"
+                className="bg-[#5E366D] hover:bg-[#5E366D]/90 text-white px-5 py-2 rounded-md transition-all duration-300 hover:shadow-lg transform hover:-translate-y-0.5 active:translate-y-0 text-sm md:text-base md:px-6"
               >
                 Get in Touch
               </Link>
@@ -1093,7 +1093,7 @@ export function Header() {
                                                 </summary>
                                                 <div className="mt-2 ml-6 pl-4 border-l-2 border-primary/10 space-y-3">
                                                   <div className="flex items-center justify-between p-3 border-b border-gray-100">
-                                                    <h4 className="text-sm font-medium text-primary">Our Brands</h4>
+                                                    <h4 className="text-sm font-medium text-[#5E366D]">Our Brands</h4>
                                                     <Image
                                                       src="/images/legend-logo.png"
                                                       alt="Legend Logo"
@@ -1111,7 +1111,7 @@ export function Header() {
                                                     >
                                                       <div className="flex items-center space-x-2">
                                                         <ChevronRight className="w-4 h-4 flex-shrink-0" />
-                                                        <span className="font-medium">{item}</span>
+                                                        <span className="text-[#5E366D] font-medium">{item}</span>
                                                       </div>
                                                       {hasLogo(service) && getLogoForItem(service, item) && (
                                                         <div className={service.brandLogoStyles?.[item] || ""}>

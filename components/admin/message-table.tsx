@@ -16,93 +16,64 @@ import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { toast } from "sonner"
 
-interface ContactSubmission {
+interface Message {
   id: string
   created_at: string
   name: string
   email: string
-  phone: string | null
-  subject: string
   message: string
   resolved?: boolean
-  status?: string
 }
 
-interface SubmissionsTableProps {
-  submissions: ContactSubmission[]
+interface MessageTableProps {
+  messages: Message[]
   loading: boolean
   onDelete: (id: string) => Promise<void>
-  onUpdate: (id: string, data: Partial<ContactSubmission>) => Promise<void>
+  onUpdate: (id: string, data: Partial<Message>) => Promise<void>
 }
 
-// Error boundary component
-class ErrorBoundary extends React.Component<
-  { children: React.ReactNode },
-  { hasError: boolean }
-> {
-  constructor(props: { children: React.ReactNode }) {
-    super(props)
-    this.state = { hasError: false }
-  }
-
-  static getDerivedStateFromError() {
-    return { hasError: true }
-  }
-
-  render() {
-    if (this.state.hasError) {
-      return (
-        <div className="p-4 text-red-500">
-          Something went wrong. Please try refreshing the page.
-        </div>
-      )
-    }
-
-    return this.props.children
-  }
-}
-
-export function SubmissionsTable({ submissions = [], loading, onDelete, onUpdate }: SubmissionsTableProps) {
+export function MessageTable({ messages = [], loading, onDelete, onUpdate }: MessageTableProps) {
   const [currentPage, setCurrentPage] = useState(1)
-  const [editingSubmission, setEditingSubmission] = useState<ContactSubmission | null>(null)
+  const [editingMessage, setEditingMessage] = useState<Message | null>(null)
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null)
   const [isDeleting, setIsDeleting] = useState(false)
   const itemsPerPage = 10
-  const totalPages = Math.ceil((submissions?.length || 0) / itemsPerPage)
+  const totalPages = Math.ceil((messages?.length || 0) / itemsPerPage)
   
   const startIndex = (currentPage - 1) * itemsPerPage
-  const paginatedSubmissions = submissions?.slice(startIndex, startIndex + itemsPerPage) || []
+  const paginatedMessages = messages?.slice(startIndex, startIndex + itemsPerPage) || []
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page)
   }
 
-  const handleEdit = (submission: ContactSubmission) => {
-    setEditingSubmission(submission)
+  const handleEdit = (message: Message) => {
+    setEditingMessage(message)
   }
 
   const handleUpdate = async () => {
-    if (!editingSubmission) return
+    if (!editingMessage) return
     try {
-      await onUpdate(editingSubmission.id, editingSubmission)
-      setEditingSubmission(null)
-      toast.success("Submission updated successfully")
+      await onUpdate(editingMessage.id, editingMessage)
+      setEditingMessage(null)
+      toast.success("Message updated successfully")
     } catch (error) {
-      console.error('[SubmissionsTable] Error updating submission:', error)
-      toast.error("Failed to update submission")
+      console.error('[MessageTable] Error updating message:', error)
+      toast.error("Failed to update message")
     }
   }
 
   const handleDelete = async (id: string) => {
     try {
-      console.log("[SubmissionsTable] Starting delete operation for ID:", id)
+      console.log("[MessageTable] Starting delete operation for ID:", id)
       setIsDeleting(true)
       await onDelete(id)
-      console.log("[SubmissionsTable] Delete operation completed successfully")
+      console.log("[MessageTable] Delete operation completed successfully")
       setDeleteConfirmId(null)
+      toast.success("Message deleted successfully")
     } catch (error) {
-      console.error('[SubmissionsTable] Error deleting submission:', error)
-      toast.error("Failed to delete submission")
+      console.error('[MessageTable] Error deleting message:', error)
+      toast.error("Failed to delete message")
     } finally {
       setIsDeleting(false)
     }
@@ -113,16 +84,16 @@ export function SubmissionsTable({ submissions = [], loading, onDelete, onUpdate
       <div className="flex items-center justify-center p-8">
         <div className="flex flex-col items-center gap-2">
           <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
-          <p className="text-sm text-muted-foreground">Loading submissions...</p>
+          <p className="text-sm text-muted-foreground">Loading messages...</p>
         </div>
       </div>
     )
   }
 
-  if (!Array.isArray(submissions) || submissions.length === 0) {
+  if (!Array.isArray(messages) || messages.length === 0) {
     return (
       <div className="flex items-center justify-center p-8">
-        <p className="text-muted-foreground">No submissions yet</p>
+        <p className="text-muted-foreground">No messages yet</p>
       </div>
     )
   }
@@ -137,32 +108,28 @@ export function SubmissionsTable({ submissions = [], loading, onDelete, onUpdate
               <TableHead>Date</TableHead>
               <TableHead>Name</TableHead>
               <TableHead>Email</TableHead>
-              <TableHead>Phone</TableHead>
-              <TableHead>Subject</TableHead>
               <TableHead>Message</TableHead>
               <TableHead>Status</TableHead>
               <TableHead className="w-[120px]">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {paginatedSubmissions.map((submission, index) => (
-              <TableRow key={submission?.id || index}>
+            {paginatedMessages.map((message, index) => (
+              <TableRow key={message?.id || index}>
                 <TableCell>{startIndex + index + 1}</TableCell>
                 <TableCell className="font-medium">
-                  {submission?.created_at ? new Date(submission.created_at).toLocaleDateString() : 'N/A'}
+                  {message?.created_at ? new Date(message.created_at).toLocaleDateString() : 'N/A'}
                 </TableCell>
-                <TableCell>{submission?.name || 'N/A'}</TableCell>
-                <TableCell>{submission?.email || 'N/A'}</TableCell>
-                <TableCell>{submission?.phone || '-'}</TableCell>
-                <TableCell className="max-w-[200px] truncate">{submission?.subject || 'N/A'}</TableCell>
-                <TableCell className="max-w-[300px] truncate">{submission?.message || 'N/A'}</TableCell>
+                <TableCell>{message?.name || 'N/A'}</TableCell>
+                <TableCell>{message?.email || 'N/A'}</TableCell>
+                <TableCell className="max-w-[300px] truncate">{message?.message || 'N/A'}</TableCell>
                 <TableCell>
                   <span className={`px-2 py-1 rounded-full text-xs ${
-                    submission?.resolved 
+                    message?.resolved 
                     ? "bg-green-100 text-green-700" 
                     : "bg-yellow-100 text-yellow-700"
                   }`}>
-                    {submission?.resolved ? "Resolved" : "Pending"}
+                    {message?.resolved ? "Resolved" : "Pending"}
                   </span>
                 </TableCell>
                 <TableCell>
@@ -170,7 +137,7 @@ export function SubmissionsTable({ submissions = [], loading, onDelete, onUpdate
                     <Button 
                       variant="ghost" 
                       size="icon"
-                      onClick={() => submission && handleEdit(submission)}
+                      onClick={() => message && handleEdit(message)}
                       title="Edit"
                     >
                       <Edit2 className="h-4 w-4" />
@@ -178,7 +145,7 @@ export function SubmissionsTable({ submissions = [], loading, onDelete, onUpdate
                     <Button 
                       variant="ghost" 
                       size="icon"
-                      onClick={() => submission?.id && setDeleteConfirmId(submission.id)}
+                      onClick={() => message?.id && setDeleteConfirmId(message.id)}
                       className="text-red-500 hover:text-red-700"
                       title="Delete"
                     >
@@ -195,7 +162,7 @@ export function SubmissionsTable({ submissions = [], loading, onDelete, onUpdate
       {totalPages > 1 && (
         <div className="flex items-center justify-between px-2 mt-4">
           <p className="text-sm text-gray-500">
-            Showing {startIndex + 1} to {Math.min(startIndex + itemsPerPage, submissions.length)} of {submissions.length} entries
+            Showing {startIndex + 1} to {Math.min(startIndex + itemsPerPage, messages.length)} of {messages.length} entries
           </p>
           <div className="flex items-center space-x-2">
             <Button
@@ -228,13 +195,13 @@ export function SubmissionsTable({ submissions = [], loading, onDelete, onUpdate
         </div>
       )}
 
-      {editingSubmission && (
-        <Dialog open={!!editingSubmission} onOpenChange={() => setEditingSubmission(null)}>
+      {editingMessage && (
+        <Dialog open={!!editingMessage} onOpenChange={() => setEditingMessage(null)}>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Edit Submission</DialogTitle>
+              <DialogTitle>Edit Message</DialogTitle>
               <DialogDescription>
-                Make changes to the contact submission here.
+                Make changes to the message here.
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
@@ -242,9 +209,9 @@ export function SubmissionsTable({ submissions = [], loading, onDelete, onUpdate
                 <Label htmlFor="name">Name</Label>
                 <Input
                   id="name"
-                  value={editingSubmission.name || ''}
-                  onChange={(e) => setEditingSubmission({
-                    ...editingSubmission,
+                  value={editingMessage.name || ''}
+                  onChange={(e) => setEditingMessage({
+                    ...editingMessage,
                     name: e.target.value
                   })}
                 />
@@ -254,32 +221,10 @@ export function SubmissionsTable({ submissions = [], loading, onDelete, onUpdate
                 <Input
                   id="email"
                   type="email"
-                  value={editingSubmission.email || ''}
-                  onChange={(e) => setEditingSubmission({
-                    ...editingSubmission,
+                  value={editingMessage.email || ''}
+                  onChange={(e) => setEditingMessage({
+                    ...editingMessage,
                     email: e.target.value
-                  })}
-                />
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="phone">Phone</Label>
-                <Input
-                  id="phone"
-                  value={editingSubmission.phone || ''}
-                  onChange={(e) => setEditingSubmission({
-                    ...editingSubmission,
-                    phone: e.target.value
-                  })}
-                />
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="subject">Subject</Label>
-                <Input
-                  id="subject"
-                  value={editingSubmission.subject || ''}
-                  onChange={(e) => setEditingSubmission({
-                    ...editingSubmission,
-                    subject: e.target.value
                   })}
                 />
               </div>
@@ -287,9 +232,9 @@ export function SubmissionsTable({ submissions = [], loading, onDelete, onUpdate
                 <Label htmlFor="message">Message</Label>
                 <Textarea
                   id="message"
-                  value={editingSubmission.message || ''}
-                  onChange={(e) => setEditingSubmission({
-                    ...editingSubmission,
+                  value={editingMessage.message || ''}
+                  onChange={(e) => setEditingMessage({
+                    ...editingMessage,
                     message: e.target.value
                   })}
                 />
@@ -299,9 +244,9 @@ export function SubmissionsTable({ submissions = [], loading, onDelete, onUpdate
                 <input
                   type="checkbox"
                   id="status"
-                  checked={editingSubmission.resolved || false}
-                  onChange={(e) => setEditingSubmission({
-                    ...editingSubmission,
+                  checked={editingMessage.resolved || false}
+                  onChange={(e) => setEditingMessage({
+                    ...editingMessage,
                     resolved: e.target.checked
                   })}
                   className="ml-2"
@@ -310,7 +255,7 @@ export function SubmissionsTable({ submissions = [], loading, onDelete, onUpdate
               </div>
             </div>
             <DialogFooter>
-              <Button variant="outline" onClick={() => setEditingSubmission(null)}>
+              <Button variant="outline" onClick={() => setEditingMessage(null)}>
                 Cancel
               </Button>
               <Button onClick={handleUpdate}>Save changes</Button>
@@ -323,7 +268,7 @@ export function SubmissionsTable({ submissions = [], loading, onDelete, onUpdate
         <Dialog 
           open={!!deleteConfirmId} 
           onOpenChange={(open) => {
-            console.log("[SubmissionsTable] Delete dialog state change:", { open, deleteConfirmId })
+            console.log("[MessageTable] Delete dialog state change:", { open, deleteConfirmId })
             if (!open) setDeleteConfirmId(null)
           }}
         >
@@ -333,7 +278,7 @@ export function SubmissionsTable({ submissions = [], loading, onDelete, onUpdate
               <DialogDescription asChild>
                 <div className="space-y-2">
                   <p className="text-sm text-muted-foreground">
-                    Are you sure you want to delete this submission? This action cannot be undone.
+                    Are you sure you want to delete this message? This action cannot be undone.
                   </p>
                   <p className="text-sm text-gray-500">
                     ID: {deleteConfirmId}
@@ -345,7 +290,7 @@ export function SubmissionsTable({ submissions = [], loading, onDelete, onUpdate
               <Button 
                 variant="outline" 
                 onClick={() => {
-                  console.log("[SubmissionsTable] Delete operation cancelled")
+                  console.log("[MessageTable] Delete operation cancelled")
                   setDeleteConfirmId(null)
                 }}
               >
@@ -354,7 +299,7 @@ export function SubmissionsTable({ submissions = [], loading, onDelete, onUpdate
               <Button
                 variant="destructive"
                 onClick={() => {
-                  console.log("[SubmissionsTable] Delete button clicked for ID:", deleteConfirmId)
+                  console.log("[MessageTable] Delete button clicked for ID:", deleteConfirmId)
                   handleDelete(deleteConfirmId)
                 }}
                 disabled={isDeleting || loading}
@@ -367,4 +312,4 @@ export function SubmissionsTable({ submissions = [], loading, onDelete, onUpdate
       )}
     </div>
   )
-}
+} 

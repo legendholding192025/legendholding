@@ -4,13 +4,13 @@ import { Input } from "@/components/ui/input"
 
 export function DashboardHeader() {
   return (
-    <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between bg-white rounded-lg border shadow-sm p-4">
-      <div className="flex-1">
+    <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between bg-white rounded-lg border shadow-sm p-6 min-w-0">
+      <div className="flex-1 min-w-0">
         <h1 className="text-2xl font-bold tracking-tight text-gray-900">Welcome back</h1>
         <p className="text-sm text-gray-500 mt-1">Here's what's happening with your dashboard today.</p>
       </div>
       
-      <div className="flex flex-col sm:flex-row items-center gap-3">
+      <div className="flex flex-col sm:flex-row items-center gap-3 shrink-0">
         <div className="relative w-full sm:w-auto">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
           <Input 

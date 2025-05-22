@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { AuthError } from '@supabase/supabase-js'
 
 export default function AdminLogin() {
   const router = useRouter()
@@ -25,20 +26,37 @@ export default function AdminLogin() {
       })
 
       if (error) {
-        console.error('Login error:', error)
-        throw error
+        if (error instanceof AuthError) {
+          // Handle specific auth errors
+          switch (error.message) {
+            case 'Invalid login credentials':
+              setError('Invalid email or password')
+              break
+            case 'Email not confirmed':
+              setError('Please verify your email address')
+              break
+            default:
+              setError(error.message)
+          }
+        } else {
+          throw error
+        }
+        return
       }
 
       console.log('Login successful:', data)
       
       if (data.user) {
+        // Set session in localStorage to persist it
+        localStorage.setItem('supabase.auth.token', JSON.stringify(data.session))
+        
         console.log('Redirecting to dashboard...')
         router.refresh()
         router.push('/admin/dashboard')
       }
     } catch (error: any) {
       console.error('Login error details:', error)
-      setError(error.message || 'Failed to login')
+      setError('An unexpected error occurred. Please try again.')
     } finally {
       setLoading(false)
     }
@@ -87,14 +105,16 @@ export default function AdminLogin() {
           </div>
 
           {error && (
-            <div className="text-red-500 text-sm text-center">{error}</div>
+            <div className="text-red-500 text-sm text-center bg-red-50 p-2 rounded">
+              {error}
+            </div>
           )}
 
           <div>
             <button
               type="submit"
               disabled={loading}
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? 'Signing in...' : 'Sign in'}
             </button>

@@ -84,7 +84,7 @@ export function AdminDashboardLayout({ children, onSignOut }: AdminDashboardLayo
 
   return (
     <SidebarProvider defaultOpen>
-      <div className="flex min-h-screen">
+      <div className="flex min-h-screen w-full">
         {/* Mobile Menu Button */}
         <div className="lg:hidden fixed top-4 left-4 z-50">
           <Button
@@ -98,7 +98,7 @@ export function AdminDashboardLayout({ children, onSignOut }: AdminDashboardLayo
         </div>
 
         {/* Sidebar */}
-        <Sidebar className="border-r border-gray-200">
+        <Sidebar className="border-r border-gray-200 shrink-0">
           <SidebarHeader className="border-b border-gray-200 py-5 px-6">
             <div className="flex items-center justify-between">
               <Link href="/admin/dashboard" className="flex items-center gap-2">
@@ -174,11 +174,13 @@ export function AdminDashboardLayout({ children, onSignOut }: AdminDashboardLayo
         </Sidebar>
 
         {/* Main Content */}
-        <main className="flex-1 overflow-auto relative">
+        <div className="flex-1 min-w-0 relative">
           {/* Persistent Sidebar Toggle */}
           <SidebarToggleButton />
-          {children}
-        </main>
+          <div className="h-full">
+            {children}
+          </div>
+        </div>
       </div>
     </SidebarProvider>
   )

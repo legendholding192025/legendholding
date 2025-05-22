@@ -19,6 +19,9 @@ const config: Config = {
       },
     },
     extend: {
+      fontFamily: {
+        brand: ['var(--font-brand)'],
+      },
       colors: {
         primary: {
           DEFAULT: "#5E366D",
@@ -89,9 +92,45 @@ const config: Config = {
         "slide-up": "slide-up 0.3s ease-out",
         "submenu-slide-down": "submenuSlideDown 0.25s cubic-bezier(0.25, 1, 0.5, 1) forwards",
       },
+      typography: {
+        DEFAULT: {
+          css: {
+            maxWidth: 'none',
+            color: 'inherit',
+            a: {
+              color: '#5E366D',
+              '&:hover': {
+                color: '#4a2b57',
+              },
+            },
+            h1: {
+              color: 'inherit',
+            },
+            h2: {
+              color: 'inherit',
+            },
+            h3: {
+              color: 'inherit',
+            },
+            h4: {
+              color: 'inherit',
+            },
+            blockquote: {
+              borderLeftColor: '#5E366D',
+              color: 'inherit',
+            },
+            'code::before': {
+              content: '""',
+            },
+            'code::after': {
+              content: '""',
+            },
+          },
+        },
+      },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
 }
 
 export default config

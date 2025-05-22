@@ -112,7 +112,7 @@ export function Footer() {
           <div>
             <h3 className="text-lg font-semibold mb-6 relative">
               <span className="relative z-10">Quick Links</span>
-              <span className="absolute bottom-0 left-0 w-12 h-0.5 bg-secondary"></span>
+              <span className="absolute bottom-0 left-0 w-12 h-0.5 bg-[#F08900]"></span>
             </h3>
             <ul className="space-y-3">
               <li>
@@ -122,7 +122,7 @@ export function Footer() {
                 >
                   <ChevronRight
                     size={16}
-                    className="mr-2 text-secondary group-hover:translate-x-1 transition-transform"
+                    className="mr-2 text-[#F08900] group-hover:translate-x-1 transition-transform"
                   />
                   About Us
                 </Link>
@@ -134,7 +134,7 @@ export function Footer() {
                 >
                   <ChevronRight
                     size={16}
-                    className="mr-2 text-secondary group-hover:translate-x-1 transition-transform"
+                    className="mr-2 text-[#F08900] group-hover:translate-x-1 transition-transform"
                   />
                   Our Business
                 </Link>
@@ -146,7 +146,7 @@ export function Footer() {
                 >
                   <ChevronRight
                     size={16}
-                    className="mr-2 text-secondary group-hover:translate-x-1 transition-transform"
+                    className="mr-2 text-[#F08900] group-hover:translate-x-1 transition-transform"
                   />
                   Newsroom
                 </Link>
@@ -155,7 +155,7 @@ export function Footer() {
                 <Link href="/csr" className="text-gray-400 hover:text-white transition-colors flex items-center group">
                   <ChevronRight
                     size={16}
-                    className="mr-2 text-secondary group-hover:translate-x-1 transition-transform"
+                    className="mr-2 text-[#F08900] group-hover:translate-x-1 transition-transform"
                   />
                   CSR Initiatives
                 </Link>
@@ -167,7 +167,7 @@ export function Footer() {
                 >
                   <ChevronRight
                     size={16}
-                    className="mr-2 text-secondary group-hover:translate-x-1 transition-transform"
+                    className="mr-2 text-[#F08900] group-hover:translate-x-1 transition-transform"
                   />
                   Careers
                 </Link>
@@ -179,7 +179,7 @@ export function Footer() {
                 >
                   <ChevronRight
                     size={16}
-                    className="mr-2 text-secondary group-hover:translate-x-1 transition-transform"
+                    className="mr-2 text-[#F08900] group-hover:translate-x-1 transition-transform"
                   />
                   Contact Us
                 </Link>
@@ -191,11 +191,11 @@ export function Footer() {
           <div>
             <h3 className="text-lg font-semibold mb-6 relative">
               <span className="relative z-10">Contact Us</span>
-              <span className="absolute bottom-0 left-0 w-12 h-0.5 bg-secondary"></span>
+              <span className="absolute bottom-0 left-0 w-12 h-0.5 bg-[#F08900]"></span>
             </h3>
             <ul className="space-y-4">
               <li className="flex items-start">
-                <MapPin size={20} className="text-secondary flex-shrink-0 mr-3 mt-1" />
+                <MapPin size={20} className="text-[#F08900] flex-shrink-0 mr-3 mt-1" />
                 <span className="text-gray-400">
                   Jebel Ali Freezone,
                   <br />
@@ -207,13 +207,13 @@ export function Footer() {
                 </span>
               </li>
               <li className="flex items-center">
-                <Phone size={20} className="text-secondary flex-shrink-0 mr-3" />
+                <Phone size={20} className="text-[#F08900] flex-shrink-0 mr-3" />
                 <Link href="tel:+97142340738" className="text-gray-400 hover:text-white transition-colors">
                   +971 4 234 0738
                 </Link>
               </li>
               <li className="flex items-center">
-                <Mail size={20} className="text-secondary flex-shrink-0 mr-3" />
+                <Mail size={20} className="text-[#F08900] flex-shrink-0 mr-3" />
                 <Link href="mailto:info@legendholding.com" className="text-gray-400 hover:text-white transition-colors">
                   info@legendholding.com
                 </Link>
@@ -225,7 +225,7 @@ export function Footer() {
           <div>
             <h3 className="text-lg font-semibold mb-6 relative">
               <span className="relative z-10">Newsletter</span>
-              <span className="absolute bottom-0 left-0 w-12 h-0.5 bg-secondary"></span>
+              <span className="absolute bottom-0 left-0 w-12 h-0.5 bg-[#F08900]"></span>
             </h3>
             <p className="text-gray-400 text-sm mb-4">
               Subscribe to our newsletter to receive the latest updates and news.
@@ -235,13 +235,13 @@ export function Footer() {
                 <input
                   type="email"
                   placeholder="Your Email Address"
-                  className="w-full bg-gray-800 border border-gray-700 rounded-md py-3 px-4 text-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                  className="w-full bg-gray-800 border border-gray-700 rounded-md py-3 px-4 text-gray-300 focus:outline-none focus:ring-2 focus:ring-[#5E366D] focus:border-transparent"
                   required
                 />
               </div>
               <button
                 type="submit"
-                className="bg-secondary hover:bg-secondary/90 text-white px-5 py-3 rounded-md transition-all duration-300 hover:shadow-lg flex items-center justify-center w-full"
+                className="bg-[#F08900] hover:bg-[#F08900]/90 text-white px-5 py-3 rounded-md transition-all duration-300 hover:shadow-lg flex items-center justify-center w-full"
               >
                 Subscribe
                 <ArrowRight size={16} className="ml-2" />
