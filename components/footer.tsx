@@ -36,76 +36,16 @@ export function Footer() {
         {/* Main Footer Content */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 mb-12">
           {/* Column 1: About */}
-          <div className="space-y-6">
+          <div className="space-y-6 flex items-center justify-center pt-4">
             <Link href="/" className="inline-block">
               <Image
                 src="https://res.cloudinary.com/dosxengut/image/upload/v1746802991/image_ummqsj.png"
                 alt="Legend Holding Group"
                 width={450}
                 height={200}
-                className="h-16 w-auto"
+                className="w-auto"
               />
             </Link>
-            <p className="text-white/80 text-sm leading-relaxed">
-              Legend Holding Group is a diversified business conglomerate with interests spanning automotive, energy,
-              facility management, travel, and technology sectors, committed to excellence and innovation.
-            </p>
-            <div className="flex space-x-4">
-              <Link
-                href="https://facebook.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-white/80 hover:text-white transition-colors"
-              >
-                <span className="sr-only">Facebook</span>
-                <Facebook size={20} />
-              </Link>
-              <Link
-                href="https://twitter.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-white/80 hover:text-white transition-colors"
-              >
-                <span className="sr-only">Twitter</span>
-                <Twitter size={20} />
-              </Link>
-              <Link
-                href="https://instagram.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-white/80 hover:text-white transition-colors"
-              >
-                <span className="sr-only">Instagram</span>
-                <Instagram size={20} />
-              </Link>
-              <Link
-                href="https://linkedin.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-white/80 hover:text-white transition-colors"
-              >
-                <span className="sr-only">LinkedIn</span>
-                <Linkedin size={20} />
-              </Link>
-              <Link
-                href="https://youtube.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-white/80 hover:text-white transition-colors"
-              >
-                <span className="sr-only">YouTube</span>
-                <Youtube size={20} />
-              </Link>
-              <Link
-                href="https://tiktok.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-white/80 hover:text-white transition-colors"
-              >
-                <span className="sr-only">TikTok</span>
-                <TikTokIcon size={20} />
-              </Link>
-            </div>
           </div>
 
           {/* Column 2: Quick Links */}
@@ -200,13 +140,11 @@ export function Footer() {
               <li className="flex items-start">
                 <MapPin size={20} className="text-secondary flex-shrink-0 mr-3 mt-1" />
                 <span className="text-white/80">
-                  Jebel Ali Freezone,
+                  Jebel Ali Freezone, Gate 5,
                   <br />
-                  Plot No. S30502 – opposite Redington,
+                  Legend Holding Group HQ
                   <br />
-                  Gate5 – Mina Jebel Ali – Dubai
-                  <br />
-                  United Arab Emirates
+                  Dubai, United Arab Emirates
                 </span>
               </li>
               <li className="flex items-center">
@@ -222,6 +160,65 @@ export function Footer() {
                 </Link>
               </li>
             </ul>
+            <div className="mt-6 pt-6 border-t border-white/10">
+              <h4 className="text-sm font-semibold mb-4 text-white">Follow Us</h4>
+              <div className="flex space-x-4">
+                <Link
+                  href="https://facebook.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-white/80 hover:text-white transition-colors"
+                >
+                  <span className="sr-only">Facebook</span>
+                  <Facebook size={20} />
+                </Link>
+                <Link
+                  href="https://twitter.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-white/80 hover:text-white transition-colors"
+                >
+                  <span className="sr-only">Twitter</span>
+                  <Twitter size={20} />
+                </Link>
+                <Link
+                  href="https://instagram.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-white/80 hover:text-white transition-colors"
+                >
+                  <span className="sr-only">Instagram</span>
+                  <Instagram size={20} />
+                </Link>
+                <Link
+                  href="https://linkedin.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-white/80 hover:text-white transition-colors"
+                >
+                  <span className="sr-only">LinkedIn</span>
+                  <Linkedin size={20} />
+                </Link>
+                <Link
+                  href="https://youtube.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-white/80 hover:text-white transition-colors"
+                >
+                  <span className="sr-only">YouTube</span>
+                  <Youtube size={20} />
+                </Link>
+                <Link
+                  href="https://tiktok.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-white/80 hover:text-white transition-colors"
+                >
+                  <span className="sr-only">TikTok</span>
+                  <TikTokIcon size={20} />
+                </Link>
+              </div>
+            </div>
           </div>
 
           {/* Column 4: Newsletter */}

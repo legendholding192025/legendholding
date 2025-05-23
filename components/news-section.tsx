@@ -86,8 +86,8 @@ export function Newsroom() {
       <div className="container mx-auto px-4">
         <div className="flex flex-col md:flex-row md:items-center justify-between mb-10">
           <div>
-            <h2 className="text-3xl sm:text-4xl font-bold text-[#5E366D] mb-2">Latest News</h2>
-            <p className="text-[#5E366D]/80 max-w-2xl">
+            <h2 className="text-3xl sm:text-4xl font-bold text-[rgb(43,28,72)] mb-2">Latest News</h2>
+            <p className="text-[rgb(93,55,110)] max-w-2xl text-lg md:text-xl leading-relaxed">
               Stay updated with the latest developments, announcements, and achievements from Legend Holding Group.
             </p>
           </div>
@@ -120,20 +120,17 @@ export function Newsroom() {
                     height={240}
                     className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
                   />
-                  <div className="absolute top-0 left-0 bg-[#F39200] text-white text-xs font-semibold px-3 py-1 m-3 rounded">
-                    {news.category}
-                  </div>
                 </div>
                 <div className="p-5 flex flex-col flex-grow relative">
-                  <div className="flex items-center text-[#5E366D]/70 text-sm mb-3">
+                  <div className="flex items-center text-gray-500 text-sm mb-3">
                     <Calendar className="h-4 w-4 mr-1" />
                     {news.date}
                   </div>
-                  <h3 className="text-lg font-semibold mb-3 text-[#5E366D] group-hover:text-[#F39200] transition-colors duration-300 line-clamp-2">
+                  <h3 className="text-lg font-semibold mb-3 text-[rgb(43,28,72)] line-clamp-2">
                     {news.title}
                   </h3>
-                  <p className="text-[#5E366D]/80 mb-4 line-clamp-3 flex-grow">{news.excerpt}</p>
-                  <div className="text-[#5E366D] font-medium text-sm flex items-center group-hover:text-[#F39200] transition-colors duration-300">
+                  <p className="text-[rgb(93,55,110)] mb-4 line-clamp-3 flex-grow text-lg">{news.excerpt}</p>
+                  <div className="text-[#F39200] font-medium text-sm flex items-center">
                     Read More
                     <ArrowRight className="ml-1 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                   </div>
@@ -146,7 +143,7 @@ export function Newsroom() {
             <div className="flex justify-center mt-8 gap-2">
               <button
                 onClick={prevSlide}
-                className="p-2 rounded-full bg-[rgb(234,226,214)]/20 border border-[#5E366D]/20 text-[#5E366D] hover:bg-[#5E366D] hover:text-white transition-colors duration-300"
+                className="p-2 rounded-full bg-[rgb(234,226,214)]/20 border border-[rgb(43,28,72)]/20 text-[rgb(43,28,72)] hover:bg-[rgb(43,28,72)] hover:text-white transition-colors duration-300"
                 aria-label="Previous news"
               >
                 <ChevronLeft className="h-5 w-5" />
@@ -159,7 +156,7 @@ export function Newsroom() {
                     className={cn(
                       "w-2 h-2 rounded-full transition-all duration-300",
                       Math.floor(currentIndex / itemsPerPage) === index
-                        ? "bg-[#5E366D] w-6"
+                        ? "bg-[rgb(43,28,72)] w-6"
                         : "bg-[rgb(234,226,214)] hover:bg-[rgb(234,226,214)]/70",
                     )}
                     aria-label={`Go to page ${index + 1}`}
@@ -168,7 +165,7 @@ export function Newsroom() {
               </div>
               <button
                 onClick={nextSlide}
-                className="p-2 rounded-full bg-[rgb(234,226,214)]/20 border border-[#5E366D]/20 text-[#5E366D] hover:bg-[#5E366D] hover:text-white transition-colors duration-300"
+                className="p-2 rounded-full bg-[rgb(234,226,214)]/20 border border-[rgb(43,28,72)]/20 text-[rgb(43,28,72)] hover:bg-[rgb(43,28,72)] hover:text-white transition-colors duration-300"
                 aria-label="Next news"
               >
                 <ChevronRight className="h-5 w-5" />

@@ -8,7 +8,6 @@ import { Footer } from "@/components/footer"
 import { PartnerSection } from "@/components/partner-section"
 import { OurPresenceSection } from "@/components/our-presence-section"
 import CompanyValuesInfographic from "@/components/value"
-import LumoWrapper from "@/components/LumoWrapper"
 
 export default function Home() {
   return (
@@ -25,7 +24,6 @@ export default function Home() {
       <PartnerSection />    
       <Newsroom />
       <Footer />
-      <LumoWrapper />
     </main>
   )
 }

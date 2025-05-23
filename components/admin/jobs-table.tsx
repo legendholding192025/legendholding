@@ -1,129 +1,157 @@
 "use client"
 
+import * as React from "react"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Button } from "@/components/ui/button"
+import { Eye, Trash2, Edit2, ChevronLeft, ChevronRight } from "lucide-react"
 import { useState } from "react"
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import { Button } from "@/components/ui/button"
-import { Edit2, Trash2 } from "lucide-react"
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
-import { Badge } from "@/components/ui/badge"
-import { format } from "date-fns"
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
+import { Label } from "@/components/ui/label"
+import { toast } from "sonner"
 
 interface Job {
   id: string
   title: string
-  description: string
-  requirements: string
-  location: string
-  job_type: string
-  experience_level: string
-  salary_range: string
   department: string
-  posted_at: string
-  deadline: string
-  is_active: boolean
+  location: string
+  description: string
+  requirements: string[]
+  responsibilities: string[]
+  job_type: string
   created_at: string
-  updated_at: string
+  status: 'active' | 'inactive'
 }
 
 interface JobsTableProps {
   jobs: Job[]
   loading: boolean
-  onEdit: (job: Job) => void
-  onDelete: (id: string) => void
+  onDelete: (id: string) => Promise<void>
+  onUpdate: (id: string, data: Partial<Job>) => Promise<void>
 }
 
-export function JobsTable({ jobs, loading, onEdit, onDelete }: JobsTableProps) {
-  const [jobToDelete, setJobToDelete] = useState<string | null>(null)
+export function JobsTable({ jobs = [], loading, onDelete, onUpdate }: JobsTableProps) {
+  const [currentPage, setCurrentPage] = useState(1)
+  const [editingJob, setEditingJob] = useState<Job | null>(null)
+  const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null)
+  const [isDeleting, setIsDeleting] = useState(false)
+  const itemsPerPage = 10
+  const totalPages = Math.ceil((jobs?.length || 0) / itemsPerPage)
+  
+  const startIndex = (currentPage - 1) * itemsPerPage
+  const paginatedJobs = jobs?.slice(startIndex, startIndex + itemsPerPage) || []
 
-  const handleDelete = () => {
-    if (jobToDelete) {
-      onDelete(jobToDelete)
-      setJobToDelete(null)
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page)
+  }
+
+  const handleEdit = (job: Job) => {
+    setEditingJob(job)
+  }
+
+  const handleUpdate = async () => {
+    if (!editingJob) return
+    try {
+      await onUpdate(editingJob.id, editingJob)
+      setEditingJob(null)
+      toast.success("Job updated successfully")
+    } catch (error) {
+      console.error('Error updating job:', error)
+      toast.error("Failed to update job")
+    }
+  }
+
+  const handleDelete = async (id: string) => {
+    try {
+      setIsDeleting(true)
+      await onDelete(id)
+      setDeleteConfirmId(null)
+      toast.success("Job deleted successfully")
+    } catch (error) {
+      console.error('Error deleting job:', error)
+      toast.error("Failed to delete job")
+    } finally {
+      setIsDeleting(false)
     }
   }
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-lg text-gray-500">Loading jobs...</div>
+      <div className="flex items-center justify-center p-8">
+        <div className="flex flex-col items-center gap-2">
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
+          <p className="text-sm text-muted-foreground">Loading jobs...</p>
+        </div>
       </div>
     )
   }
 
-  if (jobs.length === 0) {
+  if (!Array.isArray(jobs) || jobs.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center h-64">
-        <div className="text-lg text-gray-500">No jobs found</div>
-        <div className="text-sm text-gray-400 mt-2">Create your first job posting</div>
+      <div className="flex items-center justify-center p-8">
+        <p className="text-muted-foreground">No jobs posted yet</p>
       </div>
     )
   }
 
   return (
-    <>
+    <div className="space-y-4">
       <div className="rounded-md border">
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead className="w-[80px]">S.N.</TableHead>
               <TableHead>Title</TableHead>
               <TableHead>Department</TableHead>
-              <TableHead>Type</TableHead>
               <TableHead>Location</TableHead>
-              <TableHead>Posted</TableHead>
+              <TableHead>Type</TableHead>
               <TableHead>Status</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
+              <TableHead className="w-[120px]">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {jobs.map((job) => (
-              <TableRow key={job.id}>
-                <TableCell className="font-medium">{job.title}</TableCell>
-                <TableCell>{job.department}</TableCell>
-                <TableCell>{job.job_type}</TableCell>
-                <TableCell>{job.location}</TableCell>
+            {paginatedJobs.map((job, index) => (
+              <TableRow key={job?.id || index}>
+                <TableCell>{startIndex + index + 1}</TableCell>
+                <TableCell className="font-medium">{job?.title || 'N/A'}</TableCell>
+                <TableCell>{job?.department || 'N/A'}</TableCell>
+                <TableCell>{job?.location || 'N/A'}</TableCell>
+                <TableCell>{job?.job_type || 'N/A'}</TableCell>
                 <TableCell>
-                  {format(new Date(job.posted_at), "MMM d, yyyy")}
+                  <span className={`px-2 py-1 rounded-full text-xs ${
+                    job?.status === 'active'
+                    ? "bg-green-100 text-green-700"
+                    : "bg-yellow-100 text-yellow-700"
+                  }`}>
+                    {job?.status === 'active' ? "Active" : "Inactive"}
+                  </span>
                 </TableCell>
                 <TableCell>
-                  <Badge 
-                    variant={job.is_active ? "default" : "secondary"}
-                  >
-                    {job.is_active ? "Active" : "Inactive"}
-                  </Badge>
-                </TableCell>
-                <TableCell className="text-right">
-                  <div className="flex justify-end gap-2">
+                  <div className="flex space-x-2">
                     <Button
                       variant="ghost"
                       size="icon"
-                      onClick={() => onEdit(job)}
+                      onClick={() => job && handleEdit(job)}
+                      title="Edit"
                     >
                       <Edit2 className="h-4 w-4" />
-                      <span className="sr-only">Edit</span>
                     </Button>
                     <Button
                       variant="ghost"
                       size="icon"
-                      onClick={() => setJobToDelete(job.id)}
+                      onClick={() => job?.id && setDeleteConfirmId(job.id)}
+                      className="text-red-500 hover:text-red-700"
+                      title="Delete"
                     >
                       <Trash2 className="h-4 w-4" />
-                      <span className="sr-only">Delete</span>
                     </Button>
                   </div>
                 </TableCell>
@@ -133,21 +161,158 @@ export function JobsTable({ jobs, loading, onEdit, onDelete }: JobsTableProps) {
         </Table>
       </div>
 
-      <AlertDialog open={!!jobToDelete} onOpenChange={() => setJobToDelete(null)}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-            <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete the job posting
-              and remove it from our servers.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDelete}>Delete</AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-    </>
+      {totalPages > 1 && (
+        <div className="flex items-center justify-between px-2">
+          <p className="text-sm text-gray-500">
+            Showing {startIndex + 1} to {Math.min(startIndex + itemsPerPage, jobs.length)} of {jobs.length} entries
+          </p>
+          <div className="flex items-center space-x-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+              <Button
+                key={page}
+                variant={currentPage === page ? "default" : "outline"}
+                size="sm"
+                onClick={() => handlePageChange(page)}
+              >
+                {page}
+              </Button>
+            ))}
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+            >
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Job Dialog */}
+      <Dialog open={!!editingJob} onOpenChange={(open) => !open && setEditingJob(null)}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Edit Job</DialogTitle>
+            <DialogDescription>
+              Make changes to the job posting.
+            </DialogDescription>
+          </DialogHeader>
+          {editingJob && (
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="edit-title">Job Title</Label>
+                  <Input
+                    id="edit-title"
+                    value={editingJob.title}
+                    onChange={(e) =>
+                      setEditingJob((prev) =>
+                        prev ? { ...prev, title: e.target.value } : null
+                      )
+                    }
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="edit-department">Department</Label>
+                  <Input
+                    id="edit-department"
+                    value={editingJob.department}
+                    onChange={(e) =>
+                      setEditingJob((prev) =>
+                        prev ? { ...prev, department: e.target.value } : null
+                      )
+                    }
+                  />
+                </div>
+              </div>
+              <div>
+                <Label htmlFor="edit-location">Location</Label>
+                <Input
+                  id="edit-location"
+                  value={editingJob.location}
+                  onChange={(e) =>
+                    setEditingJob((prev) =>
+                      prev ? { ...prev, location: e.target.value } : null
+                    )
+                  }
+                />
+              </div>
+              <div>
+                <Label htmlFor="edit-description">Description</Label>
+                <Textarea
+                  id="edit-description"
+                  value={editingJob.description}
+                  onChange={(e) =>
+                    setEditingJob((prev) =>
+                      prev ? { ...prev, description: e.target.value } : null
+                    )
+                  }
+                  className="h-32"
+                />
+              </div>
+              <div>
+                <Label htmlFor="edit-status">Status</Label>
+                <select
+                  id="edit-status"
+                  value={editingJob.status}
+                  onChange={(e) =>
+                    setEditingJob((prev) =>
+                      prev
+                        ? { ...prev, status: e.target.value as 'active' | 'inactive' }
+                        : null
+                    )
+                  }
+                  className="w-full px-3 py-2 border rounded-md"
+                >
+                  <option value="active">Active</option>
+                  <option value="inactive">Inactive</option>
+                </select>
+              </div>
+            </div>
+          )}
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setEditingJob(null)}>
+              Cancel
+            </Button>
+            <Button onClick={handleUpdate} className="bg-secondary hover:bg-secondary/90">
+              Save Changes
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog open={!!deleteConfirmId} onOpenChange={(open) => !open && setDeleteConfirmId(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Confirm Delete</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to delete this job posting? This action cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setDeleteConfirmId(null)}>
+              Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={() => deleteConfirmId && handleDelete(deleteConfirmId)}
+              disabled={isDeleting}
+            >
+              {isDeleting ? "Deleting..." : "Delete"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </div>
   )
 } 

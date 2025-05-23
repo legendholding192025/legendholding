@@ -75,15 +75,16 @@ export function OurPresenceSection() {
       <div className="container mx-auto px-4 relative">
         {/* Title Section */}
         <motion.div 
-          className="mb-8"
+          className="mb-12 text-center"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
           variants={fadeInUp}
         >
-          <h2 className="text-3xl sm:text-4xl font-bold text-primary">
+          <h2 className="text-3xl sm:text-4xl font-bold text-[#2B1C48] mb-4">
             Our Presence
           </h2>
+          <div className="w-24 h-1 bg-[#EE8900] mx-auto rounded-full"></div>
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">

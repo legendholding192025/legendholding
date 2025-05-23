@@ -1,94 +1,28 @@
 "use client"
 
-import { useEffect, useState, useRef } from "react"
+import { useState, useRef } from "react"
 import { motion, useInView } from "framer-motion"
 import Image from "next/image"
 import { Car, Building2, Globe, Users, Clock, CarTaxiFront, Handshake } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 interface CounterProps {
-  end: number
-  duration: number
+  value: number
   suffix?: string
-  isInView: boolean
-  format?: string
 }
 
-const Counter = ({ end, duration, suffix = "", isInView, format }: CounterProps) => {
-  const [count, setCount] = useState(0)
-
-  useEffect(() => {
-    if (!isInView) return
-
-    let startTime: number
-    let animationFrame: number
-
-    const countUp = (timestamp: number) => {
-      if (!startTime) startTime = timestamp
-      const progress = timestamp - startTime
-      const progressPercent = Math.min(progress / duration, 1)
-
-      setCount(Math.floor(progressPercent * end))
-
-      if (progressPercent < 1) {
-        animationFrame = requestAnimationFrame(countUp)
-      }
-    }
-
-    animationFrame = requestAnimationFrame(countUp)
-
-    return () => {
-      cancelAnimationFrame(animationFrame)
-    }
-  }, [end, duration, isInView])
-
-  if (format === "million" && count === 1) {
-    return <span>1 Million{suffix}</span>
-  }
-
+const Counter = ({ value, suffix = "" }: CounterProps) => {
   return (
     <span>
-      {count}
+      {value}
       {suffix}
     </span>
   )
 }
 
-const containerVariants = {
-  hidden: { 
-    opacity: 0,
-  },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.15,
-      delayChildren: 0.2,
-      ease: "easeOut",
-      duration: 0.8
-    }
-  }
-}
-
-const cardVariants = {
-  hidden: { 
-    opacity: 0,
-    y: 30,
-    scale: 0.95
-  },
-  visible: { 
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: {
-      duration: 0.6,
-      ease: [0.22, 1, 0.36, 1]
-    }
-  }
-}
-
 export function BrandStatsSection() {
   const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, amount: 0.2, margin: "100px" })
+  const isInView = useInView(ref, { once: true, amount: 0.2 })
 
   const stats = [
     {
@@ -96,115 +30,100 @@ export function BrandStatsSection() {
       value: 20,
       suffix: "+",
       label: "Brands",
-      color: "bg-[#5E366D]",
+      color: "bg-[#2B1C48]",
     },
     {
       icon: <Users className="h-7 w-7" />,
       value: 1,
-      suffix: "+",
+      suffix: "Million +",
       label: "Customers a year",
-      color: "bg-[#F39200]",
-      format: "million"
+      color: "bg-[#5D376E]",
     },
     {
       icon: <Globe className="h-7 w-7" />,
       value: 10,
       suffix: "+",
       label: "Countries",
-      color: "bg-[#5E366D]",
+      color: "bg-[#EE8900]",
     },
+    
     {
       icon: <Building2 className="h-7 w-7" />,
       value: 1,
       suffix: "B USD",
       label: "Sales Turnover",
-      color: "bg-[#F39200]",
+      color: "bg-[#EE8900]/80",
     },
   ]
 
   return (
-    <section ref={ref} className="py-20 relative overflow-hidden bg-white">
-      <div className="container relative z-10">
-        <div className="flex flex-col items-center mb-12">
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            className="text-3xl sm:text-4xl font-bold text-[#5E366D] mb-4 text-center"
-          >
-            <span className="text-[#5E366D]">
+    <section ref={ref} className="py-20 relative bg-white">
+      <div className="container">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6 }}
+          className="flex flex-col items-center mb-12"
+        >
+          <h2 className="text-3xl sm:text-4xl font-bold text-[#2B1C48] mb-4 text-center">
+            <span className="text-[#2B1C48]">
               Capabilities
             </span>
-          </motion.h2>
+          </h2>
+          <div className="w-24 h-1 bg-[#EE8900] mx-auto rounded-full mb-6"></div>
 
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
-            className="text-[#5E366D]/80 max-w-2xl mx-auto text-center"
-          >
+          <p className="text-[#5D376E]/80 max-w-2xl mx-auto text-center text-lg md:text-xl leading-relaxed">
             For over two decades, Legend Holding Group has been pioneering innovation and excellence across automotive,
             energy, facility management, and technology sectors.
-          </motion.p>
-        </div>
+          </p>
+        </motion.div>
 
-        <motion.div 
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10"
-          variants={containerVariants}
-          initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
-        >
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10">
           {stats.map((stat, index) => (
             <motion.div
               key={index}
-              variants={cardVariants}
-              className="bg-[rgb(234,226,214)]/20 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-500 hover:-translate-y-2 group will-change-transform relative"
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              className={cn(
+                "rounded-xl overflow-hidden shadow-lg",
+                stat.color
+              )}
             >
-              <div 
-                className="absolute inset-0 bg-gradient-to-br from-[rgb(234,226,214)]/50 to-white opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                aria-hidden="true"
-              />
-              <div className={cn("h-2 transition-all duration-300 group-hover:h-3", stat.color)}></div>
-              <div className="p-6 relative">
+              <div className="p-6">
                 <div className="flex items-start gap-4">
-                  <div className={cn("p-3 rounded-lg text-white transition-transform duration-300 group-hover:scale-110 shadow-lg", stat.color)}>
+                  <div className="p-3 rounded-lg bg-white/10 text-white transform transition-all duration-300 hover:scale-110 hover:bg-white/20 hover:shadow-lg">
                     {stat.icon}
                   </div>
                   <div>
-                    <h3 className="text-3xl font-bold text-[#5E366D] mb-1 flex items-center">
+                    <h3 className="text-3xl font-bold text-white mb-1 flex items-center">
                       <Counter 
-                        end={stat.value} 
-                        duration={2500} 
-                        suffix={stat.suffix} 
-                        isInView={isInView}
-                        format={stat.format}
+                        value={stat.value} 
+                        suffix={stat.suffix}
                       />
                     </h3>
-                    <p className="text-[#5E366D]/80">{stat.label}</p>
+                    <p className="text-white/80 text-lg font-medium">
+                      {stat.label}
+                    </p>
                   </div>
                 </div>
 
-                <div className="mt-4 pt-4 border-t border-[#5E366D]/10">
-                  <motion.div
-                    initial={{ width: 0 }}
-                    animate={isInView ? { width: "100%" } : {}}
-                    transition={{ duration: 1.8, delay: 0.5, ease: "easeOut" }}
-                    className={cn("h-1 rounded-full", stat.color + "/30")}
-                  />
+                <div className="mt-4 pt-4 border-t border-white/10">
+                  <div className="h-1 rounded-full bg-white/20" />
                 </div>
               </div>
             </motion.div>
           ))}
-        </motion.div>
+        </div>
 
-        <motion.div
+        <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.8 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
           className="mt-16 text-center"
         >
-          <div className="inline-flex items-center px-6 py-3 rounded-full bg-[rgb(234,226,214)]/20 text-[#5E366D] text-sm border border-[#5E366D]/20 hover:shadow-md transition-all duration-300 group">
-            <span className="w-2 h-2 rounded-full bg-[#F39200] mr-2 animate-pulse"></span>
+          <div className="inline-flex items-center px-6 py-3 rounded-full bg-[rgb(234,226,214)]/20 text-[#2B1C48] text-sm border border-[#5D376E]/20">
+            <span className="w-2 h-2 rounded-full bg-[#EE8900] mr-2"></span>
             Committed to excellence and innovation since 2008
           </div>
         </motion.div>

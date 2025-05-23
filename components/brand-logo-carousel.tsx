@@ -20,37 +20,6 @@ const brandLogos: BrandLogo[] = [
     url: "/business/legend-motors",
   },
   
-
-  {
-    id: "skywell",
-    name: "Skywell",
-    logo: "https://res.cloudinary.com/dosxengut/image/upload/v1746788882/logo_sisnn9.png",
-    url: "/business/skywell",
-  },
-  {
-    id: "kaiyi",
-    name: "Kaiyi",
-    logo: "https://res.cloudinary.com/dosxengut/image/upload/v1746788951/download_wmkc6s.png",
-    url: "/business/kaiyi",
-  },
-  {
-    id: "li-auto",
-    name: "Li Auto",
-    logo: "https://res.cloudinary.com/dosxengut/image/upload/v1746788922/logo-text-black-en.e6782a94_xfc37w_1_dmhqga.svg",
-    url: "/business/li-auto",
-  },
-  {
-    id: "jidu",
-    name: "JIDU",
-    logo: "https://res.cloudinary.com/dosxengut/image/upload/v1746789093/Jidu-Logo-White-TEXT-ONLY-e1726466708510-300x75_sukedy.png",
-    url: "/business/jidu",
-  },
-  {
-    id: "212",
-    name: "212",
-    logo: "https://res.cloudinary.com/dosxengut/image/upload/v1746788883/Legend-automobile-service-centre-01-1024x471_me8mnh.png",
-    url: "/business/212",
-  },
   {
     id: "rental-services",
     name: "Legend Rental",
@@ -81,6 +50,12 @@ const brandLogos: BrandLogo[] = [
     logo: "https://res.cloudinary.com/dosxengut/image/upload/v1746793661/WhatsApp_Image_2025-05-09_at_4.26.15_PM_qnt87i.jpg",
     url: "/business/technology",
   },
+  {
+    id: "Legend-dealership",
+    name: "Legend dealership",
+    logo: "https://res.cloudinary.com/dosxengut/image/upload/v1747988307/Picture1_gkrsxy.png",
+    url: "/business/dealership",
+  },
 ]
 
 export function BrandLogoCarousel() {
@@ -101,7 +76,7 @@ export function BrandLogoCarousel() {
   useEffect(() => {
     let animationId: number
     let lastTimestamp = 0
-    const speed = isPaused ? 0 : 0.2 // pixels per millisecond (reduced from 0.5)
+    const speed = isPaused ? 0 : 0.08 // pixels per millisecond (reduced from 0.2)
 
     const animate = (timestamp: number) => {
       if (!carouselRef.current) return
@@ -140,7 +115,10 @@ export function BrandLogoCarousel() {
   return (
     <section className="py-16 bg-white">
       <div className="container mx-auto px-4">
-        <h2 className="text-3xl sm:text-4xl font-bold text-primary mb-12 text-center">Our Brands</h2>
+        <div className="text-center mb-12">
+          <h2 className="text-3xl sm:text-4xl font-bold text-[#2B1C48] mb-4">Our Brands</h2>
+          <div className="w-24 h-1 bg-[#EE8900] mx-auto rounded-full"></div>
+        </div>
 
         <div
           className="relative overflow-hidden"

@@ -117,40 +117,40 @@ type MenuItem = {
 const menuItems: MenuItem[] = [
   {
     title: "Who We Are",
-    url: "/about",
+    url: "/who-we-are",
     hasSubmenu: true,
     submenu: [
       {
         title: "Vision, Mission & Values",
-        url: "/about/journey",
+        url: "/who-we-are/vision-mission",
         image: "https://res.cloudinary.com/dosxengut/image/upload/v1747649702/mission-values-lead_ch3qfe.webp",
-        description: "Discover the story of Legend Holding Group and our path to success.",
+        description: "Discover our vision, mission, and the values that drive us forward.",
         icon: <History className="w-5 h-5" />
       },
       {
         title: "The Team",
-        url: "/about/team",
+        url: "/who-we-are/the-team",
         image: "https://res.cloudinary.com/dosxengut/image/upload/v1747650256/1744992098296_cqtkjo.jpg",
         description: "Meet the dedicated professionals behind our continued growth and innovation.",
         icon: <Users className="w-5 h-5" />
       },
       {
         title: "Brand Story",
-        url: "/about/capabilities",
+        url: "/who-we-are/brand-story",
         image: "https://res.cloudinary.com/dosxengut/image/upload/v1747649828/lumo-with-logo_crratq.png",
-        description: "Explore our diverse range of expertise across multiple industries.",
+        description: "Explore our journey and the story behind our brand.",
         icon: <Briefcase className="w-5 h-5" />
       },
       {
         title: "Our Partners",
-        url: "/about/partners",
+        url: "/who-we-are/partners",
         image: "https://res.cloudinary.com/dosxengut/image/upload/v1747650381/1746961012298_hxmgin.jpg",
         description: "Learn about our strategic partnerships that drive mutual success.",
         icon: <Building2 className="w-5 h-5" />
       },
       {
         title: "CSR",
-        url: "/about/csr",
+        url: "/who-we-are/csr",
         image: "https://res.cloudinary.com/dosxengut/image/upload/v1746797713/blog-corporate-social-responsibility-program_olhz5m.webp",
         description: "Our commitment to corporate social responsibility and community impact.",
         icon: <Building2 className="w-5 h-5" />
@@ -222,7 +222,7 @@ const menuItems: MenuItem[] = [
   },
   {
     title: "Newsroom",
-    url: "/newsroom",
+    url: "/news",
   },
   {
     title: "Careers",
@@ -508,7 +508,7 @@ export function Header() {
         role="banner"
       >
         <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between relative h-10 md:h-12 lg:h-14">
+          <div className="flex items-center justify-between relative h-12 md:h-16 lg:h-20">
             {/* Logo */}
             <Link 
               href="/" 
@@ -517,9 +517,9 @@ export function Header() {
               <Image
                 src={logoUrl || "/placeholder.svg"}
                 alt="Legend Holding Group"
-                width={220}
-                height={80}
-                className="h-10 md:h-12 lg:h-14 w-auto"
+                width={280}
+                height={100}
+                className="h-12 md:h-16 lg:h-20 w-auto"
                 priority
               />
             </Link>
@@ -565,18 +565,22 @@ export function Header() {
                   <Link
                     href={item.url}
                     className={cn(
+                      item.title === "Contact Us" ? 
+                      "bg-[#5E366D] hover:bg-[#EE8900] text-white px-5 py-2 rounded-md transition-all duration-300 hover:shadow-lg transform hover:-translate-y-0.5 active:translate-y-0 text-sm md:text-base md:px-6" :
                       "text-gray-800 font-medium text-base hover:text-primary transition-colors duration-200 flex items-center py-2 px-1 relative group",
-                      (activeMenu === item.title || hoveredItem === item.title) && "text-primary",
+                      (activeMenu === item.title || hoveredItem === item.title) && item.title !== "Contact Us" && "text-primary",
                     )}
                   >
-                    <span className="relative">
+                    <span className={item.title !== "Contact Us" ? "relative" : ""}>
                       {item.title}
+                      {item.title !== "Contact Us" && (
                       <span
                         className={cn(
                           "absolute -bottom-1 left-0 w-0 h-0.5 bg-secondary transition-all duration-300 group-hover:w-full",
                           (activeMenu === item.title || hoveredItem === item.title) && "w-full",
                         )}
                       ></span>
+                      )}
                     </span>
                     {item.hasSubmenu && (
                       <ChevronDown
@@ -793,13 +797,6 @@ export function Header() {
                   )}
                 </div>
               ))}
-
-              <Link
-                href="/contact"
-                className="bg-[#5E366D] hover:bg-[#5E366D]/90 text-white px-5 py-2 rounded-md transition-all duration-300 hover:shadow-lg transform hover:-translate-y-0.5 active:translate-y-0 text-sm md:text-base md:px-6"
-              >
-                Get in Touch
-              </Link>
             </nav>
           </div>
         </div>
@@ -820,6 +817,9 @@ export function Header() {
             WebkitOverflowScrolling: 'touch',
             touchAction: 'pan-y pinch-zoom'
           }}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
         >
           <div className="h-full flex flex-col">
             {/* Search Bar */}
@@ -1163,34 +1163,6 @@ export function Header() {
                   ))}
                 </nav>
               )}
-            </div>
-
-            {/* Bottom CTA */}
-            <div 
-              className={cn(
-                "px-4 py-3 bg-white border-t border-gray-100",
-                "transition-opacity duration-300 delay-200",
-                mobileMenuOpen ? "opacity-100" : "opacity-0"
-              )}
-            >
-              <Link
-                href="/contact"
-                className={cn(
-                  "block w-full bg-primary text-white text-center",
-                  "px-6 py-4 rounded-lg font-medium",
-                  "hover:bg-primary/90 active:bg-primary/80",
-                  "transition-colors duration-200",
-                  "shadow-lg"
-                )}
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  setSearchQuery("");
-                  setSearchResults(null);
-                }}
-                tabIndex={mobileMenuOpen ? 0 : -1}
-              >
-                Get in Touch
-              </Link>
             </div>
           </div>
         </div>

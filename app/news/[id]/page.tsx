@@ -6,20 +6,17 @@ import { useParams } from "next/navigation"
 import Image from "next/image"
 import Link from "next/link"
 import {
-  BookmarkIcon,
   CalendarIcon,
   ChevronLeft,
   Clock,
+  ArrowRight,
   Facebook,
-  Heart,
-  Link2,
-  Linkedin,
-  Share2,
   Twitter,
+  Linkedin,
+  Link2,
 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
-import { Separator } from "@/components/ui/separator"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { toast } from "sonner"
@@ -41,15 +38,37 @@ interface NewsArticle {
 export default function NewsArticlePage() {
   const [article, setArticle] = useState<NewsArticle | null>(null)
   const [relatedArticles, setRelatedArticles] = useState<NewsArticle[]>([])
+  const [latestArticles, setLatestArticles] = useState<NewsArticle[]>([])
   const [loading, setLoading] = useState(true)
   const params = useParams()
   const supabase = createClientComponentClient()
 
   useEffect(() => {
-    fetchArticle()
-  }, [params.id])
+    if (params?.id) {
+      fetchArticle()
+      fetchLatestArticles()
+    }
+  }, [params?.id])
+
+  const fetchLatestArticles = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("news_articles")
+        .select("*")
+        .eq("published", true)
+        .order("created_at", { ascending: false })
+        .limit(5)
+
+      if (error) throw error
+      setLatestArticles(data || [])
+    } catch (error) {
+      console.error("Error fetching latest articles:", error)
+    }
+  }
 
   const fetchArticle = async () => {
+    if (!params?.id) return
+
     try {
       // Fetch the current article
       const { data: articleData, error: articleError } = await supabase
@@ -157,158 +176,182 @@ export default function NewsArticlePage() {
             </Link>
           </div>
 
-          <article className="bg-white p-6 rounded-xl shadow-md">
-            {/* Category and Meta Info */}
-            <div className="mb-4 flex flex-wrap items-center gap-4">
-              <span className="rounded-full bg-[#5E366D] px-3 py-1 text-sm font-medium text-white">
-                {article.category}
-              </span>
-              <div className="flex items-center text-sm text-gray-500">
-                <CalendarIcon className="mr-1 h-4 w-4" />
-                {new Date(article.created_at).toLocaleDateString()}
-              </div>
-              <div className="flex items-center text-sm text-gray-500">
-                <Clock className="mr-1 h-4 w-4" />
-                {article.read_time}
-              </div>
+          <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_300px]">
+            <div>
+              <article className="bg-white p-6 rounded-xl shadow-md">
+                {/* Category and Meta Info */}
+                <div className="mb-4 flex flex-wrap items-center gap-4">
+                  <span className="rounded-full bg-[#5E366D] px-3 py-1 text-sm font-medium text-white">
+                    {article.category}
+                  </span>
+                  <div className="flex items-center text-sm text-gray-500">
+                    <CalendarIcon className="mr-1 h-4 w-4" />
+                    {new Date(article.created_at).toLocaleDateString()}
+                  </div>
+                  <div className="flex items-center text-sm text-gray-500">
+                    <Clock className="mr-1 h-4 w-4" />
+                    {article.read_time}
+                  </div>
+                </div>
+
+                {/* Title */}
+                <h1 className="mb-6 text-3xl font-bold leading-tight md:text-4xl lg:text-5xl text-[rgb(43,28,72)]">
+                  {article.title}
+                </h1>
+
+                {/* Featured Image */}
+                <div className="relative mb-8 h-[300px] w-full overflow-hidden rounded-xl md:h-[500px]">
+                  <Image
+                    src={article.image_url || "/placeholder.svg"}
+                    alt={article.title}
+                    fill
+                    className="object-cover"
+                    priority
+                  />
+                </div>
+
+                {/* Content */}
+                <div 
+                  className="prose prose-lg max-w-none prose-headings:text-[rgb(43,28,72)] prose-p:text-[rgb(93,55,110)]"
+                  dangerouslySetInnerHTML={{ __html: article.content }}
+                />
+
+                {/* Share Section */}
+                <div className="mt-8 pt-6 border-t border-gray-200">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Button variant="outline" size="sm">
+                        #{article.category}
+                      </Button>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm text-gray-500 mr-2">Share this article:</span>
+                      <div className="flex gap-2">
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          className="h-8 w-8 rounded-full hover:bg-[#1877F2]/10 hover:text-[#1877F2] transition-colors"
+                          onClick={() => handleShare("facebook")}
+                        >
+                          <Facebook className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          className="h-8 w-8 rounded-full hover:bg-[#1DA1F2]/10 hover:text-[#1DA1F2] transition-colors"
+                          onClick={() => handleShare("twitter")}
+                        >
+                          <Twitter className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          className="h-8 w-8 rounded-full hover:bg-[#0A66C2]/10 hover:text-[#0A66C2] transition-colors"
+                          onClick={() => handleShare("linkedin")}
+                        >
+                          <Linkedin className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          className="h-8 w-8 rounded-full hover:bg-gray-100 transition-colors"
+                          onClick={() => handleShare("copy")}
+                        >
+                          <Link2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </article>
+
+              {/* Related Articles */}
+              {relatedArticles.length > 0 && (
+                <div className="mt-12">
+                  <h2 className="mb-6 text-2xl font-bold text-[rgb(43,28,72)]">Related Articles</h2>
+                  <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                    {relatedArticles.map((relatedArticle) => (
+                      <Link
+                        key={relatedArticle.id}
+                        href={`/news/${relatedArticle.id}`}
+                        className="group overflow-hidden rounded-xl bg-white shadow-md transition-transform hover:-translate-y-1"
+                      >
+                        <div className="relative h-48 w-full">
+                          <Image
+                            src={relatedArticle.image_url || "/placeholder.svg"}
+                            alt={relatedArticle.title}
+                            fill
+                            className="object-cover"
+                          />
+                        </div>
+                        <div className="p-4">
+                          <div className="mb-2 flex items-center gap-3 text-sm text-gray-500">
+                            <div className="flex items-center">
+                              <CalendarIcon className="mr-1 h-4 w-4" />
+                              {new Date(relatedArticle.created_at).toLocaleDateString()}
+                            </div>
+                            <div className="flex items-center">
+                              <Clock className="mr-1 h-4 w-4" />
+                              {relatedArticle.read_time}
+                            </div>
+                          </div>
+                          <h3 className="text-lg font-bold text-[rgb(43,28,72)] group-hover:text-[#5E366D] transition-colors">
+                            {relatedArticle.title}
+                          </h3>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
 
-            {/* Title */}
-            <h1 className="mb-6 text-3xl font-bold leading-tight md:text-4xl lg:text-5xl">
-              {article.title}
-            </h1>
-
-            {/* Author and Share */}
-            <div className="mb-8 flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="h-12 w-12 rounded-full bg-[#5E366D]"></div>
-                <div>
-                  <div className="font-medium">{article.author}</div>
-                  <div className="text-sm text-gray-500">Author</div>
+            {/* Sidebar */}
+            <div className="space-y-8">
+              {/* Latest Articles */}
+              <div className="bg-white p-6 rounded-xl shadow-md">
+                <h3 className="text-xl font-bold mb-6 text-[rgb(43,28,72)]">Latest Articles</h3>
+                <div className="divide-y divide-gray-100">
+                  {latestArticles.map((latestArticle) => (
+                    <Link
+                      key={latestArticle.id}
+                      href={`/news/${latestArticle.id}`}
+                      className="block py-4 first:pt-0 last:pb-0 group"
+                    >
+                      <div className="flex gap-4">
+                        <div className="relative w-20 h-20 flex-shrink-0 overflow-hidden rounded-lg">
+                          <Image 
+                            src={latestArticle.image_url || "/placeholder.svg"} 
+                            alt={latestArticle.title}
+                            fill
+                            className="object-cover group-hover:scale-105 transition-transform duration-300"
+                          />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h4 className="text-base font-medium leading-tight mb-1.5 line-clamp-2 text-[rgb(43,28,72)] group-hover:text-[#5E366D] transition-colors">
+                            {latestArticle.title}
+                          </h4>
+                          <p className="text-sm text-[rgb(93,55,110)] mb-2 line-clamp-2">
+                            {latestArticle.excerpt}
+                          </p>
+                          <div className="flex flex-col gap-1.5">
+                            <div className="flex items-center text-xs text-gray-500">
+                              <Clock className="mr-1 h-3 w-3" />
+                              {latestArticle.read_time}
+                            </div>
+                            <span className="inline-flex items-center text-xs font-medium text-[#F39200] group-hover:text-[#F39200]/80 transition-colors">
+                              Read Now
+                              <ArrowRight className="ml-1 h-3 w-3 transition-transform duration-300 group-hover:translate-x-1" />
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
                 </div>
               </div>
-              <div className="flex gap-2">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className="h-10 w-10 rounded-full"
-                  onClick={() => handleShare("facebook")}
-                >
-                  <Facebook className="h-5 w-5" />
-                </Button>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className="h-10 w-10 rounded-full"
-                  onClick={() => handleShare("twitter")}
-                >
-                  <Twitter className="h-5 w-5" />
-                </Button>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className="h-10 w-10 rounded-full"
-                  onClick={() => handleShare("linkedin")}
-                >
-                  <Linkedin className="h-5 w-5" />
-                </Button>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className="h-10 w-10 rounded-full"
-                  onClick={() => handleShare("copy")}
-                >
-                  <Link2 className="h-5 w-5" />
-                </Button>
-              </div>
             </div>
-
-            {/* Featured Image */}
-            <div className="relative mb-8 h-[300px] w-full overflow-hidden rounded-xl md:h-[500px]">
-              <Image
-                src={article.image_url || "/placeholder.svg"}
-                alt={article.title}
-                fill
-                className="object-cover"
-                priority
-              />
-            </div>
-
-            {/* Content */}
-            <div 
-              className="prose prose-lg max-w-none"
-              dangerouslySetInnerHTML={{ __html: article.content }}
-            />
-
-            {/* Tags and Actions */}
-            <div className="mt-8 flex items-center justify-between border-t border-gray-200 pt-6">
-              <div className="flex gap-2">
-                <Button variant="outline" size="sm">
-                  #{article.category}
-                </Button>
-                <Button variant="outline" size="sm">
-                  #news
-                </Button>
-              </div>
-              <div className="flex gap-2">
-                <Button variant="outline" size="icon" className="h-10 w-10">
-                  <Heart className="h-5 w-5" />
-                </Button>
-                <Button variant="outline" size="icon" className="h-10 w-10">
-                  <BookmarkIcon className="h-5 w-5" />
-                </Button>
-                <Button variant="outline" size="icon" className="h-10 w-10">
-                  <Share2 className="h-5 w-5" />
-                </Button>
-              </div>
-            </div>
-          </article>
-
-          {/* Related Articles */}
-          {relatedArticles.length > 0 && (
-            <div className="mt-12">
-              <h2 className="mb-6 text-2xl font-bold">Related Articles</h2>
-              <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-                {relatedArticles.map((relatedArticle) => (
-                  <Link
-                    key={relatedArticle.id}
-                    href={`/news/${relatedArticle.id}`}
-                    className="group overflow-hidden rounded-xl bg-white shadow-md transition-transform hover:-translate-y-1"
-                  >
-                    <div className="relative h-48 w-full">
-                      <Image
-                        src={relatedArticle.image_url || "/placeholder.svg"}
-                        alt={relatedArticle.title}
-                        fill
-                        className="object-cover"
-                      />
-                      <div className="absolute left-3 top-3 rounded-full bg-[#F08900] px-3 py-1 text-xs font-medium text-white">
-                        {relatedArticle.category}
-                      </div>
-                    </div>
-                    <div className="p-4">
-                      <div className="mb-2 flex items-center gap-3 text-xs text-gray-500">
-                        <div className="flex items-center">
-                          <CalendarIcon className="mr-1 h-3 w-3" />
-                          {new Date(relatedArticle.created_at).toLocaleDateString()}
-                        </div>
-                        <div className="flex items-center">
-                          <Clock className="mr-1 h-3 w-3" />
-                          {relatedArticle.read_time}
-                        </div>
-                      </div>
-                      <h3 className="mb-2 text-lg font-bold leading-tight group-hover:text-[#5E366D]">
-                        {relatedArticle.title}
-                      </h3>
-                      <p className="line-clamp-2 text-sm text-gray-600">
-                        {relatedArticle.excerpt}
-                      </p>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          )}
+          </div>
         </main>
       </div>
       <Footer />

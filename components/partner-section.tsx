@@ -19,7 +19,6 @@ const partners = [
     { id: 9, logo: 'https://res.cloudinary.com/dosxengut/image/upload/v1747727867/Picture14_apmvql.png', name: 'Partner 9' },
     { id: 10, logo: 'https://res.cloudinary.com/dosxengut/image/upload/v1747727868/Picture5_txk7lq.png', name: 'Partner 10' },
     { id: 11, logo: 'https://res.cloudinary.com/dosxengut/image/upload/v1747727868/Picture6_bcnri8.png', name: 'Partner 11' },
-    { id: 12, logo: '/partners/partner12.png', name: 'Partner 12' },
 ]
 
 export function PartnerSection() {
@@ -29,10 +28,10 @@ export function PartnerSection() {
   const [isVisible, setIsVisible] = useState(false)
 
   const isMobile = useMediaQuery("(max-width: 640px)")
-  const isTablet = useMediaQuery("(min-width: 641px) and (max-width: 1023px)")
+  const isTablet = useMediaQuery("(min-width: 641px) and (max-width: 100% )")
 
   // Determine how many partners to show based on screen size
-  const partnersToShow = isMobile ? 2 : isTablet ? 3 : 4
+  const partnersToShow = isMobile ? 2 : isTablet ? 3 : 6
 
   // Create extended array for infinite scroll
   const extendedPartners = [...partners, ...partners, ...partners]
@@ -101,15 +100,9 @@ export function PartnerSection() {
     <>
       <section className="py-12 sm:py-16 bg-white">
         <div className="container mx-auto px-4">
-          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 sm:gap-8 mb-8 sm:mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold text-primary">Our Partners</h2>
-            <Link 
-              href="/partners" 
-              className="inline-flex items-center text-secondary hover:text-secondary/80 transition-colors group text-sm sm:text-base"
-            >
-              <span className="whitespace-nowrap">Learn More About Our Partners</span>
-              <ArrowRight className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1" />
-            </Link>
+          <div className="flex flex-col items-center mb-12">
+            <h2 className="text-3xl sm:text-4xl font-bold text-[#2B1C48] mb-4 text-center">Our Partners</h2>
+            <div className="w-24 h-1 bg-[#EE8900] mx-auto rounded-full mb-6"></div>
           </div>
 
           <div
@@ -126,11 +119,11 @@ export function PartnerSection() {
                 <div
                   key={`${partner.id}-${index}`}
                   className={cn(
-                    "flex-shrink-0 px-4 flex items-center justify-center transition-transform duration-300",
-                    isMobile ? "w-1/2" : isTablet ? "w-1/3" : "w-1/4"
+                    "flex-shrink-0 px-2 flex items-center justify-center transition-transform duration-300",
+                    isMobile ? "w-1/2" : isTablet ? "w-1/3" : "w-1/6"
                   )}
                 >
-                  <div className="rounded-lg p-6 h-32 flex items-center justify-center border transition-all duration-300 mx-2 bg-white hover:shadow-md border-gray-200">
+                  <div className="rounded-lg p-4 h-28 flex items-center justify-center border transition-all duration-300 mx-1 bg-white hover:shadow-md border-gray-200">
                     <div className="relative w-[120px] sm:w-[150px] h-[60px] sm:h-[80px]">
                       <Image
                         src={partner.logo}
@@ -153,7 +146,7 @@ export function PartnerSection() {
       </section>
 
       {/* Animated Text Section */}
-      <section className="py-16 bg-cream overflow-hidden">
+      <section className="py-16 bg-primary overflow-hidden">
         <div 
           id="animated-text"
           className={cn(
@@ -162,16 +155,16 @@ export function PartnerSection() {
           )}
         >
           <div className="relative">
-            <h2 className="text-4xl md:text-6xl font-bold text-primary mb-4 animate-float">
+            <h2 className="text-4xl md:text-6xl font-bold text-white mb-4 animate-float">
               Together We Grow
             </h2>
-            <p className="text-lg md:text-xl text-primary/90 max-w-2xl mx-auto animate-float-delayed">
+            <p className="text-lg md:text-xl text-white/90 max-w-2xl mx-auto animate-float-delayed">
               Building partnerships that drive success and innovation
             </p>
             
             {/* Decorative Elements */}
-            <div className="absolute -left-4 -top-4 w-8 h-8 border-l-2 border-t-2 border-primary/30"></div>
-            <div className="absolute -right-4 -bottom-4 w-8 h-8 border-r-2 border-b-2 border-primary/30"></div>
+            <div className="absolute -left-4 -top-4 w-8 h-8 border-l-2 border-t-2 border-white/30"></div>
+            <div className="absolute -right-4 -bottom-4 w-8 h-8 border-r-2 border-b-2 border-white/30"></div>
           </div>
         </div>
       </section>
