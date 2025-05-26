@@ -458,7 +458,7 @@ export function Header() {
             {/* Logo */}
             <Link 
               href="/" 
-              className="relative z-[9999]"
+              className="relative z-[9999] lg:absolute lg:left-4"
             >
               <Image
                 src={logoUrl || "/placeholder.svg"}
@@ -500,171 +500,173 @@ export function Header() {
             </button>
 
             {/* Desktop Navigation Menu */}
-            <nav className="hidden lg:flex items-center space-x-6 xl:space-x-8">
-              {menuItems.map((item) => (
-                <div
-                  key={item.title}
-                  className="relative"
-                  onMouseEnter={() => item.hasSubmenu && handleMenuHover(item.title)}
-                  onMouseLeave={handleMenuLeave}
-                >
-                  <Link
-                    href={item.url}
-                    className={cn(
-                      "text-gray-800 font-medium text-base hover:text-primary transition-colors duration-200 flex items-center py-2 px-1 relative group",
-                      (activeMenu === item.title || hoveredItem === item.title) && "text-primary",
-                    )}
+            <nav className="hidden lg:flex items-center justify-center flex-1 pl-20">
+              <div className="flex items-center space-x-8 xl:space-x-12">
+                {menuItems.map((item) => (
+                  <div
+                    key={item.title}
+                    className="relative"
+                    onMouseEnter={() => item.hasSubmenu && handleMenuHover(item.title)}
+                    onMouseLeave={handleMenuLeave}
                   >
-                    <span className="relative">
-                      {item.title}
-                      <span
-                        className={cn(
-                          "absolute -bottom-1 left-0 w-0 h-0.5 bg-secondary transition-all duration-300 group-hover:w-full",
-                          (activeMenu === item.title || hoveredItem === item.title) && "w-full",
-                        )}
-                      ></span>
-                    </span>
-                    {item.hasSubmenu && (
-                      <ChevronDown
-                        className={cn(
-                          "ml-1 h-4 w-4 transition-transform duration-200",
-                          activeMenu === item.title && "rotate-180",
-                        )}
-                      />
-                    )}
-                  </Link>
-
-                  {/* About Us Submenu with Images */}
-                  {item.hasSubmenu && item.submenu && activeMenu === item.title && (
-                    <div
-                      className="absolute left-0 right-0 top-full bg-white shadow-lg z-[9998] animate-submenu-slide-down w-screen"
-                      onMouseEnter={cancelMenuClose}
-                      onMouseLeave={handleMenuLeave}
-                      style={{
-                        position: 'fixed',
-                        top: isScrolled ? '70px' : '84px',
-                        maxHeight: 'calc(100vh - 80px)',
-                        overflowY: 'auto'
-                      }}
+                    <Link
+                      href={item.url}
+                      className={cn(
+                        "text-gray-800 font-medium text-base hover:text-primary transition-colors duration-200 flex items-center py-2 px-1 relative group",
+                        (activeMenu === item.title || hoveredItem === item.title) && "text-primary",
+                      )}
                     >
-                      <div className="container mx-auto py-8 px-4">
-                        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
-                          {item.submenu.map((subItem) => (
-                            <Link
-                              key={subItem.title}
-                              href={subItem.url}
-                              className="group overflow-hidden rounded-lg border border-gray-100 hover:border-gray-200 hover:shadow-md transition-all duration-300 bg-white"
-                            >
-                              <div className="relative h-40 overflow-hidden">
-                                <Image
-                                  src={subItem.image}
-                                  alt={subItem.title}
-                                  width={320}
-                                  height={160}
-                                  className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
-                                <div className="absolute bottom-0 left-0 p-4">
-                                  <h3 className="text-base font-semibold text-white">{subItem.title}</h3>
-                                </div>
-                              </div>
-                              <div className="p-4">
-                                <p className="text-gray-600 text-sm">{subItem.description}</p>
-                                <div className="mt-3 flex items-center text-secondary font-medium text-sm">
-                                  <span>Learn more</span>
-                                  <ChevronRight className="h-4 w-4 ml-1" />
-                                </div>
-                              </div>
-                            </Link>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  )}
+                      <span className="relative">
+                        {item.title}
+                        <span
+                          className={cn(
+                            "absolute -bottom-1 left-0 w-0 h-0.5 bg-secondary transition-all duration-300 group-hover:w-full",
+                            (activeMenu === item.title || hoveredItem === item.title) && "w-full",
+                          )}
+                        ></span>
+                      </span>
+                      {item.hasSubmenu && (
+                        <ChevronDown
+                          className={cn(
+                            "ml-1 h-4 w-4 transition-transform duration-200",
+                            activeMenu === item.title && "rotate-180",
+                          )}
+                        />
+                      )}
+                    </Link>
 
-                  {/* Our Business Submenu with Images */}
-                  {item.hasSubmenu && item.businessCategories && activeMenu === item.title && (
-                    <div
-                      className="absolute left-0 right-0 top-full bg-white shadow-lg z-[9998] animate-submenu-slide-down w-screen"
-                      onMouseEnter={cancelMenuClose}
-                      onMouseLeave={handleMenuLeave}
-                      style={{
-                        position: 'fixed',
-                        top: isScrolled ? '70px' : '84px',
-                        maxHeight: 'calc(100vh - 80px)',
-                        overflowY: 'auto'
-                      }}
-                    >
-                      <div className="container mx-auto py-6 px-4 md:py-8">
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6">
-                          {item.businessCategories[0].items.map((business) => (
-                            <div key={business.title} className="relative group">
+                    {/* About Us Submenu with Images */}
+                    {item.hasSubmenu && item.submenu && activeMenu === item.title && (
+                      <div
+                        className="absolute left-0 right-0 top-full bg-white shadow-lg z-[9998] animate-submenu-slide-down w-screen"
+                        onMouseEnter={cancelMenuClose}
+                        onMouseLeave={handleMenuLeave}
+                        style={{
+                          position: 'fixed',
+                          top: isScrolled ? '70px' : '84px',
+                          maxHeight: 'calc(100vh - 80px)',
+                          overflowY: 'auto'
+                        }}
+                      >
+                        <div className="container mx-auto py-8 px-4">
+                          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                            {item.submenu.map((subItem) => (
                               <Link
-                                href={business.url}
-                                className="block overflow-hidden rounded-lg border border-gray-100 hover:border-gray-200 hover:shadow-md transition-all duration-300 bg-white h-full"
+                                key={subItem.title}
+                                href={subItem.url}
+                                className="group overflow-hidden rounded-lg border border-gray-100 hover:border-gray-200 hover:shadow-md transition-all duration-300 bg-white"
                               >
                                 <div className="relative h-40 overflow-hidden">
                                   <Image
-                                    src={business.image}
-                                    alt={business.title}
+                                    src={subItem.image}
+                                    alt={subItem.title}
                                     width={320}
-                                    height={180}
+                                    height={160}
                                     className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
                                   />
-                                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
                                   <div className="absolute bottom-0 left-0 p-4">
-                                    <h3 className="text-base font-semibold text-white">{business.title}</h3>
+                                    <h3 className="text-base font-semibold text-white">{subItem.title}</h3>
                                   </div>
                                 </div>
                                 <div className="p-4">
-                                  <p className="text-gray-600 text-sm">{business.description}</p>
+                                  <p className="text-gray-600 text-sm">{subItem.description}</p>
                                   <div className="mt-3 flex items-center text-secondary font-medium text-sm">
                                     <span>Learn more</span>
                                     <ChevronRight className="h-4 w-4 ml-1" />
                                   </div>
                                 </div>
                               </Link>
-
-                              {/* Legend Mobility Services Popup */}
-                              {business.title === "Legend Mobility" && (
-                                <div className="absolute z-[9999] transition-all duration-300 lg:left-full lg:top-0 lg:ml-2 lg:opacity-0 lg:invisible group-hover:opacity-100 group-hover:visible w-[300px] lg:w-[400px]">
-                                  <div className="bg-white rounded-lg shadow-xl border border-gray-100 p-3 md:p-4 space-y-1 md:space-y-2 w-full">
-                                    <div className="flex items-center justify-end border-b border-gray-100 pb-2 mb-2 md:mb-3">
-                                      <Image
-                                        src="/images/legend-logo.png"
-                                        alt="Legend Logo"
-                                        width={20}
-                                        height={20}
-                                        className="object-contain"
-                                      />
-                                    </div>
-                                    {[
-                                      "Legend World Rent a Car",
-                                      "Legend Automobile Services",
-                                      "Legend Technical Services"
-                                    ].map((service, index) => (
-                                      <Link
-                                        key={index}
-                                        href={`/our-brands/${service.toLowerCase().replace(/\s+/g, "-")}`}
-                                        className="flex items-center text-gray-600 hover:text-primary transition-colors p-2 rounded-lg hover:bg-gray-50 group/item text-sm md:text-base"
-                                      >
-                                        <ChevronRight className="w-4 h-4 mr-2 group-hover/item:translate-x-1 transition-transform" />
-                                        <span>{service}</span>
-                                      </Link>
-                                    ))}
-                                  </div>
-                                </div>
-                              )}
-
-                              {/* No submenu for Legend Motors */}
-                            </div>
-                          ))}
+                            ))}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  )}
-                </div>
-              ))}
+                    )}
+
+                    {/* Our Business Submenu with Images */}
+                    {item.hasSubmenu && item.businessCategories && activeMenu === item.title && (
+                      <div
+                        className="absolute left-0 right-0 top-full bg-white shadow-lg z-[9998] animate-submenu-slide-down w-screen"
+                        onMouseEnter={cancelMenuClose}
+                        onMouseLeave={handleMenuLeave}
+                        style={{
+                          position: 'fixed',
+                          top: isScrolled ? '70px' : '84px',
+                          maxHeight: 'calc(100vh - 80px)',
+                          overflowY: 'auto'
+                        }}
+                      >
+                        <div className="container mx-auto py-6 px-4 md:py-8">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6">
+                            {item.businessCategories[0].items.map((business) => (
+                              <div key={business.title} className="relative group">
+                                <Link
+                                  href={business.url}
+                                  className="block overflow-hidden rounded-lg border border-gray-100 hover:border-gray-200 hover:shadow-md transition-all duration-300 bg-white h-full"
+                                >
+                                  <div className="relative h-40 overflow-hidden">
+                                    <Image
+                                      src={business.image}
+                                      alt={business.title}
+                                      width={320}
+                                      height={180}
+                                      className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
+                                    />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                                    <div className="absolute bottom-0 left-0 p-4">
+                                      <h3 className="text-base font-semibold text-white">{business.title}</h3>
+                                    </div>
+                                  </div>
+                                  <div className="p-4">
+                                    <p className="text-gray-600 text-sm">{business.description}</p>
+                                    <div className="mt-3 flex items-center text-secondary font-medium text-sm">
+                                      <span>Learn more</span>
+                                      <ChevronRight className="h-4 w-4 ml-1" />
+                                    </div>
+                                  </div>
+                                </Link>
+
+                                {/* Legend Mobility Services Popup */}
+                                {business.title === "Legend Mobility" && (
+                                  <div className="absolute z-[9999] transition-all duration-300 lg:left-full lg:top-0 lg:ml-2 lg:opacity-0 lg:invisible group-hover:opacity-100 group-hover:visible w-[300px] lg:w-[400px]">
+                                    <div className="bg-white rounded-lg shadow-xl border border-gray-100 p-3 md:p-4 space-y-1 md:space-y-2 w-full">
+                                      <div className="flex items-center justify-end border-b border-gray-100 pb-2 mb-2 md:mb-3">
+                                        <Image
+                                          src="/images/legend-logo.png"
+                                          alt="Legend Logo"
+                                          width={20}
+                                          height={20}
+                                          className="object-contain"
+                                        />
+                                      </div>
+                                      {[
+                                        "Legend World Rent a Car",
+                                        "Legend Automobile Services",
+                                        "Legend Technical Services"
+                                      ].map((service, index) => (
+                                        <Link
+                                          key={index}
+                                          href={`/our-brands/${service.toLowerCase().replace(/\s+/g, "-")}`}
+                                          className="flex items-center text-gray-600 hover:text-primary transition-colors p-2 rounded-lg hover:bg-gray-50 group/item text-sm md:text-base"
+                                        >
+                                          <ChevronRight className="w-4 h-4 mr-2 group-hover/item:translate-x-1 transition-transform" />
+                                          <span>{service}</span>
+                                        </Link>
+                                      ))}
+                                    </div>
+                                  </div>
+                                )}
+
+                                {/* No submenu for Legend Motors */}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
             </nav>
           </div>
         </div>

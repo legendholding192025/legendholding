@@ -19,31 +19,22 @@ type CSRInitiative = {
 const csrInitiatives: CSRInitiative[] = [
   {
     id: "csr-1",
-    title: "Environmental Sustainability",
+    title: "Humanitarian Relief",
     description:
-      "Our commitment to reducing carbon footprint through renewable energy adoption, waste reduction, and sustainable business practices.",
-    image: "https://res.cloudinary.com/dosxengut/image/upload/v1746797599/iStock-1009934102_cre0yr.webp",
-    icon: <Leaf className="h-6 w-6" />,
-    url: "/csr/environmental-sustainability",
+      "Providing immediate emergency response and long-term support during natural disasters, including earthquake relief efforts, ensuring essential aid reaches affected communities.",
+    image: "https://res.cloudinary.com/dosxengut/image/upload/v1746786003/Emergency-Relief-Initiative-796x372-1_xktqfm.webp",
+    icon: <Heart className="h-6 w-6" />,
+    url: "/csr/humanitarian-relief",
   },
   {
     id: "csr-2",
     title: "Community Development",
     description:
-      "Supporting local communities through education initiatives, infrastructure development, and economic empowerment programs.",
-    image: "https://res.cloudinary.com/dosxengut/image/upload/v1746785737/7_cwmzrg.jpg",
+      "Supporting communities through year-round initiatives, including special Ramadan programs providing food, essential supplies, and support to families in need.",
+    image: "https://res.cloudinary.com/dosxengut/image/upload/v1748260264/0f47e352-6e32-4d03-a8ef-bd4ad4e14f54_vp6yiq.jpg",
     icon: <Users className="h-6 w-6" />,
     url: "/csr/community-development",
-  },
-  {
-    id: "csr-3",
-    title: "Humanitarian Relief",
-    description:
-      "Providing aid and support during crises and natural disasters, ensuring essential resources reach those in need.",
-    image: "https://res.cloudinary.com/dosxengut/image/upload/v1746797713/blog-corporate-social-responsibility-program_olhz5m.webp",
-    icon: <Heart className="h-6 w-6" />,
-    url: "/csr/humanitarian-relief",
-  },
+  }
 ]
 
 // Pre-generate background circles to avoid hydration issues
@@ -117,13 +108,13 @@ export function CSRSection() {
                   "w-full text-left p-5 rounded-lg transition-all duration-300 flex items-start gap-4 border",
                   activeInitiative === initiative.id
                     ? "bg-[#EE8900]/60 shadow-lg border-[#EE8900]/20"
-                    : "bg-white/50 hover:bg-white hover:shadow-md border-gray-100",
+                    : "bg-[rgb(234,226,214)]/50 hover:bg-[rgb(234,226,214)] hover:shadow-md border-gray-100",
                 )}
               >
                 <div
                   className={cn(
                     "p-3 rounded-full flex-shrink-0 transition-colors duration-300",
-                    activeInitiative === initiative.id ? "bg-white text-[rgb(93,55,110)]" : "bg-gray-100 text-gray-500",
+                    activeInitiative === initiative.id ? "bg-white text-[rgb(93,55,110)]" : "bg-[rgb(234,226,214)]/80 text-gray-500",
                   )}
                 >
                   {initiative.icon}
@@ -180,13 +171,9 @@ export function CSRSection() {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
                 <div className="absolute bottom-0 left-0 p-6 text-white">
                   <h3 className="text-2xl md:text-3xl font-bold mb-3">{initiative.title}</h3>
-                  <Link
-                    href={initiative.url}
-                    className="inline-flex items-center text-white/90 hover:text-white transition-colors group text-base md:text-lg font-medium"
-                  >
-                    Learn more about this initiative
-                    <ArrowRight className="ml-2 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
-                  </Link>
+                  <p className="text-white/90 text-base md:text-lg">
+                    Learn more about how we're making a difference
+                  </p>
                 </div>
               </div>
             ))}

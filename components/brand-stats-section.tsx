@@ -115,18 +115,6 @@ export function BrandStatsSection() {
             </motion.div>
           ))}
         </div>
-
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="mt-16 text-center"
-        >
-          <div className="inline-flex items-center px-6 py-3 rounded-full bg-[rgb(234,226,214)]/20 text-[#2B1C48] text-sm border border-[#5D376E]/20">
-            <span className="w-2 h-2 rounded-full bg-[#EE8900] mr-2"></span>
-            Committed to excellence and innovation since 2008
-          </div>
-        </motion.div>
       </div>
     </section>
   )
