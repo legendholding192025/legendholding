@@ -17,44 +17,44 @@ const brandLogos: BrandLogo[] = [
     id: "legend-motors",
     name: "Legend Motors",
     logo: "https://res.cloudinary.com/dosxengut/image/upload/v1746788883/Legend_motors_logo_ghitje.png",
-    url: "/business/legend-motors",
+    url: "/brands/legend-motors",
   },
   
   {
     id: "rental-services",
     name: "Legend Rental",
     logo: "https://res.cloudinary.com/dosxengut/image/upload/v1746794059/Legend-world-rent-a-car-Logo-1_oqrb2x.webp",
-    url: "/business/rental",
+    url: "/brands/rental",
   },
   {
     id: "energy-solutions",
     name: "Zul-Energy",
     logo: "https://res.cloudinary.com/dosxengut/image/upload/v1746792126/WhatsApp_Image_2025-05-09_at_4.01.53_PM_ujtdwj.jpg",
-    url: "/business/zulenergy",
+    url: "/brands/zulenergy",
   },
   {
     id: "facility-services",
     name: "Legend Facility",
     logo: "https://res.cloudinary.com/dosxengut/image/upload/v1746793661/WhatsApp_Image_2025-05-09_at_4.26.34_PM_p8xzld.jpg",
-    url: "/business/facility",
+    url: "/brands/facility",
   },
   {
     id: "travel-services",
     name: "Legend Travel",
     logo: "https://res.cloudinary.com/dosxengut/image/upload/v1746791315/ltt1_epvsac.png",
-    url: "/business/travel",
+    url: "/brands/travel",
   },
   {
     id: "tech-solutions",
     name: "Legend Tech",
     logo: "https://res.cloudinary.com/dosxengut/image/upload/v1746793661/WhatsApp_Image_2025-05-09_at_4.26.15_PM_qnt87i.jpg",
-    url: "/business/technology",
+    url: "/brands/technology",
   },
   {
     id: "Legend-dealership",
     name: "Legend dealership",
     logo: "https://res.cloudinary.com/dosxengut/image/upload/v1747988307/Picture1_gkrsxy.png",
-    url: "/business/dealership",
+    url: "/brands/dealership",
   },
 ]
 

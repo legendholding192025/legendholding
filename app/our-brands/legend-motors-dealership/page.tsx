@@ -59,7 +59,7 @@ export default function LegendMotorsDealershipPage() {
         {/* Subtle background elements */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute -top-40 -right-40 w-80 h-80 bg-[#2b1c48]/5 rounded-full blur-3xl"></div>
-          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-[#ee8900]/5 rounded-full blur-3xl"></div>
+          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-[#ee8900]/10 rounded-full blur-3xl"></div>
         </div>
  
         <div className="relative z-10 flex flex-col items-center py-12 px-4">
@@ -73,7 +73,10 @@ export default function LegendMotorsDealershipPage() {
               <h2 className="text-2xl md:text-3xl font-semibold text-[#2b1c48] mb-6 font-richmond animation-delay-200">
                 Dealerships
               </h2>
-              <div className="h-1 w-16 bg-[#2b1c48] rounded-full animate-expand-width"></div>
+              <div className="flex gap-2">
+                <div className="h-1 w-16 bg-[#2b1c48] rounded-full animate-expand-width"></div>
+                <div className="h-1 w-8 bg-[#ee8900] rounded-full animate-expand-width animation-delay-200"></div>
+              </div>
  
               <p className="mt-8 text-gray-700 text-lg max-w-3xl animation-delay-400 font-effra">
                 Legend Motors represents premium automotive brands across the UAE, providing exceptional sales, service,
@@ -82,7 +85,7 @@ export default function LegendMotorsDealershipPage() {
             </section>
  
             {/* Dealership Sections */}
-            <section className="w-full space-y-12">
+            <section className="w-full space-y-12 mb-16">
               {dealerships.map((dealership, idx) => (
                 <div
                   key={dealership.name}
@@ -100,7 +103,7 @@ export default function LegendMotorsDealershipPage() {
                           alt={`${dealership.name} vehicle`}
                           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                         />
-                        <div className="absolute inset-0 bg-[#2b1c48] opacity-0 group-hover:opacity-20 transition-opacity duration-500"></div>
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#2b1c48]/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                       </div>
  
                       {/* Logo overlay - standardized size with custom background */}
@@ -148,22 +151,6 @@ export default function LegendMotorsDealershipPage() {
                   </div>
                 </div>
               ))}
-            </section>
- 
-            {/* Contact Section */}
-            <section className="w-full mt-16 bg-[#2b1c48] text-white rounded-3xl p-8 md:p-12 shadow-2xl animate-fade-in-up animation-delay-1000">
-              <div className="flex flex-col md:flex-row items-center justify-between gap-8">
-                <div>
-                  <h3 className="text-2xl md:text-3xl font-bold mb-4 font-richmond">Interested in our dealerships?</h3>
-                  <p className="text-white/80 max-w-xl font-effra">
-                    Contact our team to learn more about our exclusive automotive brands and dealership opportunities
-                    across the UAE.
-                  </p>
-                </div>
-                <button className="bg-[#ee8900] hover:bg-[#ee8900]/90 text-white px-8 py-4 rounded-xl font-semibold text-lg shadow-lg transition-all duration-300 transform hover:scale-105 hover:shadow-xl">
-                  Contact Us
-                </button>
-              </div>
             </section>
           </div>
         </div>

@@ -1,3 +1,6 @@
+"use client"
+
+import { useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import {
@@ -11,6 +14,8 @@ import {
   Mail,
   ChevronRight,
   ArrowRight,
+  Loader2,
+  CheckCircle,
 } from "lucide-react"
 
 const TikTokIcon = ({ size = 20, className = "" }) => (
@@ -29,6 +34,39 @@ const TikTokIcon = ({ size = 20, className = "" }) => (
 
 export function Footer() {
   const currentYear = new Date().getFullYear()
+  const [email, setEmail] = useState("")
+  const [isLoading, setIsLoading] = useState(false)
+  const [isSuccess, setIsSuccess] = useState(false)
+  const [error, setError] = useState("")
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsLoading(true)
+    setError("")
+    setIsSuccess(false)
+
+    try {
+      const response = await fetch("/api/admin/newsletters", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      })
+
+      if (!response.ok) {
+        const data = await response.json()
+        throw new Error(data.error || "Failed to subscribe")
+      }
+
+      setIsSuccess(true)
+      setEmail("")
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to subscribe")
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   return (
     <footer className="bg-[rgb(43,28,72)] text-white pt-16 pb-8">
@@ -230,22 +268,43 @@ export function Footer() {
             <p className="text-white/80 text-sm mb-4">
               Subscribe to our newsletter to receive the latest updates and news.
             </p>
-            <form className="space-y-3">
+            <form onSubmit={handleSubmit} className="space-y-3">
               <div className="relative">
                 <input
                   type="email"
                   placeholder="Your Email Address"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   className="w-full bg-white/10 border border-white/20 rounded-md py-3 px-4 text-white placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
                   required
+                  disabled={isLoading || isSuccess}
                 />
               </div>
               <button
                 type="submit"
-                className="bg-secondary hover:bg-secondary/90 text-white px-5 py-3 rounded-md transition-all duration-300 hover:shadow-lg flex items-center justify-center w-full"
+                disabled={isLoading || isSuccess}
+                className="bg-secondary hover:bg-secondary/90 text-white px-5 py-3 rounded-md transition-all duration-300 hover:shadow-lg flex items-center justify-center w-full disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Subscribe
-                <ArrowRight size={16} className="ml-2" />
+                {isLoading ? (
+                  <>
+                    <Loader2 size={16} className="animate-spin mr-2" />
+                    Subscribing...
+                  </>
+                ) : isSuccess ? (
+                  <>
+                    <CheckCircle size={16} className="mr-2" />
+                    Subscribed!
+                  </>
+                ) : (
+                  <>
+                    Subscribe
+                    <ArrowRight size={16} className="ml-2" />
+                  </>
+                )}
               </button>
+              {error && (
+                <p className="text-red-400 text-sm mt-2">{error}</p>
+              )}
             </form>
           </div>
         </div>

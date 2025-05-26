@@ -40,71 +40,7 @@ type BusinessCategory = {
   }[]
 }
 
-type ServiceItem = {
-  title: string
-  hasSubmenu: boolean
-  brandLogo?: string
-  brandLogos?: { [key: string]: string }
-  brandLogoStyles?: { [key: string]: string }
-  submenuItems: string[]
-}
-
-type MotorService = ServiceItem & {
-  brandLogo: string
-}
-
-function hasLogo(service: ServiceItem): boolean {
-  return 'brandLogo' in service || 'brandLogos' in service;
-}
-
-function getLogoForItem(service: ServiceItem, item: string): string {
-  if ('brandLogo' in service && service.brandLogo) {
-    return service.brandLogo;
-  }
-  if ('brandLogos' in service && service.brandLogos && service.brandLogos[item]) {
-    return service.brandLogos[item];
-  }
-  return "";
-}
-
-const motorServices: (ServiceItem | MotorService)[] = [
-  {
-    title: "Legend Motorcycles",
-    hasSubmenu: true,
-    brandLogo: "https://res.cloudinary.com/dosxengut/image/upload/v1747660840/Lifan-Logo_behsab.png",
-    submenuItems: ["LIFAN"]
-  },
-  {
-    title: "Legend Motors Trading",
-    hasSubmenu: false,
-    submenuItems: []
-  },
-                                            {
-                                            title: "Legend Motors Dealership",
-                                            hasSubmenu: true,
-                                            submenuItems: ["SKYWELL", "KAIYI", "LI AUTO", "212"],
-                                            brandLogos: {
-                                              "SKYWELL": "https://res.cloudinary.com/dosxengut/image/upload/v1746788882/logo_sisnn9.png",
-                                              "KAIYI": "https://res.cloudinary.com/dosxengut/image/upload/v1746788951/download_wmkc6s.png",
-                                              "LI AUTO": "https://res.cloudinary.com/dosxengut/image/upload/v1746788883/logo-text-black-en.e6782a94_chlojl.svg",
-                                              "212": "https://res.cloudinary.com/dosxengut/image/upload/v1746788882/logo212b_qk5xsj.png"
-                                            },
-                                            brandLogoStyles: {
-                                              "KAIYI": "bg-black p-1 rounded",
-                                              "212": "bg-black p-1 rounded"
-                                            }
-                                          },
-  {
-    title: "Legend Commercial",
-    hasSubmenu: false,
-    submenuItems: []
-  },
-  {
-    title: "Legend Pre Owned Vehicles",
-    hasSubmenu: false,
-    submenuItems: []
-  }
-];
+// No additional types needed for simplified menu structure
 
 type MenuItem = {
   title: string
@@ -142,11 +78,11 @@ const menuItems: MenuItem[] = [
         icon: <Briefcase className="w-5 h-5" />
       },
       {
-        title: "Our Partners",
-        url: "/who-we-are/partners",
+        title: "Our Journey",
+        url: "/who-we-are/journey",
         image: "https://res.cloudinary.com/dosxengut/image/upload/v1747650381/1746961012298_hxmgin.jpg",
-        description: "Learn about our strategic partnerships that drive mutual success.",
-        icon: <Building2 className="w-5 h-5" />
+        description: "Follow our path of growth and milestones through the years.",
+        icon: <History className="w-5 h-5" />
       },
       {
         title: "CSR",
@@ -168,51 +104,61 @@ const menuItems: MenuItem[] = [
         items: [
           { 
             title: "Zul Energy",
-            url: "/business/zul-energy",
+            url: "/our-brands/zul-energy",
             image: "https://res.cloudinary.com/dosxengut/image/upload/v1747645931/1681896024283_sl22tw.jpg",
             description: "Pioneering sustainable energy solutions for a brighter future."
           },
           { 
             title: "Legend Motors",
-            url: "/business/legend-motors",
+            url: "/our-brands/legend-motors-trading",
             image: "https://res.cloudinary.com/dosxengut/image/upload/v1747649304/Official-Car-Dealers-in-Dubai-Cover-180620210841_ldmnuq.jpg",
             description: "Premium automotive solutions and services."
           },
           { 
-            title: "Legend Logistics",
-            url: "/business/legend-logistics",
-            image: "https://res.cloudinary.com/dosxengut/image/upload/v1747647684/NYK-CURRENTLY-HAS-A-STAKE-IN-OVER-40-COMPANIES-ALL-OVER-THE-WORLD-PROVIDING-FINISHED-CAR-INLAND-LOGISTICS_h8kfgk.webp",
-            description: "Efficient and reliable logistics solutions for global trade."
+            title: "Legend Motors Dealership",
+            url: "/our-brands/legend-motors-dealership",
+            image: "https://res.cloudinary.com/dosxengut/image/upload/v1747649304/Official-Car-Dealers-in-Dubai-Cover-180620210841_ldmnuq.jpg",
+            description: "Official dealership for premium automotive brands."
           },
           { 
-            title: "Legend Mobility",
-            url: "/business/legend-mobility",
-            image: "https://res.cloudinary.com/dosxengut/image/upload/v1747648445/csm_cruising_visual_43e29fa7bb_ruiloc.jpg",
-            description: "Comprehensive mobility solutions for modern transportation needs."
+            title: "Legend Motorcycles",
+            url: "/our-brands/legend-motorcycles",
+            image: "https://res.cloudinary.com/dosxengut/image/upload/v1747660840/Lifan-Logo_behsab.png",
+            description: "Premium motorcycles and accessories."
           },
-          
+          { 
+            title: "Legend World Rent a Car",
+            url: "/our-brands/legend-world-rent-a-car",
+            image: "https://res.cloudinary.com/dckrspiqe/image/upload/v1748247935/rent-a-car_dyzdgk.png",
+            description: "Premium car rental services across UAE."
+          },
+          { 
+            title: "Legend Automobile Services",
+            url: "/our-brands/legend-automobile-services",
+            image: "https://res.cloudinary.com/dosxengut/image/upload/v1747648445/csm_cruising_visual_43e29fa7bb_ruiloc.jpg",
+            description: "Professional automotive maintenance and repair services."
+          },
+          { 
+            title: "Legend Technical Services",
+            url: "/our-brands/legend-technical-services",
+            image: "https://res.cloudinary.com/dosxengut/image/upload/v1747648530/Stock_Photo_Digital_Media_otoogv.jpg",
+            description: "Expert technical solutions and support services."
+          },
           { 
             title: "Legend Global Media",
-            url: "/business/legend-global-media",
+            url: "/our-brands/legend-global-media",
             image: "https://res.cloudinary.com/dosxengut/image/upload/v1747648530/Stock_Photo_Digital_Media_otoogv.jpg",
             description: "Innovative media solutions for the digital age."
           },
           { 
-            title: "Legend x",
-            url: "/business/legend-x",
-            image: "https://res.cloudinary.com/dosxengut/image/upload/v1747649548/the-importance-of-modern-technology-in-business_bd28rl.webp",
-            description: "Cutting-edge technology and innovation hub."
-          },
-         
-          { 
             title: "Legend Travel and Tourism",
-            url: "/business/legend-travel",
+            url: "/our-brands/legend-travel",
             image: "https://res.cloudinary.com/dosxengut/image/upload/v1747648726/bliss_travels_and_tours_cover_p7t8ma.jpg",
             description: "Exceptional travel experiences and tourism services."
           },
           { 
             title: "Legend Green Energy Solutions",
-            url: "/business/legend-green-energy",
+            url: "/our-brands/legend-green-energy",
             image: "https://res.cloudinary.com/dosxengut/image/upload/v1747648852/in-copy-about-charging-green_qjoyjk.jpg",
             description: "Sustainable energy solutions for a greener future."
           },
@@ -502,7 +448,7 @@ export function Header() {
           "fixed top-0 left-0 w-full z-[9999]",
           "transition-all duration-300 transform",
           "touch-pan-y",
-          isScrolled ? "bg-white shadow-md py-2" : "bg-white/95 backdrop-blur-sm py-3 md:py-4",
+          isScrolled ? "bg-white shadow-md py-2" : "bg-white py-3 md:py-4",
           mobileMenuOpen && "bg-white py-2"
         )}
         role="banner"
@@ -565,22 +511,18 @@ export function Header() {
                   <Link
                     href={item.url}
                     className={cn(
-                      item.title === "Contact Us" ? 
-                      "bg-[#5E366D] hover:bg-[#EE8900] text-white px-5 py-2 rounded-md transition-all duration-300 hover:shadow-lg transform hover:-translate-y-0.5 active:translate-y-0 text-sm md:text-base md:px-6" :
                       "text-gray-800 font-medium text-base hover:text-primary transition-colors duration-200 flex items-center py-2 px-1 relative group",
-                      (activeMenu === item.title || hoveredItem === item.title) && item.title !== "Contact Us" && "text-primary",
+                      (activeMenu === item.title || hoveredItem === item.title) && "text-primary",
                     )}
                   >
-                    <span className={item.title !== "Contact Us" ? "relative" : ""}>
+                    <span className="relative">
                       {item.title}
-                      {item.title !== "Contact Us" && (
                       <span
                         className={cn(
                           "absolute -bottom-1 left-0 w-0 h-0.5 bg-secondary transition-all duration-300 group-hover:w-full",
                           (activeMenu === item.title || hoveredItem === item.title) && "w-full",
                         )}
                       ></span>
-                      )}
                     </span>
                     {item.hasSubmenu && (
                       <ChevronDown
@@ -595,23 +537,23 @@ export function Header() {
                   {/* About Us Submenu with Images */}
                   {item.hasSubmenu && item.submenu && activeMenu === item.title && (
                     <div
-                      className="absolute left-0 right-0 top-full bg-white/95 backdrop-blur-sm shadow-lg border-t-2 border-primary z-[9998] animate-submenu-slide-down w-screen"
+                      className="absolute left-0 right-0 top-full bg-white shadow-lg z-[9998] animate-submenu-slide-down w-screen"
                       onMouseEnter={cancelMenuClose}
                       onMouseLeave={handleMenuLeave}
                       style={{
                         position: 'fixed',
-                        top: isScrolled ? '66px' : '80px',
+                        top: isScrolled ? '70px' : '84px',
                         maxHeight: 'calc(100vh - 80px)',
                         overflowY: 'auto'
                       }}
                     >
                       <div className="container mx-auto py-8 px-4">
-                        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
                           {item.submenu.map((subItem) => (
                             <Link
                               key={subItem.title}
                               href={subItem.url}
-                              className="group overflow-hidden rounded-lg border border-gray-100 hover:border-gray-200 hover:shadow-md transition-all duration-300"
+                              className="group overflow-hidden rounded-lg border border-gray-100 hover:border-gray-200 hover:shadow-md transition-all duration-300 bg-[rgb(234,226,214)]"
                             >
                               <div className="relative h-40 overflow-hidden">
                                 <Image
@@ -623,7 +565,7 @@ export function Header() {
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
                                 <div className="absolute bottom-0 left-0 p-4">
-                                  <h3 className="text-white font-semibold text-lg">{subItem.title}</h3>
+                                  <h3 className="text-base font-semibold text-white">{subItem.title}</h3>
                                 </div>
                               </div>
                               <div className="p-4">
@@ -643,23 +585,23 @@ export function Header() {
                   {/* Our Business Submenu with Images */}
                   {item.hasSubmenu && item.businessCategories && activeMenu === item.title && (
                     <div
-                      className="absolute left-0 right-0 top-full bg-white/95 backdrop-blur-sm shadow-lg border-t-2 border-primary z-[9998] animate-submenu-slide-down w-screen"
+                      className="absolute left-0 right-0 top-full bg-white shadow-lg z-[9998] animate-submenu-slide-down w-screen"
                       onMouseEnter={cancelMenuClose}
                       onMouseLeave={handleMenuLeave}
                       style={{
                         position: 'fixed',
-                        top: isScrolled ? '66px' : '80px',
+                        top: isScrolled ? '70px' : '84px',
                         maxHeight: 'calc(100vh - 80px)',
                         overflowY: 'auto'
                       }}
                     >
                       <div className="container mx-auto py-6 px-4 md:py-8">
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6">
                           {item.businessCategories[0].items.map((business) => (
                             <div key={business.title} className="relative group">
                               <Link
                                 href={business.url}
-                                className="block overflow-hidden rounded-lg border border-gray-100 hover:border-gray-200 hover:shadow-md transition-all duration-300 bg-white h-full"
+                                className="block overflow-hidden rounded-lg border border-gray-100 hover:border-gray-200 hover:shadow-md transition-all duration-300 bg-[rgb(234,226,214)] h-full"
                               >
                                 <div className="relative h-40 overflow-hidden">
                                   <Image
@@ -671,7 +613,7 @@ export function Header() {
                                   />
                                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                                   <div className="absolute bottom-0 left-0 p-4">
-                                    <h3 className="text-white font-semibold text-lg">{business.title}</h3>
+                                    <h3 className="text-base font-semibold text-white">{business.title}</h3>
                                   </div>
                                 </div>
                                 <div className="p-4">
@@ -687,8 +629,7 @@ export function Header() {
                               {business.title === "Legend Mobility" && (
                                 <div className="absolute z-[9999] transition-all duration-300 lg:left-full lg:top-0 lg:ml-2 lg:opacity-0 lg:invisible group-hover:opacity-100 group-hover:visible w-[300px] lg:w-[400px]">
                                   <div className="bg-white rounded-lg shadow-xl border border-gray-100 p-3 md:p-4 space-y-1 md:space-y-2 w-full">
-                                    <div className="flex items-center justify-between border-b border-gray-100 pb-2 mb-2 md:mb-3">
-                                      <h4 className="font-semibold text-primary text-sm md:text-base">Our Services</h4>
+                                    <div className="flex items-center justify-end border-b border-gray-100 pb-2 mb-2 md:mb-3">
                                       <Image
                                         src="/images/legend-logo.png"
                                         alt="Legend Logo"
@@ -704,7 +645,7 @@ export function Header() {
                                     ].map((service, index) => (
                                       <Link
                                         key={index}
-                                        href={`/business/${service.toLowerCase().replace(/\s+/g, "-")}`}
+                                        href={`/our-brands/${service.toLowerCase().replace(/\s+/g, "-")}`}
                                         className="flex items-center text-gray-600 hover:text-primary transition-colors p-2 rounded-lg hover:bg-gray-50 group/item text-sm md:text-base"
                                       >
                                         <ChevronRight className="w-4 h-4 mr-2 group-hover/item:translate-x-1 transition-transform" />
@@ -715,80 +656,7 @@ export function Header() {
                                 </div>
                               )}
 
-                              {/* Legend Motors Services Popup */}
-                              {business.title === "Legend Motors" && (
-                                <div className="absolute z-[9999] transition-all duration-300 lg:left-full lg:top-0 lg:ml-2 lg:opacity-0 lg:invisible group-hover:opacity-100 group-hover:visible w-[300px] lg:w-[400px]">
-                                  <div className="bg-white rounded-lg shadow-xl border border-gray-100 p-3 md:p-4 space-y-1 md:space-y-2 w-full">
-                                    <div className="flex items-center justify-between border-b border-gray-100 pb-2 mb-2 md:mb-3">
-                                      <h4 className="font-semibold text-primary text-sm md:text-base">Our Services</h4>
-                                      <Image
-                                        src="/images/legend-logo.png"
-                                        alt="Legend Logo"
-                                        width={20}
-                                        height={20}
-                                        className="object-contain"
-                                      />
-                                    </div>
-                                                                        {motorServices.map((service, index) => (
-                                      <div key={index} className="relative group/submenu">
-                                        <Link
-                                          href={service.hasSubmenu ? "#" : `/business/${service.title.toLowerCase().replace(/\s+/g, "-")}`}
-                                          className="flex items-center justify-between text-gray-600 hover:text-primary transition-colors p-2 rounded-lg hover:bg-gray-50 group/item text-sm md:text-base w-full"
-                                        >
-                                          <div className="flex items-center">
-                                            <ChevronRight className="w-4 h-4 mr-2 group-hover/item:translate-x-1 transition-transform" />
-                                            <span>{service.title}</span>
-                                          </div>
-                                          {service.hasSubmenu && (
-                                            <ChevronRight className="w-4 h-4 ml-2 opacity-50 group-hover/submenu:opacity-100" />
-                                          )}
-                                        </Link>
-                                        
-                                        {/* Nested Submenu */}
-                                        {service.hasSubmenu && (
-                                          <div className="absolute left-full top-0 ml-2 opacity-0 invisible group-hover/submenu:opacity-100 group-hover/submenu:visible transition-all duration-200 w-[350px] lg:w-[450px]">
-                                            <div className="bg-white rounded-lg shadow-xl border border-gray-100 p-4 space-y-3">
-                                              <div className="flex items-center justify-between border-b border-gray-100 pb-2">
-                                                <h4 className="font-semibold text-primary text-sm md:text-base">Our Brands</h4>
-                                                <Image
-                                                  src="/images/legend-logo.png"
-                                                  alt="Legend Logo"
-                                                  width={20}
-                                                  height={20}
-                                                  className="object-contain"
-                                                />
-                                              </div>
-                                              {service.submenuItems?.map((item, subIndex) => (
-                                                <Link
-                                                  key={subIndex}
-                                                  href={`/business/motorcycles/${item.toLowerCase().replace(/\s+/g, "-")}`}
-                                                  className="flex items-center justify-between text-gray-600 hover:text-primary transition-colors p-2 rounded-lg hover:bg-gray-50 text-sm md:text-base w-full group/brand"
-                                                >
-                                                  <div className="flex items-center">
-                                                    <ChevronRight className="w-4 h-4 mr-2 group-hover/brand:translate-x-1 transition-transform" />
-                                                    <span className="font-medium">{item}</span>
-                                                  </div>
-                                                                                                     {hasLogo(service) && getLogoForItem(service, item) && (
-                                                     <div className={service.brandLogoStyles?.[item] || ""}>
-                                                       <Image
-                                                         src={getLogoForItem(service, item)}
-                                                         alt={`${item} Logo`}
-                                                         width={40}
-                                                         height={20}
-                                                         className="object-contain opacity-80 group-hover/brand:opacity-100 transition-opacity"
-                                                       />
-                                                     </div>
-                                                   )}
-                                                </Link>
-                                              ))}
-                                            </div>
-                                          </div>
-                                        )}
-                                      </div>
-                                    ))}
-                                  </div>
-                                </div>
-                              )}
+                              {/* No submenu for Legend Motors */}
                             </div>
                           ))}
                         </div>
@@ -1031,7 +899,7 @@ export function Header() {
                                         ].map((service, index) => (
                                           <Link
                                             key={index}
-                                            href={`/business/${service.toLowerCase().replace(/\s+/g, "-")}`}
+                                            href={`/our-brands/${service.toLowerCase().replace(/\s+/g, "-")}`}
                                             className="flex items-center space-x-2 p-2 text-sm text-gray-600 hover:text-primary hover:bg-gray-50 rounded-lg transition-colors"
                                             onClick={() => setMobileMenuOpen(false)}
                                           >
@@ -1042,108 +910,7 @@ export function Header() {
                                       </div>
                                     )}
 
-                                    {/* Legend Motors Submenu */}
-                                    {business.title === "Legend Motors" && (
-                                      <div className="mt-2 ml-12 pl-4 border-l-2 border-primary/20 space-y-2">
-                                        {[
-                                          {
-                                            title: "Legend Motorcycles",
-                                            hasSubmenu: true,
-                                            brandLogo: "https://res.cloudinary.com/dosxengut/image/upload/v1747660840/Lifan-Logo_behsab.png",
-                                            submenuItems: ["LIFAN"]
-                                          } as ServiceItem,
-                                          {
-                                            title: "Legend Motors Trading",
-                                            hasSubmenu: false,
-                                            submenuItems: []
-                                          } as ServiceItem,
-                                          {
-                                            title: "Legend Motors Dealership",
-                                            hasSubmenu: true,
-                                            submenuItems: ["SKYWELL", "KAIYI", "LI AUTO", "212"],
-                                            brandLogos: {
-                                              "SKYWELL": "https://res.cloudinary.com/dosxengut/image/upload/v1746788882/logo_sisnn9.png",
-                                              "KAIYI": "https://res.cloudinary.com/dosxengut/image/upload/v1746788951/download_wmkc6s.png",
-                                              "LI AUTO": "https://res.cloudinary.com/dosxengut/image/upload/v1746788883/logo-text-black-en.e6782a94_chlojl.svg",
-                                              "212": "https://res.cloudinary.com/dosxengut/image/upload/v1746788882/logo212b_qk5xsj.png"
-                                            },
-                                            brandLogoStyles: {
-                                              "KAIYI": "bg-black p-1 rounded",
-                                              "212": "bg-black p-1 rounded"
-                                            }
-                                          } as ServiceItem,
-                                          {
-                                            title: "Legend Commercial",
-                                            hasSubmenu: false,
-                                            submenuItems: []
-                                          } as ServiceItem,
-                                          {
-                                            title: "Legend Pre Owned Vehicles",
-                                            hasSubmenu: false,
-                                            submenuItems: []
-                                          } as ServiceItem
-                                        ].map((service, index) => (
-                                          <div key={index}>
-                                            {service.hasSubmenu ? (
-                                              <details className="group">
-                                                <summary className="flex items-center justify-between p-2 text-sm text-gray-600 hover:text-primary hover:bg-gray-50 rounded-lg transition-colors cursor-pointer">
-                                                  <div className="flex items-center space-x-2">
-                                                    <ChevronRight className="w-4 h-4 flex-shrink-0" />
-                                                    <span>{service.title}</span>
-                                                  </div>
-                                                  <ChevronDown className="w-4 h-4 transition-transform group-open:rotate-180" />
-                                                </summary>
-                                                <div className="mt-2 ml-6 pl-4 border-l-2 border-primary/10 space-y-3">
-                                                  <div className="flex items-center justify-between p-3 border-b border-gray-100">
-                                                    <h4 className="text-sm font-medium text-[#5E366D]">Our Brands</h4>
-                                                    <Image
-                                                      src="/images/legend-logo.png"
-                                                      alt="Legend Logo"
-                                                      width={16}
-                                                      height={16}
-                                                      className="object-contain"
-                                                    />
-                                                  </div>
-                                                  {service.submenuItems?.map((item, subIndex) => (
-                                                    <Link
-                                                      key={subIndex}
-                                                      href={`/business/motorcycles/${item.toLowerCase().replace(/\s+/g, "-")}`}
-                                                      className="flex items-center justify-between p-2 text-sm text-gray-600 hover:text-primary hover:bg-gray-50 rounded-lg transition-colors"
-                                                      onClick={() => setMobileMenuOpen(false)}
-                                                    >
-                                                      <div className="flex items-center space-x-2">
-                                                        <ChevronRight className="w-4 h-4 flex-shrink-0" />
-                                                        <span className="text-[#5E366D] font-medium">{item}</span>
-                                                      </div>
-                                                      {hasLogo(service) && getLogoForItem(service, item) && (
-                                                        <div className={service.brandLogoStyles?.[item] || ""}>
-                                                          <Image
-                                                            src={getLogoForItem(service, item) || ""}
-                                                            alt={`${item} Logo`}
-                                                            width={32}
-                                                            height={16}
-                                                            className="object-contain opacity-80"
-                                                          />
-                                                        </div>
-                                                      )}
-                                                    </Link>
-                                                  ))}
-                                                </div>
-                                              </details>
-                                            ) : (
-                                              <Link
-                                                href={`/business/${service.title.toLowerCase().replace(/\s+/g, "-")}`}
-                                                className="flex items-center space-x-2 p-2 text-sm text-gray-600 hover:text-primary hover:bg-gray-50 rounded-lg transition-colors"
-                                                onClick={() => setMobileMenuOpen(false)}
-                                              >
-                                                <ChevronRight className="w-4 h-4 flex-shrink-0" />
-                                                <span>{service.title}</span>
-                                              </Link>
-                                            )}
-                                          </div>
-                                        ))}
-                                      </div>
-                                    )}
+                                    {/* No submenu for Legend Motors */}
                                   </div>
                                 ))}
                               </div>

@@ -24,6 +24,7 @@ import { supabase } from "@/lib/supabase"
 import { toast } from "sonner"
 import Image from "next/image"
 import Link from "next/link"
+import Newsletter from "@/components/newsletter"
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -92,13 +93,13 @@ export default function ContactPage() {
       icon: <Phone className="w-6 h-6" />,
       title: "Phone",
       details: ["+971 4 234 0738"],
-      color: "bg-primary"
+      color: "bg-[#2B1C48]"
     },
     {
       icon: <Mail className="w-6 h-6" />,
       title: "Email",
       details: ["info@legendholding.com"],
-      color: "bg-secondary"
+      color: "bg-[#5D376E]"
     },
     {
       icon: <MapPin className="w-6 h-6" />,
@@ -108,13 +109,13 @@ export default function ContactPage() {
         "Jebel Ali Freezone, Gate 5",
         "Dubai, United Arab Emirates"
       ],
-      color: "bg-primary"
+      color: "bg-[#EE8900]"
     },
     {
       icon: <Clock className="w-6 h-6" />,
       title: "Business Hours",
       details: ["Monday - Friday: 9:00 AM - 6:00 PM", "Saturday: 9:00 AM - 1:00 PM"],
-      color: "bg-secondary"
+      color: "bg-[#EE8900]/80"
     }
   ]
 
@@ -123,31 +124,31 @@ export default function ContactPage() {
       icon: <Facebook className="w-5 h-5" />,
       name: "Facebook",
       url: "https://facebook.com/legendholding",
-      color: "bg-primary hover:bg-primary/90",
+      color: "bg-[#2B1C48] hover:bg-[#2B1C48]/90",
     },
     {
       icon: <Twitter className="w-5 h-5" />,
       name: "Twitter",
       url: "https://twitter.com/legendholding",
-      color: "bg-secondary hover:bg-secondary/90",
+      color: "bg-[#5D376E] hover:bg-[#5D376E]/90",
     },
     {
       icon: <Instagram className="w-5 h-5" />,
       name: "Instagram",
       url: "https://instagram.com/legendholding",
-      color: "bg-primary hover:bg-primary/90",
+      color: "bg-[#EE8900] hover:bg-[#EE8900]/90",
     },
     {
       icon: <Linkedin className="w-5 h-5" />,
       name: "LinkedIn",
       url: "https://linkedin.com/company/legendholding",
-      color: "bg-secondary hover:bg-secondary/90",
+      color: "bg-[#EE8900]/80 hover:bg-[#EE8900]/70",
     },
     {
       icon: <Youtube className="w-5 h-5" />,
       name: "YouTube",
       url: "https://youtube.com/legendholding",
-      color: "bg-primary hover:bg-primary/90",
+      color: "bg-[#2B1C48] hover:bg-[#2B1C48]/90",
     }
   ]
 
@@ -239,7 +240,7 @@ export default function ContactPage() {
                   {formStep === 0 ? (
                     <>
                       <div className="mb-8">
-                        <h3 className="text-2xl md:text-3xl font-semibold text-gray-900 mb-2">Send Us a Message</h3>
+                        <h3 className="text-2xl md:text-3xl font-semibold text-[#2B1C48] mb-2">Send Us a Message</h3>
                         <p className="text-lg text-gray-600">
                           Fill out the form below and we'll get back to you as soon as possible.
                         </p>
@@ -332,7 +333,7 @@ export default function ContactPage() {
                             disabled={isSubmitting}
                             className={`
                               inline-flex items-center px-8 py-4 rounded-lg text-white
-                              ${isSubmitting ? "bg-gray-400 cursor-not-allowed" : "bg-primary hover:bg-primary/90"}
+                              ${isSubmitting ? "bg-gray-400 cursor-not-allowed" : "bg-[#EE8900] hover:bg-[#EE8900]/90"}
                               transition-all duration-200 font-medium text-base shadow-lg hover:shadow-xl
                             `}
                           >
@@ -406,31 +407,8 @@ export default function ContactPage() {
             </div>
           </section>
 
-          {/* Newsletter Section */}
-          <section className="py-16 bg-primary text-white relative">
-            <div className="container px-4 mx-auto relative z-10">
-              <div className="max-w-4xl mx-auto text-center">
-                <h2 className="text-3xl md:text-4xl font-bold mb-6">Stay Updated with Our Newsletter</h2>
-                <p className="text-lg md:text-xl text-white/80 mb-8 max-w-2xl mx-auto">
-                  Subscribe to our newsletter to receive the latest updates, news, and exclusive offers directly to your inbox.
-                </p>
-                <form className="flex flex-col sm:flex-row gap-4 max-w-xl mx-auto">
-                  <input
-                    type="email"
-                    placeholder="Enter your email address"
-                    className="flex-1 px-4 py-3 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-secondary"
-                    required
-                  />
-                  <button
-                    type="submit"
-                    className="px-6 py-3 bg-secondary text-white font-medium rounded-lg hover:bg-secondary/90 transition-colors duration-200"
-                  >
-                    Subscribe
-                  </button>
-                </form>
-              </div>
-            </div>
-          </section>
+          {/* Newsletter Component */}
+          <Newsletter />
         </div>
       </main>
       <Footer />

@@ -146,25 +146,32 @@ export function PartnerSection() {
       </section>
 
       {/* Animated Text Section */}
-      <section className="py-16 bg-primary overflow-hidden">
+      <section 
+        className="py-16 overflow-hidden relative"
+        style={{
+          backgroundImage: 'url("https://res.cloudinary.com/dosxengut/image/upload/v1748236714/image_1_fmiofr.jpg")',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      >
         <div 
           id="animated-text"
           className={cn(
-            "container mx-auto px-4 text-center transform transition-all duration-1000",
+            "container mx-auto px-4 text-center transform transition-all duration-1000 relative z-10",
             isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
           )}
         >
           <div className="relative">
-            <h2 className="text-4xl md:text-6xl font-bold text-white mb-4 animate-float">
+            <h2 className="text-3xl md:text-5xl font-bold text-[#2B1C48] mb-4 animate-float">
               Together We Grow
             </h2>
-            <p className="text-lg md:text-xl text-white/90 max-w-2xl mx-auto animate-float-delayed">
+            <p className="text-lg md:text-xl text-[#EE8900] max-w-2xl mx-auto animate-float-delayed">
               Building partnerships that drive success and innovation
             </p>
             
             {/* Decorative Elements */}
-            <div className="absolute -left-4 -top-4 w-8 h-8 border-l-2 border-t-2 border-white/30"></div>
-            <div className="absolute -right-4 -bottom-4 w-8 h-8 border-r-2 border-b-2 border-white/30"></div>
+            <div className="absolute -left-4 -top-4 w-8 h-8 border-l-2 border-t-2 border-[#2B1C48]/30"></div>
+            <div className="absolute -right-4 -bottom-4 w-8 h-8 border-r-2 border-b-2 border-[#2B1C48]/30"></div>
           </div>
         </div>
       </section>

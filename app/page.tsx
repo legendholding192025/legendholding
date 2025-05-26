@@ -8,14 +8,12 @@ import { Footer } from "@/components/footer"
 import { PartnerSection } from "@/components/partner-section"
 import { OurPresenceSection } from "@/components/our-presence-section"
 import CompanyValuesInfographic from "@/components/value"
-
+import Newsletter from "@/components/newsletter"
 export default function Home() {
   return (
     <main>
       <Header />
-      <HeroSection 
-        videoUrl="https://res.cloudinary.com/dosxengut/video/upload/v1746786385/LEGEND0416_1_x0nlfv.mp4"
-      />
+      <HeroSection />
       <CompanyValuesInfographic />
       <BrandLogoCarousel />
       <BrandStatsSection />
@@ -23,7 +21,9 @@ export default function Home() {
       <CSRSection />
       <PartnerSection />    
       <Newsroom />
+      <Newsletter />
       <Footer />
+
     </main>
   )
 }

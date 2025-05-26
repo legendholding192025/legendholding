@@ -15,7 +15,8 @@ import {
   Building2,
   ChevronRight,
   PanelLeftClose,
-  PanelLeftOpen
+  PanelLeftOpen,
+  Mail
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -68,6 +69,11 @@ const menuItems = [
     title: "Company Profile",
     icon: Building2,
     href: "/admin/company"
+  },
+  {
+    title: "Newsletter",
+    icon: Mail,
+    href: "/admin/newsletters"
   }
 ]
 

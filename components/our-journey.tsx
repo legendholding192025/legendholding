@@ -2,25 +2,12 @@
 
 import { useState, useRef, useEffect, useCallback } from "react"
 import React from "react"
-import { motion, useInView, AnimatePresence, useAnimation } from "framer-motion"
-import {
-  ChevronRight,
-  ChevronLeft,
-  Building,
-  Car,
-  Globe,
-  Zap,
-  Truck,
-  MapPin,
-  Award,
-  Play,
-  Pause,
-  ChevronDown,
-  ChevronsDown,
-} from "lucide-react"
+import { motion, useInView, AnimatePresence } from "framer-motion"
+import { Building, Car, Globe, Zap, Truck, MapPin, Award, Sparkles, ChevronRight } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+import { Badge } from "@/components/ui/badge"
+import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar"
+import { AppSidebar } from "@/components/app-sidebar"
 import type { JSX } from "react/jsx-runtime"
 
 // Error boundary component
@@ -62,34 +49,37 @@ type MilestoneType = {
   }[]
 }
 
-// Modify the animation configurations
+interface Screenshot {
+  id: string
+  title: string
+  year: number
+  image: string
+  description: string
+  category: string
+}
+
+// Animation configurations
 const fadeInAnimation = {
   initial: { opacity: 0 },
   animate: { opacity: 1 },
-  transition: { duration: 0.5 }
+  transition: { duration: 0.6 },
 }
 
 const slideUpAnimation = {
-  initial: { opacity: 0, y: 20 },
+  initial: { opacity: 0, y: 30 },
   animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.5 }
+  transition: { duration: 0.6 },
 }
 
 export function OurJourney() {
-  const [activeYearIndex, setActiveYearIndex] = useState(0) // Start with first year
+  const [activeYearIndex, setActiveYearIndex] = useState(0)
   const [isAutoPlaying, setIsAutoPlaying] = useState(false)
   const [selectedAchievement, setSelectedAchievement] = useState<number | null>(null)
-  const [showComparison, setShowComparison] = useState(false)
-  const [comparisonYear, setComparisonYear] = useState<number | null>(null)
-  const [previousYearIndex, setPreviousYearIndex] = useState(0) // Track previous year for animation
-  const [animatingCircle, setAnimatingCircle] = useState(false)
   const [isScrolling, setIsScrolling] = useState(false)
   const timelineRef = useRef<HTMLDivElement>(null)
   const sectionRef = useRef<HTMLElement>(null)
   const scrollRef = useRef<HTMLDivElement>(null)
-  const circleAnimationControls = useAnimation()
   const isInView = useInView(sectionRef, { once: false, amount: 0.2 })
-  const controls = useAnimation()
 
   const milestones: MilestoneType[] = [
     {
@@ -99,9 +89,9 @@ export function OurJourney() {
           title: "Oriental wiseman general trading",
           description:
             "Our journey began with the establishment of our first trading company, focusing on bringing quality products to the market.",
-          icon: <Building />,
+          icon: <Building className="w-5 h-5" />,
           color: "bg-purple-100 text-purple-700",
-          image: "/company-founding-ceremony.png",
+          image: "/placeholder.svg?height=300&width=500&query=company%20founding%20ceremony",
         },
       ],
     },
@@ -112,17 +102,17 @@ export function OurJourney() {
           title: "Legend motors FZCO",
           description:
             "Established our first automotive company in the free zone, marking our entry into the automotive industry.",
-          icon: <Car />,
+          icon: <Car className="w-5 h-5" />,
           color: "bg-amber-100 text-amber-700",
-          image: "/automotive-launch.png",
+          image: "/placeholder.svg?height=300&width=500&query=automotive%20launch",
         },
         {
           title: "Legend Motors Br-1",
           description:
             "Opened our first showroom (268), showcasing our commitment to providing exceptional customer experiences.",
-          icon: <Building />,
+          icon: <Building className="w-5 h-5" />,
           color: "bg-purple-100 text-purple-700",
-          image: "/modern-car-showroom.png",
+          image: "/placeholder.svg?height=300&width=500&query=modern%20car%20showroom",
         },
       ],
     },
@@ -133,16 +123,16 @@ export function OurJourney() {
           title: "Legend Multi Motors",
           description:
             "Expanded our automotive portfolio with multiple brands, offering customers a wider range of choices.",
-          icon: <Car />,
+          icon: <Car className="w-5 h-5" />,
           color: "bg-amber-100 text-amber-700",
-          image: "/multiple-car-brands-showroom.png",
+          image: "/placeholder.svg?height=300&width=500&query=multiple%20car%20brands%20showroom",
         },
         {
           title: "Legend Motors Br-2",
           description: "Opened our second showroom (116), further expanding our physical presence in the market.",
-          icon: <Building />,
+          icon: <Building className="w-5 h-5" />,
           color: "bg-purple-100 text-purple-700",
-          image: "/luxury-car-dealership.png",
+          image: "/placeholder.svg?height=300&width=500&query=luxury%20car%20dealership",
         },
       ],
     },
@@ -153,9 +143,9 @@ export function OurJourney() {
           title: "Jabal Al Barakha",
           description:
             "Established new regional operations to better serve our growing customer base across different territories.",
-          icon: <MapPin />,
+          icon: <MapPin className="w-5 h-5" />,
           color: "bg-emerald-100 text-emerald-700",
-          image: "/placeholder-a6e59.png",
+          image: "/placeholder.svg?height=300&width=500&query=regional%20operations%20center",
         },
       ],
     },
@@ -166,17 +156,17 @@ export function OurJourney() {
           title: "Highline Motors Trading",
           description:
             "Launched our premium automotive division, catering to luxury vehicle enthusiasts with exclusive offerings.",
-          icon: <Car />,
+          icon: <Car className="w-5 h-5" />,
           color: "bg-amber-100 text-amber-700",
-          image: "/luxury-car-showroom.png",
+          image: "/placeholder.svg?height=300&width=500&query=luxury%20car%20showroom",
         },
         {
           title: "Automatic Motors",
           description:
             "Specialized division for automatic transmission vehicles, meeting the growing demand for this technology.",
-          icon: <Car />,
+          icon: <Car className="w-5 h-5" />,
           color: "bg-amber-100 text-amber-700",
-          image: "/automatic-transmission-vehicles.png",
+          image: "/placeholder.svg?height=300&width=500&query=automatic%20transmission%20vehicles",
         },
       ],
     },
@@ -187,9 +177,9 @@ export function OurJourney() {
           title: "Zul Energy",
           description:
             "Ventured into the energy sector with innovative solutions, diversifying our business portfolio beyond automotive.",
-          icon: <Zap />,
+          icon: <Zap className="w-5 h-5" />,
           color: "bg-blue-100 text-blue-700",
-          image: "/renewable-energy-landscape.png",
+          image: "/placeholder.svg?height=300&width=500&query=renewable%20energy%20landscape",
         },
       ],
     },
@@ -199,17 +189,17 @@ export function OurJourney() {
         {
           title: "Legend World Investment",
           description: "Established our global investment division to explore new opportunities and markets worldwide.",
-          icon: <Globe />,
+          icon: <Globe className="w-5 h-5" />,
           color: "bg-indigo-100 text-indigo-700",
-          image: "/global-investment-office.png",
+          image: "/placeholder.svg?height=300&width=500&query=global%20investment%20office",
         },
         {
           title: "Legend Travel & Tourism",
           description:
             "Expanded into the tourism and hospitality sector, offering premium travel experiences to our customers.",
-          icon: <Globe />,
+          icon: <Globe className="w-5 h-5" />,
           color: "bg-indigo-100 text-indigo-700",
-          image: "/travel-tourism-agency.png",
+          image: "/placeholder.svg?height=300&width=500&query=travel%20tourism%20agency",
         },
       ],
     },
@@ -219,7 +209,7 @@ export function OurJourney() {
         {
           title: "Legend Motors Br-3",
           description: "Opened our third showroom (26), continuing our expansion despite global challenges.",
-          icon: <Building />,
+          icon: <Building className="w-5 h-5" />,
           color: "bg-purple-100 text-purple-700",
           image: "/placeholder.svg?height=300&width=500&query=modern%20automotive%20showroom",
         },
@@ -232,7 +222,7 @@ export function OurJourney() {
           title: "Legend Motors Br-4",
           description:
             "Opened our fourth showroom (46), strengthening our market presence with a state-of-the-art facility.",
-          icon: <Building />,
+          icon: <Building className="w-5 h-5" />,
           color: "bg-purple-100 text-purple-700",
           image: "/placeholder.svg?height=300&width=500&query=futuristic%20car%20showroom",
         },
@@ -240,7 +230,7 @@ export function OurJourney() {
           title: "Legend World Rent A Car",
           description:
             "Launched our vehicle rental services, providing flexible mobility solutions for various customer needs.",
-          icon: <Car />,
+          icon: <Car className="w-5 h-5" />,
           color: "bg-amber-100 text-amber-700",
           image: "/placeholder.svg?height=300&width=500&query=car%20rental%20service",
         },
@@ -248,7 +238,7 @@ export function OurJourney() {
           title: "Legend World Automobile Services",
           description:
             "Comprehensive automotive service centers ensuring top-quality maintenance and support for all vehicles.",
-          icon: <Car />,
+          icon: <Car className="w-5 h-5" />,
           color: "bg-amber-100 text-amber-700",
           image: "/placeholder.svg?height=300&width=500&query=automobile%20service%20center",
         },
@@ -261,21 +251,21 @@ export function OurJourney() {
           title: "Skywell Dealership",
           description:
             "Secured exclusive dealership rights for Skywell, bringing innovative electric vehicles to our market.",
-          icon: <Award />,
+          icon: <Award className="w-5 h-5" />,
           color: "bg-rose-100 text-rose-700",
           image: "/placeholder.svg?height=300&width=500&query=skywell%20electric%20vehicles",
         },
         {
           title: "Kaiyi Dealership",
           description: "Expanded our brand portfolio with Kaiyi, offering customers more diverse automotive options.",
-          icon: <Award />,
+          icon: <Award className="w-5 h-5" />,
           color: "bg-rose-100 text-rose-700",
           image: "/placeholder.svg?height=300&width=500&query=kaiyi%20vehicles%20showroom",
         },
         {
           title: "Lifan Dealership",
           description: "Added another prestigious brand to our lineup, strengthening our position in the market.",
-          icon: <Award />,
+          icon: <Award className="w-5 h-5" />,
           color: "bg-rose-100 text-rose-700",
           image: "/placeholder.svg?height=300&width=500&query=lifan%20vehicles%20display",
         },
@@ -283,7 +273,7 @@ export function OurJourney() {
           title: "Li Auto",
           description:
             "Partnered with electric vehicle manufacturer Li Auto, embracing the future of sustainable transportation.",
-          icon: <Car />,
+          icon: <Car className="w-5 h-5" />,
           color: "bg-amber-100 text-amber-700",
           image: "/placeholder.svg?height=300&width=500&query=li%20auto%20electric%20vehicles",
         },
@@ -291,7 +281,7 @@ export function OurJourney() {
           title: "212",
           description:
             "Special project launch that marked a significant milestone in our company's innovation journey.",
-          icon: <MapPin />,
+          icon: <MapPin className="w-5 h-5" />,
           color: "bg-emerald-100 text-emerald-700",
           image: "/placeholder.svg?height=300&width=500&query=special%20project%20launch%20event",
         },
@@ -304,7 +294,7 @@ export function OurJourney() {
           title: "Legend Motors Br-5",
           description:
             "Opened our fifth showroom in Jebel Ali, featuring our most advanced facilities and technologies.",
-          icon: <Building />,
+          icon: <Building className="w-5 h-5" />,
           color: "bg-purple-100 text-purple-700",
           image: "/placeholder.svg?height=300&width=500&query=jebel%20ali%20car%20showroom",
         },
@@ -312,7 +302,7 @@ export function OurJourney() {
           title: "Legend Green Energy Solution",
           description:
             "Launched sustainable energy initiatives, contributing to environmental conservation and green technology.",
-          icon: <Zap />,
+          icon: <Zap className="w-5 h-5" />,
           color: "bg-green-100 text-green-700",
           image: "/placeholder.svg?height=300&width=500&query=green%20energy%20solutions",
         },
@@ -320,7 +310,7 @@ export function OurJourney() {
           title: "Legend Logistics",
           description:
             "Established comprehensive logistics services to optimize our supply chain and delivery capabilities.",
-          icon: <Truck />,
+          icon: <Truck className="w-5 h-5" />,
           color: "bg-orange-100 text-orange-700",
           image: "/placeholder.svg?height=300&width=500&query=logistics%20and%20transportation%20fleet",
         },
@@ -333,7 +323,7 @@ export function OurJourney() {
           title: "Opening Global Headquarters in JAFZA",
           description:
             "Our future landmark headquarters spanning over 450,000 SQFT will serve as the nerve center for our global operations.",
-          icon: <Building />,
+          icon: <Building className="w-5 h-5" />,
           color: "bg-purple-100 text-purple-700",
           image: "/placeholder.svg?height=300&width=500&query=futuristic%20corporate%20headquarters",
         },
@@ -341,19 +331,36 @@ export function OurJourney() {
     },
   ]
 
+  // Generate screenshots data
+  const screenshots: Screenshot[] = milestones.flatMap((milestone) =>
+    milestone.achievements.map((achievement, index) => ({
+      id: `${milestone.year}-${index}`,
+      title: achievement.title,
+      year: milestone.year,
+      image: achievement.image || "/placeholder.svg?height=300&width=500&query=default",
+      description: achievement.description || "",
+      category:
+        achievement.title.includes("Motors") || achievement.title.includes("Car")
+          ? "Automotive"
+          : achievement.title.includes("Energy")
+            ? "Energy"
+            : achievement.title.includes("Travel") || achievement.title.includes("Tourism")
+              ? "Tourism"
+              : "Business",
+    })),
+  )
+
   // Scroll-based navigation
   useEffect(() => {
     const handleWheel = (e: WheelEvent) => {
       if (isScrolling) return
 
       setIsScrolling(true)
-      setTimeout(() => setIsScrolling(false), 800) // Debounce scrolling
+      setTimeout(() => setIsScrolling(false), 800)
 
       if (e.deltaY > 0) {
-        // Scrolling down
         setActiveYearIndex((prev) => (prev < milestones.length - 1 ? prev + 1 : prev))
       } else {
-        // Scrolling up
         setActiveYearIndex((prev) => (prev > 0 ? prev - 1 : prev))
       }
     }
@@ -381,7 +388,7 @@ export function OurJourney() {
           scrollToActiveYear(next, true)
           return next
         })
-      }, 3000)
+      }, 4000)
     }
 
     return () => clearInterval(interval)
@@ -391,62 +398,17 @@ export function OurJourney() {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
-        handlePrevYear()
+        setActiveYearIndex((prev) => (prev > 0 ? prev - 1 : prev))
       } else if (e.key === "ArrowRight" || e.key === "ArrowDown") {
-        handleNextYear()
+        setActiveYearIndex((prev) => (prev < milestones.length - 1 ? prev + 1 : prev))
       } else if (e.key === "Escape") {
         setSelectedAchievement(null)
-        setShowComparison(false)
-      } else if (e.key === " ") {
-        setIsAutoPlaying((prev) => !prev)
       }
     }
 
     window.addEventListener("keydown", handleKeyDown)
     return () => window.removeEventListener("keydown", handleKeyDown)
   }, [])
-
-  // Animate circle when active year changes
-  useEffect(() => {
-    if (previousYearIndex !== activeYearIndex) {
-      animateCircleJump(previousYearIndex, activeYearIndex)
-      setPreviousYearIndex(activeYearIndex)
-    }
-  }, [activeYearIndex, previousYearIndex])
-
-  // Scroll to active year when it changes
-  useEffect(() => {
-    scrollToActiveYear(activeYearIndex, true)
-  }, [activeYearIndex])
-
-  const animateCircleJump = async (fromIndex: number, toIndex: number) => {
-    if (fromIndex === toIndex) return
-    setAnimatingCircle(true)
-    
-    try {
-      await circleAnimationControls.start({
-        scale: [1, 1.1, 1],
-        transition: {
-          duration: 0.3,
-          ease: "easeInOut",
-        },
-      })
-    } catch (error) {
-      console.error("Animation error:", error)
-    }
-    
-    setAnimatingCircle(false)
-  }
-
-  const handlePrevYear = () => {
-    setIsAutoPlaying(false)
-    setActiveYearIndex((prev) => (prev > 0 ? prev - 1 : prev))
-  }
-
-  const handleNextYear = () => {
-    setIsAutoPlaying(false)
-    setActiveYearIndex((prev) => (prev < milestones.length - 1 ? prev + 1 : prev))
-  }
 
   const scrollToActiveYear = useCallback(
     (index: number, isSmooth: boolean) => {
@@ -455,7 +417,7 @@ export function OurJourney() {
 
       if (timelineRef.current) {
         const timelineWidth = timelineRef.current.clientWidth
-        const itemWidth = 100 // Approximate width of each year item
+        const itemWidth = 100
         const scrollPosition = index * itemWidth - timelineWidth / 2 + itemWidth / 2
 
         timelineRef.current.scrollTo({
@@ -467,466 +429,272 @@ export function OurJourney() {
     [timelineRef],
   )
 
-  const toggleAutoPlay = () => {
-    setIsAutoPlaying((prev) => !prev)
-  }
-
-  const toggleComparison = (yearIndex: number | null) => {
-    if (yearIndex === comparisonYear) {
-      setComparisonYear(null)
-      setShowComparison(false)
-    } else {
-      setComparisonYear(yearIndex)
-      setShowComparison(true)
-    }
-  }
-
-  const getYearDifference = () => {
-    if (comparisonYear === null) return null
-
-    const currentYear = milestones[activeYearIndex].year
-    const compareYear = milestones[comparisonYear].year
-    const diff = currentYear - compareYear
-
-    return {
-      years: Math.abs(diff),
-      direction: diff > 0 ? "after" : "before",
-    }
-  }
-
-  const yearDiff = getYearDifference()
-
   return (
-    <section
-      ref={sectionRef}
-      className="h-screen w-full overflow-hidden relative bg-gradient-to-b from-white to-[#5E366D]/5 flex flex-col"
-    >
-      {/* Background decorative elements */}
-      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-        <motion.div
-          className="absolute -top-24 -left-24 w-64 h-64 rounded-full bg-[#5E366D]/10 opacity-20 blur-3xl"
-          animate={{
-            x: [0, 20, 0],
-            y: [0, 15, 0],
-          }}
-          transition={{
-            repeat: Number.POSITIVE_INFINITY,
-            duration: 15,
-            ease: "easeInOut",
-          }}
-        />
-        <motion.div
-          className="absolute top-1/2 -right-32 w-80 h-80 rounded-full bg-[#F39200]/20 opacity-20 blur-3xl"
-          animate={{
-            x: [0, -30, 0],
-            y: [0, -20, 0],
-          }}
-          transition={{
-            repeat: Number.POSITIVE_INFINITY,
-            duration: 20,
-            ease: "easeInOut",
-          }}
-        />
-        <motion.div
-          className="absolute -bottom-32 left-1/4 w-72 h-72 rounded-full bg-[#5E366D]/20 opacity-20 blur-3xl"
-          animate={{
-            x: [0, 25, 0],
-            y: [0, -15, 0],
-          }}
-          transition={{
-            repeat: Number.POSITIVE_INFINITY,
-            duration: 18,
-            ease: "easeInOut",
-          }}
-        />
-      </div>
-
-      <div ref={scrollRef} className="container relative z-10 px-4 sm:px-6 mx-auto max-w-7xl flex flex-col h-full">
-        {/* Header section */}
-        <div className="flex flex-col items-center pt-10 pb-6">
-          <AnimationErrorBoundary>
-            <motion.div
-              {...fadeInAnimation}
-              className="inline-flex items-center px-4 py-1.5 rounded-full bg-[#5E366D]/10 text-[#5E366D] text-sm font-medium mb-4"
-            >
-              <span className="w-2 h-2 rounded-full bg-[#5E366D] mr-2"></span>
-              Our History
-            </motion.div>
-
-            <motion.h2
-              {...slideUpAnimation}
-              className="text-3xl sm:text-4xl font-bold text-[#5E366D] mb-2 text-center leading-tight"
-            >
-              <span className="relative">
-                Our Journey
-                <motion.span
-                  initial={{ width: 0 }}
-                  animate={{ width: "100%" }}
-                  transition={{ duration: 0.5, ease: "easeOut" }}
-                  className="absolute -bottom-1 left-0 h-1 bg-gradient-to-r from-[#F39200] to-[#F39200]/70 rounded-full"
-                ></motion.span>
-              </span>
-            </motion.h2>
-
-            <motion.p
-              {...slideUpAnimation}
-              transition={{ delay: 0.1 }}
-              className="text-[#5E366D]/80 max-w-2xl mx-auto text-center text-base mb-2"
-            >
-              Scroll to explore our company's remarkable growth over the years
-            </motion.p>
-          </AnimationErrorBoundary>
-
-          {/* Scroll indicator */}
-          <AnimationErrorBoundary>
-            <motion.div
-              {...fadeInAnimation}
-              transition={{ delay: 0.5 }}
-              className="flex flex-col items-center text-[#5E366D]/60 text-sm"
-            >
-              <ChevronsDown className="w-5 h-5 animate-bounce" />
-              <span className="sr-only">Scroll to navigate</span>
-            </motion.div>
-          </AnimationErrorBoundary>
+    <SidebarProvider>
+      <div className="h-screen w-full overflow-hidden relative bg-white flex">
+        {/* Background decorative elements */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <motion.div
+            className="absolute -top-24 -left-24 w-96 h-96 rounded-full bg-primary/5 opacity-30 blur-3xl"
+            animate={{
+              x: [0, 30, 0],
+              y: [0, 20, 0],
+              scale: [1, 1.1, 1],
+            }}
+            transition={{
+              repeat: Number.POSITIVE_INFINITY,
+              duration: 20,
+              ease: "easeInOut",
+            }}
+          />
+          <motion.div
+            className="absolute top-1/2 -right-32 w-80 h-80 rounded-full bg-secondary/5 opacity-20 blur-3xl"
+            animate={{
+              x: [0, -40, 0],
+              y: [0, -25, 0],
+              scale: [1, 1.2, 1],
+            }}
+            transition={{
+              repeat: Number.POSITIVE_INFINITY,
+              duration: 25,
+              ease: "easeInOut",
+            }}
+          />
         </div>
 
-        {/* Timeline visualization */}
-        <div className="relative py-4 overflow-hidden">
-          <div
-            ref={timelineRef}
-            className="flex items-center overflow-x-auto scrollbar-hide"
-            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-          >
-            <div className="flex items-center space-x-4 px-4 mx-auto">
-              {milestones.map((milestone, index) => (
-                <button
-                  key={milestone.year}
-                  onClick={() => {
-                    if (showComparison && activeYearIndex !== index) {
-                      toggleComparison(index)
-                    } else {
-                      scrollToActiveYear(index, true)
-                      setIsAutoPlaying(false)
-                    }
-                  }}
-                  onContextMenu={(e) => {
-                    e.preventDefault()
-                    if (activeYearIndex !== index) {
-                      toggleComparison(index)
-                    }
-                  }}
-                  className={cn(
-                    "flex flex-col items-center min-w-[80px] transition-all duration-300 relative py-2",
-                    index === activeYearIndex ? "scale-110" : "opacity-70 hover:opacity-100",
-                    comparisonYear === index ? "ring-2 ring-[#F39200] ring-offset-2 rounded-lg" : "",
-                  )}
-                  aria-label={`View milestones from ${milestone.year}`}
-                  aria-current={index === activeYearIndex ? "true" : "false"}
+        <AppSidebar
+          activeYear={milestones[activeYearIndex].year}
+          screenshots={screenshots}
+          side="left"
+          className="w-1/4"
+        />
+
+        <SidebarInset>
+          <section ref={sectionRef} className="h-full w-full overflow-hidden relative flex flex-col">
+            <div ref={scrollRef} className="container relative z-10 px-6 mx-auto max-w-6xl flex flex-col h-full">
+              {/* Timeline visualization */}
+              <div className="relative py-6 overflow-hidden border-b border-primary/10">
+                <div
+                  ref={timelineRef}
+                  className="flex items-center overflow-x-auto scrollbar-hide"
+                  style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
                 >
-                  <div
-                    className={cn(
-                      "w-8 h-8 rounded-full border-2 transition-all duration-300 mb-2 relative",
-                      index === activeYearIndex
-                        ? "border-[#5E366D] bg-white"
-                        : comparisonYear === index
-                          ? "border-[#F39200] bg-[#F39200]/10"
-                          : "border-gray-300 bg-gray-100",
-                    )}
-                  >
-                    {/* Inner dot for active year */}
-                    {index === activeYearIndex && (
-                      <motion.div className="absolute inset-0 flex items-center justify-center" initial={false}>
-                        <motion.div
-                          className="w-4 h-4 rounded-full bg-[#5E366D]"
-                          animate={{
-                            scale: [1, 1.2, 1],
-                          }}
-                          transition={{
-                            repeat: Number.POSITIVE_INFINITY,
-                            repeatType: "reverse",
-                            duration: 1.5,
-                            ease: "easeInOut",
-                          }}
-                        />
-                      </motion.div>
-                    )}
-                  </div>
-                  <div
-                    className={cn(
-                      "h-0.5 w-20 transition-all duration-300",
-                      index === activeYearIndex
-                        ? "bg-[#5E366D]"
-                        : comparisonYear === index
-                          ? "bg-[#F39200]"
-                          : "bg-gray-300",
-                    )}
-                  />
-                  <span
-                    className={cn(
-                      "font-medium mt-2 transition-all duration-300",
-                      index === activeYearIndex
-                        ? "text-[#5E366D] text-lg"
-                        : comparisonYear === index
-                          ? "text-[#F39200] font-bold"
-                          : "text-gray-500",
-                    )}
-                  >
-                    {milestone.year}
-                  </span>
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Animated jumping circle indicator */}
-          <AnimationErrorBoundary>
-            <AnimatePresence>
-              {!animatingCircle && (
-                <motion.div
-                  key={`circle-${activeYearIndex}`}
-                  className="absolute bottom-0 left-0 w-full pointer-events-none"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <motion.div
-                    className="absolute left-0 bottom-0 w-full flex justify-center"
-                    style={{
-                      left: `${activeYearIndex * 100 + 40}px`,
-                    }}
-                    initial={{ y: 0, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    transition={{
-                      duration: 0.3,
-                      ease: "easeOut",
-                    }}
-                  >
-                    <div className="w-3 h-3 bg-[#5E366D] rounded-full shadow-lg" />
-                  </motion.div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </AnimationErrorBoundary>
-
-          {/* Gradient overlays for scroll indication */}
-          <div className="absolute left-0 top-0 h-full w-12 bg-gradient-to-r from-white to-transparent pointer-events-none"></div>
-          <div className="absolute right-0 top-0 h-full w-12 bg-gradient-to-l from-white to-transparent pointer-events-none"></div>
-        </div>
-
-        {/* Navigation controls */}
-        <div className="flex items-center justify-center gap-4 py-2">
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  onClick={toggleAutoPlay}
-                  variant="outline"
-                  size="icon"
-                  className={cn(
-                    "rounded-full transition-all duration-300",
-                    isAutoPlaying ? "bg-[#5E366D]/10 text-[#5E366D] border-[#5E366D]/30" : "",
-                  )}
-                  aria-label={isAutoPlaying ? "Pause story mode" : "Play story mode"}
-                >
-                  {isAutoPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>{isAutoPlaying ? "Pause story mode" : "Play story mode"}</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-
-          <div className="flex items-center bg-white rounded-full shadow-sm border border-[#5E366D]/10 p-1">
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    onClick={handlePrevYear}
-                    disabled={activeYearIndex === 0}
-                    variant="ghost"
-                    size="icon"
-                    className="rounded-full h-8 w-8 text-[#5E366D] disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#5E366D]/5 transition-colors"
-                  >
-                    <ChevronLeft className="w-4 h-4" />
-                    <span className="sr-only">Previous Year</span>
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Previous year</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-
-            <div className="px-3 font-bold text-lg text-[#5E366D] flex items-center gap-2">
-              <motion.span
-                key={milestones[activeYearIndex].year}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.3 }}
-                className="min-w-12 text-center"
-              >
-                {milestones[activeYearIndex].year}
-              </motion.span>
-            </div>
-
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    onClick={handleNextYear}
-                    disabled={activeYearIndex === milestones.length - 1}
-                    variant="ghost"
-                    size="icon"
-                    className="rounded-full h-8 w-8 text-[#5E366D] disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#5E366D]/5 transition-colors"
-                  >
-                    <ChevronRight className="w-4 h-4" />
-                    <span className="sr-only">Next Year</span>
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Next year</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          </div>
-        </div>
-
-        {/* Main content area - Achievements */}
-        <div className="flex-1 overflow-hidden relative">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={`year-${activeYearIndex}`}
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -50 }}
-              transition={{ duration: 0.5 }}
-              className="h-full flex flex-col"
-            >
-              {/* Year title */}
-              <div className="text-center mb-4">
-                <h3 className="text-2xl font-bold text-[#5E366D]">
-                  {milestones[activeYearIndex].year}{" "}
-                  <span className="text-lg font-normal text-[#5E366D]/70">Milestones</span>
-                </h3>
-              </div>
-
-              {/* Achievements grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 overflow-y-auto pr-2 pb-4 achievements-container">
-                {milestones[activeYearIndex].achievements.map((achievement, index) => (
-                  <motion.div
-                    key={`${milestones[activeYearIndex].year}-${index}`}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3, delay: index * 0.1 }}
-                    className={cn(
-                      "bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 border border-[#5E366D]/10 group cursor-pointer h-full",
-                      selectedAchievement === index ? "ring-2 ring-[#5E366D] ring-offset-2" : "",
-                    )}
-                    onClick={() => setSelectedAchievement(selectedAchievement === index ? null : index)}
-                  >
-                    <div className="flex h-full">
-                      {/* Achievement image (if available) */}
-                      {achievement.image && (
-                        <div className="relative w-1/3 overflow-hidden">
-                          <div
-                            className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
-                            style={{ backgroundImage: `url(${achievement.image})` }}
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-r from-black/30 to-transparent" />
-                        </div>
-                      )}
-
-                      {/* Achievement content */}
-                      <div className={cn("p-4 flex flex-col", achievement.image ? "w-2/3" : "w-full")}>
+                  <div className="flex items-center space-x-6 px-4 mx-auto">
+                    {milestones.map((milestone, index) => (
+                      <button
+                        key={milestone.year}
+                        onClick={() => {
+                          scrollToActiveYear(index, true)
+                          setIsAutoPlaying(false)
+                        }}
+                        className={cn(
+                          "flex flex-col items-center min-w-[100px] transition-all duration-500 relative py-3 group",
+                          index === activeYearIndex ? "scale-110" : "opacity-60 hover:opacity-90",
+                        )}
+                        aria-label={`View milestones from ${milestone.year}`}
+                        aria-current={index === activeYearIndex ? "true" : "false"}
+                      >
                         <div
                           className={cn(
-                            "p-2 rounded-lg w-fit mb-2 transition-all duration-300 group-hover:scale-110",
-                            achievement.color,
+                            "w-10 h-10 rounded-full border-3 transition-all duration-500 mb-3 relative overflow-hidden",
+                            index === activeYearIndex
+                              ? "border-secondary bg-white shadow-lg"
+                              : "border-gray-300 bg-white group-hover:border-secondary",
                           )}
                         >
-                          {achievement.icon}
+                          {index === activeYearIndex && (
+                            <motion.div className="absolute inset-0 flex items-center justify-center">
+                              <motion.div
+                                className="w-5 h-5 rounded-full bg-secondary"
+                                animate={{
+                                  scale: [1, 1.3, 1],
+                                  rotate: [0, 180, 360],
+                                }}
+                                transition={{
+                                  repeat: Number.POSITIVE_INFINITY,
+                                  duration: 3,
+                                  ease: "easeInOut",
+                                }}
+                              />
+                            </motion.div>
+                          )}
                         </div>
-                        <h4 className="text-base font-bold text-[#5E366D] mb-1">{achievement.title}</h4>
-
-                        <motion.div
-                          initial={{ height: selectedAchievement === index ? "auto" : "40px", overflow: "hidden" }}
-                          animate={{ height: selectedAchievement === index ? "auto" : "40px", overflow: "hidden" }}
-                          transition={{ duration: 0.3 }}
-                          className="text-sm"
+                        <div
+                          className={cn(
+                            "h-1 w-24 rounded-full transition-all duration-500",
+                            index === activeYearIndex
+                              ? "bg-secondary"
+                              : "bg-gray-300 group-hover:bg-secondary/30",
+                          )}
+                        />
+                        <span
+                          className={cn(
+                            "font-bold mt-3 transition-all duration-500",
+                            index === activeYearIndex
+                              ? "text-secondary text-xl"
+                              : "text-gray-500 group-hover:text-secondary",
+                          )}
                         >
-                          {achievement.description && <p className="text-[#5E366D]/70">{achievement.description}</p>}
-                        </motion.div>
+                          {milestone.year}
+                        </span>
+                        <Badge
+                          variant={index === activeYearIndex ? "default" : "secondary"}
+                          className={cn(
+                            "mt-1 text-xs transition-all duration-500",
+                            index === activeYearIndex ? "bg-secondary text-white" : "bg-gray-100 text-gray-600",
+                          )}
+                        >
+                          {milestone.achievements.length} milestone{milestone.achievements.length > 1 ? "s" : ""}
+                        </Badge>
+                      </button>
+                    ))}
+                  </div>
+                </div>
 
-                        {achievement.description && achievement.description.length > 60 && (
-                          <button
-                            className="mt-auto text-xs font-medium text-[#5E366D] hover:text-[#5E366D]/80 transition-colors flex items-center self-end"
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              setSelectedAchievement(selectedAchievement === index ? null : index)
-                            }}
-                          >
-                            {selectedAchievement === index ? "Read less" : "Read more"}
-                            <ChevronDown
-                              className={cn(
-                                "ml-1 w-3 h-3 transition-transform",
-                                selectedAchievement === index ? "rotate-180" : "",
-                              )}
-                            />
-                          </button>
-                        )}
-                      </div>
-                    </div>
-                  </motion.div>
-                ))}
+                {/* Gradient overlays */}
+                <div className="absolute left-0 top-0 h-full w-16 bg-gradient-to-r from-white to-transparent pointer-events-none"></div>
+                <div className="absolute right-0 top-0 h-full w-16 bg-gradient-to-l from-white to-transparent pointer-events-none"></div>
               </div>
 
-              {/* Future vision for 2025 */}
-              {activeYearIndex === milestones.length - 1 && (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: 0.5 }}
-                  className="mt-4 p-4 bg-gradient-to-r from-[#5E366D] to-[#F39200] rounded-xl text-white text-center relative overflow-hidden"
-                >
-                  <div className="relative z-10">
-                    <h3 className="text-lg font-bold mb-2">Our Vision for the Future</h3>
-                    <p className="max-w-3xl mx-auto text-sm">
-                      Our new global headquarters represents the next chapter in our journey, setting the stage for even
-                      greater achievements to come.
-                    </p>
-                  </div>
-                </motion.div>
-              )}
-            </motion.div>
-          </AnimatePresence>
-        </div>
+              {/* Main content area - Achievements */}
+              <div className="flex-1 overflow-hidden relative pt-6">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={`year-${activeYearIndex}`}
+                    initial={{ opacity: 0, x: 100 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -100 }}
+                    transition={{ duration: 0.6, ease: "easeInOut" }}
+                    className="h-full flex flex-col"
+                  >
+                    {/* Year title */}
+                    <div className="text-center mb-6">
+                      <motion.h2
+                        className="text-3xl font-bold text-primary mb-2"
+                        initial={{ scale: 0.9 }}
+                        animate={{ scale: 1 }}
+                        transition={{ duration: 0.5 }}
+                      >
+                        {milestones[activeYearIndex].year}{" "}
+                        <span className="text-xl font-normal text-primary/60">Achievements</span>
+                      </motion.h2>
+                      <div className="w-24 h-1 bg-primary mx-auto rounded-full"></div>
+                    </div>
 
-        {/* Scroll instruction */}
-        <div className="text-center text-xs text-[#5E366D]/60 py-2">
-          <p>Use mouse wheel or arrow keys to navigate through years</p>
-        </div>
+                    {/* Achievements grid */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 overflow-y-auto pr-2 pb-6 achievements-container">
+                      {milestones[activeYearIndex].achievements.map((achievement, index) => (
+                        <motion.div
+                          key={`${milestones[activeYearIndex].year}-${index}`}
+                          initial={{ opacity: 0, y: 30, scale: 0.9 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                          transition={{ duration: 0.5, delay: index * 0.1 }}
+                          className={cn(
+                            "bg-white/80 backdrop-blur-sm rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-500 border border-primary/10 group cursor-pointer h-full",
+                            selectedAchievement === index
+                              ? "ring-2 ring-primary ring-offset-2 scale-105"
+                              : "hover:scale-105",
+                          )}
+                          onClick={() => setSelectedAchievement(selectedAchievement === index ? null : index)}
+                          whileHover={{ y: -5 }}
+                        >
+                          <div className="p-6 h-full flex flex-col">
+                            <div className="flex items-start gap-4 mb-4">
+                              <div
+                                className={cn(
+                                  "p-3 rounded-xl transition-all duration-500 group-hover:scale-110 group-hover:rotate-6",
+                                  achievement.color,
+                                )}
+                              >
+                                {achievement.icon}
+                              </div>
+                              <div className="flex-1">
+                                <h3 className="text-lg font-bold text-primary mb-2 group-hover:text-secondary transition-colors duration-300">
+                                  {achievement.title}
+                                </h3>
+                              </div>
+                            </div>
+
+                            <motion.div
+                              initial={{ height: selectedAchievement === index ? "auto" : "60px", overflow: "hidden" }}
+                              animate={{ height: selectedAchievement === index ? "auto" : "60px", overflow: "hidden" }}
+                              transition={{ duration: 0.4 }}
+                              className="flex-1"
+                            >
+                              {achievement.description && (
+                                <p className="text-primary/70 leading-relaxed">{achievement.description}</p>
+                              )}
+                            </motion.div>
+
+                            {achievement.description && achievement.description.length > 100 && (
+                              <motion.button
+                                className="mt-4 text-sm font-medium text-primary hover:text-secondary transition-colors flex items-center self-start group/btn"
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  setSelectedAchievement(selectedAchievement === index ? null : index)
+                                }}
+                                whileHover={{ x: 5 }}
+                              >
+                                {selectedAchievement === index ? "Show less" : "Read more"}
+                                <ChevronRight className="ml-1 w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
+                              </motion.button>
+                            )}
+                          </div>
+                        </motion.div>
+                      ))}
+                    </div>
+
+                    {/* Future vision for 2025 */}
+                    {activeYearIndex === milestones.length - 1 && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8, delay: 0.5 }}
+                        className="mt-6 p-6 bg-primary text-white text-center relative overflow-hidden rounded-2xl"
+                      >
+                        <div className="absolute inset-0 bg-secondary/10"></div>
+                        <div className="relative z-10">
+                          <Sparkles className="w-8 h-8 mx-auto mb-3 text-secondary" />
+                          <h3 className="text-2xl font-bold mb-3">Our Vision for the Future</h3>
+                          <p className="max-w-3xl mx-auto text-lg opacity-90">
+                            Our new global headquarters represents the next chapter in our journey, setting the stage
+                            for even greater achievements and innovations to come.
+                          </p>
+                        </div>
+                      </motion.div>
+                    )}
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+            </div>
+          </section>
+        </SidebarInset>
       </div>
 
       {/* Custom scrollbar styling */}
       <style jsx global>{`
         .achievements-container::-webkit-scrollbar {
-          width: 6px;
+          width: 8px;
         }
         .achievements-container::-webkit-scrollbar-track {
-          background: #f1f1f1;
+          background: #f8f9fa;
           border-radius: 10px;
         }
         .achievements-container::-webkit-scrollbar-thumb {
-          background: #5E366D20;
+          background: #5E366D;
           border-radius: 10px;
         }
         .achievements-container::-webkit-scrollbar-thumb:hover {
-          background: #5E366D40;
+          background: #F08900;
+        }
+        .scrollbar-hide {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+          display: none;
         }
       `}</style>
-    </section>
+    </SidebarProvider>
   )
 }

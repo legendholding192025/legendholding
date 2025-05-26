@@ -1,152 +1,401 @@
+"use client"
+ 
 import Image from "next/image"
-import { Heart, Award, TrendingUp, Users, Zap, Globe } from "lucide-react"
+import { Heart, Award, TrendingUp, Users, Zap, Globe, Eye, Target } from "lucide-react"
+import { Card, CardContent } from "@/components/ui/card"
+import { useEffect, useState } from "react"
+import { Header } from "@/components/header"
+import { Footer } from "@/components/footer"
+ 
+// Counter Animation Component
+type AnimatedCounterProps = {
+  target: number;
+  suffix?: string;
+  duration?: number;
+  startDelay?: number;
+};
+function AnimatedCounter({ target, suffix = "", duration = 2000, startDelay = 0 }: AnimatedCounterProps) {
+  const [count, setCount] = useState(0)
+  const [isVisible, setIsVisible] = useState(false)
+ 
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !isVisible) {
+          setIsVisible(true)
+ 
+          setTimeout(() => {
+            const startTime = Date.now()
+            const startValue = 0
+            const endValue = target
+ 
+            const animate = () => {
+              const now = Date.now()
+              const elapsed = now - startTime
+              const progress = Math.min(elapsed / duration, 1)
+ 
+              // Easing function for smooth deceleration
+              const easeOut = 1 - Math.pow(1 - progress, 3)
+              const currentValue = Math.floor(startValue + (endValue - startValue) * easeOut)
+ 
+              setCount(currentValue)
+ 
+              if (progress < 1) {
+                requestAnimationFrame(animate)
+              }
+            }
+ 
+            animate()
+          }, startDelay)
+        }
+      },
+      { threshold: 0.5 },
+    )
+ 
+    const element = document.getElementById(`counter-${target}`)
+    if (element) observer.observe(element)
+ 
+    return () => observer.disconnect()
+  }, [target, duration, startDelay, isVisible])
+ 
+  return (
+    <span
+      id={`counter-${target}`}
+      className="inline-block tabular-nums"
+      style={{
+        transform: isVisible ? "translateY(0)" : "translateY(10px)",
+        opacity: isVisible ? 1 : 0,
+        transition: "all 0.5s ease-out",
+      }}
+    >
+      {count}
+      {suffix}
+    </span>
+  )
+}
  
 export default function VisionMissionValuesPage() {
+  const [scrollY, setScrollY] = useState(0)
+ 
+  // Animated counters
+  const [yearsCount, setYearsCount] = useState(0)
+  const [clientsCount, setClientsCount] = useState(0)
+  const yearsTarget = (() => {
+    const baseYear = 2008
+    const now = new Date()
+    let years = now.getFullYear() - baseYear
+    if (now.getMonth() >= 0) years += 1
+    return years
+  })()
+  const clientsTarget = 10000
+ 
+  useEffect(() => {
+    let yearsFrame: number, clientsFrame: number
+    // Animate years
+    if (yearsCount < yearsTarget) {
+      yearsFrame = window.setTimeout(() => setYearsCount(yearsCount + 1), 40)
+    }
+    // Animate clients
+    if (clientsCount < clientsTarget) {
+      clientsFrame = window.setTimeout(() => setClientsCount(clientsCount + Math.ceil(clientsTarget / 100)), 10)
+    }
+    return () => {
+      clearTimeout(yearsFrame)
+      clearTimeout(clientsFrame)
+    }
+  }, [yearsCount, clientsCount, yearsTarget, clientsTarget])
+ 
+  // Calculate years of excellence dynamically
+  const getYearsOfExcellence = () => {
+    const baseYear = 2008
+    const now = new Date()
+    let years = now.getFullYear() - baseYear
+    if (now.getMonth() >= 0) years += 1 // January is month 0
+    return years
+  }
+ 
+  useEffect(() => {
+    const handleScroll = () => setScrollY(window.scrollY)
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
+ 
   return (
-    <main className="min-h-screen bg-white relative overflow-hidden">
-      {/* Decorative background shapes */}
-      <div className="absolute -top-32 -left-32 w-96 h-96 bg-primary/10 rounded-full blur-3xl z-0" />
-      <div className="absolute -bottom-32 -right-32 w-96 h-96 bg-primary-orange/10 rounded-full blur-3xl z-0" />
-      <div className="absolute top-1/2 right-0 w-64 h-64 bg-primary-green/5 rounded-full blur-2xl z-0" />
- 
-      {/* Vision & Mission Section */}
-      <section className="py-20 px-4 md:px-6 lg:px-8 max-w-7xl mx-auto relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-          <div className="lg:col-span-6 order-2 lg:order-1">
-            <div className="relative">
-              <h2 className="text-primary-orange font-medium mb-3 font-effra tracking-wide uppercase text-sm">
-                Vision & Mission
-              </h2>
-              <h3 className="text-3xl md:text-4xl font-bold text-primary mb-6 font-richmond leading-tight">
-                Our Vision & Mission
-              </h3>
-              <div className="h-1 w-24 bg-primary-orange rounded mb-8" />
-              <p className="text-gray-700 mb-10 font-effra text-lg leading-relaxed">
-                We are committed to transforming industries through innovative solutions and sustainable practices,
-                creating value for our clients and communities.
-              </p>
- 
-              <div className="mb-10 bg-primary p-8 rounded-lg border-l-4 border-primary-orange shadow-lg transform transition-all duration-300 hover:translate-x-1">
-                <h4 className="text-xl font-bold text-white mb-4 font-richmond">Vision</h4>
-                <p className="text-white/90 font-effra leading-relaxed">
-                  To seamlessly connect the physical and digital worlds, revolutionizing supply chains with cutting-edge
-                  financial technology, and become the global leader in intelligent, data-driven solutions that empower
-                  businesses to thrive through efficiency, transparency, and sustainable growth.
-                </p>
+    <>
+      <Header />
+      <main className="min-h-screen bg-white relative">
+        {/* Minimal Hero Section */}
+        <section className="relative py-24 md:py-32 px-4 md:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center max-w-4xl mx-auto">
+              <div className="inline-block mb-6">
+                <span className="text-sm font-medium text-gray-500 uppercase tracking-[0.2em] font-effra">
+                  Our Foundation
+                </span>
+                <div className="h-px w-16 bg-[#E67E22] mx-auto mt-2" />
               </div>
  
-              {/* Image positioned between Vision and Mission cards on mobile/tablet */}
-              <div className="lg:hidden flex justify-center mb-10">
-                <div className="rounded-2xl overflow-hidden shadow-2xl border-4 border-primary/10 transform transition-all duration-500 hover:scale-[1.02] max-w-md">
-                  <Image
-                    src="https://res.cloudinary.com/dosxengut/image/upload/v1746784919/1-1-2_geivzn.jpg"
-                    width={800}
-                    height={600}
-                    alt="Legend team collaboration"
-                    className="w-full h-auto object-cover"
-                    priority
+              <h1 className="text-4xl md:text-6xl lg:text-7xl font-light text-gray-900 mb-8 font-richmond leading-[1.1] tracking-tight">
+                Vision, Mission
+                <br />
+                <span className="font-normal text-[#2b1c48]">& Values</span>
+              </h1>
+ 
+              <p className="text-lg md:text-xl text-gray-600 font-effra leading-relaxed max-w-2xl mx-auto">
+                The principles that guide our commitment to transforming industries and creating sustainable value
+                worldwide.
+              </p>
+            </div>
+          </div>
+        </section>
+ 
+        {/* Vision Section */}
+        <section className="py-12 md:py-20 px-4 md:px-6 lg:px-8 bg-[#F5F1EB]">
+          <div className="max-w-7xl mx-auto">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+              {/* Vision Content */}
+              <div className="order-2 lg:order-1">
+                <div className="mb-8">
+                  <div className="flex items-center gap-4 mb-6">
+                    <div className="w-12 h-12 bg-[#2b1c48] rounded-full flex items-center justify-center">
+                      <Eye className="w-6 h-6 text-white" />
+                    </div>
+                    <span className="text-sm font-medium text-gray-500 uppercase tracking-[0.2em] font-effra">
+                      Vision
+                    </span>
+                  </div>
+                  <h2 className="text-3xl md:text-4xl lg:text-5xl font-light text-gray-900 mb-8 font-richmond leading-tight">
+                    Our Vision
+                  </h2>
+                </div>
+ 
+                <div className="space-y-6">
+                  <p className="text-lg md:text-xl text-gray-700 font-effra leading-relaxed">
+                    To seamlessly connect the physical and digital worlds, revolutionizing supply chains with cutting-edge financial technology, and become the global leader in intelligent, data-driven solutions that empower businesses to thrive through efficiency, transparency, and sustainable growth.
+                  </p>
+                </div>
+ 
+                {/* Vision Pillars */}
+                <div className="grid grid-cols-3 gap-6 mt-6">
+                  {[
+                    { title: "Innovation", desc: "Cutting-edge technology" },
+                    { title: "Global Impact", desc: "Worldwide transformation" },
+                    { title: "Sustainability", desc: "Future-focused growth" },
+                  ].map((pillar, index) => (
+                    <div key={index} className="text-center">
+                      <div className="w-2 h-2 bg-[#E67E22] rounded-full mx-auto mb-3" />
+                      <h4 className="text-sm font-semibold text-gray-900 mb-2 font-richmond">{pillar.title}</h4>
+                      <p className="text-xs text-gray-600 font-effra">{pillar.desc}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+ 
+              {/* Vision Image */}
+              <div className="order-1 lg:order-2">
+                <div className="relative">
+                  <div className="aspect-[4/3] relative overflow-hidden">
+                    <Image
+                      src="https://res.cloudinary.com/dosxengut/image/upload/v1746784919/1-1-2_geivzn.jpg"
+                      width={800}
+                      height={600}
+                      alt="Vision"
+                      className="w-full h-full object-cover"
+                      priority
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+                  </div>
+ 
+                  {/* Floating Stats */}
+                  <div className="absolute -bottom-6 -left-6 bg-white rounded-lg shadow-lg p-6 border border-gray-100">
+                    <div className="text-2xl font-bold text-[#2b1c48] font-richmond">
+                      <AnimatedCounter target={yearsTarget} suffix="+" duration={1200} startDelay={200} />
+                    </div>
+                    <div className="text-sm text-gray-600 font-effra">Years of Excellence</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+ 
+        {/* Mission Section */}
+        <section className="py-12 md:py-20 px-4 md:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+              {/* Mission Image */}
+              <div>
+                <div className="relative">
+                  <div className="aspect-[4/3] relative overflow-hidden">
+                    <Image
+                      src="https://res.cloudinary.com/dosxengut/image/upload/v1746784919/1-1-2_geivzn.jpg"
+                      width={800}
+                      height={600}
+                      alt="Mission"
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+                  </div>
+ 
+                  {/* Floating Stats */}
+                  <div className="absolute -bottom-6 -right-6 bg-white rounded-lg shadow-lg p-6 border border-gray-100">
+                    <div className="text-2xl font-bold text-[#E67E22] font-richmond">
+                      <AnimatedCounter target={10} suffix="K+" duration={1500} startDelay={100} />
+                    </div>
+                    <div className="text-sm text-gray-600 font-effra">Global Clients</div>
+                  </div>
+                </div>
+              </div>
+ 
+              {/* Mission Content */}
+              <div>
+                <div className="mb-8">
+                  <div className="flex items-center gap-4 mb-6">
+                    <div className="w-12 h-12 bg-[#2b1c48] rounded-full flex items-center justify-center">
+                      <Target className="w-6 h-6 text-white" />
+                    </div>
+                    <span className="text-sm font-medium text-gray-500 uppercase tracking-[0.2em] font-effra">
+                      Mission
+                    </span>
+                  </div>
+                  <h2 className="text-3xl md:text-4xl lg:text-5xl font-light text-gray-900 mb-8 font-richmond leading-tight">
+                    Our Mission
+                  </h2>
+                </div>
+ 
+                <div className="space-y-6">
+                  <p className="text-lg md:text-xl text-gray-700 font-effra leading-relaxed">
+                    We are dedicated to fostering happiness and delivering value, focusing on building a sustainable future.
+                  </p>
+                </div>
+ 
+                {/* Mission Pillars */}
+                <div className="grid grid-cols-3 gap-6 mt-6">
+                  {[
+                    { title: "Excellence", desc: "Highest standards" },
+                    { title: "Collaboration", desc: "Working together" },
+                    { title: "Impact", desc: "Meaningful change" },
+                  ].map((pillar, index) => (
+                    <div key={index} className="text-center">
+                      <div className="w-2 h-2 bg-[#27AE60] rounded-full mx-auto mb-3" />
+                      <h4 className="text-sm font-semibold text-gray-900 mb-2 font-richmond">{pillar.title}</h4>
+                      <p className="text-xs text-gray-600 font-effra">{pillar.desc}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+ 
+        {/* Values Section */}
+        <section className="py-12 md:py-20 px-4 md:px-6 lg:px-8 bg-[#F5F1EB]">
+          <div className="max-w-7xl mx-auto">
+            {/* Section Header */}
+            <div className="text-center mb-12">
+              <div className="inline-block mb-6">
+                <span className="text-sm font-medium text-gray-500 uppercase tracking-[0.2em] font-effra">
+                  Our Foundation
+                </span>
+                <div className="h-px w-16 bg-[#27AE60] mx-auto mt-2" />
+              </div>
+ 
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-light text-gray-900 mb-8 font-richmond leading-tight">
+                Our Core Values
+              </h2>
+ 
+              <p className="text-lg text-gray-600 font-effra leading-relaxed max-w-3xl mx-auto">
+                Our values spell out <span className="font-semibold text-[#2b1c48]">LEGEND</span> — the principles that guide every decision and action we take.
+              </p>
+            </div>
+ 
+            {/* Values Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {[
+                {
+                  icon: <Heart className="w-6 h-6" />,
+                  title: "Loyalty",
+                  desc: "Commitment to our stakeholders and partners, building lasting relationships based on trust and mutual respect.",
+                  color: "text-[#C0392B]",
+                  bg: "bg-[#FADBD8]",
+                  border: "border-[#F1948A]",
+                },
+                {
+                  icon: <Award className="w-6 h-6" />,
+                  title: "Excellence",
+                  desc: "Striving for the highest standards in all we do, continuously improving and delivering exceptional results.",
+                  color: "text-[#E67E22]",
+                  bg: "bg-[#FDF2E9]",
+                  border: "border-[#F8C471]",
+                },
+                {
+                  icon: <TrendingUp className="w-6 h-6" />,
+                  title: "Growth",
+                  desc: "Continuous improvement and sustainable development, fostering innovation and embracing new opportunities.",
+                  color: "text-[#27AE60]",
+                  bg: "bg-[#D5F4E6]",
+                  border: "border-[#82E0AA]",
+                },
+                {
+                  icon: <Users className="w-6 h-6" />,
+                  title: "Empathy",
+                  desc: "Understanding and addressing the needs of others, creating solutions that truly make a difference.",
+                  color: "text-[#2b1c48]",
+                  bg: "bg-[#EBE7F0]",
+                  border: "border-[#D2B4DE]",
+                },
+                {
+                  icon: <Zap className="w-6 h-6" />,
+                  title: "Nimble",
+                  desc: "Agility and adaptability in a changing world, responding quickly to new challenges and opportunities.",
+                  color: "text-[#8E44AD]",
+                  bg: "bg-[#F4ECF7]",
+                  border: "border-[#D7BDE2]",
+                },
+                {
+                  icon: <Globe className="w-6 h-6" />,
+                  title: "Diversity",
+                  desc: "Embracing different perspectives and backgrounds, fostering an inclusive environment for innovation.",
+                  color: "text-[#16A085]",
+                  bg: "bg-[#D1F2EB]",
+                  border: "border-[#7FB3D3]",
+                },
+              ].map((value, index) => (
+                <div
+                  key={value.title}
+                  className={`group relative bg-white rounded-xl p-6 shadow-sm hover:shadow-lg transition-all duration-300 border ${value.border} hover:-translate-y-1`}
+                >
+                  {/* Header with icon and letter */}
+                  <div className="flex items-start justify-between mb-4">
+                    <div
+                      className={`w-14 h-14 ${value.bg} rounded-xl flex items-center justify-center ${value.color} group-hover:scale-110 transition-transform duration-300`}
+                    >
+                      {value.icon}
+                    </div>
+                    <div className="w-10 h-10 bg-gray-50 rounded-full flex items-center justify-center">
+                      <span className="text-lg font-bold text-gray-700 font-richmond">{}</span>
+                    </div>
+                  </div>
+ 
+                  {/* Content */}
+                  <div className="space-y-3">
+                    <h3 className="text-xl font-semibold text-gray-900 font-richmond group-hover:text-gray-800 transition-colors">
+                      {value.title}
+                    </h3>
+                    <p className="text-gray-600 font-effra leading-relaxed text-sm">{value.desc}</p>
+                  </div>
+ 
+                  {/* Bottom accent line */}
+                  <div
+                    className={`absolute bottom-0 left-0 w-0 h-1 ${value.bg.replace("bg-", "bg-gradient-to-r from-")} group-hover:w-full transition-all duration-500 rounded-b-xl`}
                   />
                 </div>
-              </div>
- 
-              <div className="bg-primary p-8 rounded-lg border-l-4 border-primary-green shadow-lg transform transition-all duration-300 hover:translate-x-1">
-                <h4 className="text-xl font-bold text-white mb-4 font-richmond">Mission</h4>
-                <p className="text-white/90 font-effra leading-relaxed">
-                  We are dedicated to fostering happiness and delivering value, focusing on building a sustainable
-                  future. Through innovation, collaboration, and excellence, we strive to create meaningful impact for
-                  our clients, partners, and the communities we serve.
-                </p>
-              </div>
+              ))}
             </div>
           </div>
- 
-          {/* Image positioned on the right side for desktop */}
-          <div className="lg:col-span-6 order-1 lg:order-2 hidden lg:flex justify-center items-center">
-            <div className="rounded-2xl overflow-hidden shadow-2xl border-4 border-primary/10 transform transition-all duration-500 hover:scale-[1.02]">
-              <Image
-                src="https://res.cloudinary.com/dosxengut/image/upload/v1746784919/1-1-2_geivzn.jpg"
-                width={800}
-                height={600}
-                alt="Legend team collaboration"
-                className="w-full h-auto object-cover"
-                priority
-              />
-            </div>
-          </div>
-        </div>
-      </section>
- 
-      {/* Values Section */}
-      <section className="py-20 px-4 md:px-6 lg:px-8 max-w-7xl mx-auto bg-white relative z-10">
-        <div className="text-center mb-16">
-          <div className="relative inline-block">
-            <h2 className="text-primary-orange font-medium mb-3 font-effra tracking-wide uppercase text-sm">
-              Our Foundation
-            </h2>
-            <h3 className="text-3xl md:text-4xl font-bold text-primary mb-4 font-richmond">Our Values</h3>
-            <div className="h-1 w-24 bg-primary-orange rounded mx-auto mb-6" />
-          </div>
-          <p className="text-gray-700 max-w-3xl mx-auto font-effra text-lg leading-relaxed">
-            Our core values form the foundation of everything we do, guiding our decisions and actions as we work
-            towards our vision and mission.
-          </p>
-        </div>
- 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {[
-            {
-              icon: <Heart className="w-8 h-8 text-primary-orange" />,
-              letter: "L",
-              title: "Loyalty",
-              desc: "Commitment to our stakeholders and partners, building lasting relationships based on trust and mutual respect.",
-            },
-            {
-              icon: <Award className="w-8 h-8 text-primary-orange" />,
-              letter: "E",
-              title: "Excellence",
-              desc: "Striving for the highest standards in all we do, continuously improving and delivering exceptional results.",
-            },
-            {
-              icon: <TrendingUp className="w-8 h-8 text-primary-green" />,
-              letter: "G",
-              title: "Growth",
-              desc: "Continuous improvement and sustainable development, fostering innovation and embracing new opportunities.",
-            },
-            {
-              icon: <Users className="w-8 h-8 text-primary" />,
-              letter: "E",
-              title: "Empathy",
-              desc: "Understanding and addressing the needs of others, creating solutions that truly make a difference.",
-            },
-            {
-              icon: <Zap className="w-8 h-8 text-primary-orange" />,
-              letter: "N",
-              title: "Nimble",
-              desc: "Agility and adaptability in a changing world, responding quickly to new challenges and opportunities.",
-            },
-            {
-              icon: <Globe className="w-8 h-8 text-primary" />,
-              letter: "D",
-              title: "Diversity",
-              desc: "Embracing different perspectives and backgrounds, fostering an inclusive environment for innovation.",
-            },
-          ].map((v, index) => (
-            <div
-              key={v.title}
-              className="bg-white rounded-xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 border-b-4 border-primary-orange group hover:scale-[1.03]"
-            >
-              <div className="flex items-center mb-6">
-                <div className="w-16 h-16 flex items-center justify-center bg-secondary-pantone7528 rounded-full p-3 group-hover:bg-primary-orange/10 transition-colors duration-300 mr-4">
-                  {v.icon}
-                </div>
-                <span className="text-4xl font-bold text-primary-orange/20 font-richmond">{v.letter}</span>
-              </div>
-              <h4 className="text-xl font-bold text-primary mb-4 font-richmond">{v.title}</h4>
-              <p className="text-gray-700 font-effra leading-relaxed">{v.desc}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-    </main>
+        </section>
+      </main>
+      <Footer />
+    </>
   )
 }

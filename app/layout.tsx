@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Toaster } from 'sonner'
+import CookieConsent from "@/components/cookie-consent"
 
 import './globals.css'
 import { brandFont } from './fonts'
@@ -18,7 +19,8 @@ export default function RootLayout({
     <html lang="en" className={`${brandFont.variable}`}>
       <body className="font-brand min-h-screen bg-background antialiased">
         {children}
-        <Toaster />
+        <Toaster position="top-right" />
+        <CookieConsent />
       </body>
     </html>
   )

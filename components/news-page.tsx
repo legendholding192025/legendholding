@@ -177,13 +177,16 @@ export function NewsPage() {
               <div className="grid gap-8 md:grid-cols-[2fr_1fr]">
                 {/* Featured News */}
                 {featuredArticle ? (
-                  <div className="relative overflow-hidden rounded-xl bg-white shadow-md">
+                  <Link
+                    href={`/news/${featuredArticle.id}`}
+                    className="relative overflow-hidden rounded-xl bg-white shadow-md hover:shadow-xl transition-all duration-300 block group"
+                  >
                     <div className="relative h-[300px] w-full md:h-[400px]">
                       <Image
                         src={featuredArticle.image_url || "/placeholder.svg"}
                         alt={featuredArticle.title}
                         fill
-                        className="object-cover"
+                        className="object-cover group-hover:scale-105 transition-transform duration-500"
                       />
                     </div>
                     <div className="p-6">
@@ -197,9 +200,13 @@ export function NewsPage() {
                           {featuredArticle.read_time}
                         </div>
                       </div>
-                      <h2 className="mb-3 text-2xl font-bold md:text-3xl">{featuredArticle.title}</h2>
+                      <h2 className="mb-3 text-2xl font-bold md:text-3xl group-hover:text-[#5E366D] transition-colors">{featuredArticle.title}</h2>
                       <p className="mb-4 text-gray-600">{featuredArticle.excerpt}</p>
-                      <div className="flex items-center justify-end">
+                      <div className="flex items-center justify-between">
+                        <div className="text-[#F39200] font-medium flex items-center">
+                          Read More
+                          <ArrowRight className="ml-1 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                        </div>
                         <div className="flex gap-2">
                           <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full">
                             <Share2 className="h-4 w-4" />
@@ -208,7 +215,7 @@ export function NewsPage() {
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </Link>
                 ) : (
                   <div className="flex h-[500px] items-center justify-center rounded-xl bg-white">
                     <p className="text-gray-500">No featured article available</p>

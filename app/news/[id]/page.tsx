@@ -195,12 +195,12 @@ export default function NewsArticlePage() {
                 </div>
 
                 {/* Title */}
-                <h1 className="mb-6 text-3xl font-bold leading-tight md:text-4xl lg:text-5xl text-[rgb(43,28,72)]">
+                <h1 className="mb-6 text-2xl font-bold leading-tight md:text-3xl lg:text-4xl text-[rgb(43,28,72)]">
                   {article.title}
                 </h1>
 
                 {/* Featured Image */}
-                <div className="relative mb-8 h-[300px] w-full overflow-hidden rounded-xl md:h-[500px]">
+                <div className="relative mb-6 h-[300px] w-full overflow-hidden rounded-xl md:h-[500px]">
                   <Image
                     src={article.image_url || "/placeholder.svg"}
                     alt={article.title}
@@ -212,7 +212,7 @@ export default function NewsArticlePage() {
 
                 {/* Content */}
                 <div 
-                  className="prose prose-lg max-w-none prose-headings:text-[rgb(43,28,72)] prose-p:text-[rgb(93,55,110)]"
+                  className="prose prose-lg max-w-none prose-headings:text-[rgb(43,28,72)] prose-h2:text-2xl prose-h3:text-xl prose-h4:text-lg prose-p:text-[rgb(93,55,110)] prose-headings:font-semibold prose-headings:mb-4 prose-p:mb-4"
                   dangerouslySetInnerHTML={{ __html: article.content }}
                 />
 
