@@ -553,7 +553,7 @@ export function Header() {
                             <Link
                               key={subItem.title}
                               href={subItem.url}
-                              className="group overflow-hidden rounded-lg border border-gray-100 hover:border-gray-200 hover:shadow-md transition-all duration-300 bg-[rgb(234,226,214)]"
+                              className="group overflow-hidden rounded-lg border border-gray-100 hover:border-gray-200 hover:shadow-md transition-all duration-300 bg-white"
                             >
                               <div className="relative h-40 overflow-hidden">
                                 <Image
@@ -601,7 +601,7 @@ export function Header() {
                             <div key={business.title} className="relative group">
                               <Link
                                 href={business.url}
-                                className="block overflow-hidden rounded-lg border border-gray-100 hover:border-gray-200 hover:shadow-md transition-all duration-300 bg-[rgb(234,226,214)] h-full"
+                                className="block overflow-hidden rounded-lg border border-gray-100 hover:border-gray-200 hover:shadow-md transition-all duration-300 bg-white h-full"
                               >
                                 <div className="relative h-40 overflow-hidden">
                                   <Image
