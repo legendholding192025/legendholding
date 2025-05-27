@@ -1,12 +1,8 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useState, useEffect } from "react"
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
-import { useRouter } from "next/navigation"
-import { AdminDashboardLayout } from "@/components/admin/dashboard-layout"
-import { Button } from "@/components/ui/button"
-import { Download, Eye, FileText, Mail, Phone } from "lucide-react"
-import { toast } from "sonner"
+import { format } from "date-fns"
 import {
   Table,
   TableBody,
@@ -15,38 +11,48 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+import { Eye, Trash2, Download, Search } from "lucide-react"
+import { toast } from "sonner"
+import Link from "next/link"
+import { Input } from "@/components/ui/input"
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog"
-import * as XLSX from 'xlsx'
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { useRouter } from "next/navigation"
+import { AdminDashboardLayout } from "@/components/admin/dashboard-layout"
 
-interface Application {
+interface Job {
+  id: string
+  title: string
+  department: string
+}
+
+interface JobApplication {
   id: string
   job_id: string
   full_name: string
   email: string
   phone: string
-  cover_letter: string
   resume_url: string
-  status: 'pending' | 'reviewed' | 'shortlisted' | 'rejected'
+  cover_letter: string | null
+  status: string
   created_at: string
-  job: {
-    title: string
-    department: string
-  }
+  job?: Job
 }
 
-export default function ApplicationsManagement() {
+export default function ApplicationsPage() {
   const router = useRouter()
-  const supabase = createClientComponentClient()
-  const [applications, setApplications] = useState<Application[]>([])
+  const [applications, setApplications] = useState<JobApplication[]>([])
   const [loading, setLoading] = useState(true)
-  const [selectedApplication, setSelectedApplication] = useState<Application | null>(null)
-  const [viewingResume, setViewingResume] = useState<string | null>(null)
+  const [searchTerm, setSearchTerm] = useState("")
+  const [statusFilter, setStatusFilter] = useState<string>("all")
+  const supabase = createClientComponentClient()
 
   useEffect(() => {
     fetchApplications()
@@ -54,94 +60,113 @@ export default function ApplicationsManagement() {
 
   const fetchApplications = async () => {
     try {
-      setLoading(true)
-      const { data, error } = await supabase
+      const { data: applicationsData, error: applicationsError } = await supabase
         .from('job_applications')
         .select(`
           *,
-          job:jobs (
-            title,
-            department
-          )
+          job:jobs(id, title, department)
         `)
         .order('created_at', { ascending: false })
 
-      if (error) throw error
-      setApplications(data || [])
+      if (applicationsError) throw applicationsError
+
+      if (!applicationsData) {
+        setApplications([])
+        return
+      }
+
+      setApplications(applicationsData)
     } catch (error) {
       console.error('Error fetching applications:', error)
-      toast.error("Failed to fetch applications")
+      toast.error('Failed to load applications')
     } finally {
       setLoading(false)
     }
   }
 
-  const handleStatusChange = async (id: string, status: Application['status']) => {
+  const handleDelete = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this application? This action cannot be undone.')) return
+
     try {
+      // First find the application to get the resume URL
+      const application = applications.find(app => app.id === id)
+      if (application) {
+        // Delete the resume file from storage
+        const resumeFileName = application.resume_url.split('/').pop()
+        if (resumeFileName) {
+          const { error: storageError } = await supabase
+            .storage
+            .from('resumes')
+            .remove([`public/${resumeFileName}`])
+
+          if (storageError) {
+            console.error('Error deleting resume file:', storageError)
+          }
+        }
+      }
+
+      // Then delete the application record
       const { error } = await supabase
         .from('job_applications')
-        .update({ status })
+        .delete()
         .eq('id', id)
 
       if (error) throw error
 
-      setApplications(prev =>
-        prev.map(app =>
-          app.id === id ? { ...app, status } : app
-        )
-      )
-      toast.success("Application status updated")
+      setApplications(applications.filter(app => app.id !== id))
+      toast.success('Application deleted successfully')
     } catch (error) {
-      console.error('Error updating application status:', error)
-      toast.error("Failed to update status")
+      console.error('Error deleting application:', error)
+      toast.error('Failed to delete application')
     }
   }
 
-  const downloadResume = async (application: Application) => {
+  const handleDownloadResume = async (url: string, fileName: string) => {
     try {
-      const { data, error } = await supabase.storage
-        .from('applications')
-        .download(application.resume_url)
-
-      if (error) throw error
-
-      // Create a download link
-      const url = window.URL.createObjectURL(data)
-      const a = document.createElement('a')
-      a.href = url
-      a.download = `${application.full_name}_resume.${application.resume_url.split('.').pop()}`
-      document.body.appendChild(a)
-      a.click()
-      window.URL.revokeObjectURL(url)
-      document.body.removeChild(a)
+      const response = await fetch(url)
+      const blob = await response.blob()
+      const downloadUrl = window.URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = downloadUrl
+      link.download = fileName
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      window.URL.revokeObjectURL(downloadUrl)
+      
+      toast.success('Resume download started')
     } catch (error) {
       console.error('Error downloading resume:', error)
-      toast.error("Failed to download resume")
+      toast.error('Failed to download resume')
     }
   }
 
-  const exportToExcel = () => {
-    try {
-      const exportData = applications.map(app => ({
-        'Date': new Date(app.created_at).toLocaleDateString(),
-        'Job Title': app.job?.title || 'N/A',
-        'Department': app.job?.department || 'N/A',
-        'Applicant Name': app.full_name,
-        'Email': app.email,
-        'Phone': app.phone,
-        'Status': app.status.charAt(0).toUpperCase() + app.status.slice(1)
-      }))
-
-      const ws = XLSX.utils.json_to_sheet(exportData)
-      const wb = XLSX.utils.book_new()
-      XLSX.utils.book_append_sheet(wb, ws, 'Applications')
-      XLSX.writeFile(wb, 'job_applications.xlsx')
-      toast.success("Data exported successfully")
-    } catch (error) {
-      console.error('Error exporting data:', error)
-      toast.error("Failed to export data")
+  const getStatusBadgeVariant = (status: string): "default" | "secondary" | "destructive" | "outline" => {
+    switch (status.toLowerCase()) {
+      case 'pending':
+        return 'outline'
+      case 'reviewing':
+        return 'secondary'
+      case 'accepted':
+        return 'default'
+      case 'rejected':
+        return 'destructive'
+      default:
+        return 'default'
     }
   }
+
+  const filteredApplications = applications.filter(application => {
+    const matchesSearch = 
+      application.full_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      application.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      application.job?.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      application.job?.department?.toLowerCase().includes(searchTerm.toLowerCase())
+
+    const matchesStatus = statusFilter === "all" || application.status === statusFilter
+
+    return matchesSearch && matchesStatus
+  })
 
   const handleSignOut = async () => {
     await supabase.auth.signOut()
@@ -149,188 +174,125 @@ export default function ApplicationsManagement() {
     router.push("/admin/login")
   }
 
-  const getStatusColor = (status: Application['status']) => {
-    switch (status) {
-      case 'pending':
-        return 'bg-yellow-100 text-yellow-700'
-      case 'reviewed':
-        return 'bg-blue-100 text-blue-700'
-      case 'shortlisted':
-        return 'bg-green-100 text-green-700'
-      case 'rejected':
-        return 'bg-red-100 text-red-700'
-      default:
-        return 'bg-gray-100 text-gray-700'
-    }
+  if (loading) {
+    return (
+      <AdminDashboardLayout onSignOut={handleSignOut}>
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="flex flex-col items-center gap-2">
+            <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#2B1C48] border-t-transparent"></div>
+            <p className="text-sm text-gray-600">Loading applications...</p>
+          </div>
+        </div>
+      </AdminDashboardLayout>
+    )
   }
 
   return (
     <AdminDashboardLayout onSignOut={handleSignOut}>
-      <div className="space-y-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-semibold">Job Applications</h1>
-            <p className="text-sm text-gray-500">View and manage job applications</p>
+      <div className="p-8">
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-2xl font-bold">Job Applications</h1>
+          <div className="flex items-center gap-4">
+            <div className="relative">
+              <Search className="absolute left-2 top-2.5 h-4 w-4 text-gray-500" />
+              <Input
+                placeholder="Search applications..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-8"
+              />
+            </div>
+            <Select value={statusFilter} onValueChange={setStatusFilter}>
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Filter by status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Status</SelectItem>
+                <SelectItem value="pending">Pending</SelectItem>
+                <SelectItem value="reviewing">Reviewing</SelectItem>
+                <SelectItem value="accepted">Accepted</SelectItem>
+                <SelectItem value="rejected">Rejected</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
-          <Button onClick={exportToExcel} variant="outline" className="flex items-center gap-2">
-            <Download className="h-4 w-4" />
-            Export to Excel
-          </Button>
         </div>
 
-        <div className="rounded-md border">
+        <div className="bg-white rounded-lg shadow overflow-hidden">
           <Table>
             <TableHeader>
               <TableRow>
                 <TableHead>Date</TableHead>
-                <TableHead>Job Title</TableHead>
-                <TableHead>Applicant</TableHead>
-                <TableHead>Contact</TableHead>
+                <TableHead>Name</TableHead>
+                <TableHead>Position</TableHead>
+                <TableHead>Email</TableHead>
                 <TableHead>Status</TableHead>
+                <TableHead>Resume</TableHead>
                 <TableHead>Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {applications.map((application) => (
+              {filteredApplications.map((application) => (
                 <TableRow key={application.id}>
                   <TableCell>
-                    {new Date(application.created_at).toLocaleDateString()}
+                    {format(new Date(application.created_at), 'MMM d, yyyy')}
                   </TableCell>
+                  <TableCell className="font-medium">{application.full_name}</TableCell>
                   <TableCell>
                     <div>
-                      <p className="font-medium">{application.job?.title || 'N/A'}</p>
-                      <p className="text-sm text-gray-500">{application.job?.department || 'N/A'}</p>
+                      <div className="font-medium">{application.job?.title || 'N/A'}</div>
+                      {application.job?.department && (
+                        <div className="text-sm text-gray-500">{application.job.department}</div>
+                      )}
                     </div>
                   </TableCell>
-                  <TableCell>{application.full_name}</TableCell>
+                  <TableCell>{application.email}</TableCell>
                   <TableCell>
-                    <div className="space-y-1">
-                      <a
-                        href={`mailto:${application.email}`}
-                        className="flex items-center text-sm text-gray-600 hover:text-gray-900"
-                      >
-                        <Mail className="h-4 w-4 mr-1" />
-                        {application.email}
-                      </a>
-                      <a
-                        href={`tel:${application.phone}`}
-                        className="flex items-center text-sm text-gray-600 hover:text-gray-900"
-                      >
-                        <Phone className="h-4 w-4 mr-1" />
-                        {application.phone}
-                      </a>
-                    </div>
+                    <Badge variant={getStatusBadgeVariant(application.status)}>
+                      {application.status}
+                    </Badge>
                   </TableCell>
                   <TableCell>
-                    <select
-                      value={application.status}
-                      onChange={(e) => handleStatusChange(application.id, e.target.value as Application['status'])}
-                      className={`px-2 py-1 rounded-full text-xs ${getStatusColor(application.status)}`}
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleDownloadResume(
+                        application.resume_url,
+                        `${application.full_name.replace(/\s+/g, '_')}_resume.pdf`
+                      )}
                     >
-                      <option value="pending">Pending</option>
-                      <option value="reviewed">Reviewed</option>
-                      <option value="shortlisted">Shortlisted</option>
-                      <option value="rejected">Rejected</option>
-                    </select>
+                      <Download className="h-4 w-4 mr-1" />
+                      Download
+                    </Button>
                   </TableCell>
                   <TableCell>
-                    <div className="flex space-x-2">
+                    <div className="flex items-center gap-2">
+                      <Link href={`/admin/applications/${application.id}`}>
+                        <Button variant="outline" size="sm">
+                          <Eye className="h-4 w-4" />
+                        </Button>
+                      </Link>
                       <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => setSelectedApplication(application)}
-                        title="View Details"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleDelete(application.id)}
                       >
-                        <Eye className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => downloadResume(application)}
-                        title="Download Resume"
-                      >
-                        <FileText className="h-4 w-4" />
+                        <Trash2 className="h-4 w-4 text-red-500" />
                       </Button>
                     </div>
                   </TableCell>
                 </TableRow>
               ))}
+              {filteredApplications.length === 0 && (
+                <TableRow>
+                  <TableCell colSpan={7} className="text-center py-8">
+                    <p className="text-gray-500">No applications found</p>
+                  </TableCell>
+                </TableRow>
+              )}
             </TableBody>
           </Table>
         </div>
       </div>
-
-      {/* Application Details Dialog */}
-      {selectedApplication && (
-        <Dialog open={!!selectedApplication} onOpenChange={() => setSelectedApplication(null)}>
-          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-            <DialogHeader>
-              <DialogTitle>Application Details</DialogTitle>
-              <DialogDescription>
-                Detailed information about the application
-              </DialogDescription>
-            </DialogHeader>
-            <div className="space-y-6 py-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <h3 className="font-medium text-gray-900">Job Details</h3>
-                  <p className="text-sm text-gray-500 mt-1">
-                    {selectedApplication.job?.title} - {selectedApplication.job?.department}
-                  </p>
-                </div>
-                <div>
-                  <h3 className="font-medium text-gray-900">Application Date</h3>
-                  <p className="text-sm text-gray-500 mt-1">
-                    {new Date(selectedApplication.created_at).toLocaleDateString()}
-                  </p>
-                </div>
-              </div>
-              <div>
-                <h3 className="font-medium text-gray-900">Applicant Information</h3>
-                <div className="mt-2 space-y-2">
-                  <p className="text-sm">
-                    <span className="font-medium">Name:</span> {selectedApplication.full_name}
-                  </p>
-                  <p className="text-sm">
-                    <span className="font-medium">Email:</span> {selectedApplication.email}
-                  </p>
-                  <p className="text-sm">
-                    <span className="font-medium">Phone:</span> {selectedApplication.phone}
-                  </p>
-                </div>
-              </div>
-              <div>
-                <h3 className="font-medium text-gray-900">Cover Letter</h3>
-                <p className="text-sm text-gray-600 mt-2 whitespace-pre-line">
-                  {selectedApplication.cover_letter}
-                </p>
-              </div>
-              <div>
-                <h3 className="font-medium text-gray-900">Status</h3>
-                <select
-                  value={selectedApplication.status}
-                  onChange={(e) => handleStatusChange(selectedApplication.id, e.target.value as Application['status'])}
-                  className={`mt-2 px-3 py-1 rounded-md text-sm ${getStatusColor(selectedApplication.status)}`}
-                >
-                  <option value="pending">Pending</option>
-                  <option value="reviewed">Reviewed</option>
-                  <option value="shortlisted">Shortlisted</option>
-                  <option value="rejected">Rejected</option>
-                </select>
-              </div>
-              <div className="flex justify-end">
-                <Button
-                  onClick={() => downloadResume(selectedApplication)}
-                  className="bg-[#5E366D] hover:bg-[#5E366D]/90"
-                >
-                  <FileText className="h-4 w-4 mr-2" />
-                  Download Resume
-                </Button>
-              </div>
-            </div>
-          </DialogContent>
-        </Dialog>
-      )}
     </AdminDashboardLayout>
   )
 } 

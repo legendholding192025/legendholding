@@ -1,54 +1,50 @@
+"use client"
+
+import { NotificationCenter } from "./notification-center"
 import { Button } from "@/components/ui/button"
-import { Calendar, Bell, Search } from "lucide-react"
-import { Input } from "@/components/ui/input"
+import { CircleUserRound, Settings, LogOut } from "lucide-react"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import Link from "next/link"
 
 interface DashboardHeaderProps {
-  title?: string
-  description?: string
+  onSignOut?: () => void
 }
 
-export function DashboardHeader({ title = "Welcome back", description = "Here's what's happening with your dashboard today." }: DashboardHeaderProps) {
+export function DashboardHeader({ onSignOut }: DashboardHeaderProps) {
   return (
-    <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between bg-white rounded-lg border shadow-sm p-6 min-w-0">
-      <div className="flex-1 min-w-0">
-        <h1 className="text-2xl font-bold tracking-tight text-gray-900">{title}</h1>
-        <p className="text-sm text-gray-500 mt-1">{description}</p>
-      </div>
-      
-      <div className="flex flex-col sm:flex-row items-center gap-3 shrink-0">
-        <div className="relative w-full sm:w-auto">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-          <Input 
-            type="search" 
-            placeholder="Search..." 
-            className="pl-9 w-full sm:w-[240px] bg-gray-50 border-gray-200 focus:bg-white"
-          />
-        </div>
-        
-        <div className="flex items-center gap-2">
-          <Button 
-            variant="outline" 
-            size="icon"
-            className="relative h-9 w-9 border-gray-200"
-          >
-            <Bell className="h-4 w-4 text-gray-600" />
-            <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-red-500 text-[10px] font-medium text-white flex items-center justify-center">
-              3
-            </span>
-          </Button>
-          
-          <Button 
-            variant="outline" 
-            size="sm" 
-            className="h-9 border-gray-200 bg-gray-50 hover:bg-white"
-          >
-            <Calendar className="mr-2 h-4 w-4 text-gray-600" />
-            {new Date().toLocaleDateString("en-US", {
-              month: "long",
-              day: "numeric",
-              year: "numeric",
-            })}
-          </Button>
+    <div className="sticky top-0 z-10 bg-white border-b border-gray-200 px-6 py-3">
+      <div className="flex items-center justify-between">
+        <h1 className="text-xl font-semibold text-gray-900">Admin Dashboard</h1>
+        <div className="flex items-center gap-4">
+          <NotificationCenter />
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" className="relative">
+                <CircleUserRound className="h-5 w-5 text-gray-700 hover:text-primary transition-colors" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-56">
+              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <Link href="/admin/settings">
+                <DropdownMenuItem className="cursor-pointer">
+                  <Settings className="mr-2 h-4 w-4" />
+                  <span>Settings</span>
+                </DropdownMenuItem>
+              </Link>
+              <DropdownMenuItem onClick={onSignOut} className="cursor-pointer text-red-600 focus:text-red-600">
+                <LogOut className="mr-2 h-4 w-4" />
+                <span>Sign Out</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
     </div>
