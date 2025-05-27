@@ -132,7 +132,7 @@ export function DashboardClient() {
   return (
     <AdminDashboardLayout onSignOut={handleSignOut}>
       <div className="p-8">
-        <DashboardHeader title="Dashboard" description="Overview of your contact submissions and activities." />
+        <DashboardHeader onSignOut={handleSignOut} />
         
         <div className="mt-8">
           <DashboardCards submissions={submissions} />

@@ -12,14 +12,14 @@ import {
   LogOut,
   Menu,
   Users,
-  Building2,
-  ChevronRight,
+  Mail,
   PanelLeftClose,
   PanelLeftOpen,
-  Mail
+  ClipboardList
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
+import { DashboardHeader } from "@/components/admin/dashboard-header"
 import {
   Sidebar,
   SidebarContent,
@@ -61,14 +61,14 @@ const menuItems = [
     href: "/admin/jobs"
   },
   {
+    title: "Job Applications",
+    icon: ClipboardList,
+    href: "/admin/applications"
+  },
+  {
     title: "Team Management",
     icon: Users,
     href: "/admin/team"
-  },
-  {
-    title: "Company Profile",
-    icon: Building2,
-    href: "/admin/company"
   },
   {
     title: "Newsletter",
@@ -184,7 +184,10 @@ export function AdminDashboardLayout({ children, onSignOut }: AdminDashboardLayo
           {/* Persistent Sidebar Toggle */}
           <SidebarToggleButton />
           <div className="h-full">
-            {children}
+            <DashboardHeader />
+            <div className="p-6">
+              {children}
+            </div>
           </div>
         </div>
       </div>

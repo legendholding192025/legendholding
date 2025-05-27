@@ -20,13 +20,14 @@ import {
   ArrowRight,
   CheckCircle,
 } from "lucide-react"
-import { supabase } from "@/lib/supabase"
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
 import { toast } from "sonner"
 import Image from "next/image"
 import Link from "next/link"
 import Newsletter from "@/components/newsletter"
 
 export default function ContactPage() {
+  const supabase = createClientComponentClient()
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -43,20 +44,18 @@ export default function ContactPage() {
     setIsSubmitting(true)
 
     try {
-      // Insert into contact_submissions table
-      const { error: submissionError } = await supabase.from("contact_submissions").insert([
-        {
-          name: formData.name,
-          email: formData.email,
-          phone: formData.phone || null,
-          subject: formData.subject,
-          message: formData.message,
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
         },
-      ])
+        body: JSON.stringify(formData),
+      });
 
-      if (submissionError) {
-        console.error("Error submitting to contact_submissions:", submissionError)
-        throw new Error("Failed to submit contact form")
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to submit form');
       }
 
       toast.success("Thank you for your message! We will get back to you soon.")
