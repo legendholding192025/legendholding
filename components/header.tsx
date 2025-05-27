@@ -109,9 +109,9 @@ const menuItems: MenuItem[] = [
             description: "Pioneering sustainable energy solutions for a brighter future."
           },
           { 
-            title: "Legend Motors",
+            title: "Legend Motors Trading",
             url: "/our-brands/legend-motors-trading",
-            image: "https://res.cloudinary.com/dosxengut/image/upload/v1747649304/Official-Car-Dealers-in-Dubai-Cover-180620210841_ldmnuq.jpg",
+            image: "https://res.cloudinary.com/dckrspiqe/image/upload/v1748006307/motor-trading_ji1zfj.png",
             description: "Premium automotive solutions and services."
           },
           { 
@@ -127,7 +127,7 @@ const menuItems: MenuItem[] = [
             description: "Premium motorcycles and accessories."
           },
           { 
-            title: "Legend World Rent a Car",
+            title: "Legend Rent a Car",
             url: "/our-brands/legend-world-rent-a-car",
             image: "https://res.cloudinary.com/dckrspiqe/image/upload/v1748247935/rent-a-car_dyzdgk.png",
             description: "Premium car rental services across UAE."
@@ -141,7 +141,7 @@ const menuItems: MenuItem[] = [
           { 
             title: "Legend Technical Services",
             url: "/our-brands/legend-technical-services",
-            image: "https://res.cloudinary.com/dosxengut/image/upload/v1747648530/Stock_Photo_Digital_Media_otoogv.jpg",
+            image: "https://res.cloudinary.com/dckrspiqe/image/upload/v1748250246/technical_service_gza8jv.jpg",
             description: "Expert technical solutions and support services."
           },
           { 

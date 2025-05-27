@@ -13,7 +13,7 @@ const dealerships = [
     description:
       "Legend Motors is the exclusive distributor of Skywell vehicles in Dubai, offering comprehensive retail and fleet solutions across the emirate.",
     needsBackground: false,
-    bgColor: "bg-white/90",
+    bgColor: "bg-transparent",
   },
   {
     name: "Kaiyi",
@@ -21,8 +21,8 @@ const dealerships = [
     logo: "https://res.cloudinary.com/dosxengut/image/upload/v1746788951/download_wmkc6s.png",
     description:
       "Legend Motors is the exclusive distributor of Kaiyi Automobiles in the UAE, proudly introducing this innovative Chinese SUV brand to the local market.",
-    needsBackground: true,
-    bgColor: "bg-black",
+    needsBackground: false,
+    bgColor: "bg-transparent",
   },
   {
     name: "Li Auto",
@@ -31,7 +31,7 @@ const dealerships = [
     description:
       "Legend Motors serves as the official sales partner and authorized provider of after-sales service and maintenance for Li Auto vehicles across the UAE.",
     needsBackground: false,
-    bgColor: "bg-white/90",
+    bgColor: "bg-transparent",
   },
   {
     name: "212",
@@ -39,8 +39,8 @@ const dealerships = [
     logo: "https://res.cloudinary.com/dosxengut/image/upload/v1746788882/logo212b_qk5xsj.png",
     description:
       "Legend Motors is the exclusive distributor for 212 vehicles in the UAE, managing both sales and after-sales service with a commitment to excellence.",
-    needsBackground: true,
-    bgColor: "bg-black",
+    needsBackground: false,
+    bgColor: "bg-transparent",
   },
 ]
  
@@ -56,12 +56,6 @@ export default function LegendMotorsDealershipPage() {
     <>
       <Header />
       <main className="min-h-screen bg-white relative overflow-hidden pt-20">
-        {/* Subtle background elements */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute -top-40 -right-40 w-80 h-80 bg-[#2b1c48]/5 rounded-full blur-3xl"></div>
-          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-[#ee8900]/10 rounded-full blur-3xl"></div>
-        </div>
- 
         <div className="relative z-10 flex flex-col items-center py-12 px-4">
           <div
             className={`w-full max-w-6xl transition-all duration-1000 ${
@@ -106,9 +100,9 @@ export default function LegendMotorsDealershipPage() {
                         <div className="absolute inset-0 bg-gradient-to-t from-[#2b1c48]/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                       </div>
  
-                      {/* Logo overlay - standardized size with custom background */}
+                      {/* Logo overlay - standardized size with transparent background */}
                       <div
-                        className={`absolute bottom-4 right-4 p-3 rounded-xl shadow-lg transform transition-transform duration-300 group-hover:scale-110 ${dealership.bgColor} backdrop-blur-sm`}
+                        className={`absolute bottom-4 right-4 p-3 rounded-xl shadow-lg transform transition-transform duration-300 group-hover:scale-110 ${dealership.bgColor}`}
                         style={{
                           width: "140px",
                           height: "60px",
@@ -120,9 +114,7 @@ export default function LegendMotorsDealershipPage() {
                         <img
                           src={dealership.logo || "/placeholder.svg"}
                           alt={`${dealership.name} logo`}
-                          className={`max-h-10 max-w-full object-contain ${
-                            dealership.needsBackground ? "brightness-150 contrast-125" : ""
-                          }`}
+                          className="max-h-10 max-w-full object-contain"
                         />
                       </div>
                     </div>
@@ -137,7 +129,7 @@ export default function LegendMotorsDealershipPage() {
                       {/* CTA Button */}
                       <div className="mt-8">
                         <button
-                          className={`group inline-flex items-center gap-2 text-[#2b1c48] font-semibold hover:text-[#ee8900] transition-colors duration-300`}
+                          className={`group inline-flex items-center gap-2 text-[#ee8900] font-semibold hover:text-[#2b1c48] transition-colors duration-300`}
                         >
                           <span>Learn more</span>
                           <ChevronRight

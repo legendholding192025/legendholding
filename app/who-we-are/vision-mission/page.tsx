@@ -156,25 +156,17 @@ export default function VisionMissionValuesPage() {
               {/* Vision Content */}
               <div className="order-2 lg:order-1">
                 <div className="mb-8">
-                  <div className="flex items-center gap-4 mb-6">
-                    <div className="w-12 h-12 bg-[#2b1c48] rounded-full flex items-center justify-center">
-                      <Eye className="w-6 h-6 text-white" />
-                    </div>
-                    <span className="text-sm font-medium text-gray-500 uppercase tracking-[0.2em] font-effra">
-                      Vision
-                    </span>
-                  </div>
                   <h2 className="text-3xl md:text-4xl lg:text-5xl font-light text-gray-900 mb-8 font-richmond leading-tight">
                     Our Vision
                   </h2>
                 </div>
- 
+
                 <div className="space-y-6">
                   <p className="text-lg md:text-xl text-gray-700 font-effra leading-relaxed">
                     To seamlessly connect the physical and digital worlds, revolutionizing supply chains with cutting-edge financial technology, and become the global leader in intelligent, data-driven solutions that empower businesses to thrive through efficiency, transparency, and sustainable growth.
                   </p>
                 </div>
- 
+
                 {/* Vision Pillars */}
                 <div className="grid grid-cols-3 gap-6 mt-6">
                   {[
@@ -190,7 +182,7 @@ export default function VisionMissionValuesPage() {
                   ))}
                 </div>
               </div>
- 
+
               {/* Vision Image */}
               <div className="order-1 lg:order-2">
                 <div className="relative">
@@ -205,7 +197,7 @@ export default function VisionMissionValuesPage() {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
                   </div>
- 
+
                   {/* Floating Stats */}
                   <div className="absolute -bottom-6 -left-6 bg-white rounded-lg shadow-lg p-6 border border-gray-100">
                     <div className="text-2xl font-bold text-[#2b1c48] font-richmond">
@@ -236,7 +228,7 @@ export default function VisionMissionValuesPage() {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
                   </div>
- 
+
                   {/* Floating Stats */}
                   <div className="absolute -bottom-6 -right-6 bg-white rounded-lg shadow-lg p-6 border border-gray-100">
                     <div className="text-2xl font-bold text-[#E67E22] font-richmond">
@@ -246,29 +238,21 @@ export default function VisionMissionValuesPage() {
                   </div>
                 </div>
               </div>
- 
+
               {/* Mission Content */}
               <div>
                 <div className="mb-8">
-                  <div className="flex items-center gap-4 mb-6">
-                    <div className="w-12 h-12 bg-[#2b1c48] rounded-full flex items-center justify-center">
-                      <Target className="w-6 h-6 text-white" />
-                    </div>
-                    <span className="text-sm font-medium text-gray-500 uppercase tracking-[0.2em] font-effra">
-                      Mission
-                    </span>
-                  </div>
                   <h2 className="text-3xl md:text-4xl lg:text-5xl font-light text-gray-900 mb-8 font-richmond leading-tight">
                     Our Mission
                   </h2>
                 </div>
- 
+
                 <div className="space-y-6">
                   <p className="text-lg md:text-xl text-gray-700 font-effra leading-relaxed">
                     We are dedicated to fostering happiness and delivering value, focusing on building a sustainable future.
                   </p>
                 </div>
- 
+
                 {/* Mission Pillars */}
                 <div className="grid grid-cols-3 gap-6 mt-6">
                   {[

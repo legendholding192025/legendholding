@@ -1,8 +1,8 @@
 "use client"
 
 import Image from "next/image"
-import { useEffect, useState, ReactNode } from "react"
-import { Wrench, Shield, Users, Star, CheckCircle, ChevronRight } from "lucide-react"
+import { useEffect, useState } from "react"
+import { Globe, Users, Star, Calendar, CheckCircle, ChevronRight } from "lucide-react"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 
@@ -76,7 +76,7 @@ function AnimatedCounter({ target, suffix = "", duration = 2000, startDelay = 0 
 
 // Animated Text Component
 interface AnimatedTextProps {
-  children: ReactNode
+  children: React.ReactNode
   delay?: number
 }
 
@@ -113,7 +113,7 @@ function AnimatedText({ children, delay = 0 }: AnimatedTextProps) {
   )
 }
 
-export default function AutomobileServicesPage() {
+export default function GlobalMediaPage() {
   const [isLoaded, setIsLoaded] = useState(false)
   const [activeSection, setActiveSection] = useState<string | null>(null)
 
@@ -134,7 +134,7 @@ export default function AutomobileServicesPage() {
             {/* Page Header */}
             <section className="w-full mb-16 animate-fade-in-up">
               <h2 className="text-2xl md:text-3xl font-semibold text-[#2b1c48] mb-6 font-richmond">
-                Automobile Services
+                Global Media
               </h2>
               <div className="flex gap-2">
                 <div className="h-1 w-16 bg-[#2b1c48] rounded-full animate-expand-width"></div>
@@ -142,9 +142,9 @@ export default function AutomobileServicesPage() {
               </div>
 
               <p className="mt-8 text-lg text-gray-700 font-effra leading-relaxed">
-                Legend Motors proudly operates Legend Automobile Services, a premier provider of high-end automotive care, 
-                offering a full spectrum of repair, maintenance, and detailing solutions for all types of luxury vehicles, 
-                including electric models.
+                Experience global elegance infused with local expertise. We specialize in curating events that resonate 
+                with diverse cultures while maintaining a touch of refined sophistication. Your event, be it a corporate 
+                summit or a grand celebration, becomes a masterpiece under our meticulous care.
               </p>
             </section>
 
@@ -156,10 +156,10 @@ export default function AutomobileServicesPage() {
                   <div className="md:w-2/5 relative group overflow-hidden">
                     <div className="h-full w-full relative overflow-hidden">
                       <Image
-                        src="https://res.cloudinary.com/dckrspiqe/image/upload/v1748249090/service_sszlnl.jpg"
+                        src="https://res.cloudinary.com/dckrspiqe/image/upload/v1748334199/anledry-cobos-D-CYZ9ZaMqs-unsplash_id2utv.jpg"
                         width={800}
                         height={600}
-                        alt="Legend Automobile Services - Professional Service Bay"
+                        alt="Legend Global Media - Event Curation"
                         className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                         priority
                       />
@@ -171,9 +171,9 @@ export default function AutomobileServicesPage() {
                   <div className="flex-1 p-8 md:p-10 flex flex-col justify-center">
                     <div className="space-y-6 mb-8">
                       <p className="text-lg text-gray-700 font-effra leading-relaxed">
-                        Certified with the prestigious MOIAT (ESMA) 5-star rating, our facility reflects our unwavering 
-                        commitment to quality, safety, and service excellence. Housed in a state-of-the-art workshop, 
-                        the center is equipped with the latest diagnostic and repair technologies.
+                        Trust us to weave a tapestry of memories that reflect both global flair and local charm. Our 
+                        team of experienced professionals ensures that every detail is meticulously planned and executed 
+                        to create unforgettable experiences.
                       </p>
                     </div>
 
@@ -181,30 +181,30 @@ export default function AutomobileServicesPage() {
                     <div className="grid grid-cols-3 gap-6 mb-8">
                       <div className="text-center">
                         <div className="flex items-center justify-center w-10 h-10 bg-gray-100 rounded-full mb-2 mx-auto">
+                          <Globe className="w-5 h-5 text-gray-600" />
+                        </div>
+                        <div className="text-xl font-bold text-gray-900 font-richmond">
+                          <AnimatedCounter target={50} suffix="+" duration={1500} startDelay={1600} />
+                        </div>
+                        <div className="text-xs text-gray-600 font-effra">Countries</div>
+                      </div>
+
+                      <div className="text-center">
+                        <div className="flex items-center justify-center w-10 h-10 bg-gray-100 rounded-full mb-2 mx-auto">
+                          <Calendar className="w-5 h-5 text-gray-600" />
+                        </div>
+                        <div className="text-xl font-bold text-gray-900 font-richmond">
+                          <AnimatedCounter target={1000} suffix="+" duration={1500} startDelay={1800} />
+                        </div>
+                        <div className="text-xs text-gray-600 font-effra">Events</div>
+                      </div>
+
+                      <div className="text-center">
+                        <div className="flex items-center justify-center w-10 h-10 bg-gray-100 rounded-full mb-2 mx-auto">
                           <Star className="w-5 h-5 text-gray-600" />
                         </div>
                         <div className="text-xl font-bold text-gray-900 font-richmond">
-                          <AnimatedCounter target={5} duration={1500} startDelay={1600} />
-                        </div>
-                        <div className="text-xs text-gray-600 font-effra">Star Rating</div>
-                      </div>
-
-                      <div className="text-center">
-                        <div className="flex items-center justify-center w-10 h-10 bg-gray-100 rounded-full mb-2 mx-auto">
-                          <Users className="w-5 h-5 text-gray-600" />
-                        </div>
-                        <div className="text-xl font-bold text-gray-900 font-richmond">
-                          <AnimatedCounter target={50} suffix="+" duration={1500} startDelay={1800} />
-                        </div>
-                        <div className="text-xs text-gray-600 font-effra">Technicians</div>
-                      </div>
-
-                      <div className="text-center">
-                        <div className="flex items-center justify-center w-10 h-10 bg-gray-100 rounded-full mb-2 mx-auto">
-                          <Shield className="w-5 h-5 text-gray-600" />
-                        </div>
-                        <div className="text-xl font-bold text-gray-900 font-richmond">
-                          <AnimatedCounter target={99} suffix="%" duration={1500} startDelay={2000} />
+                          <AnimatedCounter target={98} suffix="%" duration={1500} startDelay={2000} />
                         </div>
                         <div className="text-xs text-gray-600 font-effra">Satisfaction</div>
                       </div>
@@ -237,12 +237,12 @@ export default function AutomobileServicesPage() {
                   <div className="p-8 md:p-12 space-y-6">
                     <div className="flex items-start gap-4">
                       <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0">
-                        <Wrench className="w-5 h-5 text-gray-600" />
+                        <Globe className="w-5 h-5 text-gray-600" />
                       </div>
                       <div>
-                        <h4 className="text-lg font-semibold text-gray-900 font-richmond mb-2">Advanced Technology</h4>
+                        <h4 className="text-lg font-semibold text-gray-900 font-richmond mb-2">Global Reach</h4>
                         <p className="text-sm text-gray-600 font-effra">
-                          Latest diagnostic and repair equipment
+                          International event expertise and cultural understanding
                         </p>
                       </div>
                     </div>
@@ -252,9 +252,9 @@ export default function AutomobileServicesPage() {
                         <Users className="w-5 h-5 text-gray-600" />
                       </div>
                       <div>
-                        <h4 className="text-lg font-semibold text-gray-900 font-richmond mb-2">Expert Technicians</h4>
+                        <h4 className="text-lg font-semibold text-gray-900 font-richmond mb-2">Expert Team</h4>
                         <p className="text-sm text-gray-600 font-effra">
-                          Highly trained automotive professionals
+                          Professional event planners and coordinators
                         </p>
                       </div>
                     </div>
@@ -264,9 +264,9 @@ export default function AutomobileServicesPage() {
                         <CheckCircle className="w-5 h-5 text-gray-600" />
                       </div>
                       <div>
-                        <h4 className="text-lg font-semibold text-gray-900 font-richmond mb-2">Full Service</h4>
+                        <h4 className="text-lg font-semibold text-gray-900 font-richmond mb-2">Quality Service</h4>
                         <p className="text-sm text-gray-600 font-effra">
-                          Complete automotive care solutions
+                          Meticulous attention to detail and execution
                         </p>
                       </div>
                     </div>
@@ -276,10 +276,10 @@ export default function AutomobileServicesPage() {
                   <div className="relative group overflow-hidden">
                     <div className="h-full w-full relative overflow-hidden">
                       <Image
-                        src="https://res.cloudinary.com/dckrspiqe/image/upload/v1748249089/service2_kxs1qb.jpg"
+                        src="https://res.cloudinary.com/dckrspiqe/image/upload/v1748334246/colin-white-RlVvZ8YGbfE-unsplash_ad1fm7.jpg"
                         width={800}
                         height={600}
-                        alt="Legend Automobile Services - Expert Technician at Work"
+                        alt="Legend Global Media - Event Experience"
                         className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                         priority
                       />
