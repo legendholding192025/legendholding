@@ -264,7 +264,7 @@ ${responsibilities.map(resp => `• ${resp}`).join('\n')}
                 />
               </div>
               <div>
-                <Label htmlFor="department">Department *</Label>
+                <Label htmlFor="department">Department </Label>
                 <Input
                   id="department"
                   value={newJob.department}
