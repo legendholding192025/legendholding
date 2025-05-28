@@ -32,7 +32,7 @@ export default function ValueSection() {
       <div className="relative z-10 max-w-6xl mx-auto px-4">
         {/* Header */}
         <div className="text-center mt-4 mb-14">
-          <h2 className="text-3xl md:text-4xl font-bold text-[#F08900] mb-3 animate-fade-in">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#F08900] mb-3 animate-fade-in">
             Mission <span className="text-[#F08900]">and</span> vision <span className="text-[#F08900]">and</span>{" "}
             values
           </h2>
@@ -40,19 +40,19 @@ export default function ValueSection() {
         </div>
 
         {/* Mission and Vision Cards */}
-        <div className="grid md:grid-cols-2 gap-16 mb-20">
+        <div className="grid md:grid-cols-2 gap-8 md:gap-16 mb-20">
           {/* Vision Column */}
           <div className="relative animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
             {/* Background shape image */}
             <img src="https://res.cloudinary.com/dosxengut/image/upload/v1748416193/Asset_9_z8nunq.png" alt="" className="w-full h-auto opacity-90" />
 
             {/* Content overlay */}
-            <div className="absolute inset-0 flex flex-col justify-center items-start p-8">
+            <div className="absolute inset-0 flex flex-col justify-center items-start p-4 sm:p-6 md:p-8">
               <div className="max-w-2xl">
-                <h3 className="text-3xl font-bold text-orange-500 mb-2 pt-14">
+                <h3 className="text-2xl sm:text-3xl font-bold text-orange-500 mb-2 pt-8 sm:pt-14">
                   <span className="border-b-2 border-orange-500 pb-1">Our</span> Vision
                 </h3>
-                <p className="text-2xl leading-relaxed mt-4" style={{ color: 'rgb(143, 32, 147)' }}>
+                <p className="text-lg sm:text-xl md:text-2xl leading-relaxed mt-4 px-2 sm:px-4" style={{ color: 'rgb(143, 32, 147)' }}>
                   To be the leading diversified business group in the region, setting new standards of excellence and
                   innovation while creating sustainable value for our stakeholders and communities.
                 </p>
@@ -66,12 +66,12 @@ export default function ValueSection() {
             <img src="https://res.cloudinary.com/dosxengut/image/upload/v1748416192/Asset_8_tzvns5.png" alt="" className="w-full h-auto opacity-90" />
 
             {/* Content overlay */}
-            <div className="absolute inset-0 flex flex-col justify-center items-start p-8">
+            <div className="absolute inset-0 flex flex-col justify-center items-start p-4 sm:p-6 md:p-8">
               <div className="max-w-2xl">
-                <h3 className="text-3xl font-bold text-orange-500 mb-2 pt-14">
+                <h3 className="text-2xl sm:text-3xl font-bold text-orange-500 mb-2 pt-8 sm:pt-14">
                   <span className="border-b-2 border-orange-500 pb-1">Our</span> Mission
                 </h3>
-                <p className="text-2xl leading-relaxed mt-4" style={{ color: 'rgb(143, 32, 147)' }}>
+                <p className="text-lg sm:text-xl md:text-2xl leading-relaxed mt-4 px-2 sm:px-4" style={{ color: 'rgb(143, 32, 147)' }}>
                   To deliver exceptional products and services through operational excellence, innovative solutions, and
                   sustainable practices while fostering growth, empowering our people, and contributing to society's
                   advancement.
@@ -83,15 +83,15 @@ export default function ValueSection() {
       </div>
 
       {/* Leadership Section - Full Width */}
-      <div className="w-full bg-white py-20">
+      <div className="w-full bg-white py-12 md:py-20">
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center animate-fade-in" style={{ animationDelay: "0.6s" }}>
             <div className="w-4 h-1 bg-orange-500 mx-auto mb-8"></div>
 
-            <div className="flex flex-col md:flex-row items-start justify-center gap-12">
+            <div className="flex flex-col md:flex-row items-center md:items-start justify-center gap-8 md:gap-12">
               {/* Left side - Photo and Name */}
               <div className="flex-shrink-0">
-                <div className="relative w-[250px] h-[330px] overflow-hidden shadow-xl border-8 border-white ring-1 ring-gray-200" style={{ 
+                <div className="relative w-[200px] sm:w-[250px] h-[260px] sm:h-[330px] overflow-hidden shadow-xl border-8 border-white ring-1 ring-gray-200" style={{ 
                   boxShadow: '0 0 20px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.05)',
                   background: 'linear-gradient(to bottom right, #ffffff, #f8f8f8)'
                 }}>
@@ -100,19 +100,19 @@ export default function ValueSection() {
                     alt="Mr. Kai Zheng - Chairman"
                     fill
                     className="object-cover"
-                    sizes="(max-width: 768px) 100vw, 250px"
+                    sizes="(max-width: 768px) 200px, 250px"
                     priority
                   />
                 </div>
               </div>
 
               {/* Right side - Title and Description */}
-              <div className="max-w-2xl text-left">
-                <h5 className="text-4xl font-semibold text-gray-700 mb-2">Chairman</h5>
-                <h6 className="text-3xl font-medium text-orange-500 mb-8">Mr. Kai Zheng</h6>
-                <div className="flex gap-6">
+              <div className="max-w-2xl text-center md:text-left">
+                <h5 className="text-3xl md:text-4xl font-semibold text-gray-700 mb-2">Chairman</h5>
+                <h6 className="text-2xl md:text-3xl font-medium text-orange-500 mb-6 md:mb-8">Mr. Kai Zheng</h6>
+                <div className="flex gap-4 md:gap-6">
                   <div className="w-1.5 bg-orange-500 rounded-full self-stretch"></div>
-                  <p className="text-2xl leading-relaxed text-left" style={{ color: 'rgb(143, 32, 147)' }}>
+                  <p className="text-lg md:text-2xl leading-relaxed" style={{ color: 'rgb(143, 32, 147)' }}>
                     With a visionary mindset and years of experience in leadership, our director stands at the helm of
                     innovation and excellence. Known for strategic thinking, strong decision-making, and an unwavering
                     commitment to growth, they continue to inspire the team to reach new heights.
@@ -125,7 +125,7 @@ export default function ValueSection() {
       </div>
 
       {/* Together We Grow Section - Full Width */}
-      <div className="relative w-full h-[17vh] bg-purple-900">
+      <div className="relative w-full h-[15vh] md:h-[17vh] bg-purple-900">
         <Image
           src="https://res.cloudinary.com/dosxengut/image/upload/v1748416192/Asset_10_flsdgb.png"
           alt="Together we grow background"
@@ -137,18 +137,18 @@ export default function ValueSection() {
         />
         <div className="absolute inset-0 flex items-center bg-gradient-to-r from-purple-900/80 via-purple-900/40 to-transparent">
           <div className="max-w-6xl w-full mx-auto px-4">
-            <div className="flex items-center gap-8">
-              <div className="relative w-10 h-10">
+            <div className="flex items-center gap-4 md:gap-8">
+              <div className="relative w-8 h-8 md:w-10 md:h-10">
                 <Image
                   src="https://res.cloudinary.com/dosxengut/image/upload/v1748416191/Asset_11_tftntp.png"
                   alt="Together we grow icon"
                   fill
                   className="object-contain"
-                  sizes="40px"
+                  sizes="(max-width: 768px) 32px, 40px"
                   priority
                 />
               </div>
-              <h3 className="text-4xl md:text-5xl font-bold text-[#F08900]" style={{
+              <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-[#F08900]" style={{
                 textShadow: '1px 1px 3px rgba(0, 0, 0, 0.3)'
               }}>
                 Together we grow
