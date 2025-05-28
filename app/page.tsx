@@ -10,11 +10,13 @@ import { OurPresenceSection } from "@/components/our-presence-section"
 import Newsletter from "@/components/newsletter"
 import ValueSection from "@/components/value"
 import GroupIndustries from "@/components/group-industries"
+import { AboutUsSection } from "@/components/about-us-section"
 export default function Home() {
   return (
     <main>
       <Header />
       <HeroSection />
+      <AboutUsSection />
       <ValueSection />
       <GroupIndustries />
       <BrandStatsSection />
