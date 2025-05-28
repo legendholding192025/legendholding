@@ -70,7 +70,7 @@ export function Newsroom() {
 
   if (loading) {
     return (
-      <section className="py-16 bg-white">
+      <section className="py-16 bg-[#EAE2D6]">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-center h-64">
             <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#5E366D] border-t-transparent"></div>
@@ -81,11 +81,11 @@ export function Newsroom() {
   }
 
   return (
-    <section className="py-16 bg-white">
+    <section className="py-16 bg-[#EAE2D6]">
       <div className="container mx-auto px-4">
         <div className="flex flex-col md:flex-row md:items-center justify-between mb-10">
           <div>
-            <h2 className="text-3xl sm:text-4xl font-bold text-[rgb(43,28,72)] mb-2">Latest News</h2>
+            <h2 className="text-3xl sm:text-4xl font-bold text-[#F08900] mb-2">Latest News</h2>
             <p className="text-[rgb(93,55,110)] max-w-2xl text-lg md:text-xl leading-relaxed">
               Stay updated with the latest developments, announcements, and achievements from Legend Holding Group.
             </p>
