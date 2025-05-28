@@ -5,11 +5,12 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
-import { Briefcase, MapPin, Clock, ChevronLeft } from "lucide-react"
+import { Briefcase, MapPin, Clock, ChevronLeft, Share2, Calendar, Building2, Users2 } from "lucide-react"
 import { toast } from "sonner"
 import Link from "next/link"
 import { useParams } from "next/navigation"
 import { JobApplicationForm } from "@/app/components/careers/JobApplicationForm"
+import { format } from "date-fns"
 
 interface Job {
   id: string
@@ -20,6 +21,10 @@ interface Job {
   description: string
   requirements: string[]
   responsibilities: string[]
+  benefits: string[]
+  salary_range?: string
+  experience_level?: string
+  team_size?: number
   created_at: string
   status: 'active' | 'inactive'
 }
@@ -30,6 +35,7 @@ export default function JobDetails() {
   const [job, setJob] = useState<Job | null>(null)
   const [loading, setLoading] = useState(true)
   const [isApplicationModalOpen, setIsApplicationModalOpen] = useState(false)
+  const [similarJobs, setSimilarJobs] = useState<Job[]>([])
   const supabase = createClientComponentClient()
 
   useEffect(() => {
@@ -41,33 +47,61 @@ export default function JobDetails() {
     try {
       setLoading(true)
       
+      // Fetch job details
       const { data: jobData, error: jobError } = await supabase
         .from('jobs')
         .select('*')
         .eq('id', jobId)
         .single()
 
-      if (jobError) {
-        console.error('Error fetching job details:', jobError)
-        toast.error(jobError.message || "Failed to fetch job details")
-        return
-      }
+      if (jobError) throw jobError
 
       if (!jobData) {
         console.warn('No job data returned')
         return
       }
 
-      setJob({
+      const job = {
         ...jobData,
         requirements: Array.isArray(jobData.requirements) ? jobData.requirements : [],
         responsibilities: Array.isArray(jobData.responsibilities) ? jobData.responsibilities : [],
-      })
+        benefits: Array.isArray(jobData.benefits) ? jobData.benefits : []
+      }
+
+      setJob(job)
+
+      // Fetch similar jobs
+      const { data: similarJobsData } = await supabase
+        .from('jobs')
+        .select('*')
+        .eq('department', job.department)
+        .neq('id', job.id)
+        .eq('status', 'active')
+        .limit(3)
+
+      if (similarJobsData) {
+        setSimilarJobs(similarJobsData)
+      }
+
     } catch (error) {
       console.error('Error in fetchJobDetails:', error)
-      toast.error("An unexpected error occurred while fetching job details")
+      toast.error("Failed to fetch job details")
     } finally {
       setLoading(false)
+    }
+  }
+
+  const handleShare = async () => {
+    try {
+      await navigator.share({
+        title: `Job Opening: ${job?.title}`,
+        text: `Check out this job opportunity: ${job?.title} at Legend`,
+        url: window.location.href
+      })
+    } catch (error) {
+      // Fallback to copying to clipboard
+      navigator.clipboard.writeText(window.location.href)
+      toast.success("Link copied to clipboard!")
     }
   }
 
@@ -78,7 +112,7 @@ export default function JobDetails() {
         <main className="pt-20 min-h-screen bg-gray-50">
           <div className="flex items-center justify-center min-h-[400px]">
             <div className="flex flex-col items-center gap-2">
-              <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#2B1C48] border-t-transparent"></div>
+              <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#5E366D] border-t-transparent"></div>
               <p className="text-sm text-gray-600">Loading job details...</p>
             </div>
           </div>
@@ -98,7 +132,7 @@ export default function JobDetails() {
               <h1 className="text-2xl font-bold text-gray-900 mb-4">Job Not Found</h1>
               <p className="text-gray-600 mb-8">The job posting you're looking for doesn't exist or has been removed.</p>
               <Link href="/careers/jobs">
-                <Button className="bg-[#2B1C48] hover:bg-[#2B1C48]/90 text-white">
+                <Button className="bg-[#5E366D] hover:bg-[#5E366D]/90 text-white">
                   View All Jobs
                 </Button>
               </Link>
@@ -115,8 +149,11 @@ export default function JobDetails() {
       <Header />
       <main className="pt-20 bg-gray-50">
         {/* Hero Section */}
-        <div className="bg-[#2B1C48] text-white py-16">
-          <div className="container mx-auto px-4">
+        <div className="bg-[#5E366D] text-white py-16 relative overflow-hidden">
+          {/* Background Pattern */}
+          <div className="absolute inset-0 bg-[url('/images/careers-pattern.svg')] opacity-10"></div>
+          
+          <div className="container mx-auto px-4 relative z-10">
             <Link 
               href="/careers/jobs"
               className="inline-flex items-center text-white/80 hover:text-white mb-6 transition-colors"
@@ -124,67 +161,129 @@ export default function JobDetails() {
               <ChevronLeft className="h-4 w-4 mr-1" />
               Back to Jobs
             </Link>
-            <h1 className="text-4xl font-bold mb-4">{job.title}</h1>
-            <div className="flex flex-wrap gap-6 text-white/90">
-              <div className="flex items-center gap-2">
-                <Briefcase className="h-5 w-5" />
-                <span>{job.department}</span>
+            
+            <div className="max-w-4xl">
+              <h1 className="text-4xl font-bold mb-4">{job.title}</h1>
+              <div className="flex flex-wrap gap-6 text-white/90 mb-8">
+                <div className="flex items-center gap-2">
+                  <Building2 className="h-5 w-5" />
+                  <span>{job.department}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <MapPin className="h-5 w-5" />
+                  <span>{job.location}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Clock className="h-5 w-5" />
+                  <span>{job.type}</span>
+                </div>
+                {job.experience_level && (
+                  <div className="flex items-center gap-2">
+                    <Briefcase className="h-5 w-5" />
+                    <span>{job.experience_level}</span>
+                  </div>
+                )}
+                {job.team_size && (
+                  <div className="flex items-center gap-2">
+                    <Users2 className="h-5 w-5" />
+                    <span>Team Size: {job.team_size}</span>
+                  </div>
+                )}
+                <div className="flex items-center gap-2">
+                  <Calendar className="h-5 w-5" />
+                  <span>Posted {format(new Date(job.created_at), 'MMMM d, yyyy')}</span>
+                </div>
               </div>
-              <div className="flex items-center gap-2">
-                <MapPin className="h-5 w-5" />
-                <span>{job.location}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Clock className="h-5 w-5" />
-                <span>{job.type}</span>
+
+              <div className="flex flex-wrap gap-4">
+                <Button
+                  onClick={() => setIsApplicationModalOpen(true)}
+                  className="bg-[#EE8900] hover:bg-[#EE8900]/90 text-white px-8 py-2.5"
+                  size="lg"
+                >
+                  Apply Now
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={handleShare}
+                  className="bg-white/10 hover:bg-white/20 text-white border-white/20"
+                >
+                  <Share2 className="w-4 h-4 mr-2" />
+                  Share
+                </Button>
               </div>
             </div>
           </div>
         </div>
 
+        {/* Main Content */}
         <div className="container mx-auto px-4 py-12">
-          <div className="grid md:grid-cols-3 gap-8">
-            {/* Main Content */}
-            <div className="md:col-span-2 space-y-8">
-              {/* Job Description */}
-              <div className="bg-white rounded-xl shadow-sm p-6">
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">About the Role</h2>
-                <div className="prose max-w-none text-gray-600">
-                  {job.description}
-                </div>
-              </div>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Left Column - Job Details */}
+            <div className="lg:col-span-2">
+              <div className="bg-white rounded-xl shadow-sm p-8 space-y-8">
+                {/* Overview */}
+                <section>
+                  <h2 className="text-2xl font-semibold text-gray-900 mb-4">Overview</h2>
+                  <div className="prose max-w-none text-gray-600">
+                    {job.description}
+                  </div>
+                </section>
 
-              {/* Responsibilities */}
-              <div className="bg-white rounded-xl shadow-sm p-6">
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">Key Responsibilities</h2>
-                <ul className="space-y-3">
-                  {job.responsibilities.map((responsibility, index) => (
-                    <li key={index} className="flex items-start gap-3">
-                      <div className="w-1.5 h-1.5 rounded-full bg-[#EE8900] mt-2" />
-                      <span className="text-gray-600">{responsibility}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+                {/* Key Responsibilities */}
+                <section>
+                  <h2 className="text-2xl font-semibold text-gray-900 mb-4">Key Responsibilities</h2>
+                  <ul className="space-y-3">
+                    {job.responsibilities.map((responsibility, index) => (
+                      <li key={index} className="flex gap-3 text-gray-600">
+                        <span className="flex-shrink-0 w-1.5 h-1.5 rounded-full bg-[#EE8900] mt-2"></span>
+                        <span>{responsibility}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </section>
 
-              {/* Requirements */}
-              <div className="bg-white rounded-xl shadow-sm p-6">
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">Requirements</h2>
-                <ul className="space-y-3">
-                  {job.requirements.map((requirement, index) => (
-                    <li key={index} className="flex items-start gap-3">
-                      <div className="w-1.5 h-1.5 rounded-full bg-[#EE8900] mt-2" />
-                      <span className="text-gray-600">{requirement}</span>
-                    </li>
-                  ))}
-                </ul>
+                {/* Requirements */}
+                <section>
+                  <h2 className="text-2xl font-semibold text-gray-900 mb-4">Requirements</h2>
+                  <ul className="space-y-3">
+                    {job.requirements.map((requirement, index) => (
+                      <li key={index} className="flex gap-3 text-gray-600">
+                        <span className="flex-shrink-0 w-1.5 h-1.5 rounded-full bg-[#EE8900] mt-2"></span>
+                        <span>{requirement}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+
+                {/* Benefits */}
+                {job.benefits && job.benefits.length > 0 && (
+                  <section>
+                    <h2 className="text-2xl font-semibold text-gray-900 mb-4">Benefits</h2>
+                    <ul className="space-y-3">
+                      {job.benefits.map((benefit, index) => (
+                        <li key={index} className="flex gap-3 text-gray-600">
+                          <span className="flex-shrink-0 w-1.5 h-1.5 rounded-full bg-[#EE8900] mt-2"></span>
+                          <span>{benefit}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </section>
+                )}
               </div>
             </div>
 
-            {/* Sidebar */}
+            {/* Right Column - Apply and Similar Jobs */}
             <div className="space-y-6">
-              {/* Apply Button */}
+              {/* Apply Section */}
               <div className="bg-white rounded-xl shadow-sm p-6">
+                <h3 className="font-semibold text-gray-900 mb-4">Quick Apply</h3>
+                {job.salary_range && (
+                  <div className="mb-4 p-4 bg-gray-50 rounded-lg">
+                    <p className="text-sm text-gray-600">Salary Range</p>
+                    <p className="text-lg font-semibold text-gray-900">{job.salary_range}</p>
+                  </div>
+                )}
                 <Button 
                   className="w-full bg-[#EE8900] hover:bg-[#EE8900]/90 text-white"
                   onClick={() => setIsApplicationModalOpen(true)}
@@ -193,26 +292,45 @@ export default function JobDetails() {
                 </Button>
               </div>
 
+              {/* Similar Jobs */}
+              {similarJobs.length > 0 && (
+                <div className="bg-white rounded-xl shadow-sm p-6">
+                  <h3 className="font-semibold text-gray-900 mb-4">Similar Jobs</h3>
+                  <div className="space-y-4">
+                    {similarJobs.map((similarJob) => (
+                      <Link 
+                        key={similarJob.id}
+                        href={`/careers/jobs/${similarJob.id}`}
+                        className="block p-4 rounded-lg hover:bg-gray-50 transition-colors"
+                      >
+                        <h4 className="font-medium text-gray-900">{similarJob.title}</h4>
+                        <div className="mt-2 flex flex-wrap gap-2">
+                          <span className="text-sm text-gray-600">{similarJob.department}</span>
+                          <span className="text-sm text-gray-600">• {similarJob.location}</span>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               {/* Share Job */}
               <div className="bg-white rounded-xl shadow-sm p-6">
                 <h3 className="font-semibold text-gray-900 mb-4">Share this job</h3>
-                <div className="flex gap-2">
-                  <Button
-                    variant="outline"
-                    className="flex-1"
-                    onClick={() => {
-                      navigator.clipboard.writeText(window.location.href)
-                      toast.success("Link copied to clipboard!")
-                    }}
-                  >
-                    Copy Link
-                  </Button>
-                </div>
+                <Button
+                  variant="outline"
+                  onClick={handleShare}
+                  className="w-full"
+                >
+                  <Share2 className="w-4 h-4 mr-2" />
+                  Share Position
+                </Button>
               </div>
             </div>
           </div>
         </div>
       </main>
+
       <Footer />
       
       {job && (

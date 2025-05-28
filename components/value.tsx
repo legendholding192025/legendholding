@@ -1,304 +1,203 @@
 "use client"
 
-import { motion, useScroll, useTransform } from "framer-motion"
-import { useInView } from "framer-motion"
-import { useRef, useState, useEffect } from "react"
-import {
-  HeartIcon,
-  ArrowTrendingUpIcon,
-  StarIcon,
-  HandRaisedIcon,
-  BoltIcon,
-  UsersIcon,
-  EyeIcon,
-  FlagIcon
-} from "@heroicons/react/24/outline"
 import Image from "next/image"
 
-export default function CompanyValuesInfographic() {
-  const containerRef = useRef(null)
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, amount: 0.2, margin: "100px" })
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start end", "end start"]
-  })
-
-  const y = useTransform(scrollYProgress, [0, 1], [0, -50])
-
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({ x: e.clientX, y: e.clientY })
-    }
-
-    window.addEventListener("mousemove", handleMouseMove)
-    return () => window.removeEventListener("mousemove", handleMouseMove)
-  }, [])
-
-  const values = [
-    {
-      title: "Loyalty",
-      description: "We are loyal to our partners and companies, regardless of the circumstances.",
-      letter: "L",
-      ariaLabel: "Loyalty value card"
-    },
-    {
-      title: "Excellence",
-      description: "We aim for excellence so that everyone works well together.",
-      letter: "E",
-      ariaLabel: "Excellence value card"
-    },
-    {
-      title: "Growth",
-      description: "Our focus is to promote continuous growth and development.",
-      letter: "G",
-      ariaLabel: "Growth value card"
-    },
-    {
-      title: "Empathy",
-      description: "We recognize potential and acknowledge everyone's potential.",
-      letter: "E",
-      ariaLabel: "Empathy value card"
-    },
-    {
-      title: "Nimble",
-      description: "We believe in quick minds, being fast in our thinking and actions.",
-      letter: "N",
-      ariaLabel: "Nimble value card"
-    },
-    {
-      title: "Diversity",
-      description: "We create opportunities for people of all sectors.",
-      letter: "D",
-      ariaLabel: "Diversity value card"
-    }
-  ]
-
+export default function ValueSection() {
   return (
-    <section 
-      ref={containerRef}
-      className="pt-20 pb-32 bg-white relative overflow-hidden"
-      aria-labelledby="values-heading"
-    >
-      {/* Background decorative elements */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-gray-50/50 to-transparent"></div>
-        <div className="absolute bottom-0 left-0 w-full h-64 bg-gradient-to-t from-gray-50/50 to-transparent"></div>
-        <motion.div 
-          style={{ y }}
-          className="absolute top-[-10%] right-[-5%] w-[30%] h-[30%] bg-[#5E366D]/5 rounded-full blur-[80px] animate-pulse"
+    <section className="relative bg-white overflow-hidden">
+      {/* Top Left Background Image */}
+      <div className="absolute top-0 left-0 w-96 h-[70%]">
+        <Image
+          src="https://res.cloudinary.com/dosxengut/image/upload/v1748416192/Asset_6_prtg5f.png"
+          alt="Top left decoration"
+          fill
+          className="object-contain object-top"
+          sizes="(max-width: 768px) 100vw, 384px"
+          priority
         />
-        <motion.div 
-          style={{ y: useTransform(scrollYProgress, [0, 1], [0, 50]) }}
-          className="absolute bottom-[-10%] left-[-5%] w-[30%] h-[30%] bg-[#F39200]/5 rounded-full blur-[80px] animate-pulse"
+      </div>
+
+      {/* Bottom Right Background Image */}
+      <div className="absolute bottom-0 right-0 w-96 h-[70%]">
+        <Image
+          src="https://res.cloudinary.com/dosxengut/image/upload/v1748416192/Asset_7_nyeomc.png"
+          alt="Background decoration"
+          fill
+          className="object-contain object-bottom"
+          sizes="(max-width: 768px) 100vw, 384px"
+          priority
         />
+      </div>
+      
+      <div className="relative z-10 max-w-6xl mx-auto px-4">
+        {/* Header */}
+        <div className="text-center mt-4 mb-14">
+          <h2 className="text-3xl md:text-4xl font-bold text-[#F08900] mb-3 animate-fade-in">
+            Mission <span className="text-[#F08900]">and</span> vision <span className="text-[#F08900]">and</span>{" "}
+            values
+          </h2>
+          <div className="w-32 h-1 bg-[#F08900] mx-auto animate-slide-in" style={{ marginTop: '-8px' }}></div>
+        </div>
+
+        {/* Mission and Vision Cards */}
+        <div className="grid md:grid-cols-2 gap-16 mb-20">
+          {/* Vision Column */}
+          <div className="relative animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
+            {/* Background shape image */}
+            <img src="https://res.cloudinary.com/dosxengut/image/upload/v1748416193/Asset_9_z8nunq.png" alt="" className="w-full h-auto opacity-90" />
+
+            {/* Content overlay */}
+            <div className="absolute inset-0 flex flex-col justify-center items-start p-8">
+              <div className="max-w-2xl">
+                <h3 className="text-3xl font-bold text-orange-500 mb-2 pt-14">
+                  <span className="border-b-2 border-orange-500 pb-1">Our</span> Vision
+                </h3>
+                <p className="text-2xl leading-relaxed mt-4" style={{ color: 'rgb(143, 32, 147)' }}>
+                  To be the leading diversified business group in the region, setting new standards of excellence and
+                  innovation while creating sustainable value for our stakeholders and communities.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Mission Column */}
+          <div className="relative animate-fade-in-up" style={{ animationDelay: "0.4s" }}>
+            {/* Background shape image */}
+            <img src="https://res.cloudinary.com/dosxengut/image/upload/v1748416192/Asset_8_tzvns5.png" alt="" className="w-full h-auto opacity-90" />
+
+            {/* Content overlay */}
+            <div className="absolute inset-0 flex flex-col justify-center items-start p-8">
+              <div className="max-w-2xl">
+                <h3 className="text-3xl font-bold text-orange-500 mb-2 pt-14">
+                  <span className="border-b-2 border-orange-500 pb-1">Our</span> Mission
+                </h3>
+                <p className="text-2xl leading-relaxed mt-4" style={{ color: 'rgb(143, 32, 147)' }}>
+                  To deliver exceptional products and services through operational excellence, innovative solutions, and
+                  sustainable practices while fostering growth, empowering our people, and contributing to society's
+                  advancement.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Leadership Section - Full Width */}
+      <div className="w-full bg-white py-20">
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="text-center animate-fade-in" style={{ animationDelay: "0.6s" }}>
+            <div className="w-4 h-1 bg-orange-500 mx-auto mb-8"></div>
+
+            <div className="flex flex-col md:flex-row items-start justify-center gap-12">
+              {/* Left side - Photo and Name */}
+              <div className="flex-shrink-0">
+                <div className="relative w-[250px] h-[330px] overflow-hidden shadow-xl border-8 border-white ring-1 ring-gray-200" style={{ 
+                  boxShadow: '0 0 20px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.05)',
+                  background: 'linear-gradient(to bottom right, #ffffff, #f8f8f8)'
+                }}>
+                  <Image
+                    src="https://res.cloudinary.com/dosxengut/image/upload/v1748420220/image_1_oo10il.png"
+                    alt="Mr. Kai Zheng - Chairman"
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, 250px"
+                    priority
+                  />
+                </div>
+              </div>
+
+              {/* Right side - Title and Description */}
+              <div className="max-w-2xl text-left">
+                <h5 className="text-4xl font-semibold text-gray-700 mb-2">Chairman</h5>
+                <h6 className="text-3xl font-medium text-orange-500 mb-8">Mr. Kai Zheng</h6>
+                <div className="flex gap-6">
+                  <div className="w-1.5 bg-orange-500 rounded-full self-stretch"></div>
+                  <p className="text-2xl leading-relaxed text-left" style={{ color: 'rgb(143, 32, 147)' }}>
+                    With a visionary mindset and years of experience in leadership, our director stands at the helm of
+                    innovation and excellence. Known for strategic thinking, strong decision-making, and an unwavering
+                    commitment to growth, they continue to inspire the team to reach new heights.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Together We Grow Section - Full Width */}
+      <div className="relative w-full h-[17vh] bg-purple-900">
+        <Image
+          src="https://res.cloudinary.com/dosxengut/image/upload/v1748416192/Asset_10_flsdgb.png"
+          alt="Together we grow background"
+          fill
+          className="object-contain md:object-cover w-full"
+          style={{ objectPosition: 'center center' }}
+          sizes="100vw"
+          priority
+        />
+        <div className="absolute inset-0 flex items-center bg-gradient-to-r from-purple-900/80 via-purple-900/40 to-transparent">
+          <div className="max-w-6xl w-full mx-auto px-4">
+            <div className="flex items-center gap-8">
+              <div className="relative w-10 h-10">
+                <Image
+                  src="https://res.cloudinary.com/dosxengut/image/upload/v1748416191/Asset_11_tftntp.png"
+                  alt="Together we grow icon"
+                  fill
+                  className="object-contain"
+                  sizes="40px"
+                  priority
+                />
+              </div>
+              <h3 className="text-4xl md:text-5xl font-bold text-[#F08900]" style={{
+                textShadow: '1px 1px 3px rgba(0, 0, 0, 0.3)'
+              }}>
+                Together we grow
+              </h3>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Add animation styles */}
+      <style jsx global>{`
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
         
-        {/* Decorative image in top right */}
-        <motion.div 
-          style={{ y: useTransform(scrollYProgress, [0, 1], [0, -30]) }}
-          className="absolute top-0 right-0 w-[180px] h-[180px] md:w-[200px] md:h-[200px] opacity-25"
-        >
-          <Image
-            src="https://res.cloudinary.com/dosxengut/image/upload/v1747730468/Picture18_zo3eri.png"
-            alt=""
-            fill
-            className="object-contain scale-90"
-            priority
-            sizes="(max-width: 768px) 180px, 200px"
-          />
-        </motion.div>
-      </div>
-
-      <div className="container mx-auto px-4 relative z-10">
-        {/* Main Heading */}
-        <motion.div
-          ref={ref}
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="text-center mb-16"
-        >
-          <span className="text-[#F39200] font-medium mb-2 block">Who We Are</span>
-          <h1 id="values-heading" className="text-3xl sm:text-4xl font-bold text-[#5E366D] mb-6">Vision, Mission & Values</h1>
-          <div className="h-1 w-40 md:w-48 bg-[#F39200] mx-auto rounded-full"></div>
-        </motion.div>
-
-        {/* Vision & Mission Cards */}
-        <motion.div 
-          className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-7xl mx-auto mb-20"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          variants={{
-            visible: {
-              transition: {
-                staggerChildren: 0.2
-              }
-            }
-          }}
-        >
-          {/* Vision Card */}
-          <motion.div
-            variants={{
-              hidden: { opacity: 0, x: -50 },
-              visible: { 
-                opacity: 1, 
-                x: 0,
-                transition: {
-                  type: "spring",
-                  duration: 0.8,
-                  bounce: 0.35
-                }
-              }
-            }}
-            className="bg-[rgb(234,226,214)]/20 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 group relative overflow-hidden"
-          >
-            <div 
-              className="absolute inset-0 rounded-2xl bg-gradient-to-br from-[rgb(234,226,214)]/50 to-white opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-              aria-hidden="true"
-            />
-            <div className="flex items-center mb-6 relative">
-              <div className="w-16 h-16 flex items-center justify-center rounded-full bg-[#5E366D] mr-4 group-hover:bg-[#F39200] transition-all duration-300 shadow-lg">
-                <EyeIcon className="w-8 h-8 text-white" />
-              </div>
-              <h2 className="text-2xl font-bold text-[#5E366D] group-hover:text-[#F39200] transition-colors duration-300">Our Vision</h2>
-            </div>
-            <p className="text-gray-600 text-lg leading-relaxed relative">
-              To be the leading diversified business group in the region, setting new standards of excellence and innovation while creating sustainable value for our stakeholders and communities.
-            </p>
-          </motion.div>
-
-          {/* Mission Card */}
-          <motion.div
-            variants={{
-              hidden: { opacity: 0, x: 50 },
-              visible: { 
-                opacity: 1, 
-                x: 0,
-                transition: {
-                  type: "spring",
-                  duration: 0.8,
-                  bounce: 0.35
-                }
-              }
-            }}
-            className="bg-[rgb(234,226,214)]/20 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 group relative overflow-hidden"
-          >
-            <div 
-              className="absolute inset-0 rounded-2xl bg-gradient-to-br from-[rgb(234,226,214)]/50 to-white opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-              aria-hidden="true"
-            />
-            <div className="flex items-center mb-6 relative">
-              <div className="w-16 h-16 flex items-center justify-center rounded-full bg-[#5E366D] mr-4 group-hover:bg-[#F39200] transition-all duration-300 shadow-lg">
-                <FlagIcon className="w-8 h-8 text-white" />
-              </div>
-              <h2 className="text-2xl font-bold text-[#5E366D] group-hover:text-[#F39200] transition-colors duration-300">Our Mission</h2>
-            </div>
-            <p className="text-gray-600 text-lg leading-relaxed relative">
-              To deliver exceptional products and services through operational excellence, innovative solutions, and sustainable practices while fostering growth, empowering our people, and contributing to society's advancement.
-            </p>
-          </motion.div>
-        </motion.div>
-
-        {/* Values Section */}
-        <motion.div 
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6 max-w-7xl mx-auto"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          variants={{
-            visible: {
-              transition: {
-                staggerChildren: 0.2
-              }
-            }
-          }}
-        >
-          {values.map((value, index) => (
-            <motion.div
-              key={value.title}
-              variants={{
-                hidden: { 
-                  opacity: 0, 
-                  y: 50,
-                  scale: 0.9
-                },
-                visible: { 
-                  opacity: 1, 
-                  y: 0,
-                  scale: 1,
-                  transition: {
-                    type: "spring",
-                    duration: 0.8,
-                    bounce: 0.35
-                  }
-                }
-              }}
-              className="group relative bg-[rgb(234,226,214)]/20 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
-              role="article"
-              aria-label={value.ariaLabel}
-            >
-              <div 
-                className="absolute inset-0 rounded-2xl bg-gradient-to-br from-[rgb(234,226,214)]/50 to-white opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                aria-hidden="true"
-              />
-              
-              <div className="flex flex-col items-center text-center mb-4 relative">
-                <motion.div 
-                  className="w-16 h-16 mb-6 flex items-center justify-center rounded-full transition-all duration-300 group-hover:bg-[#F39200] bg-[#5E366D] shadow-lg"
-                  whileHover={{ scale: 1.05 }}
-                  animate={{
-                    x: mousePosition.x / 100,
-                    y: mousePosition.y / 100,
-                    transition: {
-                      type: "spring",
-                      mass: 0.5,
-                      stiffness: 50,
-                      damping: 10
-                    }
-                  }}
-                >
-                  <span 
-                    className="text-3xl font-bold text-white transition-all duration-300 group-hover:scale-110"
-                  >
-                    {value.letter}
-                  </span>
-                </motion.div>
-                <motion.div
-                  variants={{
-                    hidden: { opacity: 0, y: 10 },
-                    visible: { 
-                      opacity: 1, 
-                      y: 0,
-                      transition: { delay: 0.2 }
-                    }
-                  }}
-                >
-                  <h3 
-                    className="text-xl font-semibold mb-3 text-[#5E366D] group-hover:text-[#F39200] transition-all duration-300"
-                  >
-                    {value.title}
-                  </h3>
-                </motion.div>
-              </div>
-              <motion.p 
-                className="text-gray-600 text-base leading-relaxed"
-                variants={{
-                  hidden: { opacity: 0, y: 10 },
-                  visible: { 
-                    opacity: 1, 
-                    y: 0,
-                    transition: { delay: 0.3 }
-                  }
-                }}
-              >
-                {value.description}
-              </motion.p>
-            </motion.div>
-          ))}
-        </motion.div>
-      </div>
+        @keyframes fadeInUp {
+          from { 
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to { 
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        
+        @keyframes slideIn {
+          from { 
+            width: 0;
+          }
+          to { 
+            width: 4rem;
+          }
+        }
+        
+        .animate-fade-in {
+          animation: fadeIn 0.8s ease-in-out forwards;
+        }
+        
+        .animate-fade-in-up {
+          animation: fadeInUp 0.8s ease-out forwards;
+          opacity: 0;
+        }
+        
+        .animate-slide-in {
+          animation: slideIn 1s ease-out forwards;
+        }
+      `}</style>
     </section>
   )
 }

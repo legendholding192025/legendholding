@@ -92,56 +92,109 @@ export function JobApplicationForm({ jobId, jobTitle, isOpen, onClose }: JobAppl
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    let fileName: string | null = null
     
-    if (!validateForm()) {
-      return
-    }
-
-    if (!resumeFile) {
-      toast.error("Please upload your resume")
-      return
-    }
-
-    setLoading(true)
-
     try {
-      // Upload resume
-      const fileExt = resumeFile.name.split(".").pop()?.toLowerCase()
-      const fileName = `${Date.now()}-${formData.fullName.replace(/[^a-zA-Z0-9]/g, "_")}.${fileExt}`
+      if (!validateForm()) {
+        return
+      }
 
-      const { error: uploadError } = await supabase.storage
-        .from("resumes")
-        .upload(fileName, resumeFile)
+      if (!resumeFile) {
+        toast.error("Please upload your resume")
+        return
+      }
 
-      if (uploadError) throw uploadError
+      setLoading(true)
 
-      // Get the public URL
-      const { data: { publicUrl } } = supabase.storage
-        .from("resumes")
-        .getPublicUrl(fileName)
+      try {
+        // First, create a unique filename and upload the resume
+        const fileExt = resumeFile.name.split(".").pop()?.toLowerCase() || ""
+        const timestamp = new Date().getTime()
+        fileName = `applications/${timestamp}/${timestamp}.${fileExt}`
 
-      // Save application
-      const { error: applicationError } = await supabase
-        .from("job_applications")
-        .insert({
-          job_id: jobId,
-          full_name: formData.fullName,
-          email: formData.email,
-          phone: formData.phone,
-          resume_url: publicUrl,
-          cover_letter: formData.coverLetter || null,
-          status: "pending",
-          created_at: new Date().toISOString()
-        })
+        // Upload resume first
+        const { error: uploadError } = await supabase.storage
+          .from("resumes")
+          .upload(fileName, resumeFile, {
+            cacheControl: "3600",
+            upsert: true,
+            contentType: resumeFile.type
+          })
 
-      if (applicationError) throw applicationError
+        if (uploadError) {
+          console.error("Resume upload error:", uploadError)
+          throw new Error("Failed to upload resume. Please try again.")
+        }
 
-      toast.success("Application submitted successfully!")
-      onClose()
-      router.push("/careers/thank-you")
+        // Get the public URL
+        const { data: urlData } = supabase.storage
+          .from("resumes")
+          .getPublicUrl(fileName)
+
+        if (!urlData?.publicUrl) {
+          throw new Error("Failed to get resume URL")
+        }
+
+        // Now create the job application with the resume URL
+        const { data: applicationData, error: applicationError } = await supabase
+          .from("job_applications")
+          .insert({
+            job_id: jobId,
+            full_name: formData.fullName.trim(),
+            email: formData.email.trim().toLowerCase(),
+            phone: formData.phone.trim(),
+            resume_url: urlData.publicUrl,
+            cover_letter: formData.coverLetter?.trim() || null,
+            status: "pending",
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          })
+          .select('id')
+          .single()
+
+        if (applicationError) {
+          // If application creation fails, clean up the uploaded file
+          if (fileName) {
+            await supabase.storage
+              .from("resumes")
+              .remove([fileName])
+          }
+          
+          console.error("Application creation error:", applicationError)
+          if (applicationError.code === "23503") {
+            throw new Error("Invalid job reference. Please try again.")
+          } else if (applicationError.code === "23505") {
+            throw new Error("You have already applied for this position.")
+          } else {
+            throw new Error(`Failed to submit application: ${applicationError.message}`)
+          }
+        }
+
+        toast.success("Application submitted successfully!")
+        onClose()
+        router.push("/careers/thank-you")
+      } catch (error) {
+        // Clean up on error
+        if (fileName) {
+          try {
+            await supabase.storage
+              .from("resumes")
+              .remove([fileName])
+          } catch (cleanupError) {
+            console.error("Error during cleanup:", cleanupError)
+          }
+        }
+
+        console.error("Submission process error:", error)
+        if (error instanceof Error) {
+          toast.error(error.message)
+        } else {
+          toast.error("Failed to submit application. Please try again.")
+        }
+      }
     } catch (error) {
-      console.error("Error submitting application:", error)
-      toast.error("Failed to submit application. Please try again.")
+      console.error("Form submission error:", error)
+      toast.error("An unexpected error occurred. Please try again.")
     } finally {
       setLoading(false)
     }
@@ -149,8 +202,16 @@ export function JobApplicationForm({ jobId, jobTitle, isOpen, onClose }: JobAppl
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
+      <DialogContent 
+        className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] z-[100] bg-white"
+        style={{
+          position: 'fixed',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+        }}
+      >
+        <DialogHeader className="sticky top-0 bg-white z-[101] pb-4 border-b">
           <DialogTitle className="text-2xl">Apply for {jobTitle}</DialogTitle>
           <DialogDescription>
             Please fill out the form below to submit your application. All fields marked with * are required.
@@ -168,12 +229,13 @@ export function JobApplicationForm({ jobId, jobTitle, isOpen, onClose }: JobAppl
                 name="fullName"
                 value={formData.fullName}
                 onChange={handleInputChange}
-                className="mt-1.5"
+                className={`mt-1.5 ${formErrors.fullName ? 'border-red-500 focus:ring-red-500' : ''}`}
                 placeholder="Enter your full name"
-                error={formErrors.fullName}
+                aria-invalid={!!formErrors.fullName}
+                aria-describedby={formErrors.fullName ? "fullName-error" : undefined}
               />
               {formErrors.fullName && (
-                <p className="text-sm text-red-500 mt-1">{formErrors.fullName}</p>
+                <p id="fullName-error" className="text-sm text-red-500 mt-1">{formErrors.fullName}</p>
               )}
             </div>
 
@@ -187,12 +249,13 @@ export function JobApplicationForm({ jobId, jobTitle, isOpen, onClose }: JobAppl
                 type="email"
                 value={formData.email}
                 onChange={handleInputChange}
-                className="mt-1.5"
+                className={`mt-1.5 ${formErrors.email ? 'border-red-500 focus:ring-red-500' : ''}`}
                 placeholder="Enter your email address"
-                error={formErrors.email}
+                aria-invalid={!!formErrors.email}
+                aria-describedby={formErrors.email ? "email-error" : undefined}
               />
               {formErrors.email && (
-                <p className="text-sm text-red-500 mt-1">{formErrors.email}</p>
+                <p id="email-error" className="text-sm text-red-500 mt-1">{formErrors.email}</p>
               )}
             </div>
 
@@ -206,12 +269,13 @@ export function JobApplicationForm({ jobId, jobTitle, isOpen, onClose }: JobAppl
                 type="tel"
                 value={formData.phone}
                 onChange={handleInputChange}
-                className="mt-1.5"
+                className={`mt-1.5 ${formErrors.phone ? 'border-red-500 focus:ring-red-500' : ''}`}
                 placeholder="Enter your phone number"
-                error={formErrors.phone}
+                aria-invalid={!!formErrors.phone}
+                aria-describedby={formErrors.phone ? "phone-error" : undefined}
               />
               {formErrors.phone && (
-                <p className="text-sm text-red-500 mt-1">{formErrors.phone}</p>
+                <p id="phone-error" className="text-sm text-red-500 mt-1">{formErrors.phone}</p>
               )}
             </div>
 
@@ -250,7 +314,7 @@ export function JobApplicationForm({ jobId, jobTitle, isOpen, onClose }: JobAppl
             </div>
           </div>
 
-          <div className="flex justify-end gap-4 pt-4 border-t">
+          <div className="flex justify-end gap-4 pt-4 border-t sticky bottom-0 bg-white z-[101]">
             <Button
               type="button"
               variant="outline"
