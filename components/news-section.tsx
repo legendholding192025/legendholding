@@ -111,13 +111,13 @@ export function Newsroom() {
                   className="absolute inset-0 bg-gradient-to-br from-[rgb(234,226,214)]/50 to-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg"
                   aria-hidden="true"
                 />
-                <div className="relative h-48 overflow-hidden">
+                <div className="relative h-48 overflow-hidden m-2 rounded-xl">
                   <Image
                     src={news.image_url || "/placeholder.svg"}
                     alt={news.title}
                     width={400}
                     height={240}
-                    className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
+                    className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500 rounded-xl"
                   />
                 </div>
                 <div className="p-5 flex flex-col flex-grow relative">
