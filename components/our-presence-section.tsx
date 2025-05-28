@@ -60,18 +60,7 @@ const itemVariants = {
 export function OurPresenceSection() {
   return (
     <section className="py-16 bg-white relative overflow-hidden">
-      {/* Background decorative image */}
-      <div className="absolute -bottom-10 -left-5 w-[250px] h-[250px] opacity-25 pointer-events-none">
-        <Image
-          src="https://res.cloudinary.com/dosxengut/image/upload/v1747730468/Picture18_zo3eri.png"
-          alt="Decorative background"
-          fill
-          className="object-contain scale-100"
-          priority
-          sizes="250px"
-        />
-      </div>
-
+      {/* Background decorative image removed for plain background */}
       <div className="container mx-auto px-4 relative">
         {/* Title Section */}
         <motion.div 
@@ -88,7 +77,25 @@ export function OurPresenceSection() {
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
-          {/* Left side - Text content */}
+          {/* Left side - Image */}
+          <motion.div 
+            className="lg:col-span-8 relative h-[400px] lg:h-[500px] rounded-2xl overflow-hidden"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeInUp}
+          >
+            <Image
+              src="https://res.cloudinary.com/dckrspiqe/image/upload/v1748431906/Asset_13_rgva8a.png"
+              alt="Global Presence Map"
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 65vw"
+            />
+            {/* Gradient overlay removed for plain background */}
+          </motion.div>
+
+          {/* Right side - Text content */}
           <div className="lg:col-span-4 space-y-6 relative z-10">
             <motion.p 
               className="text-lg text-gray-600"
@@ -118,25 +125,6 @@ export function OurPresenceSection() {
               ))}
             </motion.div>
           </div>
-
-          {/* Right side - Image */}
-          <motion.div 
-            className="lg:col-span-8 relative h-[400px] lg:h-[500px] rounded-2xl overflow-hidden"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={fadeInUp}
-          >
-            <Image
-              src="https://res.cloudinary.com/dosxengut/image/upload/v1747729868/Picture17_ffqrwc.png"
-              alt="Global Presence Map"
-              fill
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw, 65vw"
-            />
-            {/* Gradient overlay */}
-            <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-transparent"></div>
-          </motion.div>
         </div>
       </div>
     </section>

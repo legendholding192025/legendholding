@@ -186,7 +186,7 @@ export default function NewsManagement() {
       setEditingArticle(null)
       toast.success("Article updated successfully")
     } catch (error) {
-      console.error("Error updating article:", error)
+      console.error("Error updating articles:", error)
       toast.error("Failed to update article")
     }
   }
