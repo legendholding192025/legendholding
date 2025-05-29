@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils"
 import { useMediaQuery } from "@/hooks/use-media-query"
 
 const partners = [
-    { id: 1, logo: 'https://res.cloudinary.com/dosxengut/image/upload/v1747727867/Picture4_pqohbf.png', name: 'Partner 1' },
+    { id: 1, logo: 'https://cdn.legendholding.com/images/car1.jpg', name: 'Partner 1' },
     { id: 2, logo: 'https://res.cloudinary.com/dosxengut/image/upload/v1747727868/Picture9_dttje6.png', name: 'Partner 2' },
     { id: 3, logo: 'https://res.cloudinary.com/dosxengut/image/upload/v1747727869/Picture10_p3whcu.png', name: 'Partner 3' },
     { id: 4, logo: 'https://res.cloudinary.com/dosxengut/image/upload/v1747727867/Picture12_stvafn.png', name: 'Partner 4' },
