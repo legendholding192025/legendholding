@@ -146,7 +146,7 @@ export default function ValueSection() {
                   priority
                 />
               </div>
-              <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-[#F08900]" style={{
+              <h3 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-[#F08900]" style={{
                 textShadow: '1px 1px 3px rgba(0, 0, 0, 0.3)'
               }}>
                 Together we grow

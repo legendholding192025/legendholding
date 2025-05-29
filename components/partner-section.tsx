@@ -149,7 +149,7 @@ export function PartnerSection() {
       <section 
         className="py-16 overflow-hidden relative"
         style={{
-          backgroundImage: 'url("https://res.cloudinary.com/dosxengut/image/upload/v1748236714/image_1_fmiofr.jpg")',
+          backgroundImage: 'url("https://res.cloudinary.com/dosxengut/image/upload/v1748501083/image_2_q3lfk4.jpg")',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
         }}
