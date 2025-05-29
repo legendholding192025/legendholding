@@ -125,14 +125,12 @@ export default function ValueSection() {
       </div>
 
       {/* Together We Grow Section - Full Width */}
-      <div className="relative w-full h-[15vh] md:h-[17vh] bg-purple-900">
+      <div className="relative w-full h-[20vh] md:h-[25vh] bg-purple-900">
         <Image
           src="https://res.cloudinary.com/dosxengut/image/upload/v1748416192/Asset_10_flsdgb.png"
           alt="Together we grow background"
           fill
-          className="object-contain md:object-cover w-full"
-          style={{ objectPosition: 'center center' }}
-          sizes="100vw"
+          className="object-cover w-full h-full"
           priority
         />
         <div className="absolute inset-0 flex items-center bg-gradient-to-r from-purple-900/80 via-purple-900/40 to-transparent">

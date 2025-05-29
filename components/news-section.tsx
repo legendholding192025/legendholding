@@ -85,7 +85,16 @@ export function Newsroom() {
       <div className="container mx-auto px-4">
         <div className="flex flex-col md:flex-row md:items-center justify-between mb-10">
           <div>
-            <h2 className="text-3xl sm:text-4xl font-bold text-[#F08900] mb-2">Latest News</h2>
+            <div className="flex items-center gap-3 mb-3">
+              <Image
+                src="https://res.cloudinary.com/dckrspiqe/image/upload/v1748439238/Asset_11_fzl19r.png"
+                alt="News icon"
+                width={32}
+                height={32}
+                className="object-contain"
+              />
+              <h2 className="text-3xl sm:text-4xl font-bold text-[#F08900]">Latest News</h2>
+            </div>
             <p className="text-[rgb(93,55,110)] max-w-2xl text-lg md:text-xl leading-relaxed">
               Stay updated with the latest developments, announcements, and achievements from Legend Holding Group.
             </p>
