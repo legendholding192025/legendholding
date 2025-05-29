@@ -33,10 +33,10 @@ export default function ValueSection() {
         {/* Header */}
         <div className="text-center mt-16 sm:mt-20 md:mt-24 mb-14">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#F08900] mb-3 animate-fade-in">
-            Mission <span className="text-[#F08900]">and</span> vision <span className="text-[#F08900]">and</span>{" "}
+            Mission, <span className="text-[#F08900]"></span> vision <span className="text-[#F08900]">and</span>{" "}
             values
           </h2>
-          <div className="w-32 h-1 bg-[#F08900] mx-auto animate-slide-in" style={{ marginTop: '-8px' }}></div>
+          <div className="w-32 h-1 bg-[#5D376E] mx-auto animate-slide-in" style={{ marginTop: '-8px' }}></div>
         </div>
 
         {/* Mission and Vision Cards */}
@@ -86,7 +86,6 @@ export default function ValueSection() {
       <div className="w-full bg-white py-12 md:py-20">
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center animate-fade-in" style={{ animationDelay: "0.6s" }}>
-            <div className="w-4 h-1 bg-orange-500 mx-auto mb-8"></div>
 
             <div className="flex flex-col md:flex-row items-center md:items-start justify-center gap-8 md:gap-12">
               {/* Left side - Photo and Name */}

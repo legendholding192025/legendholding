@@ -169,17 +169,14 @@ export function Footer() {
               <span className="relative z-10">Connect With Us</span>
               <span className="absolute bottom-0 left-0 w-12 h-0.5 bg-secondary"></span>
             </h3>
-            <p className="text-white/80 text-sm mb-6">
-              Stay connected with Legend Holding Group on social media. Follow us for the latest updates, news, and insights about our global operations and initiatives.
-            </p>
-            <div className="flex items-center gap-4 mb-6">
+            <div className="flex items-center gap-6 mb-4">
               <Link
                 href="https://facebook.com"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-white/80 hover:text-white transition-colors hover:scale-110"
               >
-                <Facebook size={18} />
+                <Facebook size={20} />
               </Link>
               <Link
                 href="https://twitter.com"
@@ -187,7 +184,7 @@ export function Footer() {
                 rel="noopener noreferrer"
                 className="text-white/80 hover:text-white transition-colors hover:scale-110"
               >
-                <Twitter size={18} />
+                <Twitter size={20} />
               </Link>
               <Link
                 href="https://instagram.com"
@@ -195,7 +192,7 @@ export function Footer() {
                 rel="noopener noreferrer"
                 className="text-white/80 hover:text-white transition-colors hover:scale-110"
               >
-                <Instagram size={18} />
+                <Instagram size={20} />
               </Link>
               <Link
                 href="https://linkedin.com"
@@ -203,7 +200,7 @@ export function Footer() {
                 rel="noopener noreferrer"
                 className="text-white/80 hover:text-white transition-colors hover:scale-110"
               >
-                <Linkedin size={18} />
+                <Linkedin size={20} />
               </Link>
               <Link
                 href="https://youtube.com"
@@ -211,7 +208,7 @@ export function Footer() {
                 rel="noopener noreferrer"
                 className="text-white/80 hover:text-white transition-colors hover:scale-110"
               >
-                <Youtube size={18} />
+                <Youtube size={20} />
               </Link>
               <Link
                 href="https://tiktok.com"
@@ -219,7 +216,7 @@ export function Footer() {
                 rel="noopener noreferrer"
                 className="text-white/80 hover:text-white transition-colors hover:scale-110"
               >
-                <TikTokIcon size={18} />
+                <TikTokIcon size={20} />
               </Link>
             </div>
             <p className="text-white/60 text-xs">
