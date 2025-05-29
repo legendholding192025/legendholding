@@ -71,16 +71,9 @@ const menuItems: MenuItem[] = [
         icon: <Users className="w-5 h-5" />
       },
       {
-        title: "Brand Story",
-        url: "/who-we-are/brand-story",
-        image: "https://res.cloudinary.com/dosxengut/image/upload/v1747649828/lumo-with-logo_crratq.png",
-        description: "Explore our journey and the story behind our brand.",
-        icon: <Briefcase className="w-5 h-5" />
-      },
-      {
         title: "Our Journey",
         url: "/who-we-are/journey",
-        image: "https://res.cloudinary.com/dosxengut/image/upload/v1747650381/1746961012298_hxmgin.jpg",
+        image: "https://res.cloudinary.com/dosxengut/image/upload/v1748416193/lumo_miwpei.png",
         description: "Follow our path of growth and milestones through the years.",
         icon: <History className="w-5 h-5" />
       },

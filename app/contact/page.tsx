@@ -108,7 +108,7 @@ export default function ContactPage() {
     {
       icon: <Clock className="w-6 h-6" />,
       title: "Business Hours",
-      details: ["Monday - Friday: 9:00 AM - 6:00 PM", "Saturday: 9:00 AM - 1:00 PM"],
+      details: ["Monday - Saturday  : 9:00 AM - 6:00 PM"],
       color: "text-[#EE8900]"
     }
   ]
@@ -125,7 +125,7 @@ export default function ContactPage() {
               src="https://res.cloudinary.com/dosxengut/image/upload/v1746784919/1-1-2_geivzn.jpg"
               alt="Contact Us"
               fill
-              className="object-cover"
+              className="object-cover object-[center_30%]"
               priority
             />
             <div className="absolute inset-0 bg-[#5E366D]/80 mix-blend-multiply" />
@@ -154,8 +154,8 @@ export default function ContactPage() {
               {/* Left Side - Contact Info */}
               <div className="space-y-8">
                 <div>
-                  <h1 className="text-4xl font-bold text-gray-900 mb-4">Contact Us</h1>
-                  <p className="text-gray-600 mb-6">
+                  <h1 className="text-5xl font-bold text-gray-900 mb-4">Contact Us</h1>
+                  <p className="text-lg text-gray-600 mb-6">
                     Get in touch with us for any inquiries about our services or collaboration opportunities.
                   </p>
                 </div>
@@ -194,8 +194,8 @@ export default function ContactPage() {
               {/* Right Side - Contact Form */}
               <div className="bg-white rounded-2xl p-8 shadow-sm mt-12">
                 <div className="mb-6">
-                  <h2 className="text-2xl font-bold text-gray-900 mb-2">Get in Touch</h2>
-                  <p className="text-gray-600">You can reach us anytime</p>
+                  <h2 className="text-4xl font-bold text-gray-900 mb-2">Get in Touch</h2>
+                  <p className="text-lg text-gray-600">You can reach us anytime</p>
                 </div>
 
                 {formStep === 0 ? (
@@ -305,8 +305,8 @@ export default function ContactPage() {
                         <CheckCircle className="w-10 h-10 text-green-600" />
                       </div>
                     </div>
-                    <h3 className="text-2xl font-semibold text-gray-900 mb-2">Message Sent Successfully!</h3>
-                    <p className="text-lg text-gray-600 mb-8">
+                    <h3 className="text-4xl font-semibold text-gray-900 mb-2">Message Sent Successfully!</h3>
+                    <p className="text-xl text-gray-600 mb-8">
                       Thank you for reaching out. We'll get back to you as soon as possible.
                     </p>
                     <button
@@ -323,11 +323,11 @@ export default function ContactPage() {
         </section>
 
         {/* Location Section */}
-        <section className="py-16 px-6 bg-white">
+        <section className="py-24 px-6 bg-gray-50">
           <div className="max-w-7xl mx-auto">
-            <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div className="grid lg:grid-cols-2 gap-16 items-start">
               {/* Map */}
-              <div className="relative bg-gray-100 rounded-2xl overflow-hidden h-[500px]">
+              <div className="relative bg-white rounded-2xl overflow-hidden h-[600px] shadow-lg">
                 <iframe
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3617.8876416068888!2d55.11843827537754!3d24.936844342145934!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5f0fb4a8a8b8a7%3A0x3e5f0fb4a8a8b8a7!2sJebel%20Ali%20Free%20Zone%20Gate%205!5e0!3m2!1sen!2sae!4v1629789456789!5m2!1sen!2sae"
                   width="100%"
@@ -341,27 +341,46 @@ export default function ContactPage() {
               </div>
 
               {/* Location Info */}
-              <div>
-                <div className="mb-4">
-                  <span className="text-[#EE8900] font-medium">Our Location</span>
-                  <h2 className="text-3xl font-bold text-gray-900 mt-2">Visit Our Office</h2>
+              <div className="lg:pl-8">
+                <div className="mb-8">
+                  <span className="text-[#EE8900] font-semibold text-lg inline-block mb-2">Our Location</span>
+                  <h2 className="text-4xl font-bold text-gray-900 mb-4">Visit Our Office</h2>
+                  <div className="w-20 h-1 bg-[#EE8900] rounded-full"></div>
                 </div>
 
-                <div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-4">Headquarters</h3>
-                  <div className="space-y-2 text-gray-600">
-                    <div>Legend Holding Group HQ</div>
-                    <div>Jebel Ali Freezone, Gate 5</div>
-                    <div>Dubai, United Arab Emirates</div>
-                    <div>P.O. Box 12345</div>
-                    <div>United Arab Emirates</div>
+                <div className="bg-white rounded-2xl p-8 shadow-lg">
+                  <h3 className="text-2xl font-semibold text-gray-900 mb-6">Headquarters</h3>
+                  <div className="space-y-4">
+                    <div className="flex items-start space-x-4">
+                      <div className="mt-1">
+                        <MapPin className="w-6 h-6 text-[#EE8900]" />
+                      </div>
+                      <div className="text-lg text-gray-600">
+                        <div className="font-medium text-gray-900">Legend Holding Group HQ</div>
+                        <div>Jebel Ali Freezone, Gate 5</div>
+                        <div>Dubai, United Arab Emirates</div>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-start space-x-4">
+                      <div className="mt-1">
+                        <Mail className="w-6 h-6 text-[#EE8900]" />
+                      </div>
+                      <div className="text-lg text-gray-600">
+                        <div>P.O. Box 12345</div>
+                        <div>United Arab Emirates</div>
+                      </div>
+                    </div>
+
                     <a
-                      href="https://maps.google.com"
+                      href="https://maps.app.goo.gl/J5xzfni3Mp55g11bA"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-1 text-[#EE8900] text-sm mt-2 hover:underline"
+                      className="inline-flex items-center px-6 py-3 bg-[#EE8900] text-white rounded-lg hover:bg-[#EE8900]/90 transition-all duration-200 mt-4 group"
                     >
-                      Open Google Maps <ExternalLink className="w-3 h-3" />
+                      <MapPin className="w-5 h-5 mr-2 group-hover:animate-bounce" />
+                      Get Directions
+                      <ExternalLink className="w-4 h-4 ml-2" />
                     </a>
                   </div>
                 </div>
