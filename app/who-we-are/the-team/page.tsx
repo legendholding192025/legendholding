@@ -19,8 +19,8 @@ export default function LeadershipTeam() {
 
           <div className="w-full max-w-7xl relative z-10">
             <div className="mb-8">
-              <h1 className="text-4xl font-bold text-[#2C2341] mb-2">Our Leadership Team</h1>
-              <div className="w-24 h-1 bg-primary mb-6"></div>
+              <h1 className="text-4xl font-bold text-[#EE8900] mb-2">Our Leadership Team</h1>
+              <div className="w-24 h-1 bg-[#5E366D] mb-6"></div>
               <p className="text-xl text-gray-600">
                 Meet our leadership team helping shape Legend Holding Group&apos;s goals.
               </p>
@@ -36,7 +36,7 @@ export default function LeadershipTeam() {
                   height={500}
                   className="mb-6 rounded-xl w-full h-[500px] object-cover"
                 />
-                <h2 className="text-2xl font-bold text-primary mb-2">Mr. Kai Zheng</h2>
+                <h2 className="text-2xl font-bold text-[#EE8900] mb-2">Mr. Kai Zheng</h2>
                 <p className="text-lg text-gray-600 mb-4">Chairman & CEO, Legend Holding Group</p>
                 <p className="text-gray-700 leading-relaxed">
                   Mr. Kai Zheng is the visionary leader behind Legend Holding Group&apos;s remarkable growth and
@@ -56,7 +56,7 @@ export default function LeadershipTeam() {
                   height={500}
                   className="mb-6 rounded-xl w-full h-[500px] object-cover"
                 />
-                <h2 className="text-2xl font-bold text-primary mb-2">Mrs. Mira Wu</h2>
+                <h2 className="text-2xl font-bold text-[#EE8900] mb-2">Mrs. Mira Wu</h2>
                 <p className="text-lg text-gray-600 mb-4">Co-Founder & Chief Operating Officer</p>
                 <p className="text-gray-700 leading-relaxed">
                   Mrs. Mira Wu brings exceptional operational expertise and strategic insight to Legend Holding Group. As
@@ -72,7 +72,7 @@ export default function LeadershipTeam() {
 
             {/* Division Leaders */}
             <div className="mb-8">
-              <h2 className="text-3xl font-bold text-[#2C2341] mb-6">Division Leaders</h2>
+              <h2 className="text-3xl font-bold text-[#EE8900] mb-6">Division Leaders</h2>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -82,6 +82,12 @@ export default function LeadershipTeam() {
                   role: "Legend Motors Trading",
                   image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&auto=format&fit=crop&q=60",
                   description: "Leading our automotive trading division with expertise in vehicle procurement and distribution."
+                },
+                {
+                  name: "Mr. Waseem",
+                  role: "Brand Manager",
+                  image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=800&auto=format&fit=crop&q=60",
+                  description: "Driving brand strategy and creative direction across all Legend Group companies, ensuring consistent and impactful brand presence."
                 },
                 {
                   name: "Cannon",
@@ -125,12 +131,7 @@ export default function LeadershipTeam() {
                   image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=800&auto=format&fit=crop&q=60",
                   description: "Overseeing talent management and organizational development across all divisions."
                 },
-                {
-                  name: "Mr. Waseem",
-                  role: "Brand Manager",
-                  image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=800&auto=format&fit=crop&q=60",
-                  description: "Driving brand strategy and creative direction across all Legend Group companies, ensuring consistent and impactful brand presence."
-                }
+              
               ].map((leader, index) => (
                 <div key={index} className="bg-white rounded-2xl shadow-lg p-6 transform transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
                   <Image
@@ -140,9 +141,9 @@ export default function LeadershipTeam() {
                     height={300}
                     className="mb-4 mx-auto rounded-xl w-full h-[300px] object-cover"
                   />
-                  <h3 className="text-xl font-bold text-[#2C2341] text-center mb-2">{leader.name}</h3>
-                  <div className="w-12 h-1 bg-primary mx-auto mb-3"></div>
-                  <p className="text-primary font-semibold text-center mb-3">{leader.role}</p>
+                  <h3 className="text-xl font-bold text-[#EE8900] text-center mb-2">{leader.name}</h3>
+                  <div className="w-12 h-1 bg-[#5E366D] mx-auto mb-3"></div>
+                  <p className="text-[#EE8900] font-semibold text-center mb-3">{leader.role}</p>
                   <p className="text-gray-700 text-center">{leader.description}</p>
                 </div>
               ))}

@@ -88,18 +88,18 @@ export function CSRSection() {
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-3xl sm:text-4xl font-bold text-[#2B1C48] mb-4">Corporate Social Responsibility</h2>
-          <div className="w-24 h-1 bg-[#EE8900] mx-auto rounded-full mb-6"></div>
-          <p className="text-lg md:text-xl leading-relaxed text-[#5D376E]/80">
+          <h2 className="text-3xl sm:text-4xl font-bold text-[#F08900] mb-4">Corporate Social Responsibility</h2>
+          <div className="w-24 h-1 bg-[#5E366D] mx-auto rounded-full mb-6"></div>
+          <p className="text-[#5E366D] max-w-4xl mx-auto text-center text-lg md:text-xl leading-relaxed">
             At Legend Holding Group, we believe in giving back to society and making a positive impact on the
             communities we serve. Our CSR initiatives focus on sustainable development, community welfare, and
             environmental stewardship.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
           {/* Left side - Initiative tabs */}
-          <div className="space-y-4">
+          <div className="space-y-4 h-full flex flex-col justify-center">
             {csrInitiatives.map((initiative) => (
               <button
                 key={initiative.id}
@@ -107,14 +107,14 @@ export function CSRSection() {
                 className={cn(
                   "w-full text-left p-5 rounded-lg transition-all duration-300 flex items-start gap-4 border",
                   activeInitiative === initiative.id
-                    ? "bg-[#EE8900]/60 shadow-lg border-[#EE8900]/20"
-                    : "bg-[rgb(234,226,214)]/50 hover:bg-[rgb(234,226,214)] hover:shadow-md border-gray-100",
+                    ? "bg-[#5E366D] shadow-lg border-[#5E366D]/20 text-white"
+                    : "bg-[#EE8900]/80 hover:bg-[#EE8900]/90 hover:shadow-md border-[#EE8900]/20 text-white",
                 )}
               >
                 <div
                   className={cn(
                     "p-3 rounded-full flex-shrink-0 transition-colors duration-300",
-                    activeInitiative === initiative.id ? "bg-white text-[rgb(93,55,110)]" : "bg-[rgb(234,226,214)]/80 text-gray-500",
+                    activeInitiative === initiative.id ? "bg-white text-[#5E366D]" : "bg-white text-[#EE8900]",
                   )}
                 >
                   {initiative.icon}
@@ -123,7 +123,7 @@ export function CSRSection() {
                   <h3
                     className={cn(
                       "font-semibold text-xl mb-2 transition-colors duration-300",
-                      activeInitiative === initiative.id ? "text-[rgb(93,55,110)]" : "text-gray-800",
+                      activeInitiative === initiative.id ? "text-white" : "text-white",
                     )}
                   >
                     {initiative.title}
@@ -131,7 +131,7 @@ export function CSRSection() {
                   <p
                     className={cn(
                       "text-base md:text-lg transition-colors duration-300",
-                      activeInitiative === initiative.id ? "text-[rgb(93,55,110)]/90" : "text-gray-500",
+                      activeInitiative === initiative.id ? "text-white/90" : "text-white/90",
                     )}
                   >
                     {initiative.description}
@@ -150,7 +150,7 @@ export function CSRSection() {
           </div>
 
           {/* Right side - Image showcase */}
-          <div className="relative h-[400px] rounded-xl overflow-hidden shadow-xl">
+          <div className="relative h-[450px] rounded-xl overflow-hidden shadow-xl">
             {csrInitiatives.map((initiative) => (
               <div
                 key={initiative.id}
