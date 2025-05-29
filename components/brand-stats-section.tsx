@@ -97,7 +97,7 @@ export function BrandStatsSection() {
           </div>
 
 
-          <p className="text-[#2B1C48] max-w-4xl mx-auto text-center text-lg md:text-xl leading-relaxed">
+          <p className="text-[#5E366D] max-w-4xl mx-auto text-center text-lg md:text-xl leading-relaxed">
             For over two decades, Legend Holding Group has been pioneering innovation and excellence across automotive,
             energy, facility management, and technology sectors.
           </p>

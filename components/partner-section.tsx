@@ -101,8 +101,8 @@ export function PartnerSection() {
       <section className="py-12 sm:py-16 bg-white">
         <div className="container mx-auto px-4">
           <div className="flex flex-col items-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold text-[#2B1C48] mb-4 text-center">Our Partners</h2>
-            <div className="w-24 h-1 bg-[#EE8900] mx-auto rounded-full mb-6"></div>
+            <h2 className="text-3xl sm:text-4xl font-bold text-[#EE8900] mb-4 text-center">Our Partners</h2>
+            <div className="w-24 h-1 bg-[#5E366D] mx-auto rounded-full mb-6"></div>
           </div>
 
           <div
@@ -162,10 +162,10 @@ export function PartnerSection() {
           )}
         >
           <div className="relative">
-            <h2 className="text-3xl md:text-5xl font-bold text-[#2B1C48] mb-4 animate-float">
+            <h2 className="text-3xl sm:text-4xl font-bold text-[#EE8900] mb-4 animate-float">
               Together We Grow
             </h2>
-            <p className="text-lg md:text-xl text-[#EE8900] max-w-2xl mx-auto animate-float-delayed">
+            <p className="text-lg md:text-xl text-[#5E366D] max-w-2xl mx-auto animate-float-delayed">
               Building partnerships that drive success and innovation
             </p>
             

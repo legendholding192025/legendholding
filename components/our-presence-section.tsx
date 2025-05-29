@@ -64,17 +64,17 @@ export function OurPresenceSection() {
         {/* Heading with lines */}
         <div className="flex items-center justify-center mb-6 md:mb-10">
           <div className="hidden md:block flex-1 h-0.5 bg-[#6C4896] mr-4" />
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#EE8900] text-center font-richmond tracking-wide">
+          <h2 className="text-3xl sm:text-4xl font-bold text-[#EE8900] text-center font-richmond tracking-wide">
             Our Presence
           </h2>
           <div className="hidden md:block flex-1 h-0.5 bg-[#6C4896] ml-4" />
         </div>
         {/* Subheading in rounded box */}
         <div className="flex justify-center mb-10">
-          <div className="border-2 border-[#EE8900] rounded-full px-6 py-2 md:px-10 md:py-3 bg-white text-center inline-block">
-            <span className="text-base md:text-lg text-[#6C4896] font-semibold">
+          <div className="border-2 border-[#EE8900] rounded-full px-3 py-1 md:px-5 md:py-2 bg-white text-center inline-block">
+            <p className="text-lg sm:text-xl md:text-2xl leading-relaxed text-[#5E366D]">
               Spanning three continents, Asia, Europe, Africa we operate in key markets including:
-            </span>
+            </p>
           </div>
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">

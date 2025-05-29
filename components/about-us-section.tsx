@@ -31,17 +31,9 @@ export function AboutUsSection() {
           <span className="block h-1 w-16 bg-[#EE8900] rounded-full animate-pulse" />
         </div>
         {/* Summary Sentence */}
-        <div className="font-effra text-lg md:text-xl text-white text-center max-w-3xl mb-12">
-          <p className="leading-relaxed">
-            Legend Holding Group is a diversified enterprise headquartered in Dubai, operating across the Middle east and African region. With a strong focus on sustainability and innovation, the group manages a growing portfolio of companies in automotive, trading, energy, Travel and Tourism and mobility services.
-            <Link 
-              href="/about"
-              className="inline-block ml-2 text-[#EE8900] hover:text-[#F08900] transition-colors duration-300 font-medium"
-            >
-              View More
-            </Link>
-          </p>
-        </div>
+        <p className="font-effra text-lg md:text-xl text-white text-center max-w-3xl mb-12">
+          To be the leading diversified business group in the region, setting new standards of excellence and innovation while creating sustainable value for our stakeholders and communities.
+        </p>
         {/* Illustration (centered, responsive) */}
         <div className="w-full flex justify-center">
           <div className="relative w-full max-w-2xl aspect-[2.5/1] md:aspect-[2.8/1]">

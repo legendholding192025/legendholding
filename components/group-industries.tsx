@@ -92,7 +92,7 @@ export default function GroupIndustries() {
       <div className="w-full px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-8 sm:mb-12">
-          <h2 className="text-2xl md:text-3xl font-semibold text-[#F08900] mb-6 font-richmond animate-fade-in">
+          <h2 className="text-3xl sm:text-4xl font-bold text-[#F08900] mb-6 font-richmond animate-fade-in">
             Group Industries
           </h2>
           <div className="flex gap-2 justify-center">

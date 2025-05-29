@@ -31,7 +31,7 @@ export default function ValueSection() {
       
       <div className="relative z-10 max-w-6xl mx-auto px-4">
         {/* Header */}
-        <div className="text-center mt-4 mb-14">
+        <div className="text-center mt-16 sm:mt-20 md:mt-24 mb-14">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#F08900] mb-3 animate-fade-in">
             Mission <span className="text-[#F08900]">and</span> vision <span className="text-[#F08900]">and</span>{" "}
             values
@@ -47,12 +47,12 @@ export default function ValueSection() {
             <img src="https://res.cloudinary.com/dosxengut/image/upload/v1748416193/Asset_9_z8nunq.png" alt="" className="w-full h-auto opacity-90" />
 
             {/* Content overlay */}
-            <div className="absolute inset-0 flex flex-col justify-center items-start p-4 sm:p-6 md:p-8">
-              <div className="max-w-2xl">
+            <div className="absolute inset-0 flex flex-col justify-center p-4 sm:p-6 md:p-8">
+              <div className="max-w-2xl pl-4 sm:pl-6">
                 <h3 className="text-2xl sm:text-3xl font-bold text-orange-500 mb-2 pt-8 sm:pt-14">
                   <span className="border-b-2 border-orange-500 pb-1">Our</span> Vision
                 </h3>
-                <p className="text-lg sm:text-xl md:text-2xl leading-relaxed mt-4 px-2 sm:px-4" style={{ color: 'rgb(143, 32, 147)' }}>
+                <p className="text-lg sm:text-xl md:text-2xl leading-relaxed mt-4" style={{ color: '#5E366D' }}>
                   To be the leading diversified business group in the region, setting new standards of excellence and
                   innovation while creating sustainable value for our stakeholders and communities.
                 </p>
@@ -66,12 +66,12 @@ export default function ValueSection() {
             <img src="https://res.cloudinary.com/dosxengut/image/upload/v1748416192/Asset_8_tzvns5.png" alt="" className="w-full h-auto opacity-90" />
 
             {/* Content overlay */}
-            <div className="absolute inset-0 flex flex-col justify-center items-start p-4 sm:p-6 md:p-8">
-              <div className="max-w-2xl">
+            <div className="absolute inset-0 flex flex-col justify-center p-4 sm:p-6 md:p-8">
+              <div className="max-w-2xl pl-4 sm:pl-6">
                 <h3 className="text-2xl sm:text-3xl font-bold text-orange-500 mb-2 pt-8 sm:pt-14">
                   <span className="border-b-2 border-orange-500 pb-1">Our</span> Mission
                 </h3>
-                <p className="text-lg sm:text-xl md:text-2xl leading-relaxed mt-4 px-2 sm:px-4" style={{ color: 'rgb(143, 32, 147)' }}>
+                <p className="text-lg sm:text-xl md:text-2xl leading-relaxed mt-4" style={{ color: '#5E366D' }}>
                   To deliver exceptional products and services through operational excellence, innovative solutions, and
                   sustainable practices while fostering growth, empowering our people, and contributing to society's
                   advancement.
@@ -91,7 +91,7 @@ export default function ValueSection() {
             <div className="flex flex-col md:flex-row items-center md:items-start justify-center gap-8 md:gap-12">
               {/* Left side - Photo and Name */}
               <div className="flex-shrink-0">
-                <div className="relative w-[200px] sm:w-[250px] h-[260px] sm:h-[330px] overflow-hidden shadow-xl border-8 border-white ring-1 ring-gray-200" style={{ 
+                <div className="relative w-[200px] sm:w-[250px] h-[260px] sm:h-[330px] overflow-hidden shadow-xl border-8 border-[#EE8900] ring-1 ring-[#EE8900]/20" style={{ 
                   boxShadow: '0 0 20px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.05)',
                   background: 'linear-gradient(to bottom right, #ffffff, #f8f8f8)'
                 }}>
@@ -112,7 +112,7 @@ export default function ValueSection() {
                 <h6 className="text-2xl md:text-3xl font-medium text-orange-500 mb-6 md:mb-8">Mr. Kai Zheng</h6>
                 <div className="flex gap-4 md:gap-6">
                   <div className="w-1.5 bg-orange-500 rounded-full self-stretch"></div>
-                  <p className="text-lg md:text-2xl leading-relaxed" style={{ color: 'rgb(143, 32, 147)' }}>
+                  <p className="text-lg md:text-2xl leading-relaxed" style={{ color: '#5E366D' }}>
                     With a visionary mindset and years of experience in leadership, our director stands at the helm of
                     innovation and excellence. Known for strategic thinking, strong decision-making, and an unwavering
                     commitment to growth, they continue to inspire the team to reach new heights.
