@@ -81,20 +81,11 @@ export function BrandStatsSection() {
           transition={{ duration: 0.6 }}
           className="flex flex-col items-center mb-16"
         >
-          <div className="flex items-center gap-2 mb-6">
-            <h2 className="text-3xl sm:text-4xl font-bold text-[#EE8900]">Capabilities</h2>
-
-            {/* Wrapper for position adjustment */}
-            <div className="-mt-12 -ml-2">
-              <div className="relative w-10 h-10 rotate-180">
-                {/* Vertical bar of the L */}
-                <div className="absolute left-0 top-0 w-5 h-full bg-[#EE8900] rounded-sm"></div>
-
-                {/* Horizontal bar of the L */}
-                <div className="absolute left-0 bottom-0 w-full h-5 bg-[#EE8900] rounded-sm"></div>
-              </div>
-            </div>
+          <div className="text-center mb-12">
+            <h2 className="text-3xl sm:text-4xl font-bold text-[#EE8900] mb-4">Capabilities</h2>
+            <div className="w-24 h-1 bg-[#5D376E] mx-auto rounded-full"></div>
           </div>
+
 
 
           <p className="text-[#5E366D] max-w-4xl mx-auto text-center text-lg md:text-xl leading-relaxed">

@@ -108,13 +108,13 @@ export function CSRSection() {
                   "w-full text-left p-5 rounded-lg transition-all duration-300 flex items-start gap-4 border",
                   activeInitiative === initiative.id
                     ? "bg-[#5E366D] shadow-lg border-[#5E366D]/20 text-white"
-                    : "bg-[#EE8900]/80 hover:bg-[#EE8900]/90 hover:shadow-md border-[#EE8900]/20 text-white",
+                    : "bg-[#F08900] hover:bg-[#F08900]/90 hover:shadow-md border-[#F08900]/20 text-white",
                 )}
               >
                 <div
                   className={cn(
                     "p-3 rounded-full flex-shrink-0 transition-colors duration-300",
-                    activeInitiative === initiative.id ? "bg-white text-[#5E366D]" : "bg-white text-[#EE8900]",
+                    activeInitiative === initiative.id ? "bg-white text-[#5E366D]" : "bg-white text-[#F08900]",
                   )}
                 >
                   {initiative.icon}
