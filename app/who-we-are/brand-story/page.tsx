@@ -10,13 +10,6 @@ export default function BrandStory() {
       <Header />
       <main className="pt-20">
         <div className="min-h-screen bg-white flex flex-col items-center py-12 px-4 relative overflow-hidden">
-          {/* Top Left Decorative Image - closer to heading */}
-          <img
-            src="https://res.cloudinary.com/dosxengut/image/upload/v1747740934/lumo-with-logo_c9fly3.png"
-            alt="Decorative top left"
-            className="hidden md:block absolute z-0 opacity-70"
-            style={{ top: 48, left: 90, position: 'absolute', width: 140, height: 140, filter: 'contrast(1.2)' }}
-          />
           {/* Top Right Decorative Image */}
           <img
             src="https://res.cloudinary.com/dosxengut/image/upload/v1747730468/Picture18_zo3eri.png"
