@@ -125,16 +125,9 @@ export default function ValueSection() {
       </div>
 
       {/* Together We Grow Section - Full Width */}
-      <div className="relative w-full h-[20vh] md:h-[25vh] bg-purple-900">
-        <Image
-          src="https://res.cloudinary.com/dosxengut/image/upload/v1748416192/Asset_10_flsdgb.png"
-          alt="Together we grow background"
-          fill
-          className="object-cover w-full h-full"
-          priority
-        />
-        <div className="absolute inset-0 flex items-center bg-gradient-to-r from-purple-900/80 via-purple-900/40 to-transparent">
-          <div className="max-w-6xl w-full mx-auto px-4">
+      <div className="relative w-full h-[40vh] md:h-[45vh] overflow-hidden bg-white">
+        <div className="absolute inset-0 flex items-center">
+          <div className="max-w-7xl w-full mx-auto px-4">
             <div className="flex items-center gap-4 md:gap-8">
               <div className="relative w-8 h-8 md:w-10 md:h-10">
                 <Image
@@ -146,11 +139,17 @@ export default function ValueSection() {
                   priority
                 />
               </div>
-              <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-[#F08900]" style={{
+              <h3 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-[#F08900] whitespace-nowrap" style={{
                 textShadow: '1px 1px 3px rgba(0, 0, 0, 0.3)'
               }}>
                 Together we grow
               </h3>
+              <div className="flex flex-col gap-2 ml-4 flex-1">
+                <div className="w-full h-1 bg-[#2C2341]"></div>
+                <div className="w-full h-1 bg-[#8F2093]"></div>
+                <div className="w-full h-1 bg-[#EE8900]"></div>
+                <div className="w-full h-1 bg-[#EE8900]/80"></div>
+              </div>
             </div>
           </div>
         </div>
