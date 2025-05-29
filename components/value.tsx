@@ -36,7 +36,7 @@ export default function ValueSection() {
             Mission <span className="text-[#F08900]">and</span> vision <span className="text-[#F08900]">and</span>{" "}
             values
           </h2>
-          <div className="w-32 h-1 bg-[#F08900] mx-auto animate-slide-in" style={{ marginTop: '-8px' }}></div>
+          <div className="w-32 h-1 bg-[#F08900] mx-auto animate-slide-in" style={{ marginTop: '4px' }}></div>
         </div>
 
         {/* Mission and Vision Cards */}

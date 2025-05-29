@@ -15,7 +15,7 @@ export default function HeroSection() {
           <span className="text-white">Legend Holding Group</span>
         </h1>
         <p className="text-orange-300 text-base sm:text-lg md:text-xl lg:text-2xl font-medium tracking-wider">
-          We are the future
+          Together We Grow 
         </p>
       </div>
     </section>

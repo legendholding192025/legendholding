@@ -98,7 +98,7 @@ export default function ZulEnergyPage() {
     {
       id: "chemical-additives",
       title: "Chemical Additives Excellence",
-      image: "https://res.cloudinary.com/dckrspiqe/image/upload/v1747995492/zul_energy_bcdbsv.jpg",
+      image: "https://cdn.legendholding.com/images/68382e9abbe3a.jpg",
       description:
         "ZUL Energy is a manufacturer of premium quality chemical additives for every stage of Oil & Gas field applications. Our commitment to provide quality products, outstanding service, and zero compromises has established us as a trusted partner in the energy sector.",
     },
