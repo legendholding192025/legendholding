@@ -99,8 +99,7 @@ export default function ContactPage() {
       icon: <MapPin className="w-6 h-6" />,
       title: "Address",
       details: [
-        "Legend Holding Group HQ",
-        "Jebel Ali Freezone, Gate 5",
+        "Legend Holding Group HQ, Jebel Ali Freezone, Gate 5",
         "Dubai, United Arab Emirates"
       ],
       color: "text-[#EE8900]"
@@ -177,9 +176,9 @@ export default function ContactPage() {
                         </div>
                         <div>
                           <h3 className="text-base font-semibold text-gray-900 mb-1">{item.title}</h3>
-                          <div className="space-y-0.5">
+                          <div className="-space-y-2">
                             {item.details.map((detail, idx) => (
-                              <p key={idx} className="text-base md:text-lg text-gray-600">
+                              <p key={idx} className="text-base md:text-lg text-gray-600 leading-none">
                                 {detail}
                               </p>
                             ))}
@@ -354,10 +353,9 @@ export default function ContactPage() {
                       <div className="mt-1">
                         <MapPin className="w-6 h-6 text-[#EE8900]" />
                       </div>
-                      <div className="text-lg text-gray-600">
-                        <div className="font-medium text-gray-900">Legend Holding Group HQ</div>
-                        <div>Jebel Ali Freezone, Gate 5</div>
-                        <div>Dubai, United Arab Emirates</div>
+                      <div className="text-lg text-gray-600 -space-y-2">
+                        <div className="font-medium text-gray-900 leading-none">Legend Holding Group HQ, Jebel Ali Freezone, Gate 5</div>
+                        <div className="leading-none">Dubai, United Arab Emirates</div>
                       </div>
                     </div>
                     

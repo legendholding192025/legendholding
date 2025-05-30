@@ -36,7 +36,7 @@ export default function ValueSection() {
             Mission, <span className="text-[#F08900]"></span> vision <span className="text-[#F08900]">and</span>{" "}
             values
           </h2>
-          <div className="w-32 h-1 bg-[#F08900] mx-auto animate-slide-in" style={{ marginTop: '4px' }}></div>
+          <div className="w-32 h-1 bg-[#2B1C48] mx-auto animate-slide-in" style={{ marginTop: '4px' }}></div>
         </div>
 
         {/* Mission and Vision Cards */}
@@ -48,13 +48,12 @@ export default function ValueSection() {
 
             {/* Content overlay */}
             <div className="absolute inset-0 flex flex-col justify-center p-4 sm:p-6 md:p-8">
-              <div className="max-w-2xl pl-4 sm:pl-6">
-                <h3 className="text-2xl sm:text-3xl font-bold text-orange-500 mb-2 pt-8 sm:pt-14">
-                  <span className="border-b-2 border-orange-500 pb-1">Our</span> Vision
+              <div className="max-w-2xl pl-4 sm:pl-6 mt-16">
+                <h3 className="text-2xl sm:text-3xl font-bold text-orange-500 mb-4">
+                  <span className="border-b-2 border-[#2B1C48] pb-1">Our</span> Vision
                 </h3>
-                <p className="text-lg sm:text-xl md:text-2xl leading-relaxed mt-4" style={{ color: '#5E366D' }}>
-                  To be the leading diversified business group in the region, setting new standards of excellence and
-                  innovation while creating sustainable value for our stakeholders and communities.
+                <p className="text-base sm:text-lg md:text-xl leading-normal" style={{ color: '#2B1C48' }}>
+                  To seamlessly connect the physical and digital worlds, revolutionizing supply chains with cutting-edge financial technology, and become the global leader in intelligent, data-driven solutions that empower businesses to thrive through efficiency transparency, and sustainable growth.
                 </p>
               </div>
             </div>
@@ -67,14 +66,12 @@ export default function ValueSection() {
 
             {/* Content overlay */}
             <div className="absolute inset-0 flex flex-col justify-center p-4 sm:p-6 md:p-8">
-              <div className="max-w-2xl pl-4 sm:pl-6">
-                <h3 className="text-2xl sm:text-3xl font-bold text-orange-500 mb-2 pt-8 sm:pt-14">
-                  <span className="border-b-2 border-orange-500 pb-1">Our</span> Mission
+              <div className="max-w-2xl pl-4 sm:pl-6 mt-16">
+                <h3 className="text-2xl sm:text-3xl font-bold text-orange-500 mb-4">
+                  <span className="border-b-2 border-[#2B1C48] pb-1">Our</span> Mission
                 </h3>
-                <p className="text-lg sm:text-xl md:text-2xl leading-relaxed mt-4" style={{ color: '#5E366D' }}>
-                  To deliver exceptional products and services through operational excellence, innovative solutions, and
-                  sustainable practices while fostering growth, empowering our people, and contributing to society's
-                  advancement.
+                <p className="text-base sm:text-lg md:text-xl leading-normal" style={{ color: '#2B1C48' }}>
+                  To foster happiness and deliver value, focusing on building a sustainable future.
                 </p>
               </div>
             </div>
