@@ -85,38 +85,17 @@ export default function ValueSection() {
       {/* Leadership Section - Full Width */}
       <div className="w-full bg-white py-12 md:py-20">
         <div className="max-w-6xl mx-auto px-4">
-          <div className="text-center animate-fade-in" style={{ animationDelay: "0.6s" }}>
-
-            <div className="flex flex-col md:flex-row items-center md:items-start justify-center gap-8 md:gap-12">
-              {/* Left side - Photo and Name */}
-              <div className="flex-shrink-0">
-                <div className="relative w-[200px] sm:w-[250px] h-[260px] sm:h-[330px] overflow-hidden shadow-xl border-8 border-[#EE8900] ring-1 ring-[#EE8900]/20" style={{ 
-                  boxShadow: '0 0 20px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.05)',
-                  background: 'linear-gradient(to bottom right, #ffffff, #f8f8f8)'
-                }}>
-                  <Image
-                    src="https://res.cloudinary.com/dosxengut/image/upload/v1748420220/image_1_oo10il.png"
-                    alt="Mr. Kai Zheng - Chairman"
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 200px, 250px"
-                    priority
-                  />
-                </div>
-              </div>
-
-              {/* Right side - Title and Description */}
-              <div className="max-w-2xl text-center md:text-left">
-                <h5 className="text-3xl md:text-4xl font-semibold text-gray-700 mb-2">Chairman</h5>
-                <h6 className="text-2xl md:text-3xl font-medium text-orange-500 mb-6 md:mb-8">Mr. Kai Zheng</h6>
-                <div className="flex gap-4 md:gap-6">
-                  <div className="w-1.5 bg-orange-500 rounded-full self-stretch"></div>
-                  <p className="text-lg md:text-2xl leading-relaxed" style={{ color: '#5E366D' }}>
-                    With a visionary mindset and years of experience in leadership, our director stands at the helm of
-                    innovation and excellence. Known for strategic thinking, strong decision-making, and an unwavering
-                    commitment to growth, they continue to inspire the team to reach new heights.
-                  </p>
-                </div>
+          <div className="animate-fade-in" style={{ animationDelay: "0.6s" }}>
+            <div className="max-w-4xl">
+              <h5 className="text-3xl md:text-4xl font-semibold text-gray-700 mb-2">Chairman Message</h5>
+              <h6 className="text-2xl md:text-3xl font-medium text-orange-500 mb-6 md:mb-8">Mr. Kai Zheng</h6>
+              <div className="flex gap-4 md:gap-6">
+                <div className="w-1.5 bg-orange-500 rounded-full self-stretch"></div>
+                <p className="text-lg md:text-2xl leading-relaxed" style={{ color: '#5E366D' }}>
+                  With a visionary mindset and years of experience in leadership, our director stands at the helm of
+                  innovation and excellence. Known for strategic thinking, strong decision-making, and an unwavering
+                  commitment to growth, they continue to inspire the team to reach new heights.
+                </p>
               </div>
             </div>
           </div>
