@@ -37,15 +37,8 @@ export default function LeadershipTeam() {
                   className="mb-6 rounded-xl w-full h-[500px] object-cover"
                 />
                 <h2 className="text-2xl font-bold text-[#EE8900] mb-2">Mr. Kai Zheng</h2>
-                <p className="text-lg text-gray-600 mb-4">Chairman & CEO, Legend Holding Group</p>
-                <p className="text-gray-700 leading-relaxed">
-                  Mr. Kai Zheng is the visionary leader behind Legend Holding Group&apos;s remarkable growth and
-                  diversification. With over 20 years of experience in strategic business development and international
-                  markets, he has successfully guided the company&apos;s expansion across multiple industries including
-                  automotive, energy, and tourism. His innovative approach to business and commitment to sustainable growth
-                  has positioned Legend Holding Group as a leading conglomerate in the region. Under his leadership, the
-                  company has achieved significant milestones in green energy solutions and automotive excellence.
-                </p>
+                <p className="text-lg text-gray-600 mb-2">Chairman & CEO</p>
+                <p className="text-[#5E366D] font-medium text-xl">Legend Holding Group</p>
               </div>
 
               <div className="bg-white rounded-2xl shadow-lg p-6">
@@ -57,16 +50,8 @@ export default function LeadershipTeam() {
                   className="mb-6 rounded-xl w-full h-[500px] object-cover"
                 />
                 <h2 className="text-2xl font-bold text-[#EE8900] mb-2">Mrs. Mira Wu</h2>
-                <p className="text-lg text-gray-600 mb-4">Co-Founder & Chief Operating Officer</p>
-                <p className="text-gray-700 leading-relaxed">
-                  Mrs. Mira Wu brings exceptional operational expertise and strategic insight to Legend Holding Group. As
-                  Co-Founder and COO, she oversees the day-to-day operations across all business divisions, ensuring seamless
-                  coordination and optimal performance. Her background in finance and operations management has been
-                  instrumental in establishing robust systems and processes that support the company&apos;s rapid growth. Mira
-                  is particularly passionate about fostering innovation and maintaining the highest standards of service
-                  excellence across all Legend Group companies. Her leadership in human resources and organizational
-                  development has created a strong corporate culture focused on excellence and integrity.
-                </p>
+                <p className="text-lg text-gray-600 mb-2">Co-Founder & Chief Operating Officer</p>
+                <p className="text-[#5E366D] font-medium text-xl">Legend Holding Group</p>
               </div>
             </div>
 
@@ -80,58 +65,48 @@ export default function LeadershipTeam() {
                 {
                   name: "Mr. Nagaraj",
                   role: "Legend Motors Trading",
-                  image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&auto=format&fit=crop&q=60",
-                  description: "Leading our automotive trading division with expertise in vehicle procurement and distribution."
+                  image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&auto=format&fit=crop&q=60"
                 },
                 {
                   name: "Mr. Waseem",
                   role: "Brand Manager",
-                  image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=800&auto=format&fit=crop&q=60",
-                  description: "Driving brand strategy and creative direction across all Legend Group companies, ensuring consistent and impactful brand presence."
+                  image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=800&auto=format&fit=crop&q=60"
                 },
                 {
                   name: "Cannon",
                   role: "Legend Motors – Dealership",
-                  image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=800&auto=format&fit=crop&q=60",
-                  description: "Managing our dealership operations and customer relations with a focus on exceptional service."
+                  image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=800&auto=format&fit=crop&q=60"
                 },
                 {
                   name: "Mr. Mubasher",
                   role: "Legend Rent a Car",
-                  image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=800&auto=format&fit=crop&q=60",
-                  description: "Overseeing our rental car services and fleet management operations."
+                  image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=800&auto=format&fit=crop&q=60"
                 },
                 {
                   name: "Mr. Tamer",
                   role: "Legend Automobile Service",
-                  image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=800&auto=format&fit=crop&q=60",
-                  description: "Leading our automotive service division with technical excellence and customer satisfaction."
+                  image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=800&auto=format&fit=crop&q=60"
                 },
                 {
                   name: "Mr. Raouf",
                   role: "Legend Green Energy Solutions",
-                  image: "https://images.unsplash.com/photo-1504257432389-52343af06ae3?w=800&auto=format&fit=crop&q=60",
-                  description: "Driving our sustainable energy initiatives and green technology solutions."
+                  image: "https://images.unsplash.com/photo-1504257432389-52343af06ae3?w=800&auto=format&fit=crop&q=60"
                 },
                 {
                   name: "Mr. Liu",
                   role: "Legend Travel and Tourism",
-                  image: "https://images.unsplash.com/photo-1506795660198-e95c6320213d?w=800&auto=format&fit=crop&q=60",
-                  description: "Managing our travel and tourism services with a commitment to exceptional experiences."
+                  image: "https://images.unsplash.com/photo-1506795660198-e95c6320213d?w=800&auto=format&fit=crop&q=60"
                 },
                 {
                   name: "Jade Li",
                   role: "Zul Energy",
-                  image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=800&auto=format&fit=crop&q=60",
-                  description: "Leading our energy sector operations with innovation and strategic vision."
+                  image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=800&auto=format&fit=crop&q=60"
                 },
                 {
                   name: "Mabel Niu",
                   role: "Human Resources",
-                  image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=800&auto=format&fit=crop&q=60",
-                  description: "Overseeing talent management and organizational development across all divisions."
-                },
-              
+                  image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=800&auto=format&fit=crop&q=60"
+                }
               ].map((leader, index) => (
                 <div key={index} className="bg-white rounded-2xl shadow-lg p-6 transform transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
                   <Image
@@ -143,8 +118,8 @@ export default function LeadershipTeam() {
                   />
                   <h3 className="text-xl font-bold text-[#EE8900] text-center mb-2">{leader.name}</h3>
                   <div className="w-12 h-1 bg-[#5E366D] mx-auto mb-3"></div>
-                  <p className="text-[#EE8900] font-semibold text-center mb-3">{leader.role}</p>
-                  <p className="text-gray-700 text-center">{leader.description}</p>
+                  <p className="text-[#EE8900] font-semibold text-center mb-2">{leader.role}</p>
+                  <p className="text-[#5E366D] font-medium text-center text-xl">Legend Holding Group</p>
                 </div>
               ))}
             </div>
