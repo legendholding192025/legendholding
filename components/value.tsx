@@ -92,9 +92,7 @@ export default function ValueSection() {
               <div className="flex gap-4 md:gap-6">
                 <div className="w-1.5 bg-orange-500 rounded-full self-stretch"></div>
                 <p className="text-lg md:text-2xl leading-relaxed" style={{ color: '#5E366D' }}>
-                  With a visionary mindset and years of experience in leadership, our director stands at the helm of
-                  innovation and excellence. Known for strategic thinking, strong decision-making, and an unwavering
-                  commitment to growth, they continue to inspire the team to reach new heights.
+                Our Vision is to shape a future where innovation, sustainability, and human connection drive meaningful impact across industries. With a strong foundation of continuous growth, a talented global team, and deep roots in the UAE’s progressive environment, we are building integrated ecosystems in mobility, energy, digital solutions, and cultural tourism. Together, we are not just expanding, we are leading the way toward a connected and collaborative future.
                 </p>
               </div>
             </div>
