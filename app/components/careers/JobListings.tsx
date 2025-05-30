@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { Briefcase, MapPin, Clock, ChevronRight } from "lucide-react"
+import { Briefcase, MapPin, Clock, ChevronRight, Building2 } from "lucide-react"
 import { useRouter } from "next/navigation"
 
 interface Job {
@@ -14,6 +14,7 @@ interface Job {
   responsibilities: string[]
   created_at: string
   status: 'active' | 'inactive'
+  company: string
 }
 
 interface JobListingsProps {
@@ -98,23 +99,30 @@ export function JobListings({
                   <h3 className="text-xl font-semibold text-gray-900 group-hover:text-[#5E366D] transition-colors">
                     {job.title}
                   </h3>
-                  <p className="text-base text-gray-500 mt-2">
-                    We're looking for a {job.title.toLowerCase()} to join our team.
-                  </p>
-                </div>
-                <div className="flex items-center gap-4">
-                  <div className="flex gap-3">
+                  <div className="flex items-center gap-6 mt-2">
+                    <div className="flex items-center gap-2 text-gray-600">
+                      <Building2 className="w-4 h-4" />
+                      <span>{job.company}</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-gray-600">
+                      <Briefcase className="w-4 h-4" />
+                      <span>{job.department}</span>
+                    </div>
+                  </div>
+                  <div className="flex gap-3 mt-3">
                     <span className="inline-flex items-center px-3 py-1.5 rounded-full bg-gray-100 text-gray-800 text-base">
                       <MapPin className="w-4 h-4 mr-1" />
-                      {job.type}
+                      {job.location}
                     </span>
                     <span className="inline-flex items-center px-3 py-1.5 rounded-full bg-gray-100 text-gray-800 text-base">
                       <Clock className="w-4 h-4 mr-1" />
-                      {job.location}
+                      {job.type}
                     </span>
                   </div>
+                </div>
+                <div>
                   <Button
-                    onClick={() => router.push(`/careers/${job.id}`)}
+                    onClick={() => router.push(`/careers/jobs/${job.id}`)}
                     className="flex items-center gap-2 bg-[#EE8900] hover:bg-[#EE8900]/90 text-white border-0 font-medium px-6 text-base"
                   >
                     Apply Now

@@ -23,11 +23,12 @@ const applicationSchema = z.object({
 interface JobApplicationFormProps {
   jobId: string
   jobTitle: string
+  company: string
   isOpen: boolean
   onClose: () => void
 }
 
-export function JobApplicationForm({ jobId, jobTitle, isOpen, onClose }: JobApplicationFormProps) {
+export function JobApplicationForm({ jobId, jobTitle, company, isOpen, onClose }: JobApplicationFormProps) {
   const [loading, setLoading] = useState(false)
   const [formErrors, setFormErrors] = useState<Record<string, string>>({})
   const [formData, setFormData] = useState({
@@ -212,7 +213,7 @@ export function JobApplicationForm({ jobId, jobTitle, isOpen, onClose }: JobAppl
         }}
       >
         <DialogHeader className="sticky top-0 bg-white z-[101] pb-4 border-b">
-          <DialogTitle className="text-2xl">Apply for {jobTitle}</DialogTitle>
+          <DialogTitle className="text-2xl">Apply for {jobTitle} at {company}</DialogTitle>
           <DialogDescription>
             Please fill out the form below to submit your application. All fields marked with * are required.
           </DialogDescription>

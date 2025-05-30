@@ -4,9 +4,10 @@ import { useState, useEffect } from "react"
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
-import { Search, Briefcase, MapPin, Clock } from "lucide-react"
+import { Search, Briefcase, MapPin, Clock, Building2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { toast } from "sonner"
+import { useRouter } from "next/navigation"
 
 interface Job {
   id: string
@@ -19,6 +20,7 @@ interface Job {
   responsibilities: string[]
   created_at: string
   status: 'active' | 'inactive'
+  company: string
 }
 
 export default function JobsPage() {
@@ -28,6 +30,7 @@ export default function JobsPage() {
   const [selectedDepartment, setSelectedDepartment] = useState<string>("all")
   const [selectedLocation, setSelectedLocation] = useState<string>("all")
   const supabase = createClientComponentClient()
+  const router = useRouter()
 
   useEffect(() => {
     fetchJobs()
@@ -185,6 +188,10 @@ export default function JobsPage() {
                       <h2 className="text-xl font-semibold text-[#2B1C48] mb-2 group-hover:text-[#5D376E]">{job.title}</h2>
                       <div className="flex flex-wrap gap-4 text-sm text-gray-600">
                         <div className="flex items-center gap-1">
+                          <Building2 className="h-4 w-4 text-[#5D376E]" />
+                          <span>{job.company}</span>
+                        </div>
+                        <div className="flex items-center gap-1">
                           <Briefcase className="h-4 w-4 text-[#5D376E]" />
                           <span>{job.department}</span>
                         </div>
@@ -198,12 +205,14 @@ export default function JobsPage() {
                         </div>
                       </div>
                     </div>
-                    <Button
-                      onClick={() => window.location.href = `/careers/jobs/${job.id}`}
-                      className="bg-[#EE8900] hover:bg-[#EE8900]/90 text-white transition-colors duration-200 min-w-[120px] font-medium"
-                    >
-                      View Details
-                    </Button>
+                    <div className="flex items-center gap-4">
+                      <Button
+                        onClick={() => router.push(`/careers/jobs/${job.id}`)}
+                        className="bg-[#EE8900] hover:bg-[#EE8900]/90 text-white"
+                      >
+                        View Details
+                      </Button>
+                    </div>
                   </div>
                 </div>
               ))}

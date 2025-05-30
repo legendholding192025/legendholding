@@ -29,6 +29,7 @@ interface Job {
   job_type: string
   created_at: string
   status: 'active' | 'inactive'
+  company: string
 }
 
 interface JobsTableProps {
@@ -110,6 +111,7 @@ export function JobsTable({ jobs = [], loading, onDelete, onUpdate }: JobsTableP
             <TableRow>
               <TableHead className="w-[80px]">S.N.</TableHead>
               <TableHead>Title</TableHead>
+              <TableHead>Company</TableHead>
               <TableHead>Department</TableHead>
               <TableHead>Location</TableHead>
               <TableHead>Type</TableHead>
@@ -122,6 +124,7 @@ export function JobsTable({ jobs = [], loading, onDelete, onUpdate }: JobsTableP
               <TableRow key={job?.id || index}>
                 <TableCell>{startIndex + index + 1}</TableCell>
                 <TableCell className="font-medium">{job?.title || 'N/A'}</TableCell>
+                <TableCell>{job?.company || 'N/A'}</TableCell>
                 <TableCell>{job?.department || 'N/A'}</TableCell>
                 <TableCell>{job?.location || 'N/A'}</TableCell>
                 <TableCell>{job?.job_type || 'N/A'}</TableCell>

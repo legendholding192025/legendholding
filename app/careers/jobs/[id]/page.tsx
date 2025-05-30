@@ -27,6 +27,7 @@ interface Job {
   team_size?: number
   created_at: string
   status: 'active' | 'inactive'
+  company: string
 }
 
 export default function JobDetails() {
@@ -65,7 +66,8 @@ export default function JobDetails() {
         ...jobData,
         requirements: Array.isArray(jobData.requirements) ? jobData.requirements : [],
         responsibilities: Array.isArray(jobData.responsibilities) ? jobData.responsibilities : [],
-        benefits: Array.isArray(jobData.benefits) ? jobData.benefits : []
+        benefits: Array.isArray(jobData.benefits) ? jobData.benefits : [],
+        company: jobData.company || ''
       }
 
       setJob(job)
@@ -164,6 +166,7 @@ export default function JobDetails() {
             
             <div className="max-w-4xl">
               <h1 className="text-4xl font-bold mb-4">{job.title}</h1>
+              <p className="text-2xl text-white/90 mb-6">{job.company}</p>
               <div className="flex flex-wrap gap-6 text-white/90 mb-8">
                 <div className="flex items-center gap-2">
                   <Building2 className="h-5 w-5" />
@@ -337,6 +340,7 @@ export default function JobDetails() {
         <JobApplicationForm
           jobId={job.id}
           jobTitle={job.title}
+          company={job.company}
           isOpen={isApplicationModalOpen}
           onClose={() => setIsApplicationModalOpen(false)}
         />

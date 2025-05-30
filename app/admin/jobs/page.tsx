@@ -31,6 +31,7 @@ interface Job {
   job_type: string
   created_at: string
   status: 'active' | 'inactive'
+  company: string
 }
 
 export default function JobsManagement() {
@@ -47,7 +48,8 @@ export default function JobsManagement() {
     requirements: [],
     responsibilities: [],
     job_type: "Full-time",
-    status: 'active'
+    status: 'active',
+    company: ""
   })
   const [requirementsText, setRequirementsText] = useState("")
   const [responsibilitiesText, setResponsibilitiesText] = useState("")
@@ -78,6 +80,10 @@ export default function JobsManagement() {
   const validateJob = () => {
     if (!newJob.title.trim()) {
       toast.error("Job title is required")
+      return false
+    }
+    if (!newJob.company.trim()) {
+      toast.error("Company name is required")
       return false
     }
     if (!newJob.department.trim()) {
@@ -138,7 +144,8 @@ ${responsibilities.map(resp => `• ${resp}`).join('\n')}
         status: newJob.status,
         job_type: newJob.job_type,
         requirements: requirements,
-        responsibilities: responsibilities
+        responsibilities: responsibilities,
+        company: newJob.company
       }
 
       console.log('Sending job data:', jobData)
@@ -163,7 +170,8 @@ ${responsibilities.map(resp => `• ${resp}`).join('\n')}
         requirements: [],
         responsibilities: [],
         job_type: "Full-time",
-        status: 'active'
+        status: 'active',
+        company: ""
       })
       setRequirementsText("")
       setResponsibilitiesText("")
@@ -264,6 +272,18 @@ ${responsibilities.map(resp => `• ${resp}`).join('\n')}
                 />
               </div>
               <div>
+                <Label htmlFor="company">Company *</Label>
+                <Input
+                  id="company"
+                  value={newJob.company}
+                  onChange={(e) => setNewJob(prev => ({ ...prev, company: e.target.value }))}
+                  placeholder="e.g. Tech Corp"
+                  required
+                />
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
                 <Label htmlFor="department">Department </Label>
                 <Input
                   id="department"
@@ -273,8 +293,6 @@ ${responsibilities.map(resp => `• ${resp}`).join('\n')}
                   required
                 />
               </div>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="location">Location *</Label>
                 <Input
@@ -285,6 +303,8 @@ ${responsibilities.map(resp => `• ${resp}`).join('\n')}
                   required
                 />
               </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="job_type">Job Type *</Label>
                 <select

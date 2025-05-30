@@ -49,6 +49,7 @@ const formSchema = z.object({
   department: z.string().optional(),
   deadline: z.string().optional(),
   is_active: z.boolean().default(true).optional(),
+  company: z.string().optional(),
 })
 
 type FormValues = z.infer<typeof formSchema>
@@ -68,6 +69,7 @@ interface Job {
   is_active: boolean
   created_at: string
   updated_at: string
+  company: string
 }
 
 interface JobFormProps {
@@ -90,6 +92,7 @@ export function JobForm({ job, onSubmit, onCancel }: JobFormProps) {
       department: job.department,
       deadline: new Date(job.deadline).toISOString().split('T')[0],
       is_active: job.is_active,
+      company: job.company,
     } : {
       title: "",
       description: "",
@@ -101,6 +104,7 @@ export function JobForm({ job, onSubmit, onCancel }: JobFormProps) {
       department: "",
       deadline: "",
       is_active: true,
+      company: "",
     },
   })
 
@@ -116,6 +120,20 @@ export function JobForm({ job, onSubmit, onCancel }: JobFormProps) {
                 <FormLabel>Job Title</FormLabel>
                 <FormControl>
                   <Input placeholder="e.g. Senior Software Engineer" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="company"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Company</FormLabel>
+                <FormControl>
+                  <Input placeholder="e.g. Legend Technology" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

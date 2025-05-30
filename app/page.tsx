@@ -19,10 +19,10 @@ export default function Home() {
       <HeroSection />
       <div className="w-full h-1 bg-[#EE8900]" />
       <AboutUsSection />
+      <BusinessUnit />
       <ValueSection />
       <GroupIndustries />
       <BrandStatsSection />
-      <BusinessUnit />
       <OurPresenceSection />
       <CSRSection />
       <PartnerSection />    

@@ -61,13 +61,15 @@ export function OurPresenceSection() {
   return (
     <section className="py-12 md:py-20 bg-white relative overflow-hidden">
       <div className="container mx-auto px-4 relative">
-        {/* Heading with lines */}
-        <div className="flex items-center justify-center mb-6 md:mb-10">
-          <div className="hidden md:block flex-1 h-0.5 bg-[#6C4896] mr-4" />
-          <h2 className="text-3xl sm:text-4xl font-bold text-[#EE8900] text-center font-richmond tracking-wide">
+        {/* Header with animated lines */}
+        <div className="text-center mb-8 sm:mb-12">
+          <h2 className="text-3xl sm:text-4xl font-bold text-[#F08900] mb-6 font-richmond animate-fade-in">
             Our Presence
           </h2>
-          <div className="hidden md:block flex-1 h-0.5 bg-[#6C4896] ml-4" />
+          <div className="flex gap-2 justify-center">
+            <div className="h-1 w-16 bg-[#2b1c48] rounded-full animate-expand-width"></div>
+            <div className="h-1 w-8 bg-[#ee8900] rounded-full animate-expand-width animation-delay-200"></div>
+          </div>
         </div>
         {/* Subheading in rounded box */}
         {/* <div className="flex justify-center mb-10">
@@ -125,6 +127,30 @@ export function OurPresenceSection() {
           </div>
         </div>
       </div>
+      {/* Animation Styles */}
+      <style jsx global>{`
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        
+        @keyframes expandWidth {
+          from { width: 0; }
+          to { width: 100%; }
+        }
+        
+        .animate-fade-in {
+          animation: fadeIn 0.8s ease-in-out forwards;
+        }
+        
+        .animate-expand-width {
+          animation: expandWidth 1s ease-out forwards;
+        }
+        
+        .animation-delay-200 {
+          animation-delay: 200ms;
+        }
+      `}</style>
     </section>
   )
 } 

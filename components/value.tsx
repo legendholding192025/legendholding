@@ -33,8 +33,7 @@ export default function ValueSection() {
         {/* Header */}
         <div className="text-center mt-24 mb-14">
           <h2 className="text-4xl font-bold text-[#F08900] mb-3 animate-fade-in">
-            Mission, <span className="text-[#F08900]"></span> vision <span className="text-[#F08900]">and</span>{" "}
-            values
+            Our Foundation
           </h2>
           <div className="w-32 h-1 bg-[#2B1C48] mx-auto animate-slide-in" style={{ marginTop: '4px' }}></div>
         </div>
@@ -97,7 +96,7 @@ export default function ValueSection() {
                   <span className="border-b-2 border-[#2B1C48] pb-1">Our</span> Mission
                 </h3>
                 <p className="text-xl leading-normal" style={{ color: '#2B1C48' }}>
-                To foster happiness and deliver value, with a clear focus on building a sustainable future. Every step we take is guided by purpose, progress, and a commitment to doing things the right way every time.
+                  To foster happiness and deliver value, with a clear focus on building a sustainable future. Every step we take is guided by purpose, progress, and a commitment to doing things the right way every time.
                 </p>
               </div>
             </div>
@@ -110,44 +109,13 @@ export default function ValueSection() {
         <div className="max-w-6xl mx-auto px-4">
           <div className="animate-fade-in" style={{ animationDelay: "0.6s" }}>
             <div className="max-w-4xl">
-              <h5 className="text-4xl font-semibold text-gray-700 mb-2">Chairman Message</h5>
-              <h6 className="text-3xl font-medium text-orange-500 mb-8">Mr. Kai Zheng</h6>
+              <h5 className="text-4xl font-semibold text-orange-500 mb-2">Chairman Message</h5>
+              <h6 className="text-3xl font-medium text-gray-700 mb-8">Mr. Kai Zheng</h6>
               <div className="flex gap-6">
                 <div className="w-1.5 bg-orange-500 rounded-full self-stretch"></div>
-                <p className="text-2xl leading-relaxed" style={{ color: '#5E366D' }}>
+                <p className="text-2xl leading-relaxed" style={{ color: '#2B1C48' }}>
                 Our Vision is to shape a future where innovation, sustainability, and human connection drive meaningful impact across industries. With a strong foundation of continuous growth, a talented global team, and deep roots in the UAE's progressive environment, we are building integrated ecosystems in mobility, energy, digital solutions, and cultural tourism. Together, we are not just expanding, we are leading the way toward a connected and collaborative future.
                 </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Together We Grow Section - Full Width */}
-      <div className="relative w-full h-[45vh] overflow-hidden bg-white">
-        <div className="absolute inset-0 flex items-center">
-          <div className="max-w-7xl w-full mx-auto px-4">
-            <div className="flex items-center gap-8">
-              <div className="relative w-10 h-10">
-                <Image
-                  src="https://res.cloudinary.com/dosxengut/image/upload/v1748416191/Asset_11_tftntp.png"
-                  alt="Together we grow icon"
-                  fill
-                  className="object-contain"
-                  sizes="40px"
-                  priority
-                />
-              </div>
-              <h3 className="text-6xl font-bold text-[#F08900] whitespace-nowrap" style={{
-                textShadow: '1px 1px 3px rgba(0, 0, 0, 0.3)'
-              }}>
-                Together we grow
-              </h3>
-              <div className="flex flex-col gap-2 ml-4 flex-1">
-                <div className="w-full h-1 bg-[#2C2341]"></div>
-                <div className="w-full h-1 bg-[#8F2093]"></div>
-                <div className="w-full h-1 bg-[#EE8900]"></div>
-                <div className="w-full h-1 bg-[#EE8900]/80"></div>
               </div>
             </div>
           </div>
