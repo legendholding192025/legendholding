@@ -138,7 +138,7 @@ export default function MotorsTradingPage() {
             {/* Page Header */}
             <section className="w-full mb-16 animate-fade-in-up">
               <h2 className="text-2xl md:text-3xl font-semibold text-[#2b1c48] mb-6 font-richmond">
-                Motors Trading
+                Legend Motors Trading
               </h2>
               <div className="flex gap-2">
                 <div className="h-1 w-16 bg-[#2b1c48] rounded-full animate-expand-width"></div>
@@ -189,46 +189,13 @@ export default function MotorsTradingPage() {
                       </p>
                     </div>
 
-                    {/* Stats Grid */}
-                    <div className="grid grid-cols-3 gap-6 mb-8">
-                      <div className="text-center">
-                        <div className="flex items-center justify-center w-10 h-10 bg-gray-100 rounded-full mb-2 mx-auto">
-                          <Car className="w-5 h-5 text-gray-600" />
-                        </div>
-                        <div className="text-xl font-bold text-gray-900 font-richmond">
-                          <AnimatedCounter target={2013} duration={1500} startDelay={1400} />
-                        </div>
-                        <div className="text-xs text-gray-600 font-effra">Founded</div>
-                      </div>
-
-                      <div className="text-center">
-                        <div className="flex items-center justify-center w-10 h-10 bg-gray-100 rounded-full mb-2 mx-auto">
-                          <TrendingUp className="w-5 h-5 text-gray-600" />
-                        </div>
-                        <div className="text-xl font-bold text-gray-900 font-richmond">
-                          <AnimatedCounter target={55} suffix="M" duration={1500} startDelay={1600} />
-                        </div>
-                        <div className="text-xs text-gray-600 font-effra">Annual Sales</div>
-                      </div>
-
-                      <div className="text-center">
-                        <div className="flex items-center justify-center w-10 h-10 bg-gray-100 rounded-full mb-2 mx-auto">
-                          <Globe className="w-5 h-5 text-gray-600" />
-                        </div>
-                        <div className="text-xl font-bold text-gray-900 font-richmond">
-                          <AnimatedCounter target={100} suffix="+" duration={1500} startDelay={1800} />
-                        </div>
-                        <div className="text-xs text-gray-600 font-effra">Global Reach</div>
-                      </div>
-                    </div>
-
                     {/* Learn More Button */}
-                    <div className="mt-auto">
+                    <div className="mt-8 w-full">
                       <button
-                        className={`group inline-flex items-center gap-2 text-[#ee8900] font-semibold hover:text-[#2b1c48] transition-colors duration-300 cursor-pointer`}
+                        className="w-full py-4 group inline-flex items-center justify-center gap-2 text-white font-semibold bg-[#F08900] hover:bg-[#d67a00] transition-colors duration-300 cursor-pointer rounded-lg"
                         onClick={() => window.open("https://www.legendmotors.com", "_blank")}
                       >
-                        <span>Learn more</span>
+                        <span>View Website</span>
                         <ChevronRight
                           className={`w-5 h-5 transform transition-transform duration-300 ${
                             activeSection === "trading" ? "translate-x-1" : ""

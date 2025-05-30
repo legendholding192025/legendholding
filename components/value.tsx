@@ -44,7 +44,20 @@ export default function ValueSection() {
           {/* Vision Column */}
           <div className="relative animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
             {/* Background shape image */}
-            <img src="https://res.cloudinary.com/dosxengut/image/upload/v1748416193/Asset_9_z8nunq.png" alt="" className="w-full h-auto opacity-90" />
+            <img src="https://res.cloudinary.com/dosxengut/image/upload/v1748596917/image_2_m9a1pw.png" alt="" className="w-full h-auto opacity-90" />
+            
+            {/* Vision Icon */}
+            <div className="absolute top-4 right-4 w-16 h-16">
+              <Image
+                src="https://res.cloudinary.com/dosxengut/image/upload/v1748416191/Asset_11_tftntp.png"
+                alt="Vision icon"
+                fill
+                className="object-contain"
+                sizes="64px"
+                priority
+                style={{ filter: 'brightness(0) saturate(100%) invert(53%) sepia(86%) saturate(1243%) hue-rotate(360deg) brightness(103%) contrast(102%)' }}
+              />
+            </div>
 
             {/* Content overlay */}
             <div className="absolute inset-0 flex flex-col justify-center p-8">
@@ -62,7 +75,20 @@ export default function ValueSection() {
           {/* Mission Column */}
           <div className="relative animate-fade-in-up" style={{ animationDelay: "0.4s" }}>
             {/* Background shape image */}
-            <img src="https://res.cloudinary.com/dosxengut/image/upload/v1748416192/Asset_8_tzvns5.png" alt="" className="w-full h-auto opacity-90" />
+            <img src="https://res.cloudinary.com/dosxengut/image/upload/v1748596917/image_2_m9a1pw.png" alt="" className="w-full h-auto opacity-90" />
+
+            {/* Mission Icon */}
+            <div className="absolute top-4 right-4 w-16 h-16">
+              <Image
+                src="https://res.cloudinary.com/dosxengut/image/upload/v1748416191/Asset_11_tftntp.png"
+                alt="Mission icon"
+                fill
+                className="object-contain"
+                sizes="64px"
+                priority
+                style={{ filter: 'brightness(0) saturate(100%) invert(27%) sepia(19%) saturate(1954%) hue-rotate(246deg) brightness(92%) contrast(88%)' }}
+              />
+            </div>
 
             {/* Content overlay */}
             <div className="absolute inset-0 flex flex-col justify-start p-10 pt-32">

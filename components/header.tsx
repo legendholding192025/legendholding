@@ -87,7 +87,7 @@ const menuItems: MenuItem[] = [
     ],
   },
   {
-    title: "Our Brands",
+    title: "Our Businesses",
     url: "/business",
     hasSubmenu: true,
     businessCategories: [
@@ -130,12 +130,6 @@ const menuItems: MenuItem[] = [
             url: "/our-brands/legend-automobile-services",
             image: "https://res.cloudinary.com/dosxengut/image/upload/v1747648445/csm_cruising_visual_43e29fa7bb_ruiloc.jpg",
             description: "Professional automotive maintenance and repair services."
-          },
-          { 
-            title: "Legend Technical Services",
-            url: "/our-brands/legend-technical-services",
-            image: "https://res.cloudinary.com/dckrspiqe/image/upload/v1748250246/technical_service_gza8jv.jpg",
-            description: "Expert technical solutions and support services."
           },
           { 
             title: "Legend Global Media",
@@ -565,7 +559,7 @@ export function Header() {
                                 <div className="p-4">
                                   <p className="text-gray-600 text-sm">{subItem.description}</p>
                                   <div className="mt-3 flex items-center text-secondary font-medium text-sm">
-                                    <span>Learn more</span>
+                                    <span> Visit Website</span>
                                     <ChevronRight className="h-4 w-4 ml-1" />
                                   </div>
                                 </div>
@@ -613,7 +607,7 @@ export function Header() {
                                   <div className="p-4">
                                     <p className="text-gray-600 text-sm">{business.description}</p>
                                     <div className="mt-3 flex items-center text-secondary font-medium text-sm">
-                                      <span>Learn more</span>
+                                      <span>view Website</span>
                                       <ChevronRight className="h-4 w-4 ml-1" />
                                     </div>
                                   </div>
@@ -635,7 +629,6 @@ export function Header() {
                                       {[
                                         "Legend World Rent a Car",
                                         "Legend Automobile Services",
-                                        "Legend Technical Services"
                                       ].map((service, index) => (
                                         <Link
                                           key={index}
@@ -890,7 +883,6 @@ export function Header() {
                                         {[
                                           "Legend World Rent a Car",
                                           "Legend Automobile Services",
-                                          "Legend Technical Services"
                                         ].map((service, index) => (
                                           <Link
                                             key={index}

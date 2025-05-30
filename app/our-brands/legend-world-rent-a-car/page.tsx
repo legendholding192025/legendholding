@@ -2,7 +2,7 @@
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { useState, useEffect } from "react"
-import { Car, Clock, Shield, Star, MapPin, Phone, ChevronRight } from "lucide-react"
+import { ChevronRight } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
  
@@ -176,113 +176,19 @@ export default function LegendRentACarPage() {
                       </p>
                     </div>
 
-                    {/* Stats Grid */}
-                    <div className="grid grid-cols-3 gap-6 mb-8">
-                      <div className="text-center">
-                        <div className="flex items-center justify-center w-10 h-10 bg-gray-100 rounded-full mb-2 mx-auto">
-                          <Star className="w-5 h-5 text-gray-600" />
-                        </div>
-                        <div className="text-xl font-bold text-gray-900 font-richmond">
-                          <AnimatedCounter target={2024} duration={1500} startDelay={1600} />
-                        </div>
-                        <div className="text-xs text-gray-600 font-effra">DAST Award</div>
-                      </div>
-
-                      <div className="text-center">
-                        <div className="flex items-center justify-center w-10 h-10 bg-gray-100 rounded-full mb-2 mx-auto">
-                          <MapPin className="w-5 h-5 text-gray-600" />
-                        </div>
-                        <div className="text-xl font-bold text-gray-900 font-richmond">
-                          <AnimatedCounter target={4} suffix="+" duration={1500} startDelay={1800} />
-                        </div>
-                        <div className="text-xs text-gray-600 font-effra">Locations</div>
-                      </div>
-
-                      <div className="text-center">
-                        <div className="flex items-center justify-center w-10 h-10 bg-gray-100 rounded-full mb-2 mx-auto">
-                          <Phone className="w-5 h-5 text-gray-600" />
-                        </div>
-                        <div className="text-xl font-bold text-gray-900 font-richmond">
-                          <AnimatedCounter target={24} suffix="/7" duration={1500} startDelay={2000} />
-                        </div>
-                        <div className="text-xs text-gray-600 font-effra">Support</div>
-                      </div>
-                    </div>
-
-                    {/* Learn More Button */}
-                    <div className="mt-auto">
+                    {/* View Website Button */}
+                    <div className="mt-8 w-full">
                       <button
-                        className={`group inline-flex items-center gap-2 text-[#ee8900] font-semibold hover:text-[#2b1c48] transition-colors duration-300 cursor-pointer`}
+                        className="w-full py-4 group inline-flex items-center justify-center gap-2 text-white font-semibold bg-[#F08900] hover:bg-[#d67a00] transition-colors duration-300 cursor-pointer rounded-lg"
                         onClick={() => window.open("https://www.legendrentacar.com", "_blank")}
                       >
-                        <span>Learn more</span>
+                        <span>View Website</span>
                         <ChevronRight
                           className={`w-5 h-5 transform transition-transform duration-300 ${
                             activeSection === "rentacar" ? "translate-x-1" : ""
                           }`}
                         />
                       </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </section>
-
-            {/* Features Section */}
-            <section className="w-full mb-16">
-              <div className="bg-white rounded-3xl overflow-hidden animate-fade-in-up animation-delay-800 border border-gray-100 shadow-2xl">
-                <div className="grid grid-cols-1 md:grid-cols-2">
-                  {/* Features List */}
-                  <div className="p-8 md:p-12 space-y-6">
-                    <div className="flex items-start gap-4">
-                      <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0">
-                        <Car className="w-5 h-5 text-gray-600" />
-                      </div>
-                      <div>
-                        <h4 className="text-lg font-semibold text-gray-900 font-richmond mb-2">Modern Fleet</h4>
-                        <p className="text-sm text-gray-600 font-effra">
-                          Fresh and well-maintained vehicles for every need
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-start gap-4">
-                      <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0">
-                        <Clock className="w-5 h-5 text-gray-600" />
-                      </div>
-                      <div>
-                        <h4 className="text-lg font-semibold text-gray-900 font-richmond mb-2">Flexible Rental</h4>
-                        <p className="text-sm text-gray-600 font-effra">
-                          Daily, weekly, and monthly rental options available
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-start gap-4">
-                      <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0">
-                        <Shield className="w-5 h-5 text-gray-600" />
-                      </div>
-                      <div>
-                        <h4 className="text-lg font-semibold text-gray-900 font-richmond mb-2">ISO Certified</h4>
-                        <p className="text-sm text-gray-600 font-effra">
-                          Quality assured with ISO 9001:2015 certification
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Second Image */}
-                  <div className="relative group overflow-hidden">
-                    <div className="h-full w-full relative overflow-hidden">
-                      <Image
-                        src="https://res.cloudinary.com/dckrspiqe/image/upload/v1742812418/PC-OTA%E9%A6%96%E5%B1%8F_pth8jh.jpg"
-                        width={800}
-                        height={600}
-                        alt="Legend Rent a Car - Premium Service"
-                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                        priority
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#2b1c48]/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                     </div>
                   </div>
                 </div>

@@ -2,7 +2,7 @@
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { useState, useEffect } from "react"
-import { Bike, Zap, Shield, Award, Globe, TrendingUp, ChevronRight } from "lucide-react"
+import { ChevronRight } from "lucide-react"
 import Image from "next/image"
 
 type AnimatedCounterProps = {
@@ -89,7 +89,7 @@ export default function MotorcyclesPage() {
             {/* Page Header */}
             <section className="w-full mb-16 animate-fade-in-up">
               <h2 className="text-2xl md:text-3xl font-semibold text-[#2b1c48] mb-6 font-richmond">
-                Motors Motorcycles
+                Legend Motorcycles
               </h2>
               <div className="flex gap-2">
                 <div className="h-1 w-16 bg-[#2b1c48] rounded-full animate-expand-width"></div>
@@ -131,46 +131,13 @@ export default function MotorcyclesPage() {
                       </p>
                     </div>
 
-                    {/* Stats Grid */}
-                    <div className="grid grid-cols-3 gap-6 mb-8">
-                      <div className="text-center">
-                        <div className="flex items-center justify-center w-10 h-10 bg-gray-100 rounded-full mb-2 mx-auto">
-                          <Bike className="w-5 h-5 text-gray-600" />
-                        </div>
-                        <div className="text-xl font-bold text-gray-900 font-richmond">
-                          <AnimatedCounter target={5000} suffix="+" duration={1000} startDelay={800} />
-                        </div>
-                        <div className="text-xs text-gray-600 font-effra">Bikes Delivered</div>
-                      </div>
-
-                      <div className="text-center">
-                        <div className="flex items-center justify-center w-10 h-10 bg-gray-100 rounded-full mb-2 mx-auto">
-                          <TrendingUp className="w-5 h-5 text-gray-600" />
-                        </div>
-                        <div className="text-xl font-bold text-gray-900 font-richmond">
-                          <AnimatedCounter target={98} suffix="%" duration={1000} startDelay={900} />
-                        </div>
-                        <div className="text-xs text-gray-600 font-effra">Customer Satisfaction</div>
-                      </div>
-
-                      <div className="text-center">
-                        <div className="flex items-center justify-center w-10 h-10 bg-gray-100 rounded-full mb-2 mx-auto">
-                          <Globe className="w-5 h-5 text-gray-600" />
-                        </div>
-                        <div className="text-xl font-bold text-gray-900 font-richmond">
-                          <AnimatedCounter target={50} suffix="+" duration={1000} startDelay={1000} />
-                        </div>
-                        <div className="text-xs text-gray-600 font-effra">Service Centers</div>
-                      </div>
-                    </div>
-
-                    {/* Learn More Button */}
-                    <div className="mt-auto">
+                    {/* View Website Button */}
+                    <div className="mt-8 w-full">
                       <button
-                        className={`group inline-flex items-center gap-2 text-[#ee8900] font-semibold hover:text-[#2b1c48] transition-colors duration-300 cursor-pointer`}
+                        className="w-full py-4 group inline-flex items-center justify-center gap-2 text-white font-semibold bg-[#F08900] hover:bg-[#d67a00] transition-colors duration-300 cursor-pointer rounded-lg"
                         onClick={() => window.open("https://www.legendmotorcycles.com", "_blank")}
                       >
-                        <span>Learn more</span>
+                        <span>View Website</span>
                         <ChevronRight
                           className={`w-5 h-5 transform transition-transform duration-300 ${
                             activeSection === "motorcycles" ? "translate-x-1" : ""
@@ -178,55 +145,6 @@ export default function MotorcyclesPage() {
                         />
                       </button>
                     </div>
-                  </div>
-                </div>
-              </div>
-            </section>
-
-            {/* Features Section */}
-            <section className="w-full mb-16">
-              <div className="bg-white rounded-3xl p-8 md:p-12 animate-fade-in-up animation-delay-800 border border-gray-100 shadow-2xl">
-                <div className="grid grid-cols-2 gap-8">
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
-                        <Zap className="w-4 h-4 text-gray-600" />
-                      </div>
-                      <span className="text-sm font-semibold text-gray-900 font-richmond">Fuel Efficient</span>
-                    </div>
-                    <p className="text-sm text-gray-600 font-effra">
-                      Advanced engine technology for maximum fuel economy
-                    </p>
-                  </div>
-
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
-                        <Shield className="w-4 h-4 text-gray-600" />
-                      </div>
-                      <span className="text-sm font-semibold text-gray-900 font-richmond">Reliable</span>
-                    </div>
-                    <p className="text-sm text-gray-600 font-effra">Built to withstand demanding delivery schedules</p>
-                  </div>
-
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
-                        <Award className="w-4 h-4 text-gray-600" />
-                      </div>
-                      <span className="text-sm font-semibold text-gray-900 font-richmond">Quality Assured</span>
-                    </div>
-                    <p className="text-sm text-gray-600 font-effra">Rigorous quality control and testing standards</p>
-                  </div>
-
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
-                        <Globe className="w-4 h-4 text-gray-600" />
-                      </div>
-                      <span className="text-sm font-semibold text-gray-900 font-richmond">UAE Wide</span>
-                    </div>
-                    <p className="text-sm text-gray-600 font-effra">Comprehensive service network across the UAE</p>
                   </div>
                 </div>
               </div>

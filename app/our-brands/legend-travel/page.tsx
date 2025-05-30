@@ -3,84 +3,16 @@
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { useState, useEffect } from "react"
-import { Plane, Globe, MapPin, Star, Clock, Users, ChevronRight } from "lucide-react"
+import { ChevronRight } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
- 
-type AnimatedCounterProps = {
-  target: number
-  suffix?: string
-  duration?: number
-  startDelay?: number
-}
- 
-// Counter Animation Component
-function AnimatedCounter({ target, suffix = "", duration = 2000, startDelay = 0 }: AnimatedCounterProps) {
-  const [count, setCount] = useState(0)
-  const [isVisible, setIsVisible] = useState(false)
- 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !isVisible) {
-          setIsVisible(true)
- 
-          setTimeout(() => {
-            const startTime = Date.now()
-            const startValue = 0
-            const endValue = target
- 
-            const animate = () => {
-              const now = Date.now()
-              const elapsed = now - startTime
-              const progress = Math.min(elapsed / duration, 1)
- 
-              // Easing function for smooth deceleration
-              const easeOut = 1 - Math.pow(1 - progress, 3)
-              const currentValue = Math.floor(startValue + (endValue - startValue) * easeOut)
- 
-              setCount(currentValue)
- 
-              if (progress < 1) {
-                requestAnimationFrame(animate)
-              }
-            }
- 
-            animate()
-          }, startDelay)
-        }
-      },
-      { threshold: 0.5 },
-    )
- 
-    const element = document.getElementById(`counter-${target}-${suffix}`)
-    if (element) observer.observe(element)
- 
-    return () => observer.disconnect()
-  }, [target, duration, startDelay, isVisible, suffix])
- 
-  return (
-    <span
-      id={`counter-${target}-${suffix}`}
-      className="inline-block tabular-nums"
-      style={{
-        transform: isVisible ? "translateY(0)" : "translateY(10px)",
-        opacity: isVisible ? 1 : 0,
-        transition: "all 0.5s ease-out",
-      }}
-    >
-      {count}
-      {suffix}
-    </span>
-  )
-}
- 
+
+// Animated Text Component
 type AnimatedTextProps = {
   children: React.ReactNode
   delay?: number
 }
  
-// Animated Text Component
 function AnimatedText({ children, delay = 0 }: AnimatedTextProps) {
   const [isVisible, setIsVisible] = useState(false)
  
@@ -135,7 +67,7 @@ export default function LegendTravelPage() {
             {/* Page Header */}
             <section className="w-full mb-16 animate-fade-in-up">
               <h2 className="text-2xl md:text-3xl font-semibold text-[#2b1c48] mb-6 font-richmond">
-                Travel & Tourism
+                Legend Travel & Tourism
               </h2>
               <div className="flex gap-2">
                 <div className="h-1 w-16 bg-[#2b1c48] rounded-full animate-expand-width"></div>
@@ -178,113 +110,19 @@ export default function LegendTravelPage() {
                       </p>
                     </div>
 
-                    {/* Stats Grid */}
-                    <div className="grid grid-cols-3 gap-6 mb-8">
-                      <div className="text-center">
-                        <div className="flex items-center justify-center w-10 h-10 bg-gray-100 rounded-full mb-2 mx-auto">
-                          <Star className="w-5 h-5 text-gray-600" />
-                        </div>
-                        <div className="text-xl font-bold text-gray-900 font-richmond">
-                          <AnimatedCounter target={50} suffix="+" duration={1500} startDelay={1600} />
-                        </div>
-                        <div className="text-xs text-gray-600 font-effra">Destinations</div>
-                      </div>
-
-                      <div className="text-center">
-                        <div className="flex items-center justify-center w-10 h-10 bg-gray-100 rounded-full mb-2 mx-auto">
-                          <Clock className="w-5 h-5 text-gray-600" />
-                        </div>
-                        <div className="text-xl font-bold text-gray-900 font-richmond">
-                          <AnimatedCounter target={24} suffix="/7" duration={1500} startDelay={1800} />
-                        </div>
-                        <div className="text-xs text-gray-600 font-effra">Support</div>
-                      </div>
-
-                      <div className="text-center">
-                        <div className="flex items-center justify-center w-10 h-10 bg-gray-100 rounded-full mb-2 mx-auto">
-                          <Users className="w-5 h-5 text-gray-600" />
-                        </div>
-                        <div className="text-xl font-bold text-gray-900 font-richmond">
-                          <AnimatedCounter target={1000} suffix="+" duration={1500} startDelay={2000} />
-                        </div>
-                        <div className="text-xs text-gray-600 font-effra">Happy Travelers</div>
-                      </div>
-                    </div>
-
-                    {/* Learn More Button */}
-                    <div className="mt-auto">
+                    {/* View Website Button */}
+                    <div className="mt-8 w-full">
                       <button
-                        className={`group inline-flex items-center gap-2 text-[#ee8900] font-semibold hover:text-[#2b1c48] transition-colors duration-300 cursor-pointer`}
+                        className="w-full py-4 group inline-flex items-center justify-center gap-2 text-white font-semibold bg-[#F08900] hover:bg-[#d67a00] transition-colors duration-300 cursor-pointer rounded-lg"
                         onClick={() => window.open("https://www.legendtravel.ae/", "_blank")}
                       >
-                        <span>Visit Website</span>
+                        <span>View Website</span>
                         <ChevronRight
                           className={`w-5 h-5 transform transition-transform duration-300 ${
-                            activeSection === "services" ? "translate-x-1" : ""
+                            activeSection === "travel" ? "translate-x-1" : ""
                           }`}
                         />
                       </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </section>
-
-            {/* Features Section */}
-            <section className="w-full mb-16">
-              <div className="bg-white rounded-3xl overflow-hidden animate-fade-in-up animation-delay-800 border border-gray-100 shadow-2xl">
-                <div className="grid grid-cols-1 md:grid-cols-2">
-                  {/* Features List */}
-                  <div className="p-8 md:p-12 space-y-6">
-                    <div className="flex items-start gap-4">
-                      <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0">
-                        <Plane className="w-5 h-5 text-gray-600" />
-                      </div>
-                      <div>
-                        <h4 className="text-lg font-semibold text-gray-900 font-richmond mb-2">Flight Bookings</h4>
-                        <p className="text-sm text-gray-600 font-effra">
-                          Competitive rates and flexible booking options
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-start gap-4">
-                      <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0">
-                        <Globe className="w-5 h-5 text-gray-600" />
-                      </div>
-                      <div>
-                        <h4 className="text-lg font-semibold text-gray-900 font-richmond mb-2">Global Destinations</h4>
-                        <p className="text-sm text-gray-600 font-effra">
-                          Access to worldwide travel destinations
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-start gap-4">
-                      <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0">
-                        <MapPin className="w-5 h-5 text-gray-600" />
-                      </div>
-                      <div>
-                        <h4 className="text-lg font-semibold text-gray-900 font-richmond mb-2">Custom Tours</h4>
-                        <p className="text-sm text-gray-600 font-effra">
-                          Personalized travel itineraries and experiences
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Second Image */}
-                  <div className="relative group overflow-hidden">
-                    <div className="h-full w-full relative overflow-hidden">
-                      <Image
-                        src="https://res.cloudinary.com/dckrspiqe/image/upload/v1748251063/ian-schneider-jk8rarn6lmw-unsplash_hk7v0y.jpg"
-                        width={800}
-                        height={600}
-                        alt="Legend Travel & Tourism - Global Destinations"
-                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                        priority
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#2b1c48]/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                     </div>
                   </div>
                 </div>

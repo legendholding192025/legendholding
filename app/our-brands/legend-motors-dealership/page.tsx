@@ -65,7 +65,7 @@ export default function LegendMotorsDealershipPage() {
             {/* Page Header */}
             <section className="w-full mb-16 animate-fade-in-up">
               <h2 className="text-2xl md:text-3xl font-semibold text-[#2b1c48] mb-6 font-richmond animation-delay-200">
-                Dealerships
+                Legend Dealerships
               </h2>
               <div className="flex gap-2">
                 <div className="h-1 w-16 bg-[#2b1c48] rounded-full animate-expand-width"></div>
@@ -127,11 +127,11 @@ export default function LegendMotorsDealershipPage() {
                       <p className="text-lg font-effra text-gray-700 mb-6 leading-relaxed">{dealership.description}</p>
  
                       {/* CTA Button */}
-                      <div className="mt-8">
+                      <div className="mt-8 w-full">
                         <button
-                          className={`group inline-flex items-center gap-2 text-[#ee8900] font-semibold hover:text-[#2b1c48] transition-colors duration-300`}
+                          className="w-full py-4 group inline-flex items-center justify-center gap-2 text-white font-semibold bg-[#F08900] hover:bg-[#d67a00] transition-colors duration-300 cursor-pointer rounded-lg"
                         >
-                          <span>Learn more</span>
+                          <span>View Website</span>
                           <ChevronRight
                             className={`w-5 h-5 transform transition-transform duration-300 ${
                               activeIndex === idx ? "translate-x-1" : ""
