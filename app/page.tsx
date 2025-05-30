@@ -11,6 +11,7 @@ import Newsletter from "@/components/newsletter"
 import ValueSection from "@/components/value"
 import GroupIndustries from "@/components/group-industries"
 import { AboutUsSection } from "@/components/about-us-section"
+import BusinessUnit from "@/components/business-unit"
 export default function Home() {
   return (
     <main>
@@ -21,7 +22,7 @@ export default function Home() {
       <ValueSection />
       <GroupIndustries />
       <BrandStatsSection />
-      <BrandLogoCarousel />
+      <BusinessUnit />
       <OurPresenceSection />
       <CSRSection />
       <PartnerSection />    
