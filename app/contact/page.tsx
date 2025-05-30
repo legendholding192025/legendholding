@@ -154,7 +154,7 @@ export default function ContactPage() {
               {/* Left Side - Contact Info */}
               <div className="space-y-8">
                 <div>
-                  <h1 className="text-5xl font-bold text-gray-900 mb-4">Get in Touch</h1>
+                  <h1 className="text-4xl font-bold text-gray-900 mb-4">Get in Touch</h1>
                   {/* <p className="text-lg text-gray-600 mb-6">
                     Get in touch with us for any inquiries about our services or collaboration opportunities.
                   </p> */}
@@ -306,7 +306,7 @@ export default function ContactPage() {
                     </div>
                     <h3 className="text-4xl font-semibold text-gray-900 mb-2">Message Sent Successfully!</h3>
                     <p className="text-xl text-gray-600 mb-8">
-                      Thank you for reaching out. We'll get back to you as soon as possible.
+                      Thank you for submitting your form, We will contact you shortly.
                     </p>
                     <button
                       onClick={resetForm}
