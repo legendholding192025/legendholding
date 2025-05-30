@@ -10,6 +10,33 @@ export default function LeadershipTeam() {
     <>
       <Header />
       <main className="pt-20">
+        {/* Hero Banner */}
+        <div className="relative bg-[#5E366D] overflow-hidden">
+          {/* Background Image */}
+          <div className="absolute inset-0">
+            <Image
+              src="https://res.cloudinary.com/dosxengut/image/upload/v1746784919/1-1-2_geivzn.jpg"
+              alt="Our Team"
+              fill
+              className="object-cover object-[center_30%]"
+              priority
+            />
+            <div className="absolute inset-0 bg-[#5E366D]/80 mix-blend-multiply" />
+          </div>
+
+          {/* Hero Content */}
+          <div className="relative container mx-auto px-4 py-24 md:py-32">
+            <div className="max-w-4xl mx-auto text-center">
+              <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
+                The Team
+              </h1>
+              <p className="text-lg md:text-xl text-white/90 max-w-2xl mx-auto">
+                Meet the visionaries and experts leading Legend Holding Group towards excellence and innovation.
+              </p>
+            </div>
+          </div>
+        </div>
+
         <div className="min-h-screen bg-white flex flex-col items-center py-12 px-4 relative overflow-hidden">
           {/* Decorative Elements */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -18,14 +45,6 @@ export default function LeadershipTeam() {
           </div>
 
           <div className="w-full max-w-7xl relative z-10">
-            <div className="mb-8">
-              <h1 className="text-4xl font-bold text-[#EE8900] mb-2">Our Leadership Team</h1>
-              <div className="w-24 h-1 bg-[#5E366D] mb-6"></div>
-              <p className="text-xl text-gray-600">
-                Meet our leadership team helping shape Legend Holding Group&apos;s goals.
-              </p>
-            </div>
-
             {/* Main Leadership - Kai and Mira */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
               <div className="bg-white rounded-2xl shadow-lg p-6">

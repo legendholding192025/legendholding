@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect, useCallback } from "react"
 import type React from "react"
 import { motion } from "framer-motion"
-import { Building, Car, Globe, Zap, MapPin, Award } from "lucide-react"
+import { Building, Car, Globe, Zap, MapPin, Award, ChevronDown } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
 import Image from "next/image"
@@ -325,6 +325,29 @@ export function OurJourney() {
                       viewport={{ once: true, amount: 0.3 }}
                       className="space-y-8"
                     >
+                      {/* Scroll Down Indicator - Only show on first section */}
+                      {index === 0 && (
+                        <motion.div 
+                          className="mb-8 cursor-pointer"
+                          initial={{ opacity: 0, y: -10 }}
+                          animate={{ 
+                            opacity: 1, 
+                            y: 10,
+                          }}
+                          transition={{
+                            duration: 1.5,
+                            repeat: Infinity,
+                            repeatType: "reverse",
+                          }}
+                          onClick={() => scrollToSection(1)}
+                        >
+                          <div className="flex flex-col items-center text-white gap-2">
+                            <span className="text-base md:text-lg font-medium tracking-wider">Scroll Down</span>
+                            <ChevronDown className="w-6 h-6 text-[#F08900]" />
+                          </div>
+                        </motion.div>
+                      )}
+
                       {/* Enhanced Header */}
                       <div className="flex flex-col md:flex-row items-center justify-center gap-6 mb-8">
                         <motion.div
