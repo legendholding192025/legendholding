@@ -3,7 +3,7 @@ export default function HeroSection() {
     <section
       className="relative w-full h-screen flex items-center justify-center text-center px-4 py-16 md:py-0"
       style={{
-        backgroundImage: "url('https://res.cloudinary.com/dosxengut/image/upload/v1748416201/Asset_4_bp4k9t.png')",
+        backgroundImage: "url('https://cdn.legendholding.com/images/cloudinary/cloudinary_6839a0fa0f7e09.48576516_20250530_121346.png')",
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",

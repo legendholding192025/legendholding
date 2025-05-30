@@ -182,7 +182,7 @@ export default function LegendRentACarPage() {
                         className="w-full py-4 group inline-flex items-center justify-center gap-2 text-white font-semibold bg-[#F08900] hover:bg-[#d67a00] transition-colors duration-300 cursor-pointer rounded-lg"
                         onClick={() => window.open("https://www.legendrentacar.com", "_blank")}
                       >
-                        <span>View Website</span>
+                        <span>Visit Website</span>
                         <ChevronRight
                           className={`w-5 h-5 transform transition-transform duration-300 ${
                             activeSection === "rentacar" ? "translate-x-1" : ""
