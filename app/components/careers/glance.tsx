@@ -68,8 +68,8 @@ function AnimatedCounter({ end, duration = 2000, suffix = "", label, color }: Co
         <div className="flex items-start gap-4">
           <div className="flex-1">
             <h3 className="text-4xl lg:text-5xl font-bold text-white mb-2 flex items-center justify-center">
-              {count.toLocaleString()}
               {suffix}
+              {count.toLocaleString()}
             </h3>
             <p className="text-white/80 text-lg font-medium uppercase tracking-wide">
               {label}
@@ -100,7 +100,7 @@ export default function AtAGlance() {
     },
     { 
       end: 10, 
-      suffix: "", 
+      suffix: "+", 
       label: "Countries",
       color: "bg-[#EE8900]"
     },
@@ -121,7 +121,7 @@ export default function AtAGlance() {
         </div>
         <div>
           <p className="text-gray-600 text-lg leading-relaxed">
-          we empower our people to lead with confidence and purpose. Working in multiple industries, We foster a strong culture of respect, and space for your ideas to thrive, you’ll grow professionally and personally. We offer flexibility, wellness support, and real recognition, because our success starts with you.
+          We empower our people to lead with confidence and purpose. Working in multiple industries, We foster a strong culture of respect, and space for your ideas to thrive, you'll grow professionally and personally. We offer flexibility, wellness support, and real recognition, because our success starts with you.
           </p>
         </div>
       </div>

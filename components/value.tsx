@@ -112,7 +112,7 @@ export default function ValueSection() {
               <h5 className="text-4xl font-semibold text-orange-500 mb-2">Chairman Message</h5>
               <h6 className="text-3xl font-medium text-gray-700 mb-8">Mr. Kai Zheng</h6>
               <div className="flex gap-6">
-                <div className="w-1.5 bg-orange-500 rounded-full self-stretch"></div>
+                <div className="w-3 bg-orange-500 rounded-full self-stretch"></div>
                 <p className="text-2xl leading-relaxed" style={{ color: '#2B1C48' }}>
                 Our Vision is to shape a future where innovation, sustainability, and human connection drive meaningful impact across industries. With a strong foundation of continuous growth, a talented global team, and deep roots in the UAE's progressive environment, we are building integrated ecosystems in mobility, energy, digital solutions, and cultural tourism. Together, we are not just expanding, we are leading the way toward a connected and collaborative future.
                 </p>

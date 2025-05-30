@@ -49,7 +49,7 @@ export default function GrowSection() {
       <div className="max-w-7xl mx-auto px-6">
         {/* Main Header - Left Aligned */}
         <div className="max-w-2xl mb-20">
-          <span className="text-[#EE8900] font-medium mb-4 block">Our Culture</span>
+          {/* <span className="text-[#EE8900] font-medium mb-4 block">Our Culture</span> */}
           <h1 className="text-4xl lg:text-5xl font-bold text-white mb-6">
             A Place of Culture,<br />
             Growth and Innovation
@@ -60,44 +60,47 @@ export default function GrowSection() {
         </div>
 
         {/* Content Section */}
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+        <div className="grid lg:grid-cols-2 gap-0 items-center">
           {/* Left Content */}
-          <div className="space-y-8">
-            <div>
-              <h2 className="text-5xl lg:text-6xl font-bold text-[#EE8900] mb-8">{currentSlideData.title}</h2>
-              <p className="text-gray-300 text-lg leading-relaxed">{currentSlideData.description}</p>
-            </div>
+          <div className="space-y-8 h-full">
+            <div className="h-full">
+              <div className="bg-white p-8 rounded-l-2xl h-full flex flex-col justify-between">
+                <div>
+                  <h2 className="text-5xl lg:text-6xl font-bold text-[#EE8900] mb-6">{currentSlideData.title}</h2>
+                  <p className="text-[#5E366D] text-lg leading-relaxed">{currentSlideData.description}</p>
+                </div>
+                {/* Navigation */}
+                <div className="flex items-center justify-between pt-8 mt-8">
+                  <div className="flex items-center space-x-4">
+                    <span className="text-gray-400 text-lg">
+                      {currentSlide + 1} / {slides.length}
+                    </span>
+                  </div>
 
-            {/* Navigation */}
-            <div className="flex items-center justify-between pt-8">
-              <div className="flex items-center space-x-4">
-                <span className="text-gray-400 text-lg">
-                  {currentSlide + 1} / {slides.length}
-                </span>
-              </div>
-
-              <div className="flex items-center space-x-4">
-                <button
-                  onClick={prevSlide}
-                  className="w-12 h-12 rounded-full border border-[#EE8900]/30 flex items-center justify-center text-[#EE8900] hover:text-white hover:border-[#EE8900] hover:bg-[#EE8900] transition-all duration-300 group"
-                  aria-label="Previous slide"
-                >
-                  <ChevronLeft className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                </button>
-                <button
-                  onClick={nextSlide}
-                  className="w-12 h-12 rounded-full border border-[#EE8900]/30 flex items-center justify-center text-[#EE8900] hover:text-white hover:border-[#EE8900] hover:bg-[#EE8900] transition-all duration-300 group"
-                  aria-label="Next slide"
-                >
-                  <ChevronRight className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                </button>
+                  <div className="flex items-center space-x-4">
+                    <button
+                      onClick={prevSlide}
+                      className="w-12 h-12 rounded-full border border-[#EE8900]/30 flex items-center justify-center text-[#EE8900] hover:text-white hover:border-[#EE8900] hover:bg-[#EE8900] transition-all duration-300 group"
+                      aria-label="Previous slide"
+                    >
+                      <ChevronLeft className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                    </button>
+                    <button
+                      onClick={nextSlide}
+                      className="w-12 h-12 rounded-full border border-[#EE8900]/30 flex items-center justify-center text-[#EE8900] hover:text-white hover:border-[#EE8900] hover:bg-[#EE8900] transition-all duration-300 group"
+                      aria-label="Next slide"
+                    >
+                      <ChevronRight className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
 
           {/* Right Image */}
-          <div className="relative">
-            <div className="aspect-[4/3] overflow-hidden rounded-2xl">
+          <div className="relative h-full">
+            <div className="aspect-[4/3] overflow-hidden rounded-r-2xl h-full">
               <Image
                 src={currentSlideData.image}
                 alt={`${currentSlideData.title} - Legend Holdings team collaboration`}

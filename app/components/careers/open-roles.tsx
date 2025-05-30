@@ -12,7 +12,7 @@ export default function OpenRoles() {
           {/* Content Side */}
           <div>
             <span className="text-[#EE8900] font-medium mb-2 block">Career Opportunities</span>
-            <h2 className="text-4xl lg:text-5xl font-bold text-[#2B1C48] mb-6 leading-tight">Shape your future with us</h2>
+            <h2 className="text-4xl lg:text-5xl font-bold text-[#2B1C48] mb-6 leading-tight">Shape Your Future with us</h2>
             <p className="text-lg text-gray-600 mb-12">
               Join a team where innovation meets ambition. At Legend Holdings, we offer diverse opportunities across our portfolio of world-renowned brands, enabling you to make an impact while building an exceptional career.
             </p>
@@ -47,7 +47,7 @@ export default function OpenRoles() {
               </div>
 
               {/* Explore Our Brands */}
-              <div className="bg-white rounded-2xl p-8 shadow-sm border border-[#5D376E]/10 hover:shadow-lg transition-all duration-300 group">
+              {/* <div className="bg-white rounded-2xl p-8 shadow-sm border border-[#5D376E]/10 hover:shadow-lg transition-all duration-300 group">
                 <div className="flex items-start gap-6">
                   <div className="flex items-center justify-center w-16 h-16 bg-[#5D376E]/10 rounded-2xl group-hover:bg-[#5D376E]/20 transition-colors duration-300 flex-shrink-0">
                     <Building2 className="w-8 h-8 text-[#5D376E]" />
@@ -71,7 +71,7 @@ export default function OpenRoles() {
                     </Link>
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
 
