@@ -194,7 +194,7 @@ export default function ContactPage() {
               {/* Right Side - Contact Form */}
               <div className="bg-white rounded-2xl p-8 shadow-sm mt-12">
                 <div className="mb-6">
-                  <h2 className="text-4xl font-bold text-gray-900 mb-2">Fill the form</h2>
+                  <h2 className="text-4xl font-bold text-gray-900 mb-2">Fill the Form</h2>
                 </div>
 
                 {formStep === 0 ? (
