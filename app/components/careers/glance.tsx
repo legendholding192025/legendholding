@@ -93,7 +93,7 @@ export default function AtAGlance() {
       color: "bg-[#2B1C48]"
     },
     { 
-      end: 30, 
+      end: 35, 
       suffix: "+", 
       label: "Nationalities",
       color: "bg-[#5D376E]"
@@ -121,9 +121,7 @@ export default function AtAGlance() {
         </div>
         <div>
           <p className="text-gray-600 text-lg leading-relaxed">
-            Our people are our strength and we thrive through diversity, collaboration and shared values, working with
-            world-leading brands across diverse industries. If you are passionate and ready to grow, innovate and make
-            an impact, then we may be just the place for you.
+          we empower our people to lead with confidence and purpose. Working in multiple industries, We foster a strong culture of respect, and space for your ideas to thrive, you’ll grow professionally and personally. We offer flexibility, wellness support, and real recognition, because our success starts with you.
           </p>
         </div>
       </div>

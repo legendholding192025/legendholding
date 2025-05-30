@@ -97,7 +97,7 @@ export default function ValueSection() {
                   <span className="border-b-2 border-[#2B1C48] pb-1">Our</span> Mission
                 </h3>
                 <p className="text-xl leading-normal" style={{ color: '#2B1C48' }}>
-                  To foster happiness and deliver value, focusing on building a sustainable future.
+                To foster happiness and deliver value, with a clear focus on building a sustainable future. Every step we take is guided by purpose, progress, and a commitment to doing things the right way every time.
                 </p>
               </div>
             </div>

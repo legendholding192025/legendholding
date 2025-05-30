@@ -23,7 +23,7 @@ export function HeroBanner() {
             Join Our Team
           </div>
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
-            Shape the Future<br />of Innovation
+          Shaping the future Together<br />
           </h1>
           <p className="text-lg md:text-xl text-white/90 max-w-2xl mb-8 leading-relaxed">
             Join a team of passionate innovators and problem-solvers dedicated to pushing the boundaries of what's possible.

@@ -18,8 +18,6 @@ export default function CareersPage() {
         <AtAGlance />
         <GrowSection />
         <OpenRoles />
-        <CareerPaths />
-        <EmployeeTestimonials />
       </main>
       <Footer />
     </>

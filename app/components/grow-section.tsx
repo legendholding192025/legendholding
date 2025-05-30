@@ -7,32 +7,32 @@ import { ChevronLeft, ChevronRight } from "lucide-react"
 const slides = [
   {
     id: 1,
-    title: "Belong",
+    title: "Culture",
     description:
-      "Join a vibrant community at Legend Holdings where innovation meets collaboration. Experience a culture that celebrates diversity, empowers individuals, and fosters meaningful connections across our global network.",
+      "We've built a culture rooted in trust, respect, and shared ambition. With over 35 nationalities working toward one vision, we celebrate diversity and grow together. Our leaders are transparent and accessible, and we recognize every win, big or small, because we believe that when one of us grows, we all do.",
     image:
       "https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=1470&auto=format&fit=crop",
   },
   {
     id: 2,
-    title: "Grow",
+    title: "Growth",
     description:
-      "With diverse industries spanning Automotive, Trading, Real Estate, Technology, and Healthcare, Legend Holdings offers unparalleled opportunities for career advancement and professional development across the Middle East and beyond.",
+      "We don't believe in one-track careers. As a diversified group, we offer cross-industry exposure and clear pathways for development. Whether it's through our training academy, mentorship, or hands-on experience, we give you the tools to shape your career.",
     image:
       "https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=1470&auto=format&fit=crop",
   },
   {
     id: 3,
-    title: "Excel",
+    title: "Innovation",
     description:
-      "Achieve excellence through our comprehensive development programs, mentorship opportunities, and exposure to cutting-edge technologies and world-renowned brands. At Legend, your success is our priority.",
+      "We listen to every idea. We believe great ideas can come from anyone, anywhere. That's why we encourage our team member to share their thoughts and take ownership. If you have an idea, we'll help you shape it, champion it, and bring it to life, because innovation starts with you.",
     image:
       "https://images.unsplash.com/photo-1557804506-669a67965ba0?q=80&w=1374&auto=format&fit=crop",
   },
 ]
 
 export default function GrowSection() {
-  const [currentSlide, setCurrentSlide] = useState(1)
+  const [currentSlide, setCurrentSlide] = useState(0)
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % slides.length)
@@ -51,8 +51,8 @@ export default function GrowSection() {
         <div className="max-w-2xl mb-20">
           <span className="text-[#EE8900] font-medium mb-4 block">Our Culture</span>
           <h1 className="text-4xl lg:text-5xl font-bold text-white mb-6">
-            A Place To Belong,<br />
-            Grow, and Excel
+            A Place of Culture,<br />
+            Growth and Innovation
           </h1>
           <p className="text-gray-300 text-lg leading-relaxed">
             At Legend Holdings, we believe in creating an environment where talent thrives, innovation flourishes, and careers reach new heights.
