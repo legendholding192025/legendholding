@@ -70,13 +70,13 @@ export function OurPresenceSection() {
           <div className="hidden md:block flex-1 h-0.5 bg-[#6C4896] ml-4" />
         </div>
         {/* Subheading in rounded box */}
-        <div className="flex justify-center mb-10">
+        {/* <div className="flex justify-center mb-10">
           <div className="border-2 border-[#EE8900] rounded-full px-3 py-1 md:px-5 md:py-2 bg-white text-center inline-block">
             <p className="text-lg sm:text-xl md:text-2xl leading-relaxed text-[#5E366D]">
               Spanning three continents, Asia, Europe, Africa we operate in key markets including:
             </p>
           </div>
-        </div>
+        </div> */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           {/* Left side - Map */}
           <motion.div 
