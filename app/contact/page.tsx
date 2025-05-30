@@ -134,11 +134,11 @@ export default function ContactPage() {
           {/* Hero Content */}
           <div className="relative container mx-auto px-4 py-24 md:py-32">
             <div className="max-w-4xl mx-auto text-center">
-              <div className="inline-flex items-center justify-center px-4 py-1.5 bg-white/10 text-white rounded-full text-sm font-medium mb-6">
+              {/* <div className="inline-flex items-center justify-center px-4 py-1.5 bg-white/10 text-white rounded-full text-sm font-medium mb-6">
                 Get in Touch
-              </div>
+              </div> */}
               <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
-                Let's Connect<br />Together
+                Contact Us
               </h1>
               <p className="text-lg md:text-xl text-white/90 max-w-2xl mx-auto">
                 Reach out to us for any inquiries or collaboration opportunities. We're here to help you succeed.
@@ -154,10 +154,10 @@ export default function ContactPage() {
               {/* Left Side - Contact Info */}
               <div className="space-y-8">
                 <div>
-                  <h1 className="text-5xl font-bold text-gray-900 mb-4">Contact Us</h1>
-                  <p className="text-lg text-gray-600 mb-6">
+                  <h1 className="text-5xl font-bold text-gray-900 mb-4">Get in Touch</h1>
+                  {/* <p className="text-lg text-gray-600 mb-6">
                     Get in touch with us for any inquiries about our services or collaboration opportunities.
-                  </p>
+                  </p> */}
                 </div>
 
                 {/* Contact Info Cards */}
@@ -179,7 +179,7 @@ export default function ContactPage() {
                           <h3 className="text-base font-semibold text-gray-900 mb-1">{item.title}</h3>
                           <div className="space-y-0.5">
                             {item.details.map((detail, idx) => (
-                              <p key={idx} className="text-sm text-gray-600">
+                              <p key={idx} className="text-base md:text-lg text-gray-600">
                                 {detail}
                               </p>
                             ))}
@@ -194,8 +194,7 @@ export default function ContactPage() {
               {/* Right Side - Contact Form */}
               <div className="bg-white rounded-2xl p-8 shadow-sm mt-12">
                 <div className="mb-6">
-                  <h2 className="text-4xl font-bold text-gray-900 mb-2">Get in Touch</h2>
-                  <p className="text-lg text-gray-600">You can reach us anytime</p>
+                  <h2 className="text-4xl font-bold text-gray-900 mb-2">Fill the form</h2>
                 </div>
 
                 {formStep === 0 ? (
