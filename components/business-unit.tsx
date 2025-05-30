@@ -100,82 +100,73 @@ export default function BusinessUnit() {
     }
 
     handleResize()
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
+    window.addEventListener("resize", handleResize)
+    return () => window.removeEventListener("resize", handleResize)
   }, [])
 
   const totalItems = businesses.length
 
-  const resetToStart = useCallback(() => {
-    if (carouselRef.current) {
-      setIsTransitioning(false)
-      carouselRef.current.style.transition = 'none'
-      setCurrentIndex(0)
-      // Force reflow
-      carouselRef.current.offsetHeight
-      carouselRef.current.style.transition = ''
-      setIsTransitioning(true)
-    }
-  }, [])
-
   const nextSlide = useCallback(() => {
     if (isTransitioning) return
-
     setIsTransitioning(true)
-    setCurrentIndex((prevIndex) => {
-      const nextIndex = prevIndex + 1
-      if (nextIndex >= totalItems) {
-        // Schedule reset after animation
-        setTimeout(resetToStart, 700)
-        return prevIndex
-      }
-      return nextIndex
-    })
-  }, [totalItems, isTransitioning, resetToStart])
+    setCurrentIndex((prevIndex) => prevIndex + 1)
+  }, [isTransitioning])
 
-  const prevSlide = () => {
+  const prevSlide = useCallback(() => {
     if (isTransitioning) return
-
     setIsTransitioning(true)
-    setCurrentIndex((prevIndex) => {
-      if (prevIndex === 0) {
-        setCurrentIndex(totalItems - 1)
-        return prevIndex
-      }
-      return prevIndex - 1
-    })
-  }
-
-  // Handle transition end
-  useEffect(() => {
-    const carousel = carouselRef.current
-    const handleTransitionEnd = () => {
-      setIsTransitioning(false)
-    }
-
-    carousel?.addEventListener('transitionend', handleTransitionEnd)
-    return () => carousel?.removeEventListener('transitionend', handleTransitionEnd)
-  }, [])
+    setCurrentIndex((prevIndex) => prevIndex - 1)
+  }, [isTransitioning])
 
   // Autoplay Effect
   useEffect(() => {
-    let intervalId: NodeJS.Timeout;
-    
-    if (!isPaused && !isTransitioning) {
-      intervalId = setInterval(() => {
-        nextSlide();
-      }, 3000);
+    let intervalId: NodeJS.Timeout
+
+    if (!isPaused) {
+      intervalId = setInterval(nextSlide, 4000)
     }
 
     return () => {
       if (intervalId) {
-        clearInterval(intervalId);
+        clearInterval(intervalId)
       }
-    };
-  }, [isPaused, nextSlide, isTransitioning]);
+    }
+  }, [isPaused, nextSlide])
 
-  // Create arrays for display
-  const displayItems = [...businesses, ...businesses.slice(0, itemsPerView)]
+  // Handle infinite loop transitions
+  const handleTransitionEnd = () => {
+    setIsTransitioning(false)
+
+    if (currentIndex >= totalItems) {
+      // Reset to beginning without animation
+      if (carouselRef.current) {
+        carouselRef.current.style.transition = "none"
+        setCurrentIndex(0)
+        // Force reflow
+        carouselRef.current.offsetHeight
+        carouselRef.current.style.transition = "transform 500ms ease-out"
+      }
+    } else if (currentIndex < 0) {
+      // Reset to end without animation
+      if (carouselRef.current) {
+        carouselRef.current.style.transition = "none"
+        setCurrentIndex(totalItems - 1)
+        // Force reflow
+        carouselRef.current.offsetHeight
+        carouselRef.current.style.transition = "transform 500ms ease-out"
+      }
+    }
+  }
+
+  // Create extended array with clones for infinite effect
+  const extendedBusinesses = [
+    ...businesses.slice(-itemsPerView), // Clone last items at beginning
+    ...businesses,
+    ...businesses.slice(0, itemsPerView), // Clone first items at end
+  ]
+
+  // Calculate transform with offset for cloned items
+  const translateX = -((currentIndex + itemsPerView) * (100 / itemsPerView))
 
   return (
     <section className="py-8 sm:py-12 md:py-16 bg-gray-50 w-full">
@@ -192,7 +183,7 @@ export default function BusinessUnit() {
         </div>
 
         {/* Carousel Container */}
-        <div 
+        <div
           className="relative w-full max-w-[2000px] mx-auto"
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
@@ -200,62 +191,84 @@ export default function BusinessUnit() {
           {/* Navigation Buttons */}
           <button
             onClick={prevSlide}
-            className="absolute -left-2 sm:left-0 top-1/2 transform -translate-y-1/2 z-10 bg-white rounded-full p-2 sm:p-3 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110"
-            aria-label="Previous slide"
             disabled={isTransitioning}
+            className="absolute -left-2 sm:left-0 top-1/2 transform -translate-y-1/2 z-10 bg-white rounded-full p-2 sm:p-3 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed"
+            aria-label="Previous slide"
           >
             <ChevronLeft className="w-4 h-4 sm:w-6 sm:h-6 text-gray-600" />
           </button>
 
           <button
             onClick={nextSlide}
-            className="absolute -right-2 sm:right-0 top-1/2 transform -translate-y-1/2 z-10 bg-white rounded-full p-2 sm:p-3 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110"
-            aria-label="Next slide"
             disabled={isTransitioning}
+            className="absolute -right-2 sm:right-0 top-1/2 transform -translate-y-1/2 z-10 bg-white rounded-full p-2 sm:p-3 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed"
+            aria-label="Next slide"
           >
             <ChevronRight className="w-4 h-4 sm:w-6 sm:h-6 text-gray-600" />
           </button>
 
           {/* Carousel Track */}
           <div className="overflow-hidden mx-4 sm:mx-8 md:mx-12">
-            <div 
+            <div
               ref={carouselRef}
-              className="flex transition-all duration-700 ease-in-out transform"
-              style={{ 
-                transform: `translateX(-${(currentIndex * 100) / itemsPerView}%)`,
-                width: `${(displayItems.length * 100) / itemsPerView}%`
+              className="flex transition-transform duration-500 ease-out"
+              style={{
+                transform: `translateX(${translateX}%)`,
               }}
+              onTransitionEnd={handleTransitionEnd}
             >
-              {displayItems.map((business, index) => (
-                <Link
+              {extendedBusinesses.map((business, index) => (
+                <div
                   key={`${business.name}-${index}`}
-                  href={business.url}
-                  className="flex-shrink-0"
-                  style={{ 
-                    width: `${100 / displayItems.length}%`,
-                    padding: '0 0.5rem'
-                  }}
+                  className="flex-shrink-0 px-2"
+                  style={{ width: `${100 / itemsPerView}%` }}
                 >
-                  <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 hover:scale-105 group h-[16rem] sm:h-[20rem] md:h-[24rem] lg:h-[28rem]">
-                    {/* Image Section */}
-                    <div className="h-[12rem] sm:h-[16rem] md:h-[20rem] lg:h-[24rem] overflow-hidden">
-                      <img
-                        src={business.image || "/placeholder.svg"}
-                        alt={business.name}
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                      />
-                    </div>
+                  <Link href={business.url} className="block">
+                    <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 hover:scale-105 group h-[16rem] sm:h-[20rem] md:h-[24rem] lg:h-[28rem]">
+                      {/* Image Section */}
+                      <div className="h-[12rem] sm:h-[16rem] md:h-[20rem] lg:h-[24rem] overflow-hidden">
+                        <img
+                          src={business.image || "/placeholder.svg"}
+                          alt={business.name}
+                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                          loading="lazy"
+                        />
+                      </div>
 
-                    {/* Content Section */}
-                    <div className={`${business.bgColor} px-3 sm:px-4 md:px-6 py-2 sm:py-3 h-14 sm:h-16 flex items-center justify-center`}>
-                      <h3 className="text-sm sm:text-base md:text-lg font-bold text-center text-white leading-tight">
-                        {business.name}
-                      </h3>
+                      {/* Content Section */}
+                      <div
+                        className={`${business.bgColor} px-3 sm:px-4 md:px-6 py-2 sm:py-3 h-14 sm:h-16 flex items-center justify-center`}
+                      >
+                        <h3 className="text-sm sm:text-base md:text-lg font-bold text-center text-white leading-tight">
+                          {business.name}
+                        </h3>
+                      </div>
                     </div>
-                  </div>
-                </Link>
+                  </Link>
+                </div>
               ))}
             </div>
+          </div>
+
+          {/* Indicators */}
+          <div className="flex justify-center mt-6 space-x-2">
+            {businesses.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => {
+                  if (!isTransitioning) {
+                    setIsTransitioning(true)
+                    setCurrentIndex(index)
+                  }
+                }}
+                className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                  index === (currentIndex < 0 ? totalItems - 1 : currentIndex >= totalItems ? 0 : currentIndex)
+                    ? "bg-[#F08900] w-6"
+                    : "bg-gray-300 hover:bg-gray-400"
+                }`}
+                aria-label={`Go to slide ${index + 1}`}
+              />
+            ))}
           </div>
         </div>
       </div>
@@ -263,8 +276,8 @@ export default function BusinessUnit() {
       {/* Animation Styles */}
       <style jsx global>{`
         @keyframes fadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
         }
         
         @keyframes expandWidth {
@@ -277,18 +290,11 @@ export default function BusinessUnit() {
         }
         
         .animate-expand-width {
-          animation: expandWidth 1s ease-out forwards;
+          animation: expandWidth 1.2s ease-out forwards;
         }
         
         .animation-delay-200 {
           animation-delay: 200ms;
-        }
-
-        /* Smooth sliding animation */
-        .transition-all {
-          transition-property: all;
-          transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-          will-change: transform;
         }
       `}</style>
     </section>
