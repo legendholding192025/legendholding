@@ -349,36 +349,40 @@ export default function ContactPage() {
                 <div className="bg-white rounded-2xl p-8 shadow-lg">
                   <h3 className="text-2xl font-semibold text-gray-900 mb-6">Headquarters</h3>
                   <div className="space-y-4">
-                    <div className="flex items-start space-x-4">
-                      <div className="mt-1">
-                        <MapPin className="w-6 h-6 text-[#EE8900]" />
-                      </div>
-                      <div className="text-lg text-gray-600 -space-y-2">
-                        <div className="font-medium text-gray-900 leading-none">Legend Holding Group HQ, Jebel Ali Freezone, Gate 5</div>
-                        <div className="leading-none">Dubai, United Arab Emirates</div>
+                    <div className="flex items-start gap-4">
+                      <MapPin className="w-6 h-6 text-[#F08900] mt-1" />
+                      <div className="-space-y-1">
+                        <p className="text-lg text-gray-700 leading-tight">Legend Holding Group HQ, Jebel Ali Freezone, Gate 5</p>
+                        <p className="text-lg text-gray-700 leading-tight">Dubai, United Arab Emirates</p>
                       </div>
                     </div>
-                    
-                    <div className="flex items-start space-x-4">
-                      <div className="mt-1">
-                        <Mail className="w-6 h-6 text-[#EE8900]" />
-                      </div>
-                      <div className="text-lg text-gray-600">
-                        <div>P.O. Box 12345</div>
-                        <div>United Arab Emirates</div>
+                    <div className="flex items-start gap-4">
+                      <Phone className="w-6 h-6 text-[#F08900] mt-1" />
+                      <div className="-space-y-1">
+                        <p className="text-lg text-gray-700 leading-tight">+971 4 234 0738</p>
                       </div>
                     </div>
-
-                    <a
-                      href="https://maps.app.goo.gl/J5xzfni3Mp55g11bA"
+                    <div className="flex items-start gap-4">
+                      <Mail className="w-6 h-6 text-[#F08900] mt-1" />
+                      <div className="-space-y-1">
+                        <p className="text-lg text-gray-700 leading-tight">info@legendholding.com</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-4">
+                      <Clock className="w-6 h-6 text-[#F08900] mt-1" />
+                      <div className="-space-y-1">
+                        <p className="text-lg text-gray-700 leading-tight">Monday - Saturday : 9:00 AM - 6:00 PM</p>
+                      </div>
+                    </div>
+                    <Link 
+                      href="https://maps.google.com"
                       target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center px-6 py-3 bg-[#EE8900] text-white rounded-lg hover:bg-[#EE8900]/90 transition-all duration-200 mt-4 group"
+                      className="inline-flex items-center px-6 py-3 bg-[#F08900] text-white rounded-lg hover:bg-[#F08900]/90 transition-colors"
                     >
-                      <MapPin className="w-5 h-5 mr-2 group-hover:animate-bounce" />
+                      <MapPin className="w-5 h-5 mr-2" />
                       Get Directions
                       <ExternalLink className="w-4 h-4 ml-2" />
-                    </a>
+                    </Link>
                   </div>
                 </div>
               </div>
