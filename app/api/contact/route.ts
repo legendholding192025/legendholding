@@ -1,72 +1,56 @@
-import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
-import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
-import { sendContactFormEmail } from '@/lib/email';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 
 export async function POST(request: Request) {
+  const supabase = createClientComponentClient();
+  
   try {
-    const supabase = createRouteHandlerClient({ cookies });
     const body = await request.json();
-    const { name, email, phone, subject, message } = body;
+    console.log('Received form data:', body);
+
+    // Validate required fields
+    const requiredFields = ['name', 'email', 'subject', 'message'];
+    for (const field of requiredFields) {
+      if (!body[field]) {
+        console.log('Missing required field:', field);
+        return NextResponse.json(
+          { error: `${field} is required` },
+          { status: 400 }
+        );
+      }
+    }
 
     // Insert into contact_submissions table
-    const { data: submissionData, error: submissionError } = await supabase
-      .from("contact_submissions")
+    const { data, error } = await supabase
+      .from('contact_submissions')
       .insert([
         {
-          name,
-          email,
-          phone: phone || null,
-          subject,
-          message,
-        },
-      ])
-      .select()
-      .single();
+          name: body.name,
+          email: body.email,
+          phone: body.phone || null,
+          subject: body.subject,
+          message: body.message,
+          status: 'pending'
+        }
+      ]);
 
-    if (submissionError) {
-      console.error("Error submitting to contact_submissions:", submissionError);
+    if (error) {
+      console.error('Supabase error:', error);
       return NextResponse.json(
-        { error: "Failed to submit contact form" },
+        { error: error.message || 'Failed to submit contact form' },
         { status: 500 }
       );
     }
 
-    // Create notification
-    const { error: notificationError } = await supabase
-      .from("notifications")
-      .insert([
-        {
-          type: "contact_form",
-          title: "New Contact Form Submission",
-          description: `${name} submitted a contact form about "${subject}"`,
-          read: false,
-          submission_id: submissionData.id
-        }
-      ]);
-
-    if (notificationError) {
-      console.error("Error creating notification:", notificationError);
-      // Don't return here as the submission was successful
-    }
-
-    // Send email notification
-    await sendContactFormEmail({
-      name,
-      email,
-      phone,
-      subject,
-      message
-    });
-
+    console.log('Form submitted successfully');
     return NextResponse.json(
-      { message: "Contact form submitted successfully" },
+      { message: 'Contact form submitted successfully' },
       { status: 200 }
     );
-  } catch (error) {
-    console.error("Error in contact form submission:", error);
+  } catch (error: any) {
+    console.error('Unexpected error:', error);
     return NextResponse.json(
-      { error: "Internal server error" },
+      { error: error.message || 'Failed to submit contact form' },
       { status: 500 }
     );
   }

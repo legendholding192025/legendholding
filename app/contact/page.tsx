@@ -24,10 +24,10 @@ import Newsletter from "@/components/newsletter"
 export default function ContactPage() {
   const supabase = createClientComponentClient()
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
+    name: "",
     email: "",
     phone: "",
+    subject: "",
     message: "",
   })
 
@@ -39,25 +39,37 @@ export default function ContactPage() {
     setIsSubmitting(true)
 
     try {
+      console.log('Submitting form data:', formData)
+      
       const response = await fetch('/api/contact', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData),
-      });
+      })
 
-      const data = await response.json();
+      const data = await response.json()
+      console.log('Response:', data)
 
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to submit form');
+        throw new Error(data.error || 'Failed to submit form')
       }
 
-      toast.success("Thank you for your message! We will get back to you soon.")
+      // Clear form and show success message
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        subject: "",
+        message: "",
+      })
+      
+      toast.success("Thank you for submitting your form, We will contact you shortly.")
       setFormStep(1)
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error submitting form:", error)
-      toast.error("Failed to submit form. Please try again later.")
+      toast.error(error.message || "Failed to submit form. Please try again later.")
     } finally {
       setIsSubmitting(false)
     }
@@ -73,10 +85,10 @@ export default function ContactPage() {
 
   const resetForm = () => {
     setFormData({
-      firstName: "",
-      lastName: "",
+      name: "",
       email: "",
       phone: "",
+      subject: "",
       message: "",
     })
     setFormStep(0)
@@ -99,7 +111,7 @@ export default function ContactPage() {
       icon: <MapPin className="w-6 h-6" />,
       title: "Address",
       details: [
-        "Legend Holding Group HQ, Jebel Ali Freezone, Gate 5",
+        "Legend Holding Group HQ, Jebel Ali Freezone Gate 5",
         "Dubai, United Arab Emirates"
       ],
       color: "text-[#EE8900]"
@@ -191,41 +203,28 @@ export default function ContactPage() {
               </div>
 
               {/* Right Side - Contact Form */}
-              <div className="bg-white rounded-2xl p-8 shadow-sm mt-12">
-                <div className="mb-6">
-                  <h2 className="text-4xl font-bold text-gray-900 mb-2">Fill the Form</h2>
+              <div className="bg-white rounded-2xl p-6 shadow-sm mt-16">
+                <div className="mb-4">
+                  <h2 className="text-3xl font-bold text-gray-900 mb-2">Fill the Form</h2>
                 </div>
 
                 {formStep === 0 ? (
-                  <form onSubmit={handleSubmit} className="space-y-4">
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <input
-                          type="text"
-                          name="firstName"
-                          value={formData.firstName}
-                          onChange={handleChange}
-                          required
-                          placeholder="First name"
-                          className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#EE8900] focus:border-transparent transition-all duration-200"
-                        />
-                      </div>
-                      <div>
-                        <input
-                          type="text"
-                          name="lastName"
-                          value={formData.lastName}
-                          onChange={handleChange}
-                          required
-                          placeholder="Last name"
-                          className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#EE8900] focus:border-transparent transition-all duration-200"
-                        />
-                      </div>
+                  <form onSubmit={handleSubmit} className="space-y-3">
+                    <div>
+                      <input
+                        type="text"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleChange}
+                        required
+                        placeholder="Your full name"
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#EE8900] focus:border-transparent transition-all duration-200"
+                      />
                     </div>
 
                     <div>
                       <div className="relative">
-                        <Mail className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
+                        <Mail className="absolute left-3 top-2 w-4 h-4 text-gray-400" />
                         <input
                           type="email"
                           name="email"
@@ -233,13 +232,13 @@ export default function ContactPage() {
                           onChange={handleChange}
                           required
                           placeholder="Your email"
-                          className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#EE8900] focus:border-transparent transition-all duration-200"
+                          className="w-full pl-10 pr-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#EE8900] focus:border-transparent transition-all duration-200"
                         />
                       </div>
                     </div>
 
                     <div className="flex gap-2">
-                      <select className="w-20 px-2 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#EE8900] focus:border-transparent">
+                      <select className="w-20 px-2 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#EE8900] focus:border-transparent">
                         <option value="+971">+971</option>
                         <option value="+1">+1</option>
                         <option value="+44">+44</option>
@@ -251,7 +250,19 @@ export default function ContactPage() {
                         value={formData.phone}
                         onChange={handleChange}
                         placeholder="Phone number"
-                        className="flex-1 px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#EE8900] focus:border-transparent transition-all duration-200"
+                        className="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#EE8900] focus:border-transparent transition-all duration-200"
+                      />
+                    </div>
+
+                    <div>
+                      <input
+                        type="text"
+                        name="subject"
+                        value={formData.subject}
+                        onChange={handleChange}
+                        required
+                        placeholder="Subject"
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#EE8900] focus:border-transparent transition-all duration-200"
                       />
                     </div>
 
@@ -262,7 +273,7 @@ export default function ContactPage() {
                         onChange={handleChange}
                         required
                         placeholder="How can we help?"
-                        className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#EE8900] focus:border-transparent transition-all duration-200 min-h-[100px] resize-none"
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#EE8900] focus:border-transparent transition-all duration-200 min-h-[80px] resize-none"
                       />
                     </div>
 
@@ -270,7 +281,7 @@ export default function ContactPage() {
                       type="submit"
                       disabled={isSubmitting}
                       className={`
-                        w-full bg-[#EE8900] hover:bg-[#EE8900]/90 text-white py-3 rounded-lg
+                        w-full bg-[#EE8900] hover:bg-[#EE8900]/90 text-white py-2.5 rounded-lg
                         transition-all duration-200 font-medium text-base
                         ${isSubmitting ? "opacity-70 cursor-not-allowed" : ""}
                       `}
@@ -297,19 +308,19 @@ export default function ContactPage() {
                     </p>
                   </form>
                 ) : (
-                  <div className="text-center py-10">
-                    <div className="flex justify-center mb-6">
-                      <div className="w-20 h-20 rounded-full bg-green-100 flex items-center justify-center">
-                        <CheckCircle className="w-10 h-10 text-green-600" />
+                  <div className="text-center py-8">
+                    <div className="flex justify-center mb-4">
+                      <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center">
+                        <CheckCircle className="w-8 h-8 text-green-600" />
                       </div>
                     </div>
-                    <h3 className="text-4xl font-semibold text-gray-900 mb-2">Message Sent Successfully!</h3>
-                    <p className="text-xl text-gray-600 mb-8">
+                    <h3 className="text-3xl font-semibold text-gray-900 mb-2">Message Sent Successfully!</h3>
+                    <p className="text-lg text-gray-600 mb-6">
                       Thank you for submitting your form, We will contact you shortly.
                     </p>
                     <button
                       onClick={resetForm}
-                      className="inline-flex items-center px-6 py-3 rounded-lg text-white bg-[#EE8900] hover:bg-[#EE8900]/90 transition-all duration-200 font-medium"
+                      className="inline-flex items-center px-5 py-2.5 rounded-lg text-white bg-[#EE8900] hover:bg-[#EE8900]/90 transition-all duration-200 font-medium"
                     >
                       Send Another Message
                     </button>

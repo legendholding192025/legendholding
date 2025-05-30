@@ -12,7 +12,7 @@ export default function ValueSection() {
           alt="Top left decoration"
           fill
           className="object-contain object-top"
-          sizes="(max-width: 768px) 100vw, 384px"
+          sizes="384px"
           priority
         />
       </div>
@@ -24,15 +24,15 @@ export default function ValueSection() {
           alt="Background decoration"
           fill
           className="object-contain object-bottom"
-          sizes="(max-width: 768px) 100vw, 384px"
+          sizes="384px"
           priority
         />
       </div>
       
       <div className="relative z-10 max-w-6xl mx-auto px-4">
         {/* Header */}
-        <div className="text-center mt-16 sm:mt-20 md:mt-24 mb-14">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#F08900] mb-3 animate-fade-in">
+        <div className="text-center mt-24 mb-14">
+          <h2 className="text-4xl font-bold text-[#F08900] mb-3 animate-fade-in">
             Mission, <span className="text-[#F08900]"></span> vision <span className="text-[#F08900]">and</span>{" "}
             values
           </h2>
@@ -40,19 +40,19 @@ export default function ValueSection() {
         </div>
 
         {/* Mission and Vision Cards */}
-        <div className="grid md:grid-cols-2 gap-8 md:gap-16 mb-20">
+        <div className="grid grid-cols-2 gap-16 mb-20">
           {/* Vision Column */}
           <div className="relative animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
             {/* Background shape image */}
             <img src="https://res.cloudinary.com/dosxengut/image/upload/v1748416193/Asset_9_z8nunq.png" alt="" className="w-full h-auto opacity-90" />
 
             {/* Content overlay */}
-            <div className="absolute inset-0 flex flex-col justify-center p-4 sm:p-6 md:p-8">
-              <div className="max-w-2xl pl-4 sm:pl-6 mt-16">
-                <h3 className="text-2xl sm:text-3xl font-bold text-orange-500 mb-4">
+            <div className="absolute inset-0 flex flex-col justify-center p-8">
+              <div className="max-w-2xl pl-6 mt-16">
+                <h3 className="text-3xl font-bold text-orange-500 mb-4">
                   <span className="border-b-2 border-[#2B1C48] pb-1">Our</span> Vision
                 </h3>
-                <p className="text-base sm:text-lg md:text-xl leading-normal" style={{ color: '#2B1C48' }}>
+                <p className="text-xl leading-normal" style={{ color: '#2B1C48' }}>
                   To seamlessly connect the physical and digital worlds, revolutionizing supply chains with cutting-edge financial technology, and become the global leader in intelligent, data-driven solutions that empower businesses to thrive through efficiency transparency, and sustainable growth.
                 </p>
               </div>
@@ -65,12 +65,12 @@ export default function ValueSection() {
             <img src="https://res.cloudinary.com/dosxengut/image/upload/v1748416192/Asset_8_tzvns5.png" alt="" className="w-full h-auto opacity-90" />
 
             {/* Content overlay */}
-            <div className="absolute inset-0 flex flex-col justify-center p-4 sm:p-6 md:p-8">
-              <div className="max-w-2xl pl-4 sm:pl-6 mt-16">
-                <h3 className="text-2xl sm:text-3xl font-bold text-orange-500 mb-4">
+            <div className="absolute inset-0 flex flex-col justify-start p-10 pt-32">
+              <div className="max-w-2xl pl-6 mt-8">
+                <h3 className="text-3xl font-bold text-orange-500 mb-6">
                   <span className="border-b-2 border-[#2B1C48] pb-1">Our</span> Mission
                 </h3>
-                <p className="text-base sm:text-lg md:text-xl leading-normal" style={{ color: '#2B1C48' }}>
+                <p className="text-xl leading-normal" style={{ color: '#2B1C48' }}>
                   To foster happiness and deliver value, focusing on building a sustainable future.
                 </p>
               </div>
@@ -80,16 +80,16 @@ export default function ValueSection() {
       </div>
 
       {/* Leadership Section - Full Width */}
-      <div className="w-full bg-white py-12 md:py-20">
+      <div className="w-full bg-white py-20">
         <div className="max-w-6xl mx-auto px-4">
           <div className="animate-fade-in" style={{ animationDelay: "0.6s" }}>
             <div className="max-w-4xl">
-              <h5 className="text-3xl md:text-4xl font-semibold text-gray-700 mb-2">Chairman Message</h5>
-              <h6 className="text-2xl md:text-3xl font-medium text-orange-500 mb-6 md:mb-8">Mr. Kai Zheng</h6>
-              <div className="flex gap-4 md:gap-6">
+              <h5 className="text-4xl font-semibold text-gray-700 mb-2">Chairman Message</h5>
+              <h6 className="text-3xl font-medium text-orange-500 mb-8">Mr. Kai Zheng</h6>
+              <div className="flex gap-6">
                 <div className="w-1.5 bg-orange-500 rounded-full self-stretch"></div>
-                <p className="text-lg md:text-2xl leading-relaxed" style={{ color: '#5E366D' }}>
-                Our Vision is to shape a future where innovation, sustainability, and human connection drive meaningful impact across industries. With a strong foundation of continuous growth, a talented global team, and deep roots in the UAE’s progressive environment, we are building integrated ecosystems in mobility, energy, digital solutions, and cultural tourism. Together, we are not just expanding, we are leading the way toward a connected and collaborative future.
+                <p className="text-2xl leading-relaxed" style={{ color: '#5E366D' }}>
+                Our Vision is to shape a future where innovation, sustainability, and human connection drive meaningful impact across industries. With a strong foundation of continuous growth, a talented global team, and deep roots in the UAE's progressive environment, we are building integrated ecosystems in mobility, energy, digital solutions, and cultural tourism. Together, we are not just expanding, we are leading the way toward a connected and collaborative future.
                 </p>
               </div>
             </div>
@@ -98,21 +98,21 @@ export default function ValueSection() {
       </div>
 
       {/* Together We Grow Section - Full Width */}
-      <div className="relative w-full h-[40vh] md:h-[45vh] overflow-hidden bg-white">
+      <div className="relative w-full h-[45vh] overflow-hidden bg-white">
         <div className="absolute inset-0 flex items-center">
           <div className="max-w-7xl w-full mx-auto px-4">
-            <div className="flex items-center gap-4 md:gap-8">
-              <div className="relative w-8 h-8 md:w-10 md:h-10">
+            <div className="flex items-center gap-8">
+              <div className="relative w-10 h-10">
                 <Image
                   src="https://res.cloudinary.com/dosxengut/image/upload/v1748416191/Asset_11_tftntp.png"
                   alt="Together we grow icon"
                   fill
                   className="object-contain"
-                  sizes="(max-width: 768px) 32px, 40px"
+                  sizes="40px"
                   priority
                 />
               </div>
-              <h3 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-[#F08900] whitespace-nowrap" style={{
+              <h3 className="text-6xl font-bold text-[#F08900] whitespace-nowrap" style={{
                 textShadow: '1px 1px 3px rgba(0, 0, 0, 0.3)'
               }}>
                 Together we grow
@@ -128,7 +128,7 @@ export default function ValueSection() {
         </div>
       </div>
 
-      {/* Add animation styles */}
+      {/* Animation styles remain unchanged */}
       <style jsx global>{`
         @keyframes fadeIn {
           from { opacity: 0; }
