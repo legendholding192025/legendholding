@@ -20,29 +20,29 @@ export default function OpenRoles() {
             </div>
 
             {/* Call to Action Cards */}
-            <div className="mt-8">
+            <div className="mt-4">
               {/* Explore Open Roles */}
-              <div className="bg-white rounded-2xl p-8 shadow-sm border border-[#5D376E]/10 hover:shadow-lg transition-all duration-300 group">
-                <div className="flex items-start gap-6">
-                  <div className="flex items-center justify-center w-16 h-16 bg-[#5D376E]/10 rounded-2xl group-hover:bg-[#5D376E]/20 transition-colors duration-300 flex-shrink-0">
-                    <Briefcase className="w-8 h-8 text-[#5D376E]" />
+              <div className="bg-white rounded-2xl p-12 shadow-sm border border-[#5D376E]/10 hover:shadow-lg transition-all duration-300 group">
+                <div className="flex items-start gap-8">
+                  <div className="flex items-center justify-center w-20 h-20 bg-[#5D376E]/10 rounded-2xl group-hover:bg-[#5D376E]/20 transition-colors duration-300 flex-shrink-0">
+                    <Briefcase className="w-10 h-10 text-[#5D376E]" />
                   </div>
 
                   <div className="flex-1">
-                    <h3 className="text-2xl font-bold text-[#2B1C48] mb-3">Explore open roles</h3>
-                    <p className="text-gray-600 mb-4 leading-relaxed">
+                    <h3 className="text-3xl font-bold text-[#2B1C48] mb-4">Explore open roles</h3>
+                    <p className="text-xl text-gray-600 mb-6 leading-relaxed">
                       Discover exciting career opportunities across our diverse industries and find the perfect role to advance
                       your career.
                     </p>
                     <Link 
                       href="/careers/jobs" 
-                      className="inline-flex items-center px-6 py-3 bg-[#EE8900] text-white font-medium rounded-xl 
+                      className="inline-flex items-center px-8 py-4 bg-[#EE8900] text-white font-medium rounded-xl 
                       hover:bg-[#EE8900]/90 transition-all duration-300 ease-in-out
                       hover:shadow-[0_0_20px_rgba(238,137,0,0.3)] 
                       active:transform active:scale-[0.98] group"
                     >
-                      <span className="group-hover:translate-x-[2px] transition-transform duration-300">View Open Positions</span>
-                      <ArrowRight className="ml-2 w-5 h-5 transform transition-transform duration-300 group-hover:translate-x-1" />
+                      <span className="text-lg group-hover:translate-x-[2px] transition-transform duration-300">View Open Positions</span>
+                      <ArrowRight className="ml-2 w-6 h-6 transform transition-transform duration-300 group-hover:translate-x-1" />
                     </Link>
                   </div>
                 </div>
