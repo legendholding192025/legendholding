@@ -204,7 +204,7 @@ export default function ContactPage() {
                 </div>
 
                 {/* Contact Info Cards - Inside Map Section */}
-                <div className="grid grid-cols-2 gap-3 mt-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-6">
                   {contactInfo.map((item, index) => (
                     <motion.div
                       key={index}
@@ -214,15 +214,15 @@ export default function ContactPage() {
                       transition={{ delay: index * 0.1, duration: 0.5 }}
                       className="bg-gray-50 rounded-xl p-3 border border-gray-100 hover:shadow-lg transition-all duration-300 group"
                     >
-                      <div className="flex items-center gap-3">
-                        <div className={`${item.color} group-hover:scale-110 transition-transform duration-300`}>
+                      <div className="flex items-start gap-3">
+                        <div className={`${item.color} group-hover:scale-110 transition-transform duration-300 mt-0.5 flex-shrink-0`}>
                           {item.icon}
                         </div>
-                        <div>
+                        <div className="min-w-0 flex-1">
                           <h3 className="text-sm font-semibold text-gray-900 mb-0.5">{item.title}</h3>
                           <div className="-space-y-1">
                             {item.details.map((detail, idx) => (
-                              <p key={idx} className="text-sm text-gray-600 leading-tight">
+                              <p key={idx} className="text-sm text-gray-600 leading-tight break-words break-all sm:break-normal">
                                 {detail}
                               </p>
                             ))}
