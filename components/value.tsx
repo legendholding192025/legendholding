@@ -58,12 +58,12 @@ export default function ValueSection() {
             </div>
 
             {/* Content overlay */}
-            <div className="absolute inset-0 flex flex-col justify-center p-4 sm:p-6 md:p-8">
-              <div className="max-w-2xl pl-4 sm:pl-6 mt-8 sm:mt-12 md:mt-16">
-                <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-orange-500 mb-3 sm:mb-4">
+            <div className="absolute inset-0 flex flex-col justify-center p-6 sm:p-6 md:p-8">
+              <div className="max-w-2xl pl-2 sm:pl-4 md:pl-6 mt-8 sm:mt-12 md:mt-16">
+                <h3 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-orange-500 mb-3 sm:mb-4">
                   <span className="border-b-2 border-[#2B1C48] pb-1">Our</span> Vision
                 </h3>
-                <p className="text-base sm:text-lg md:text-xl leading-relaxed" style={{ color: '#2B1C48' }}>
+                <p className="text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed pr-2 sm:pr-4" style={{ color: '#2B1C48' }}>
                   To seamlessly connect the physical and digital worlds, revolutionizing supply chains with cutting-edge financial technology, and become the global leader in intelligent, data-driven solutions that empower businesses to thrive through efficiency transparency, and sustainable growth.
                 </p>
               </div>
@@ -88,12 +88,12 @@ export default function ValueSection() {
             </div>
 
             {/* Content overlay */}
-            <div className="absolute inset-0 flex flex-col justify-start p-4 sm:p-6 md:p-8 lg:p-10 pt-16 sm:pt-20 md:pt-24 lg:pt-32">
-              <div className="max-w-2xl pl-4 sm:pl-6 mt-4 sm:mt-6 md:mt-8">
-                <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-orange-500 mb-3 sm:mb-4 md:mb-6">
+            <div className="absolute inset-0 flex flex-col justify-start p-6 sm:p-6 md:p-8 lg:p-10 pt-16 sm:pt-20 md:pt-24 lg:pt-32">
+              <div className="max-w-2xl pl-2 sm:pl-4 md:pl-6 mt-4 sm:mt-6 md:mt-8">
+                <h3 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-orange-500 mb-3 sm:mb-4 md:mb-6">
                   <span className="border-b-2 border-[#2B1C48] pb-1">Our</span> Mission
                 </h3>
-                <p className="text-base sm:text-lg md:text-xl leading-relaxed" style={{ color: '#2B1C48' }}>
+                <p className="text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed pr-2 sm:pr-4" style={{ color: '#2B1C48' }}>
                   To foster happiness and deliver value, with a clear focus on building a sustainable future. Every step we take is guided by purpose, progress, and a commitment to doing things the right way every time.
                 </p>
               </div>
