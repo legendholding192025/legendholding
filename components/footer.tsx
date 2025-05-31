@@ -82,7 +82,7 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="/newsroom"
+                  href="/news"
                   className="text-white/80 hover:text-white transition-colors flex items-center group"
                 >
                   <ChevronRight
@@ -94,7 +94,7 @@ export function Footer() {
               </li>
               <li>
                 <Link 
-                  href="/csr" 
+                  href="/who-we-are/csr" 
                   className="text-white/80 hover:text-white transition-colors flex items-center group"
                 >
                   <ChevronRight

@@ -21,7 +21,7 @@ export default function AboutPage() {
           />
         </div>
         {/* Content */}
-        <div className="relative z-10 flex flex-col items-center justify-center px-4 py-24 md:py-32">
+        <div className="relative z-10 flex flex-col items-center justify-center px-4 py-32 md:py-40">
           {/* Heading */}
           <h2
             className="font-richmond text-3xl md:text-4xl font-bold text-[#EE8900] text-center mb-4"
