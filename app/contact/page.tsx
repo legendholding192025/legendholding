@@ -112,8 +112,7 @@ export default function ContactPage() {
       icon: <MapPin className="w-6 h-6" />,
       title: "Address",
       details: [
-        "Legend Holding Group HQ, Jebel Ali Freezone Gate 5",
-        "Dubai, United Arab Emirates"
+        "Legend Holding Group HQ, Jebel Ali Freezone Gate 5, Dubai, United Arab Emirates"
       ],
       color: "text-[#EE8900]"
     },
