@@ -149,6 +149,12 @@ const menuItems: MenuItem[] = [
             image: "https://res.cloudinary.com/dosxengut/image/upload/v1747648852/in-copy-about-charging-green_qjoyjk.jpg",
             description: "Sustainable energy solutions for a greener future."
           },
+          { 
+            title: "Legend Commercial Vehicles",
+            url: "/our-brands/legend-commercial-vehicles",
+            image: "https://cdn.legendholding.com/images/cdn_683ab636326ef8.83143422_20250531_075638.jpg",
+            description: "Comprehensive commercial vehicle solutions for businesses."
+          },
         ],
       },
     ],

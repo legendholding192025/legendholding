@@ -64,19 +64,17 @@ function AnimatedCounter({ end, duration = 2000, suffix = "", label, color }: Co
 
   return (
     <div ref={counterRef} className="text-center">
-      <div className={`${color} rounded-xl overflow-hidden shadow-lg p-6`}>
-        <div className="flex items-start gap-4">
-          <div className="flex-1">
-            <h3 className="text-4xl lg:text-5xl font-bold text-white mb-2 flex items-center justify-center">
-              {suffix}
-              {count.toLocaleString()}
-            </h3>
-            <p className="text-white/80 text-lg font-medium uppercase tracking-wide">
-              {label}
-            </p>
-          </div>
+      <div className={`${color} rounded-xl overflow-hidden shadow-lg p-8 h-full flex flex-col justify-center`}>
+        <div className="flex flex-col items-center justify-center pt-6">
+          <h3 className="text-4xl lg:text-5xl font-bold text-white mb-6 flex items-center justify-center w-full -ml-2">
+            {suffix}
+            {count.toLocaleString()}
+          </h3>
+          <p className="text-white/80 text-lg font-medium uppercase tracking-wide text-center px-2">
+            {label}
+          </p>
         </div>
-        <div className="mt-4 pt-4 border-t border-white/10">
+        <div className="mt-8 pt-4 border-t border-white/10">
           <div className="h-1 rounded-full bg-white/20" />
         </div>
       </div>
@@ -127,7 +125,7 @@ export default function AtAGlance() {
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat, index) => (
           <AnimatedCounter
             key={index}
@@ -135,7 +133,7 @@ export default function AtAGlance() {
             suffix={stat.suffix}
             label={stat.label}
             color={stat.color}
-            duration={2000 + index * 200} // Stagger animations
+            duration={2000 + index * 200}
           />
         ))}
       </div>

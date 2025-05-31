@@ -45,6 +45,73 @@ function AnimatedText({ children, delay = 0 }: AnimatedTextProps) {
   )
 }
 
+type AnimatedCounterProps = {
+  target: number
+  suffix?: string
+  duration?: number
+  startDelay?: number
+}
+
+function AnimatedCounter({ target, suffix = "", duration = 2000, startDelay = 0 }: AnimatedCounterProps) {
+  const [count, setCount] = useState(0)
+  const [isVisible, setIsVisible] = useState(false)
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !isVisible) {
+          setIsVisible(true)
+
+          setTimeout(() => {
+            const startTime = Date.now()
+            const startValue = 0
+            const endValue = target
+
+            const animate = () => {
+              const now = Date.now()
+              const elapsed = now - startTime
+              const progress = Math.min(elapsed / duration, 1)
+
+              // Easing function for smooth deceleration
+              const easeOut = 1 - Math.pow(1 - progress, 3)
+              const currentValue = Math.floor(startValue + (endValue - startValue) * easeOut)
+
+              setCount(currentValue)
+
+              if (progress < 1) {
+                requestAnimationFrame(animate)
+              }
+            }
+
+            animate()
+          }, startDelay)
+        }
+      },
+      { threshold: 0.5 },
+    )
+
+    const element = document.getElementById(`counter-${target}-${suffix}`)
+    if (element) observer.observe(element)
+
+    return () => observer.disconnect()
+  }, [target, duration, startDelay, isVisible, suffix])
+
+  return (
+    <span
+      id={`counter-${target}-${suffix}`}
+      className="inline-block tabular-nums"
+      style={{
+        transform: isVisible ? "translateY(0)" : "translateY(10px)",
+        opacity: isVisible ? 1 : 0,
+        transition: "all 0.5s ease-out",
+      }}
+    >
+      {count}
+      {suffix}
+    </span>
+  )
+}
+
 export default function AutomobileServicesPage() {
   const [isLoaded, setIsLoaded] = useState(false)
   const [activeSection, setActiveSection] = useState<string | null>(null)
@@ -85,12 +152,12 @@ export default function AutomobileServicesPage() {
               <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden">
                 <div className="flex flex-col md:flex-row">
                   {/* Image Section */}
-                  <div className="md:w-2/5 relative group overflow-hidden">
+                  <div className="md:w-1/2 relative group overflow-hidden">
                     <div className="h-full w-full relative overflow-hidden">
                       <Image
-                        src="https://res.cloudinary.com/dckrspiqe/image/upload/v1748249090/service_sszlnl.jpg"
-                        width={800}
-                        height={600}
+                        src="https://res.cloudinary.com/dckrspiqe/image/upload/v1747998254/service_sszlnl.jpg"
+                        width={1000}
+                        height={800}
                         alt="Legend Automobile Services - Professional Service Bay"
                         className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                         priority
@@ -100,24 +167,32 @@ export default function AutomobileServicesPage() {
                   </div>
 
                   {/* Content Section */}
-                  <div className="flex-1 p-8 md:p-10 flex flex-col justify-center">
-                    <div className="space-y-6 mb-8">
-                      <p className="text-lg text-gray-700 font-effra leading-relaxed">
-                        Certified with the prestigious MOIAT (ESMA) 5-star rating, our facility reflects our unwavering 
-                        commitment to quality, safety, and service excellence. Housed in a state-of-the-art workshop, 
-                        the center is equipped with the latest diagnostic and repair technologies.
+                  <div className="flex-1 p-10 md:p-12 flex flex-col justify-center">
+                    <div className="space-y-8 mb-8">
+                      <p className="text-xl text-gray-700 font-effra leading-relaxed">
+                        Since their inception in <span className="font-semibold text-[#2b1c48]">2013</span>, Legend Automobile Services
+                        has achieved remarkable sales figures, reaching an impressive{" "}
+                        <span className="font-bold text-[#ee8900]">
+                          <AnimatedCounter target={55} suffix="M USD" duration={2000} startDelay={800} />
+                        </span>{" "}
+                        in a year.
+                      </p>
+
+                      <p className="text-xl text-gray-700 font-effra leading-relaxed">
+                        These numbers not only validate Legend Automobile Services' position as a market leader but also affirm the trust
+                        and confidence of their valued customers across the region.
                       </p>
                     </div>
 
-                    {/* View Website Button */}
-                    <div className="mt-8 w-full">
+                    {/* Learn More Button */}
+                    <div className="mt-10 w-full">
                       <button
-                        className="w-full py-4 group inline-flex items-center justify-center gap-2 text-white font-semibold bg-[#F08900] hover:bg-[#d67a00] transition-colors duration-300 cursor-pointer rounded-lg"
-                        onClick={() => window.open("/contact", "_blank")}
+                        className="w-full py-5 group inline-flex items-center justify-center gap-2 text-white font-semibold bg-[#F08900] hover:bg-[#d67a00] transition-colors duration-300 cursor-pointer rounded-lg text-lg"
+                        onClick={() => window.open("https://www.legendautomobileservices.com", "_blank")}
                       >
                         <span>Visit Website</span>
                         <ChevronRight
-                          className={`w-5 h-5 transform transition-transform duration-300 ${
+                          className={`w-6 h-6 transform transition-transform duration-300 ${
                             activeSection === "services" ? "translate-x-1" : ""
                           }`}
                         />

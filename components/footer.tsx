@@ -219,9 +219,9 @@ export function Footer() {
                 <TikTokIcon size={20} />
               </Link>
             </div>
-            <p className="text-white/60 text-xs">
+            {/* <p className="text-white/60 text-xs">
               Join our growing community of followers and be part of our journey towards excellence and innovation.
-            </p>
+            </p> */}
           </div>
         </div>
 

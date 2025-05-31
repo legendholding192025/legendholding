@@ -8,17 +8,19 @@ export default function OpenRoles() {
   return (
     <div className="bg-white py-20">
       <div className="max-w-7xl mx-auto px-6">
-        <div className="grid md:grid-cols-2 gap-16 items-center mb-20">
+        <div className="grid md:grid-cols-2 gap-16 items-end mb-20">
           {/* Content Side */}
-          <div>
-            <span className="text-[#EE8900] font-medium mb-2 block">Career Opportunities</span>
-            <h2 className="text-4xl lg:text-5xl font-bold text-[#2B1C48] mb-6 leading-tight">Shape Your Future with us</h2>
-            <p className="text-lg text-gray-600 mb-12">
-              Join a team where innovation meets ambition. At Legend Holdings, we offer diverse opportunities across our portfolio of world-renowned brands, enabling you to make an impact while building an exceptional career.
-            </p>
+          <div className="flex flex-col h-full">
+            <div className="mb-8 mt-auto">
+              <span className="text-[#EE8900] font-medium mb-2 block">Career Opportunities</span>
+              <h2 className="text-4xl lg:text-5xl font-bold text-[#2B1C48] mb-6 leading-tight">Shape Your Future With Us</h2>
+              <p className="text-lg text-gray-600">
+                Join a team where innovation meets ambition. At Legend Holdings, we offer diverse opportunities across our portfolio of world-renowned brands, enabling you to make an impact while building an exceptional career.
+              </p>
+            </div>
 
             {/* Call to Action Cards */}
-            <div className="grid gap-6">
+            <div className="mt-8">
               {/* Explore Open Roles */}
               <div className="bg-white rounded-2xl p-8 shadow-sm border border-[#5D376E]/10 hover:shadow-lg transition-all duration-300 group">
                 <div className="flex items-start gap-6">

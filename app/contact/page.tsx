@@ -14,6 +14,7 @@ import {
   CheckCircle,
   ExternalLink,
   ChevronDown,
+  ChevronRight,
 } from "lucide-react"
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
 import { toast } from "sonner"
@@ -161,18 +162,49 @@ export default function ContactPage() {
         {/* Main Contact Section */}
         <section className="bg-slate-100 py-16 px-6">
           <div className="max-w-7xl mx-auto">
-            <div className="grid lg:grid-cols-2 gap-12 items-start">
-              {/* Left Side - Contact Info */}
-              <div className="space-y-8">
-                <div>
-                  <h1 className="text-4xl font-bold text-gray-900 mb-4">Get in Touch</h1>
-                  {/* <p className="text-lg text-gray-600 mb-6">
-                    Get in touch with us for any inquiries about our services or collaboration opportunities.
-                  </p> */}
+            <div>
+              <h1 className="text-4xl font-bold text-gray-900 mb-2">Get in Touch</h1>
+              <p className="text-lg text-gray-600 mb-6">
+                Visit our office or reach out to us through any of the following channels.
+              </p>
+            </div>
+
+            <div className="grid lg:grid-cols-2 gap-12 items-stretch">
+              {/* Left Side - Map and Contact Info */}
+              <div className="bg-white rounded-2xl p-6 shadow-sm flex flex-col">
+                <div className="mb-4">
+                  <span className="text-[#EE8900] font-semibold text-lg inline-block mb-2">Our Location</span>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-2">Visit Our Office</h3>
+                  <div className="w-16 h-1 bg-[#EE8900] rounded-full mb-4"></div>
                 </div>
 
-                {/* Contact Info Cards */}
-                <div className="grid grid-cols-1 gap-3">
+                <div className="flex-grow rounded-xl overflow-hidden shadow-lg mb-4">
+                  <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3617.8876416068888!2d55.11843827537754!3d24.936844342145934!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5f0fb4a8a8b8a7%3A0x3e5f0fb4a8a8b8a7!2sJebel%20Ali%20Free%20Zone%20Gate%205!5e0!3m2!1sen!2sae!4v1629789456789!5m2!1sen!2sae"
+                    width="100%"
+                    height="100%"
+                    style={{ border: 0, minHeight: "350px" }}
+                    allowFullScreen
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                    className="rounded-xl"
+                  ></iframe>
+                </div>
+
+                <div className="mt-auto">
+                  <a
+                    href="https://goo.gl/maps/your-location-link"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#F08900] text-white font-semibold rounded-lg hover:bg-[#d67a00] transition-colors duration-300 w-full"
+                  >
+                    <span>Get Directions</span>
+                    <ChevronRight className="w-5 h-5" />
+                  </a>
+                </div>
+
+                {/* Contact Info Cards - Inside Map Section */}
+                <div className="grid grid-cols-2 gap-3 mt-6">
                   {contactInfo.map((item, index) => (
                     <motion.div
                       key={index}
@@ -180,17 +212,17 @@ export default function ContactPage() {
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true }}
                       transition={{ delay: index * 0.1, duration: 0.5 }}
-                      className="bg-white rounded-xl p-4 border border-gray-100 hover:shadow-lg transition-all duration-300 group"
+                      className="bg-gray-50 rounded-xl p-3 border border-gray-100 hover:shadow-lg transition-all duration-300 group"
                     >
-                      <div className="flex items-center gap-4">
+                      <div className="flex items-center gap-3">
                         <div className={`${item.color} group-hover:scale-110 transition-transform duration-300`}>
                           {item.icon}
                         </div>
                         <div>
-                          <h3 className="text-base font-semibold text-gray-900 mb-1">{item.title}</h3>
-                          <div className="-space-y-2">
+                          <h3 className="text-sm font-semibold text-gray-900 mb-0.5">{item.title}</h3>
+                          <div className="-space-y-1">
                             {item.details.map((detail, idx) => (
-                              <p key={idx} className="text-base md:text-lg text-gray-600 leading-none">
+                              <p key={idx} className="text-sm text-gray-600 leading-tight">
                                 {detail}
                               </p>
                             ))}
@@ -203,13 +235,15 @@ export default function ContactPage() {
               </div>
 
               {/* Right Side - Contact Form */}
-              <div className="bg-white rounded-2xl p-6 shadow-sm mt-16">
+              <div className="bg-white rounded-2xl p-6 shadow-sm flex flex-col">
                 <div className="mb-4">
-                  <h2 className="text-3xl font-bold text-gray-900 mb-2">Fill the Form</h2>
+                  <span className="text-[#EE8900] font-semibold text-lg inline-block mb-2">Contact Us</span>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-2">Fill the Form</h3>
+                  <div className="w-16 h-1 bg-[#EE8900] rounded-full mb-4"></div>
                 </div>
 
                 {formStep === 0 ? (
-                  <form onSubmit={handleSubmit} className="space-y-3">
+                  <form onSubmit={handleSubmit} className="space-y-3 flex-grow">
                     <div>
                       <input
                         type="text"
@@ -266,49 +300,51 @@ export default function ContactPage() {
                       />
                     </div>
 
-                    <div>
+                    <div className="flex-grow">
                       <textarea
                         name="message"
                         value={formData.message}
                         onChange={handleChange}
                         required
                         placeholder="How can we help?"
-                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#EE8900] focus:border-transparent transition-all duration-200 min-h-[80px] resize-none"
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#EE8900] focus:border-transparent transition-all duration-200 min-h-[120px] resize-none"
                       />
                     </div>
 
-                    <button
-                      type="submit"
-                      disabled={isSubmitting}
-                      className={`
-                        w-full bg-[#EE8900] hover:bg-[#EE8900]/90 text-white py-2.5 rounded-lg
-                        transition-all duration-200 font-medium text-base
-                        ${isSubmitting ? "opacity-70 cursor-not-allowed" : ""}
-                      `}
-                    >
-                      {isSubmitting ? (
-                        <div className="flex items-center justify-center">
-                          <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
-                          Submitting...
-                        </div>
-                      ) : (
-                        "Submit"
-                      )}
-                    </button>
+                    <div className="mt-auto">
+                      <button
+                        type="submit"
+                        disabled={isSubmitting}
+                        className={`
+                          w-full bg-[#F08900] hover:bg-[#d67a00] text-white py-3 rounded-lg
+                          transition-all duration-200 font-semibold text-base
+                          ${isSubmitting ? "opacity-70 cursor-not-allowed" : ""}
+                        `}
+                      >
+                        {isSubmitting ? (
+                          <div className="flex items-center justify-center">
+                            <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                            Submitting...
+                          </div>
+                        ) : (
+                          "Submit"
+                        )}
+                      </button>
 
-                    <p className="text-xs text-gray-500 text-center">
-                      By contacting us, you agree to our{" "}
-                      <Link href="/terms" className="text-[#EE8900] hover:underline">
-                        Terms of Service
-                      </Link>{" "}
-                      and{" "}
-                      <Link href="/privacy" className="text-[#EE8900] hover:underline">
-                        Privacy Policy
-                      </Link>
-                    </p>
+                      <p className="text-xs text-gray-500 text-center mt-3">
+                        By contacting us, you agree to our{" "}
+                        <Link href="/terms" className="text-[#EE8900] hover:underline">
+                          Terms of Service
+                        </Link>{" "}
+                        and{" "}
+                        <Link href="/privacy" className="text-[#EE8900] hover:underline">
+                          Privacy Policy
+                        </Link>
+                      </p>
+                    </div>
                   </form>
                 ) : (
-                  <div className="text-center py-8">
+                  <div className="text-center py-8 flex-grow flex flex-col">
                     <div className="flex justify-center mb-4">
                       <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center">
                         <CheckCircle className="w-8 h-8 text-green-600" />
@@ -318,84 +354,16 @@ export default function ContactPage() {
                     <p className="text-lg text-gray-600 mb-6">
                       Thank you for submitting your form, We will contact you shortly.
                     </p>
-                    <button
-                      onClick={resetForm}
-                      className="inline-flex items-center px-5 py-2.5 rounded-lg text-white bg-[#EE8900] hover:bg-[#EE8900]/90 transition-all duration-200 font-medium"
-                    >
-                      Send Another Message
-                    </button>
+                    <div className="mt-auto">
+                      <button
+                        onClick={resetForm}
+                        className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#F08900] text-white font-semibold rounded-lg hover:bg-[#d67a00] transition-colors duration-300 w-full"
+                      >
+                        Send Another Message
+                      </button>
+                    </div>
                   </div>
                 )}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Location Section */}
-        <section className="py-24 px-6 bg-gray-50">
-          <div className="max-w-7xl mx-auto">
-            <div className="grid lg:grid-cols-2 gap-16 items-start">
-              {/* Map */}
-              <div className="relative bg-white rounded-2xl overflow-hidden h-[600px] shadow-lg">
-                <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3617.8876416068888!2d55.11843827537754!3d24.936844342145934!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5f0fb4a8a8b8a7%3A0x3e5f0fb4a8a8b8a7!2sJebel%20Ali%20Free%20Zone%20Gate%205!5e0!3m2!1sen!2sae!4v1629789456789!5m2!1sen!2sae"
-                  width="100%"
-                  height="100%"
-                  style={{ border: 0 }}
-                  allowFullScreen
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                  className="absolute inset-0"
-                ></iframe>
-              </div>
-
-              {/* Location Info */}
-              <div className="lg:pl-8">
-                <div className="mb-8">
-                  <span className="text-[#EE8900] font-semibold text-lg inline-block mb-2">Our Location</span>
-                  <h2 className="text-4xl font-bold text-gray-900 mb-4">Visit Our Office</h2>
-                  <div className="w-20 h-1 bg-[#EE8900] rounded-full"></div>
-                </div>
-
-                <div className="bg-white rounded-2xl p-8 shadow-lg">
-                  <h3 className="text-2xl font-semibold text-gray-900 mb-6">Headquarters</h3>
-                  <div className="space-y-4">
-                    <div className="flex items-start gap-4">
-                      <MapPin className="w-6 h-6 text-[#F08900] mt-1" />
-                      <div className="-space-y-1">
-                        <p className="text-lg text-gray-700 leading-tight">Legend Holding Group HQ, Jebel Ali Freezone, Gate 5</p>
-                        <p className="text-lg text-gray-700 leading-tight">Dubai, United Arab Emirates</p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-4">
-                      <Phone className="w-6 h-6 text-[#F08900] mt-1" />
-                      <div className="-space-y-1">
-                        <p className="text-lg text-gray-700 leading-tight">+971 4 234 0738</p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-4">
-                      <Mail className="w-6 h-6 text-[#F08900] mt-1" />
-                      <div className="-space-y-1">
-                        <p className="text-lg text-gray-700 leading-tight">info@legendholding.com</p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-4">
-                      <Clock className="w-6 h-6 text-[#F08900] mt-1" />
-                      <div className="-space-y-1">
-                        <p className="text-lg text-gray-700 leading-tight">Monday - Saturday : 9:00 AM - 6:00 PM</p>
-                      </div>
-                    </div>
-                    <Link 
-                      href="https://maps.google.com"
-                      target="_blank"
-                      className="inline-flex items-center px-6 py-3 bg-[#F08900] text-white rounded-lg hover:bg-[#F08900]/90 transition-colors"
-                    >
-                      <MapPin className="w-5 h-5 mr-2" />
-                      Get Directions
-                      <ExternalLink className="w-4 h-4 ml-2" />
-                    </Link>
-                  </div>
-                </div>
               </div>
             </div>
           </div>

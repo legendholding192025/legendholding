@@ -53,7 +53,7 @@ export default function Newsletter() {
               <div className="flex-1 text-center lg:text-left space-y-4">
                 <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight">Never miss an update</h2>
                 <p className="text-lg md:text-xl text-[#5D376E]">
-                  Get the latest updates, exclusive content, and insider tips delivered straight to your inbox.
+                Stay connected to the latest news of Legend Holding Group.
                 </p>
               </div>
 

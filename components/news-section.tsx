@@ -81,7 +81,7 @@ export function Newsroom() {
   }
 
   return (
-    <section className="py-16 bg-[#EAE2D6]">
+    <section className="py-16 bg-[#FFFFF]">
       <div className="container mx-auto px-4">
         <div className="flex flex-col md:flex-row md:items-center justify-between mb-10">
           <div>

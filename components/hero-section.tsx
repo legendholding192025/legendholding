@@ -14,9 +14,13 @@ export default function HeroSection() {
           <span className="text-orange-400 block mb-2 text-2xl sm:text-3xl md:text-4xl lg:text-5xl">Welcome to</span>
           <span className="text-white">Legend Holding Group</span>
         </h1>
-        <p className="text-orange-300 text-base sm:text-lg md:text-xl lg:text-2xl font-medium tracking-wider">
-          Together We Grow 
+        <p
+          className="text-base sm:text-lg md:text-xl lg:text-2xl font-medium tracking-wider"
+          style={{ color: '#5D376E' }}
+        >
+          Together We Grow
         </p>
+
       </div>
     </section>
   )
