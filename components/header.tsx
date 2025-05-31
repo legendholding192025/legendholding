@@ -508,6 +508,11 @@ export function Header() {
                         "text-gray-800 font-medium text-base hover:text-primary transition-colors duration-200 flex items-center py-2 px-1 relative group",
                         (activeMenu === item.title || hoveredItem === item.title) && "text-primary",
                       )}
+                      onClick={(e) => {
+                        if (item.hasSubmenu) {
+                          e.preventDefault();
+                        }
+                      }}
                     >
                       <span className="relative">
                         {item.title}
