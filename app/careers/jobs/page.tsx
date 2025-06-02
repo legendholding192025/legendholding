@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
-import { Search, Briefcase, MapPin, Clock, Building2 } from "lucide-react"
+import { Search, Briefcase, MapPin, Clock, Building2, ChevronDown, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
@@ -29,6 +29,8 @@ export default function JobsPage() {
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedDepartment, setSelectedDepartment] = useState<string>("all")
   const [selectedLocation, setSelectedLocation] = useState<string>("all")
+  const [isDepartmentOpen, setIsDepartmentOpen] = useState(false)
+  const [isLocationOpen, setIsLocationOpen] = useState(false)
   const supabase = createClientComponentClient()
   const router = useRouter()
 
@@ -116,31 +118,93 @@ export default function JobsPage() {
               </div>
 
               {/* Department Filter */}
-              <div>
-                <select
-                  value={selectedDepartment}
-                  onChange={(e) => setSelectedDepartment(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#5D376E]/20 focus:border-[#5D376E] text-gray-700"
+              <div className="relative">
+                <button
+                  onClick={() => {
+                    setIsDepartmentOpen(!isDepartmentOpen)
+                    setIsLocationOpen(false)
+                  }}
+                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#5D376E]/20 focus:border-[#5D376E] text-gray-700 flex items-center justify-between"
                 >
-                  <option value="all">All Departments</option>
-                  {departments.map((dept) => (
-                    <option key={dept} value={dept}>{dept}</option>
-                  ))}
-                </select>
+                  <span>{selectedDepartment === "all" ? "All Departments" : selectedDepartment}</span>
+                  <ChevronDown className={`h-4 w-4 transition-transform ${isDepartmentOpen ? "rotate-180" : ""}`} />
+                </button>
+                {isDepartmentOpen && (
+                  <div className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-[300px] overflow-y-auto">
+                    <div className="p-2">
+                      <button
+                        onClick={() => {
+                          setSelectedDepartment("all")
+                          setIsDepartmentOpen(false)
+                        }}
+                        className={`w-full text-left px-3 py-2 rounded-md hover:bg-gray-100 ${
+                          selectedDepartment === "all" ? "bg-[#5D376E]/10 text-[#5D376E]" : ""
+                        }`}
+                      >
+                        All Departments
+                      </button>
+                      {departments.map((dept) => (
+                        <button
+                          key={dept}
+                          onClick={() => {
+                            setSelectedDepartment(dept)
+                            setIsDepartmentOpen(false)
+                          }}
+                          className={`w-full text-left px-3 py-2 rounded-md hover:bg-gray-100 ${
+                            selectedDepartment === dept ? "bg-[#5D376E]/10 text-[#5D376E]" : ""
+                          }`}
+                        >
+                          {dept}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Location Filter */}
-              <div>
-                <select
-                  value={selectedLocation}
-                  onChange={(e) => setSelectedLocation(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#5D376E]/20 focus:border-[#5D376E] text-gray-700"
+              <div className="relative">
+                <button
+                  onClick={() => {
+                    setIsLocationOpen(!isLocationOpen)
+                    setIsDepartmentOpen(false)
+                  }}
+                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#5D376E]/20 focus:border-[#5D376E] text-gray-700 flex items-center justify-between"
                 >
-                  <option value="all">All Locations</option>
-                  {locations.map((loc) => (
-                    <option key={loc} value={loc}>{loc}</option>
-                  ))}
-                </select>
+                  <span>{selectedLocation === "all" ? "All Locations" : selectedLocation}</span>
+                  <ChevronDown className={`h-4 w-4 transition-transform ${isLocationOpen ? "rotate-180" : ""}`} />
+                </button>
+                {isLocationOpen && (
+                  <div className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-[300px] overflow-y-auto">
+                    <div className="p-2">
+                      <button
+                        onClick={() => {
+                          setSelectedLocation("all")
+                          setIsLocationOpen(false)
+                        }}
+                        className={`w-full text-left px-3 py-2 rounded-md hover:bg-gray-100 ${
+                          selectedLocation === "all" ? "bg-[#5D376E]/10 text-[#5D376E]" : ""
+                        }`}
+                      >
+                        All Locations
+                      </button>
+                      {locations.map((loc) => (
+                        <button
+                          key={loc}
+                          onClick={() => {
+                            setSelectedLocation(loc)
+                            setIsLocationOpen(false)
+                          }}
+                          className={`w-full text-left px-3 py-2 rounded-md hover:bg-gray-100 ${
+                            selectedLocation === loc ? "bg-[#5D376E]/10 text-[#5D376E]" : ""
+                          }`}
+                        >
+                          {loc}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Clear Filters */}

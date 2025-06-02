@@ -13,7 +13,7 @@ export default function CareersPage() {
   return (
     <>
       <Header />
-      <main className="pt-20">
+      <main className="pt-20 overflow-x-hidden">
         <HeroBanner />
         <AtAGlance />
         <GrowSection />

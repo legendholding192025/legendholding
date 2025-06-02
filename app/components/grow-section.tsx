@@ -45,34 +45,34 @@ export default function GrowSection() {
   const currentSlideData = slides[currentSlide]
 
   return (
-    <div className="bg-[#2B1C48] py-24">
-      <div className="max-w-7xl mx-auto px-6">
+    <div className="bg-[#2B1C48] py-16 md:py-24">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
         {/* Main Header - Left Aligned */}
-        <div className="max-w-2xl mb-20">
+        <div className="max-w-2xl mb-12 md:mb-20">
           {/* <span className="text-[#EE8900] font-medium mb-4 block">Our Culture</span> */}
-          <h1 className="text-4xl lg:text-5xl font-bold text-white mb-6">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 md:mb-6">
             A Place of Culture,<br />
             Growth and Innovation
           </h1>
-          <p className="text-gray-300 text-lg leading-relaxed">
+          <p className="text-base md:text-lg text-gray-300 leading-relaxed">
             At Legend Holdings, we believe in creating an environment where talent thrives, innovation flourishes, and careers reach new heights.
           </p>
         </div>
 
         {/* Content Section */}
-        <div className="grid lg:grid-cols-2 gap-0 items-center">
+        <div className="grid md:grid-cols-2 gap-0">
           {/* Left Content */}
           <div className="space-y-8 h-full">
             <div className="h-full">
-              <div className="bg-white p-8 rounded-l-2xl h-full flex flex-col justify-between">
+              <div className="bg-white p-6 md:p-8 rounded-l-2xl md:rounded-r-none rounded-2xl h-full flex flex-col justify-between">
                 <div>
-                  <h2 className="text-5xl lg:text-6xl font-bold text-[#EE8900] mb-6">{currentSlideData.title}</h2>
-                  <p className="text-[#5E366D] text-lg leading-relaxed">{currentSlideData.description}</p>
+                  <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#EE8900] mb-4 md:mb-6">{currentSlideData.title}</h2>
+                  <p className="text-base md:text-lg text-[#5E366D] leading-relaxed">{currentSlideData.description}</p>
                 </div>
                 {/* Navigation */}
-                <div className="flex items-center justify-between pt-8 mt-8">
+                <div className="flex items-center justify-between pt-6 md:pt-8 mt-6 md:mt-8">
                   <div className="flex items-center space-x-4">
-                    <span className="text-gray-400 text-lg">
+                    <span className="text-gray-400 text-base md:text-lg">
                       {currentSlide + 1} / {slides.length}
                     </span>
                   </div>
@@ -80,17 +80,17 @@ export default function GrowSection() {
                   <div className="flex items-center space-x-4">
                     <button
                       onClick={prevSlide}
-                      className="w-12 h-12 rounded-full border border-[#EE8900]/30 flex items-center justify-center text-[#EE8900] hover:text-white hover:border-[#EE8900] hover:bg-[#EE8900] transition-all duration-300 group"
+                      className="w-10 h-10 md:w-12 md:h-12 rounded-full border border-[#EE8900]/30 flex items-center justify-center text-[#EE8900] hover:text-white hover:border-[#EE8900] hover:bg-[#EE8900] transition-all duration-300 group"
                       aria-label="Previous slide"
                     >
-                      <ChevronLeft className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                      <ChevronLeft className="w-4 h-4 md:w-5 md:h-5 group-hover:scale-110 transition-transform" />
                     </button>
                     <button
                       onClick={nextSlide}
-                      className="w-12 h-12 rounded-full border border-[#EE8900]/30 flex items-center justify-center text-[#EE8900] hover:text-white hover:border-[#EE8900] hover:bg-[#EE8900] transition-all duration-300 group"
+                      className="w-10 h-10 md:w-12 md:h-12 rounded-full border border-[#EE8900]/30 flex items-center justify-center text-[#EE8900] hover:text-white hover:border-[#EE8900] hover:bg-[#EE8900] transition-all duration-300 group"
                       aria-label="Next slide"
                     >
-                      <ChevronRight className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                      <ChevronRight className="w-4 h-4 md:w-5 md:h-5 group-hover:scale-110 transition-transform" />
                     </button>
                   </div>
                 </div>
@@ -99,8 +99,8 @@ export default function GrowSection() {
           </div>
 
           {/* Right Image */}
-          <div className="relative h-full">
-            <div className="aspect-[4/3] overflow-hidden rounded-r-2xl h-full">
+          <div className="relative h-[300px] md:h-[500px]">
+            <div className="aspect-[4/3] overflow-hidden rounded-r-2xl md:rounded-l-none rounded-2xl h-full">
               <Image
                 src={currentSlideData.image}
                 alt={`${currentSlideData.title} - Legend Holdings team collaboration`}
@@ -114,12 +114,12 @@ export default function GrowSection() {
         </div>
 
         {/* Progress Indicators */}
-        <div className="flex justify-center mt-12 space-x-3">
+        <div className="flex justify-center items-center gap-2 mt-8">
           {slides.map((_, index) => (
             <button
               key={index}
               onClick={() => setCurrentSlide(index)}
-              className={`w-3 h-3 rounded-full transition-all duration-300 ${
+              className={`w-2 h-2 md:w-3 md:h-3 rounded-full transition-all duration-300 ${
                 index === currentSlide ? "bg-[#EE8900] scale-110" : "bg-gray-600 hover:bg-[#EE8900]/40"
               }`}
               aria-label={`Go to slide ${index + 1}`}

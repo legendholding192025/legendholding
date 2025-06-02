@@ -217,16 +217,16 @@ export default function NewsArticlePage() {
                 />
 
                 {/* Share Section */}
-                <div className="mt-8 pt-6 border-t border-gray-200">
-                  <div className="flex items-center justify-between">
+                <div className="mt-8 border-t pt-6">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div className="flex items-center gap-2">
                       <Button variant="outline" size="sm">
                         #{article.category}
                       </Button>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm text-gray-500 mr-2">Share this article:</span>
-                      <div className="flex gap-2">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+                      <span className="text-sm text-gray-500">Share this article:</span>
+                      <div className="flex flex-wrap gap-2">
                         <Button
                           variant="outline"
                           size="icon"

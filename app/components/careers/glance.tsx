@@ -111,21 +111,21 @@ export default function AtAGlance() {
   ]
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-16 bg-white">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 md:py-16 bg-white">
       {/* Header Section */}
-      <div className="grid lg:grid-cols-2 gap-12 mb-16">
+      <div className="grid md:grid-cols-2 gap-8 md:gap-12 mb-12 md:mb-16">
         <div>
-          <h2 className="text-4xl font-bold text-[#2B1C48] mb-4">At a Glance</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-[#2B1C48] mb-4">At a Glance</h2>
         </div>
         <div>
-          <p className="text-gray-600 text-lg leading-relaxed">
-          We empower our people to lead with confidence and purpose. Working in multiple industries, We foster a strong culture of respect, and space for your ideas to thrive, you'll grow professionally and personally. We offer flexibility, wellness support, and real recognition, because our success starts with you.
+          <p className="text-base md:text-lg text-gray-600 leading-relaxed">
+            We empower our people to lead with confidence and purpose. Working in multiple industries, We foster a strong culture of respect, and space for your ideas to thrive, you'll grow professionally and personally. We offer flexibility, wellness support, and real recognition, because our success starts with you.
           </p>
         </div>
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
         {stats.map((stat, index) => (
           <AnimatedCounter
             key={index}
