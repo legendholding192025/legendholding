@@ -49,7 +49,7 @@ export default function LegendCommercialVehiclesPage() {
                 <div className="flex flex-col md:flex-row">
                   {/* Image Section */}
                   <div className="md:w-1/2 relative group overflow-hidden">
-                    <div className="h-full w-full relative overflow-hidden">
+                    <div className="aspect-[4/3] md:h-full w-full relative overflow-hidden">
                       <Image
                         src="https://cdn.legendholding.com/images/cdn_683ab636326ef8.83143422_20250531_075638.jpg"
                         width={1000}

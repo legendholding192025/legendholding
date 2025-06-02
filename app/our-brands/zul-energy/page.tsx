@@ -143,7 +143,7 @@ ZUL Energy continues to expand its footprint in the energy sector while maintain
                   <div className="flex flex-col md:flex-row">
                     {/* Image Section */}
                     <div className="md:w-1/4 relative group overflow-hidden rounded-l-xl">
-                      <div className="h-full w-full relative overflow-hidden bg-[#2b1c48]/5">
+                      <div className="aspect-[4/3] md:h-full w-full relative overflow-hidden bg-[#2b1c48]/5">
                         <img
                           src={section.image}
                           alt={section.title}

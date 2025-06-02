@@ -154,7 +154,7 @@ export default function LegendRentACarPage() {
                 <div className="flex flex-col md:flex-row">
                   {/* Image Section */}
                   <div className="md:w-1/2 relative group overflow-hidden">
-                    <div className="h-full w-full relative overflow-hidden">
+                    <div className="aspect-[4/3] md:h-full w-full relative overflow-hidden">
                       <Image
                         src="https://res.cloudinary.com/dckrspiqe/image/upload/v1748247935/rent-a-car_dyzdgk.png"
                         width={1000}

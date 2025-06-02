@@ -47,7 +47,7 @@ export default function LegendGreenEnergyPage() {
                 <div className="flex flex-col md:flex-row">
                   {/* Image Section */}
                   <div className="md:w-1/2 relative group overflow-hidden">
-                    <div className="h-full w-full relative overflow-hidden">
+                    <div className="aspect-[4/3] md:h-full w-full relative overflow-hidden">
                       <Image
                         src="https://res.cloudinary.com/dckrspiqe/image/upload/v1748255087/green_energy_solutions_c4gy4a.png"
                         width={1000}

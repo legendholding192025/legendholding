@@ -153,7 +153,7 @@ export default function GlobalMediaPage() {
                 <div className="flex flex-col md:flex-row">
                   {/* Image Section */}
                   <div className="md:w-1/2 relative group overflow-hidden">
-                    <div className="h-full w-full relative overflow-hidden">
+                    <div className="aspect-[4/3] md:h-full w-full relative overflow-hidden">
                       <Image
                         src="https://res.cloudinary.com/dckrspiqe/image/upload/v1748334199/anledry-cobos-D-CYZ9ZaMqs-unsplash_id2utv.jpg"
                         width={1000}
