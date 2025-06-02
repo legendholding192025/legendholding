@@ -82,6 +82,12 @@ export default function BusinessUnit() {
       name: "Legend Green Energy Solutions",
       image: "https://res.cloudinary.com/dosxengut/image/upload/v1747648852/in-copy-about-charging-green_qjoyjk.jpg",
       url: "/our-brands/legend-green-energy",
+      bgColor: "bg-[#2B1C48]",
+    },
+    {
+      name: "Legend Commercial Vehicles",
+      image: "https://cdn.legendholding.com/images/cdn_683ab636326ef8.83143422_20250531_075638.jpg",
+      url: "/our-brands/legend-commercial-vehicles",
       bgColor: "bg-[#EE8900]/80",
     },
   ]
