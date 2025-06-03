@@ -624,7 +624,7 @@ export function Header() {
                                   <div className="p-4">
                                     <p className="text-gray-600 text-sm">{business.description}</p>
                                     <div className="mt-3 flex items-center text-secondary font-medium text-sm">
-                                      <span>view Website</span>
+                                      <span>Visit Website</span>
                                       <ChevronRight className="h-4 w-4 ml-1" />
                                     </div>
                                   </div>
