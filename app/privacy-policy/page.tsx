@@ -3,7 +3,6 @@
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { motion } from "framer-motion"
-import { Mail, Phone, MapPin } from "lucide-react"
 import Link from "next/link"
 
 export default function PrivacyPolicyPage() {
@@ -29,7 +28,7 @@ export default function PrivacyPolicyPage() {
                 transition={{ duration: 0.5, delay: 0.1 }}
                 className="text-lg text-white/80"
               >
-                Your privacy is important to us. Learn how we collect, use, and protect your information.
+                Welcome to Legend Holding Group. Your privacy is important to us.
               </motion.p>
             </div>
           </div>
@@ -48,81 +47,76 @@ export default function PrivacyPolicyPage() {
                 >
                   <h2 className="text-2xl font-bold text-[#2B1C48] mb-6">Introduction</h2>
                   <p className="text-gray-600 mb-8">
-                    Legend Holding Group ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website or use our services.
+                    Welcome to Legend Holding Group ("we," "our," or "us"). Your privacy is important to us, and this Privacy Policy outlines how we collect, use, and protect your personal information when you visit and interact with our website, www.legendholding.com (the "Website").
                   </p>
 
-                  <h2 className="text-2xl font-bold text-[#2B1C48] mb-6">Information We Collect</h2>
-                  <p className="text-gray-600 mb-4">We collect information that you provide directly to us, including:</p>
+                  <h2 className="text-2xl font-bold text-[#2B1C48] mb-6">1. Information We Collect</h2>
+                  <p className="text-gray-600 mb-4">We may collect the following types of information:</p>
                   <ul className="list-disc pl-6 text-gray-600 mb-8">
-                    <li>Contact information (name, email address, phone number)</li>
-                    <li>Business information (company name, job title)</li>
-                    <li>Communication preferences</li>
-                    <li>Feedback and correspondence</li>
+                    <li><strong>Personal Information:</strong> Includes your name, email address, phone number, and any other information you voluntarily provide when filling out forms on our Website.</li>
+                    <li><strong>Usage Data:</strong> Information about how you use the Website, such as your IP address, browser type, pages visited, and the time and date of your visits.</li>
+                    <li><strong>Cookies and Tracking Technologies:</strong> We use cookies and similar tracking technologies to monitor activity on our Website and store certain information. You can manage cookie preferences through your browser settings.</li>
                   </ul>
 
-                  <h2 className="text-2xl font-bold text-[#2B1C48] mb-6">How We Use Your Information</h2>
-                  <p className="text-gray-600 mb-4">We use the information we collect to:</p>
+                  <h2 className="text-2xl font-bold text-[#2B1C48] mb-6">2. How We Use Your Information</h2>
+                  <p className="text-gray-600 mb-4">We use the information we collect for various purposes, including:</p>
                   <ul className="list-disc pl-6 text-gray-600 mb-8">
-                    <li>Provide and maintain our services</li>
-                    <li>Respond to your inquiries and requests</li>
-                    <li>Send you marketing communications (with your consent)</li>
-                    <li>Improve our website and services</li>
-                    <li>Comply with legal obligations</li>
+                    <li>To provide, operate, and maintain our Website</li>
+                    <li>To improve, personalize, and expand our services</li>
+                    <li>To communicate with you, respond to inquiries, and provide customer support</li>
+                    <li>To send you updates, marketing materials, and other information related to our services, subject to your consent</li>
+                    <li>To monitor and analyze usage and trends to enhance your experience</li>
+                    <li>To ensure the security and integrity of our Website</li>
                   </ul>
 
-                  <h2 className="text-2xl font-bold text-[#2B1C48] mb-6">Information Sharing</h2>
+                  <h2 className="text-2xl font-bold text-[#2B1C48] mb-6">3. Sharing Your Information</h2>
+                  <p className="text-gray-600 mb-4">We do not sell, trade, or rent your personal information to third parties. However, we may share your information with:</p>
+                  <ul className="list-disc pl-6 text-gray-600 mb-8">
+                    <li><strong>Service Providers:</strong> Third-party companies or individuals we employ to facilitate our services, such as hosting, analytics, or payment processing. These parties are obligated to maintain the confidentiality of your information.</li>
+                    <li><strong>Legal Compliance:</strong> If required by law or in response to valid requests by public authorities, we may disclose your personal information.</li>
+                  </ul>
+
+                  <h2 className="text-2xl font-bold text-[#2B1C48] mb-6">4. Security of Your Information</h2>
                   <p className="text-gray-600 mb-8">
-                    We do not sell or rent your personal information to third parties. We may share your information with trusted service providers who assist us in operating our website and conducting our business.
+                    We take reasonable measures to protect your personal information from unauthorized access, use, or disclosure. However, no method of transmission over the internet or electronic storage is completely secure, and we cannot guarantee absolute security.
                   </p>
 
-                  <h2 className="text-2xl font-bold text-[#2B1C48] mb-6">Your Rights</h2>
+                  <h2 className="text-2xl font-bold text-[#2B1C48] mb-6">5. Your Rights</h2>
                   <p className="text-gray-600 mb-4">You have the right to:</p>
                   <ul className="list-disc pl-6 text-gray-600 mb-8">
-                    <li>Access your personal information</li>
-                    <li>Correct inaccurate information</li>
-                    <li>Request deletion of your information</li>
-                    <li>Opt-out of marketing communications</li>
+                    <li>Access, update, or delete your personal information</li>
+                    <li>Withdraw consent for the processing of your personal data</li>
+                    <li>Object to the processing of your personal data for marketing purposes</li>
+                    <li>Request the transfer of your data to another service provider (data portability)</li>
                   </ul>
+                  <p className="text-gray-600 mb-8">To exercise these rights, please contact us using the information provided below.</p>
 
-                  <h2 className="text-2xl font-bold text-[#2B1C48] mb-6">Contact Us</h2>
-                  <p className="text-gray-600 mb-6">
-                    If you have any questions about this Privacy Policy or our practices, please contact us:
+                  <h2 className="text-2xl font-bold text-[#2B1C48] mb-6">6. Third-Party Links</h2>
+                  <p className="text-gray-600 mb-8">
+                    Our Website may contain links to third-party websites. We are not responsible for the privacy practices or content of these websites. We encourage you to read the privacy policies of any linked sites.
                   </p>
-                </motion.div>
 
-                {/* Contact Information Cards */}
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5 }}
-                  className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12"
-                >
-                  <div className="bg-[rgb(234,226,214)] rounded-xl p-6">
-                    <div className="flex items-center mb-4">
-                      <Phone className="w-5 h-5 text-[#2B1C48] mr-2" />
-                      <h3 className="text-lg font-semibold text-[#2B1C48]">Phone</h3>
-                    </div>
-                    <p className="text-gray-600">+971 4 234 0738</p>
-                  </div>
+                  <h2 className="text-2xl font-bold text-[#2B1C48] mb-6">7. Children's Privacy</h2>
+                  <p className="text-gray-600 mb-8">
+                    Our Website is not intended for children under the age of 13. We do not knowingly collect personal information from children under 13. If you believe we have collected such information, please contact us immediately.
+                  </p>
 
-                  <div className="bg-[rgb(234,226,214)] rounded-xl p-6">
-                    <div className="flex items-center mb-4">
-                      <Mail className="w-5 h-5 text-[#2B1C48] mr-2" />
-                      <h3 className="text-lg font-semibold text-[#2B1C48]">Email</h3>
-                    </div>
-                    <p className="text-gray-600">info@legendholding.com</p>
-                  </div>
+                  <h2 className="text-2xl font-bold text-[#2B1C48] mb-6">8. Changes to This Privacy Policy</h2>
+                  <p className="text-gray-600 mb-8">
+                    We may update this Privacy Policy from time to time. Any changes will be posted on this page with the updated effective date. We encourage you to review this Privacy Policy periodically.
+                  </p>
 
-                  <div className="bg-[rgb(234,226,214)] rounded-xl p-6">
-                    <div className="flex items-center mb-4">
-                      <MapPin className="w-5 h-5 text-[#2B1C48] mr-2" />
-                      <h3 className="text-lg font-semibold text-[#2B1C48]">Address</h3>
-                    </div>
+                  <h2 className="text-2xl font-bold text-[#2B1C48] mb-6">9. Contact Us</h2>
+                  <p className="text-gray-600 mb-6">
+                    If you have any questions or concerns about this Privacy Policy or our data practices, please contact us:
+                  </p>
+                  <div className="mb-8">
                     <p className="text-gray-600">
+                      Jebel Ali Freezone, Gate 5,<br />
                       Legend Holding Group HQ<br />
-                      Jebel Ali Freezone, Gate 5<br />
-                      Dubai, UAE
+                      Dubai, United Arab Emirates<br />
+                      Phone: +971 4 234 0738<br />
+                      Email: info@legendholding.com
                     </p>
                   </div>
                 </motion.div>
@@ -133,11 +127,6 @@ export default function PrivacyPolicyPage() {
                   viewport={{ once: true }}
                   transition={{ duration: 0.5 }}
                 >
-                  <h2 className="text-2xl font-bold text-[#2B1C48] mb-6">Updates to This Policy</h2>
-                  <p className="text-gray-600 mb-8">
-                    We may update this Privacy Policy from time to time. The updated version will be indicated by an updated "Last Updated" date and the updated version will be effective as soon as it is accessible.
-                  </p>
-
                   <div className="bg-[rgb(234,226,214)]/30 border border-[#2B1C48]/10 rounded-xl p-6 mb-8">
                     <p className="text-gray-600 text-sm">
                       Last Updated: {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
