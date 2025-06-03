@@ -136,14 +136,14 @@ export default function ContactPage() {
               src="https://cdn.legendholding.com/images/cloudinary/cloudinary_683ea90f29b708.04231409_20250603_074935.jpg"
               alt="Contact Us"
               fill
-              className="object-cover object-[center_30%]"
+              className="object-cover object-[center_20%]"
               priority
             />
-            <div className="absolute inset-0 bg-[#5E366D]/80 mix-blend-multiply" />
+            <div className="absolute inset-0 bg-[#5E366D]/70 mix-blend-multiply" />
           </div>
 
           {/* Hero Content */}
-          <div className="relative container mx-auto px-4 py-24 md:py-32">
+          <div className="relative container mx-auto px-4 py-32 md:py-40">
             <div className="max-w-4xl mx-auto text-center">
               {/* <div className="inline-flex items-center justify-center px-4 py-1.5 bg-white/10 text-white rounded-full text-sm font-medium mb-6">
                 Get in Touch
@@ -151,9 +151,6 @@ export default function ContactPage() {
               <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
                 Contact Us
               </h1>
-              <p className="text-lg md:text-xl text-white/90 max-w-2xl mx-auto">
-                Reach out to us for any inquiries or collaboration opportunities. We're here to help you succeed.
-              </p>
             </div>
           </div>
         </div>
@@ -177,33 +174,8 @@ export default function ContactPage() {
                   <div className="w-16 h-1 bg-[#EE8900] rounded-full mb-4"></div>
                 </div>
 
-                <div className="flex-grow rounded-xl overflow-hidden shadow-lg mb-4">
-                  <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3617.8876416068888!2d55.11843827537754!3d24.936844342145934!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5f0fb4a8a8b8a7%3A0x3e5f0fb4a8a8b8a7!2sJebel%20Ali%20Free%20Zone%20Gate%205!5e0!3m2!1sen!2sae!4v1629789456789!5m2!1sen!2sae"
-                    width="100%"
-                    height="100%"
-                    style={{ border: 0, minHeight: "350px" }}
-                    allowFullScreen
-                    loading="lazy"
-                    referrerPolicy="no-referrer-when-downgrade"
-                    className="rounded-xl"
-                  ></iframe>
-                </div>
-
-                <div className="mt-auto">
-                  <a
-                    href="https://goo.gl/maps/your-location-link"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#F08900] text-white font-semibold rounded-lg hover:bg-[#d67a00] transition-colors duration-300 w-full"
-                  >
-                    <span>Get Directions</span>
-                    <ChevronRight className="w-5 h-5" />
-                  </a>
-                </div>
-
-                {/* Contact Info Cards - Inside Map Section */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-6">
+                {/* Contact Info Cards */}
+                <div className="grid grid-cols-1 gap-4">
                   {contactInfo.map((item, index) => (
                     <motion.div
                       key={index}
@@ -211,14 +183,14 @@ export default function ContactPage() {
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true }}
                       transition={{ delay: index * 0.1, duration: 0.5 }}
-                      className="bg-gray-50 rounded-xl p-3 border border-gray-100 hover:shadow-lg transition-all duration-300 group"
+                      className="bg-gray-50 rounded-xl p-4 border border-gray-100 hover:shadow-lg transition-all duration-300 group"
                     >
                       <div className="flex items-start gap-3">
                         <div className={`${item.color} group-hover:scale-110 transition-transform duration-300 mt-0.5 flex-shrink-0`}>
                           {item.icon}
                         </div>
                         <div className="min-w-0 flex-1">
-                          <h3 className="text-sm font-semibold text-gray-900 mb-0.5">{item.title}</h3>
+                          <h3 className="text-sm font-semibold text-gray-900 mb-1">{item.title}</h3>
                           <div className="-space-y-1">
                             {item.details.map((detail, idx) => (
                               <p key={idx} className="text-sm text-gray-600 leading-tight break-words break-all sm:break-normal">
@@ -230,6 +202,19 @@ export default function ContactPage() {
                       </div>
                     </motion.div>
                   ))}
+                </div>
+
+                {/* Get Directions Button */}
+                <div className="mt-4">
+                  <a
+                    href="https://www.google.com/maps/search/?api=1&query=25.016667,55.116667&query_place_id=Legend+Holding+Group+-+Global+HQ+Space,+Plot+No-+S30502+-+opposite+Redington,+Gate5+-+JAFZA+-+Dubai"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#F08900] text-white font-semibold rounded-lg hover:bg-[#d67a00] transition-colors duration-300 w-full"
+                  >
+                    <span>Get Directions</span>
+                    <ExternalLink className="w-4 h-4" />
+                  </a>
                 </div>
               </div>
 
