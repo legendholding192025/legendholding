@@ -150,6 +150,12 @@ const menuItems: MenuItem[] = [
             description: "Sustainable energy solutions for a greener future."
           },
           { 
+            title: "Legend Pre-Owned Vehicles",
+            url: "/our-brands/legend-pre-owned-vehicles",
+            image: "https://cdn.legendholding.com/images/cloudinary/cloudinary_683da26519e1d9.85792572_20250602_130853.jpg",
+            description: "Offering customers a wide selection of high-quality vehicles."
+          },
+          { 
             title: "Legend Commercial Vehicles",
             url: "/our-brands/legend-commercial-vehicles",
             image: "https://cdn.legendholding.com/images/cloudinary/cloudinary_683d9eed970a05.14970741_20250602_125405.jpg",
