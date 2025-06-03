@@ -276,58 +276,39 @@ export default function JobDetails() {
               </div>
             </div>
 
-            {/* Right Column - Apply and Similar Jobs */}
-            <div className="space-y-6">
-              {/* Apply Section */}
+            {/* Right Column - Similar Jobs */}
+            <div className="lg:col-span-1">
               <div className="bg-white rounded-xl shadow-sm p-6">
-                <h3 className="font-semibold text-gray-900 mb-4">Quick Apply</h3>
-                {job.salary_range && (
-                  <div className="mb-4 p-4 bg-gray-50 rounded-lg">
-                    <p className="text-sm text-gray-600">Salary Range</p>
-                    <p className="text-lg font-semibold text-gray-900">{job.salary_range}</p>
-                  </div>
-                )}
-                <Button 
-                  className="w-full bg-[#EE8900] hover:bg-[#EE8900]/90 text-white"
-                  onClick={() => setIsApplicationModalOpen(true)}
-                >
-                  Apply Now
-                </Button>
-              </div>
-
-              {/* Similar Jobs */}
-              {similarJobs.length > 0 && (
-                <div className="bg-white rounded-xl shadow-sm p-6">
-                  <h3 className="font-semibold text-gray-900 mb-4">Similar Jobs</h3>
-                  <div className="space-y-4">
+                <h2 className="text-xl font-semibold text-gray-900 mb-6">Similar Jobs</h2>
+                {similarJobs.length > 0 ? (
+                  <div className="space-y-6">
                     {similarJobs.map((similarJob) => (
                       <Link 
                         key={similarJob.id}
                         href={`/careers/jobs/${similarJob.id}`}
-                        className="block p-4 rounded-lg hover:bg-gray-50 transition-colors"
+                        className="block p-4 rounded-lg border border-gray-100 hover:border-[#5E366D] transition-colors"
                       >
-                        <h4 className="font-medium text-gray-900">{similarJob.title}</h4>
-                        <div className="mt-2 flex flex-wrap gap-2">
-                          <span className="text-sm text-gray-600">{similarJob.department}</span>
-                          <span className="text-sm text-gray-600">• {similarJob.location}</span>
+                        <h3 className="font-medium text-gray-900 mb-2">{similarJob.title}</h3>
+                        <div className="space-y-2 text-sm text-gray-600">
+                          <div className="flex items-center gap-2">
+                            <Building2 className="h-4 w-4" />
+                            <span>{similarJob.department}</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <MapPin className="h-4 w-4" />
+                            <span>{similarJob.location}</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Clock className="h-4 w-4" />
+                            <span>{similarJob.type}</span>
+                          </div>
                         </div>
                       </Link>
                     ))}
                   </div>
-                </div>
-              )}
-
-              {/* Share Job */}
-              <div className="bg-white rounded-xl shadow-sm p-6">
-                <h3 className="font-semibold text-gray-900 mb-4">Share this job</h3>
-                <Button
-                  variant="outline"
-                  onClick={handleShare}
-                  className="w-full"
-                >
-                  <Share2 className="w-4 h-4 mr-2" />
-                  Share Position
-                </Button>
+                ) : (
+                  <p className="text-gray-600 text-center py-4">No similar jobs found</p>
+                )}
               </div>
             </div>
           </div>
