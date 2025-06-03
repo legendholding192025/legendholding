@@ -328,11 +328,11 @@ export function OurJourney() {
                       {/* Scroll Down Indicator - Only show on first section */}
                       {index === 0 && (
                         <motion.div 
-                          className="mb-8 cursor-pointer"
-                          initial={{ opacity: 0, y: -10 }}
+                          className="absolute -top-40 left-0 right-0 mx-auto w-fit cursor-pointer"
+                          initial={{ opacity: 0, y: -20 }}
                           animate={{ 
                             opacity: 1, 
-                            y: 10,
+                            y: 0,
                           }}
                           transition={{
                             duration: 1.5,
@@ -341,9 +341,9 @@ export function OurJourney() {
                           }}
                           onClick={() => scrollToSection(1)}
                         >
-                          <div className="flex flex-col items-center text-white gap-2">
+                          <div className="flex flex-col items-center text-white gap-1">
                             <span className="text-base md:text-lg font-medium tracking-wider">Scroll Down</span>
-                            <ChevronDown className="w-6 h-6 text-[#F08900]" />
+                            <ChevronDown className="w-5 h-5 text-[#F08900]" />
                           </div>
                         </motion.div>
                       )}
@@ -359,7 +359,7 @@ export function OurJourney() {
                         </motion.div>
                         <div className="text-center md:text-left">
                           <motion.h1
-                            className="text-3xl md:text-5xl lg:text-6xl font-bold mb-3 leading-tight"
+                            className="text-3xl md:text-5xl lg:text-6xl font-bold mb-3 leading-tight font-[var(--heading-font)]"
                             initial={{ opacity: 0, x: -30 }}
                             whileInView={{ opacity: 1, x: 0 }}
                             transition={{ duration: 0.6, delay: 0.4 }}
@@ -368,7 +368,7 @@ export function OurJourney() {
                           </motion.h1>
                           <Badge
                             variant="secondary"
-                            className="text-lg md:text-xl px-6 py-3 bg-[#F08900]/95 text-white hover:bg-[#F08900] shadow-lg border-0"
+                            className="text-lg md:text-xl px-6 py-3 bg-[#F08900]/95 text-white hover:bg-[#F08900] shadow-lg border-0 font-[var(--body-font)]"
                           >
                             {milestone.year}
                           </Badge>
@@ -382,7 +382,7 @@ export function OurJourney() {
                         whileInView={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6, delay: 0.6 }}
                       >
-                        <p className="text-lg md:text-xl lg:text-2xl leading-relaxed text-gray-100">
+                        <p className="text-lg md:text-xl lg:text-2xl leading-relaxed text-gray-100 font-[var(--body-font)]">
                           {milestone.description}
                         </p>
                         
@@ -395,7 +395,7 @@ export function OurJourney() {
                               whileInView={{ opacity: 1, x: 0 }}
                               transition={{ delay: 0.7 + achievementIndex * 0.1, duration: 0.5 }}
                               viewport={{ once: true }}
-                              className="flex items-center gap-3 text-lg md:text-xl text-white/90 font-medium"
+                              className="flex items-center gap-3 text-lg md:text-xl text-white/90 font-medium font-[var(--body-font)]"
                             >
                               <div className="w-2 h-2 rounded-full bg-[#F08900]" />
                               {achievement}

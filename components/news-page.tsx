@@ -157,9 +157,6 @@ export function NewsPage() {
           {/* Hero Content */}
           <div className="relative container mx-auto px-4 py-24 md:py-32">
             <div className="max-w-4xl mx-auto text-center">
-              <div className="inline-flex items-center justify-center px-4 py-1.5 bg-white/10 text-white rounded-full text-sm font-medium mb-6">
-                Latest Updates
-              </div>
               <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
                 Newsroom
               </h1>
