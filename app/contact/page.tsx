@@ -133,7 +133,7 @@ export default function ContactPage() {
           {/* Background Image */}
           <div className="absolute inset-0">
             <Image
-              src="https://res.cloudinary.com/dosxengut/image/upload/v1746784919/1-1-2_geivzn.jpg"
+              src="https://cdn.legendholding.com/images/cloudinary/cloudinary_683ea90f29b708.04231409_20250603_074935.jpg"
               alt="Contact Us"
               fill
               className="object-cover object-[center_30%]"

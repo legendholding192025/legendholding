@@ -22,7 +22,7 @@ const csrInitiatives: CSRInitiative[] = [
     title: "Humanitarian Relief",
     description:
       "Providing immediate emergency response and long-term support during natural disasters, including earthquake relief efforts, ensuring essential aid reaches affected communities.",
-    image: "https://res.cloudinary.com/dosxengut/image/upload/v1746786003/Emergency-Relief-Initiative-796x372-1_xktqfm.webp",
+    image: "https://cdn.legendholding.com/images/cloudinary/cloudinary_683ea24ace9db9.23851636_20250603_072042.jpg",
     icon: <Heart className="h-6 w-6" />,
     url: "/csr/humanitarian-relief",
   },
@@ -31,7 +31,7 @@ const csrInitiatives: CSRInitiative[] = [
     title: "Community Development",
     description:
       "Supporting communities through year-round initiatives, including special Ramadan programs providing food, essential supplies, and support to families in need.",
-    image: "https://res.cloudinary.com/dosxengut/image/upload/v1748260264/0f47e352-6e32-4d03-a8ef-bd4ad4e14f54_vp6yiq.jpg",
+    image: "https://cdn.legendholding.com/images/cloudinary/cloudinary_683ea1e520f8a0.56379725_20250603_071901.jpg",
     icon: <Users className="h-6 w-6" />,
     url: "/csr/community-development",
   }

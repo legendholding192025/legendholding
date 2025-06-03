@@ -47,7 +47,7 @@ export default function ValueSection() {
             {/* Vision Icon */}
             <div className="absolute top-3 sm:top-4 right-3 sm:right-4 w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16">
               <Image
-                src="https://res.cloudinary.com/dosxengut/image/upload/v1748416191/Asset_11_tftntp.png"
+                src="https://cdn.legendholding.com/images/cdn_683e960b1997b5.22165608_20250603_062827.png"
                 alt="Vision icon"
                 fill
                 className="object-contain"
@@ -72,12 +72,12 @@ export default function ValueSection() {
 
           {/* Mission Column */}
           <div className="relative animate-fade-in-up" style={{ animationDelay: "0.4s" }}>
-            <img src="https://res.cloudinary.com/dosxengut/image/upload/v1748596917/image_2_m9a1pw.png" alt="" className="w-full h-auto opacity-90" />
+            <img src="https://cdn.legendholding.com/images/cloudinary/cloudinary_683da9c6ede476.24969316_20250602_134022.png" alt="" className="w-full h-auto opacity-90" />
             
             {/* Mission Icon */}
             <div className="absolute top-3 sm:top-4 right-3 sm:right-4 w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16">
               <Image
-                src="https://res.cloudinary.com/dosxengut/image/upload/v1748416191/Asset_11_tftntp.png"
+                src="https://cdn.legendholding.com/images/cdn_683e960b1997b5.22165608_20250603_062827.png"
                 alt="Mission icon"
                 fill
                 className="object-contain"

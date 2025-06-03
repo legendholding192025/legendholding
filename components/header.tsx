@@ -59,14 +59,14 @@ const menuItems: MenuItem[] = [
       {
         title: "Vision, Mission & Values",
         url: "/who-we-are/vision-mission",
-        image: "https://res.cloudinary.com/dosxengut/image/upload/v1747649702/mission-values-lead_ch3qfe.webp",
+        image: "https://cdn.legendholding.com/images/cdn_683e9dd2a74833.63027495_20250603_070138.jpg",
         description: "Discover our vision, mission, and the values that drive us forward.",
         icon: <History className="w-5 h-5" />
       },
       {
         title: "The Team",
         url: "/who-we-are/the-team",
-        image: "https://res.cloudinary.com/dosxengut/image/upload/v1747650256/1744992098296_cqtkjo.jpg",
+        image: "https://cdn.legendholding.com/images/cdn_683e9ef4bd30c8.05897688_20250603_070628.jpg",
         description: "Meet the dedicated professionals behind our continued growth and innovation.",
         icon: <Users className="w-5 h-5" />
       },
@@ -80,7 +80,7 @@ const menuItems: MenuItem[] = [
       {
         title: "CSR",
         url: "/who-we-are/csr",
-        image: "https://res.cloudinary.com/dosxengut/image/upload/v1746797713/blog-corporate-social-responsibility-program_olhz5m.webp",
+        image: "https://cdn.legendholding.com/images/cdn_683e9e33367140.14677364_20250603_070315.jpg",
         description: "Our commitment to corporate social responsibility and community impact.",
         icon: <Building2 className="w-5 h-5" />
       },
@@ -98,61 +98,61 @@ const menuItems: MenuItem[] = [
           { 
             title: "Zul Energy",
             url: "/our-brands/zul-energy",
-            image: "https://res.cloudinary.com/dosxengut/image/upload/v1747645931/1681896024283_sl22tw.jpg",
+            image: "https://cdn.legendholding.com/images/cloudinary/cloudinary_683da403178ef3.07284478_20250602_131547.jpg",
             description: "Pioneering sustainable energy solutions for a brighter future."
           },
           { 
             title: "Legend Motors Trading",
             url: "/our-brands/legend-motors-trading",
-            image: "https://res.cloudinary.com/dckrspiqe/image/upload/v1748006307/motor-trading_ji1zfj.png",
+            image: "https://cdn.legendholding.com/images/cloudinary/cloudinary_683da1fac83f95.14534616_20250602_130706.png",
             description: "Premium automotive solutions and services."
           },
           { 
             title: "Legend Motors Dealership",
             url: "/our-brands/legend-motors-dealership",
-            image: "https://res.cloudinary.com/dosxengut/image/upload/v1747649304/Official-Car-Dealers-in-Dubai-Cover-180620210841_ldmnuq.jpg",
+            image: "https://cdn.legendholding.com/images/cdn_683e9c69623805.82335206_20250603_065537.jpg",
             description: "Official dealership for premium automotive brands."
           },
           { 
             title: "Legend Motorcycles",
             url: "/our-brands/legend-motorcycles",
-            image: "https://res.cloudinary.com/dosxengut/image/upload/v1747660840/Lifan-Logo_behsab.png",
+            image: "https://cdn.legendholding.com/images/cloudinary/cloudinary_683da00a4a22c3.88022895_20250602_125850.png",
             description: "Premium motorcycles and accessories."
           },
           { 
             title: "Legend Rent a Car",
             url: "/our-brands/legend-world-rent-a-car",
-            image: "https://res.cloudinary.com/dckrspiqe/image/upload/v1748247935/rent-a-car_dyzdgk.png",
+            image: "https://cdn.legendholding.com/images/cloudinary/cloudinary_683da3d88d3185.41319420_20250602_131504.png",
             description: "Premium car rental services across UAE."
           },
           { 
             title: "Legend Automobile Services",
             url: "/our-brands/legend-automobile-services",
-            image: "https://res.cloudinary.com/dosxengut/image/upload/v1747648445/csm_cruising_visual_43e29fa7bb_ruiloc.jpg",
+            image: "https://cdn.legendholding.com/images/cloudinary/cloudinary_683d9e25db0112.44798593_20250602_125045.jpg",
             description: "Professional automotive maintenance and repair services."
           },
           { 
             title: "Legend Global Media",
             url: "/our-brands/legend-global-media",
-            image: "https://res.cloudinary.com/dosxengut/image/upload/v1747648530/Stock_Photo_Digital_Media_otoogv.jpg",
+            image: "https://cdn.legendholding.com/images/cloudinary/cloudinary_683d9f42113ba5.78852919_20250602_125530.jpg",
             description: "Innovative media solutions for the digital age."
           },
           { 
             title: "Legend Travel and Tourism",
             url: "/our-brands/legend-travel",
-            image: "https://res.cloudinary.com/dosxengut/image/upload/v1747648726/bliss_travels_and_tours_cover_p7t8ma.jpg",
+            image: "https://cdn.legendholding.com/images/cloudinary/cloudinary_683da36902ee20.33408729_20250602_131313.jpg",
             description: "Exceptional travel experiences and tourism services."
           },
           { 
             title: "Legend Green Energy Solutions",
             url: "/our-brands/legend-green-energy",
-            image: "https://res.cloudinary.com/dosxengut/image/upload/v1747648852/in-copy-about-charging-green_qjoyjk.jpg",
+            image: "https://cdn.legendholding.com/images/cloudinary/cloudinary_683d9fb5d95276.90087674_20250602_125725.png",
             description: "Sustainable energy solutions for a greener future."
           },
           { 
             title: "Legend Commercial Vehicles",
             url: "/our-brands/legend-commercial-vehicles",
-            image: "https://cdn.legendholding.com/images/cdn_683ab636326ef8.83143422_20250531_075638.jpg",
+            image: "https://cdn.legendholding.com/images/cloudinary/cloudinary_683d9eed970a05.14970741_20250602_125405.jpg",
             description: "Comprehensive commercial vehicle solutions for businesses."
           },
         ],

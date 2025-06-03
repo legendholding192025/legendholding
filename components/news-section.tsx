@@ -87,7 +87,7 @@ export function Newsroom() {
           <div>
             <div className="flex items-center gap-3 mb-3">
               <Image
-                src="https://res.cloudinary.com/dckrspiqe/image/upload/v1748439238/Asset_11_fzl19r.png"
+                src="https://cdn.legendholding.com/images/cdn_683e960b1997b5.22165608_20250603_062827.png"
                 alt="News icon"
                 width={32}
                 height={32}

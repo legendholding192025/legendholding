@@ -8,17 +8,17 @@ import { cn } from "@/lib/utils"
 import { useMediaQuery } from "@/hooks/use-media-query"
 
 const partners = [
-    { id: 1, logo: 'https://cdn.legendholding.com/images/car1.jpg', name: 'Partner 1' },
-    { id: 2, logo: 'https://res.cloudinary.com/dosxengut/image/upload/v1747727868/Picture9_dttje6.png', name: 'Partner 2' },
-    { id: 3, logo: 'https://res.cloudinary.com/dosxengut/image/upload/v1747727869/Picture10_p3whcu.png', name: 'Partner 3' },
-    { id: 4, logo: 'https://res.cloudinary.com/dosxengut/image/upload/v1747727867/Picture12_stvafn.png', name: 'Partner 4' },
-    { id: 5, logo: 'https://res.cloudinary.com/dosxengut/image/upload/v1747727868/Picture8_jmctgu.png', name: 'Partner 5' },
-    { id: 6, logo: 'https://res.cloudinary.com/dosxengut/image/upload/v1747727868/Picture7_wplkgz.png', name: 'Partner 6' },
-    { id: 7, logo: 'https://res.cloudinary.com/dosxengut/image/upload/v1747727867/Picture13_fqzvhb.png', name: 'Partner 7' },
-    { id: 8, logo: 'https://res.cloudinary.com/dosxengut/image/upload/v1747727867/Picture11_sqgf9y.png', name: 'Partner 8' },
-    { id: 9, logo: 'https://res.cloudinary.com/dosxengut/image/upload/v1747727867/Picture14_apmvql.png', name: 'Partner 9' },
-    { id: 10, logo: 'https://res.cloudinary.com/dosxengut/image/upload/v1747727868/Picture5_txk7lq.png', name: 'Partner 10' },
-    { id: 11, logo: 'https://res.cloudinary.com/dosxengut/image/upload/v1747727868/Picture6_bcnri8.png', name: 'Partner 11' },
+    { id: 1, logo: 'https://cdn.legendholding.com/images/cdn_683eb86e45e183.72081489_20250603_085510.jpg', name: 'Partner 1' },
+    { id: 2, logo: 'https://cdn.legendholding.com/images/cdn_683eb8920b65a7.63176838_20250603_085546.png', name: 'Partner 2' },
+    { id: 3, logo: 'https://cdn.legendholding.com/images/cdn_683eb8b588d928.25041842_20250603_085621.png', name: 'Partner 3' },
+    { id: 4, logo: 'https://cdn.legendholding.com/images/cdn_683eb934df6a15.04266165_20250603_085828.png', name: 'Partner 4' },
+    { id: 5, logo: 'https://cdn.legendholding.com/images/cdn_683eb9848c45a8.14376233_20250603_085948.png', name: 'Partner 5' },
+    { id: 6, logo: 'https://cdn.legendholding.com/images/cdn_683eb99c9f6c06.84723846_20250603_090012.png', name: 'Partner 6' },
+    { id: 7, logo: 'https://cdn.legendholding.com/images/cdn_683eb9f622b153.33094244_20250603_090142.png', name: 'Partner 7' },
+    { id: 8, logo: 'https://cdn.legendholding.com/images/cdn_683eba1b3b9bd9.54350367_20250603_090219.png', name: 'Partner 8' },
+    { id: 9, logo: 'https://cdn.legendholding.com/images/cdn_683eba3d465fd3.54437503_20250603_090253.png', name: 'Partner 9' },
+    { id: 10, logo: 'https://cdn.legendholding.com/images/cdn_683eba5fd528a4.04920396_20250603_090327.png', name: 'Partner 10' },
+    { id: 11, logo: 'https://cdn.legendholding.com/images/cdn_683eba80ac1311.74540241_20250603_090400.png', name: 'Partner 11' },
 ]
 
 export function PartnerSection() {
@@ -149,7 +149,7 @@ export function PartnerSection() {
       <section 
         className="py-16 overflow-hidden relative"
         style={{
-          backgroundImage: 'url("https://res.cloudinary.com/dosxengut/image/upload/v1748501083/image_2_q3lfk4.jpg")',
+          backgroundImage: 'url("https://cdn.legendholding.com/images/cloudinary/cloudinary_683ea373547101.30987392_20250603_072539.jpg")',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
         }}

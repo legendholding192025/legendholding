@@ -11,7 +11,7 @@ const csrInitiatives = [
     icon: <Heart className="w-8 h-8" />,
     title: "Community Development",
     description: "Supporting local communities through education, healthcare, and social welfare programs.",
-    image: "https://res.cloudinary.com/dosxengut/image/upload/v1746797713/blog-corporate-social-responsibility-program_olhz5m.webp",
+    image: "https://cdn.legendholding.com/images/cloudinary/cloudinary_683ea1e520f8a0.56379725_20250603_071901.jpg",
     initiatives: [
       "Educational Scholarships",
       "Healthcare Access Programs",
@@ -23,7 +23,7 @@ const csrInitiatives = [
     icon: <Leaf className="w-8 h-8" />,
     title: "Environmental Sustainability",
     description: "Committed to reducing our environmental footprint and promoting sustainable practices.",
-    image: "https://res.cloudinary.com/dosxengut/image/upload/v1746797713/blog-corporate-social-responsibility-program_olhz5m.webp",
+    image: "https://cdn.legendholding.com/images/cloudinary/cloudinary_683ea60e1179f3.75648194_20250603_073646.jpg",
     initiatives: [
       "Carbon Footprint Reduction",
       "Renewable Energy Adoption",
@@ -35,7 +35,7 @@ const csrInitiatives = [
     icon: <Users className="w-8 h-8" />,
     title: "Employee Well-being",
     description: "Investing in our employees' growth, health, and professional development.",
-    image: "https://res.cloudinary.com/dosxengut/image/upload/v1746797713/blog-corporate-social-responsibility-program_olhz5m.webp",
+    image: "https://cdn.legendholding.com/images/cloudinary/cloudinary_683ea24ace9db9.23851636_20250603_072042.jpg",
     initiatives: [
       "Professional Development Programs",
       "Health & Wellness Initiatives",

@@ -50,7 +50,7 @@ export function OurJourney() {
       title: "Legend Motors FZCO",
       description:
         "Established our first automotive company in the free zone, marking our entry into the automotive industry with our first showroom.",
-      image: "https://res.cloudinary.com/dosxengut/image/upload/v1747647684/NYK-CURRENTLY-HAS-A-STAKE-IN-OVER-40-COMPANIES-ALL-OVER-THE-WORLD-PROVIDING-FINISHED-CAR-INLAND-LOGISTICS_h8kfgk.webp",
+      image: "https://cdn.legendholding.com/images/cloudinary/cloudinary_683eab0e39b1c2.37745865_20250603_075806.webp",
       icon: <Car className="w-6 h-6" />,
       color: "#6d28d9",
       achievements: ["Legend Motors FZCO", "Legend Motors Br-1 (268)", "Automotive Industry Entry"],
@@ -150,7 +150,7 @@ export function OurJourney() {
       title: "Global Headquarters",
       description:
         "Our future landmark headquarters spanning over 450,000 SQFT in JAFZA will serve as the nerve center for our global operations.",
-      image: "https://res.cloudinary.com/dosxengut/image/upload/v1746784919/1-1-2_geivzn.jpg",
+      image: "https://cdn.legendholding.com/images/cloudinary/cloudinary_683ea90f29b708.04231409_20250603_074935.jpg",
       icon: <Building className="w-6 h-6" />,
       color: "#4c1d95",
       achievements: ["Global HQ Opening", "450,000 SQFT Facility", "JAFZA Operations Center"],

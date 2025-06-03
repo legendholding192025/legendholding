@@ -89,7 +89,7 @@ export function OurPresenceSection() {
             variants={fadeInUp}
           >
             <Image
-              src="https://res.cloudinary.com/dckrspiqe/image/upload/v1748431906/Asset_13_rgva8a.png"
+              src="https://cdn.legendholding.com/images/cdn_683e930040dfb1.08078741_20250603_061528.png"
               alt="Global Presence Map"
               fill
               className="object-contain"
@@ -114,7 +114,7 @@ export function OurPresenceSection() {
                   className="flex items-center gap-3 md:gap-4"
                 >
                   <Image
-                    src="https://res.cloudinary.com/dckrspiqe/image/upload/v1748439238/Asset_11_fzl19r.png"
+                    src="https://cdn.legendholding.com/images/cdn_683e960b1997b5.22165608_20250603_062827.png"
                     alt="bullet"
                     width={18}
                     height={18}
