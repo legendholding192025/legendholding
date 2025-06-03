@@ -22,14 +22,6 @@ export default function CookiePolicyPage() {
               >
                 Cookie Policy
               </motion.h1>
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.1 }}
-                className="text-lg text-white/80"
-              >
-                Understanding how and why we use cookies on our website
-              </motion.p>
             </div>
           </div>
         </section>
