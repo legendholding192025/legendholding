@@ -90,7 +90,7 @@ export default function LegendTravelPage() {
                   <div className="md:w-1/2 relative group overflow-hidden">
                     <div className="aspect-[4/3] md:h-full w-full relative overflow-hidden">
                       <Image
-                        src="https://res.cloudinary.com/dckrspiqe/image/upload/v1748251027/spencer-davis-0QcSnCM0aMc-unsplash_c3aetn.jpg"
+                        src="https://cdn.legendholding.com/images/cloudinary/cloudinary_683da36902ee20.33408729_20250602_131313.jpg"
                         width={1000}
                         height={800}
                         alt="Legend Travel & Tourism - Premium Travel Services"

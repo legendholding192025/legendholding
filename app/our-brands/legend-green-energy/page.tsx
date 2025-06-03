@@ -49,7 +49,7 @@ export default function LegendGreenEnergyPage() {
                   <div className="md:w-1/2 relative group overflow-hidden">
                     <div className="aspect-[4/3] md:h-full w-full relative overflow-hidden">
                       <Image
-                        src="https://res.cloudinary.com/dckrspiqe/image/upload/v1748255087/green_energy_solutions_c4gy4a.png"
+                        src="https://cdn.legendholding.com/images/cloudinary/cloudinary_683d9fb5d95276.90087674_20250602_125725.png"
                         width={1000}
                         height={800}
                         alt="Legend Green Energy Solutions - Sustainable Energy Services"

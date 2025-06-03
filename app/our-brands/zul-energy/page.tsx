@@ -91,7 +91,7 @@ export default function ZulEnergyPage() {
     {
       id: "zul-energy-overview",
       title: "Chemical Additives Excellence & Global Standards",
-      image: "https://cdn.legendholding.com/images/68382e9abbe3a.jpg",
+      image: "https://cdn.legendholding.com/images/cloudinary/cloudinary_683da403178ef3.07284478_20250602_131547.jpg",
       description: `ZUL Energy is a manufacturer of premium quality chemical additives for every stage of Oil & Gas field applications. Our commitment to provide quality products, outstanding service, and zero compromises has established us as a trusted partner in the energy sector.
 
 Our commitment to quality chemical production and following environment regulations have been well acknowledged by the ISO 9001-2015, ISO 14001-2015 and ISO 45001-2018 certifications. These certifications demonstrate our unwavering dedication to quality management, environmental stewardship, and occupational health and safety standards.

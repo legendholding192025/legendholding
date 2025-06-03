@@ -111,7 +111,7 @@ export default function MotorcyclesPage() {
                   <div className="md:w-1/2 relative group overflow-hidden">
                     <div className="aspect-[4/3] w-full bg-[#2b1c48]/5 relative overflow-hidden">
                       <Image
-                        src="https://res.cloudinary.com/dckrspiqe/image/upload/v1747998254/lifan_yhes49.png"
+                        src="https://cdn.legendholding.com/images/cloudinary/cloudinary_683da00a4a22c3.88022895_20250602_125850.png"
                         width={1000}
                         height={800}
                         alt="Legend Motorcycles - Premium Motorcycle Collection"

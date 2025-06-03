@@ -156,7 +156,7 @@ export default function TechnicalServicesPage() {
                   <div className="md:w-2/5 relative group overflow-hidden">
                     <div className="h-full w-full relative overflow-hidden">
                       <Image
-                        src="https://res.cloudinary.com/dckrspiqe/image/upload/v1748250246/technical_service_gza8jv.jpg"
+                        src="https://cdn.legendholding.com/images/cloudinary/cloudinary_683da2fc6fd9b2.48641261_20250602_131124.jpg"
                         width={800}
                         height={600}
                         alt="Legend Technical Services - World-Class Facilities Management"
@@ -289,7 +289,7 @@ export default function TechnicalServicesPage() {
                   <div className="relative group overflow-hidden">
                     <div className="h-full w-full relative overflow-hidden">
                       <Image
-                        src="https://res.cloudinary.com/dckrspiqe/image/upload/v1748336541/lightsaber-collection-hqBr-KfgR8o-unsplash_mnwjgt.jpg"
+                        src="https://cdn.legendholding.com/images/cloudinary/cloudinary_683da33906dec9.67996794_20250602_131225.jpg"
                         width={800}
                         height={600}
                         alt="Legend Technical Services - Facility Management"

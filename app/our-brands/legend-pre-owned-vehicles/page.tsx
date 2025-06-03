@@ -283,7 +283,7 @@ export default function PreOwnedVehiclesPage() {
                     {/* Main Image Container */}
                     <div className="relative aspect-[4/3] overflow-hidden rounded-2xl shadow-2xl">
                       <Image
-                        src="https://res.cloudinary.com/dckrspiqe/image/upload/v1748245324/pre-owned-vehicles_jvhl1b.jpg"
+                        src="https://cdn.legendholding.com/images/cloudinary/cloudinary_683da26519e1d9.85792572_20250602_130853.jpg"
                         width={800}
                         height={600}
                         alt="Legend Pre-Owned Vehicles - Certified Luxury Car Collection"

@@ -8,7 +8,7 @@ export default function ValueSection() {
       {/* Top Left Background Image */}
       <div className="absolute top-0 left-0 w-48 sm:w-64 md:w-80 lg:w-96 h-[50%] sm:h-[60%] md:h-[70%]">
         <Image
-          src="https://res.cloudinary.com/dosxengut/image/upload/v1748416192/Asset_6_prtg5f.png"
+          src="https://cdn.legendholding.com/images/cloudinary/cloudinary_683da96eaa2ac2.38253748_20250602_133854.png"
           alt="Top left decoration"
           fill
           className="object-contain object-top"
@@ -20,7 +20,7 @@ export default function ValueSection() {
       {/* Bottom Right Background Image */}
       <div className="absolute bottom-0 right-0 w-48 sm:w-64 md:w-80 lg:w-96 h-[50%] sm:h-[60%] md:h-[70%]">
         <Image
-          src="https://res.cloudinary.com/dosxengut/image/upload/v1748416192/Asset_7_nyeomc.png"
+          src="https://cdn.legendholding.com/images/cloudinary/cloudinary_683da9a99cd6c6.97768081_20250602_133953.png"
           alt="Background decoration"
           fill
           className="object-contain object-bottom"
@@ -42,7 +42,7 @@ export default function ValueSection() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 md:gap-16 mb-16 sm:mb-20">
           {/* Vision Column */}
           <div className="relative animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
-            <img src="https://res.cloudinary.com/dosxengut/image/upload/v1748596917/image_2_m9a1pw.png" alt="" className="w-full h-auto opacity-90" />
+            <img src="https://cdn.legendholding.com/images/cloudinary/cloudinary_683da9c6ede476.24969316_20250602_134022.png" alt="" className="w-full h-auto opacity-90" />
             
             {/* Vision Icon */}
             <div className="absolute top-3 sm:top-4 right-3 sm:right-4 w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16">

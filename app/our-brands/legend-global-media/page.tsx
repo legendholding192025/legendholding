@@ -155,7 +155,7 @@ export default function GlobalMediaPage() {
                   <div className="md:w-1/2 relative group overflow-hidden">
                     <div className="aspect-[4/3] md:h-full w-full relative overflow-hidden">
                       <Image
-                        src="https://res.cloudinary.com/dckrspiqe/image/upload/v1748334199/anledry-cobos-D-CYZ9ZaMqs-unsplash_id2utv.jpg"
+                        src="https://cdn.legendholding.com/images/cloudinary/cloudinary_683d9f42113ba5.78852919_20250602_125530.jpg"
                         width={1000}
                         height={800}
                         alt="Legend Global Media - Event Curation"

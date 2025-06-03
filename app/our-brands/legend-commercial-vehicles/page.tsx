@@ -51,7 +51,7 @@ export default function LegendCommercialVehiclesPage() {
                   <div className="md:w-1/2 relative group overflow-hidden">
                     <div className="aspect-[4/3] md:h-full w-full relative overflow-hidden">
                       <Image
-                        src="https://cdn.legendholding.com/images/cdn_683ab636326ef8.83143422_20250531_075638.jpg"
+                        src="https://cdn.legendholding.com/images/cloudinary/cloudinary_683d9eed970a05.14970741_20250602_125405.jpg"
                         width={1000}
                         height={800}
                         alt="Legend Commercial Vehicles - Business Solutions"

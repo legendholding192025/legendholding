@@ -10,7 +10,7 @@ export function AboutUsSection() {
       {/* Background Image */}
       <div className="absolute inset-0 w-full h-full z-0">
         <Image
-          src="https://res.cloudinary.com/dckrspiqe/image/upload/v1748417832/about-us_yzut9i.png"
+          src="https://cdn.legendholding.com/images/cloudinary/cloudinary_683d3c6534d604.31267381_20250602_055341.png"
           alt="About Us Background"
           fill
           className="object-cover object-center opacity-100"
