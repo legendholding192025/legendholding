@@ -18,7 +18,7 @@ export default function LeadershipTeam() {
               src="https://res.cloudinary.com/dosxengut/image/upload/v1746784919/1-1-2_geivzn.jpg"
               alt="Our Team"
               fill
-              className="object-cover object-[center_30%]"
+              className="object-cover object-[center_20%]"
               priority
             />
             <div className="absolute inset-0 bg-[#5E366D]/80 mix-blend-multiply" />
@@ -30,9 +30,6 @@ export default function LeadershipTeam() {
               <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
                 The Team
               </h1>
-              <p className="text-lg md:text-xl text-white/90 max-w-2xl mx-auto">
-                Meet the visionaries and experts leading Legend Holding Group towards excellence and innovation.
-              </p>
             </div>
           </div>
         </div>

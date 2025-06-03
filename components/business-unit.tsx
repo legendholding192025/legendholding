@@ -198,7 +198,7 @@ export default function BusinessUnit() {
           <button
             onClick={prevSlide}
             disabled={isTransitioning}
-            className="absolute -left-2 sm:left-0 top-1/2 transform -translate-y-1/2 z-10 bg-white rounded-full p-2 sm:p-3 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="absolute -left-2 sm:left-0 top-1/2 transform -translate-y-1/2 z-10 bg-white rounded-full p-2 sm:p-3 shadow-lg hover:shadow-xl transition-all duration-100 hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed"
             aria-label="Previous slide"
           >
             <ChevronLeft className="w-4 h-4 sm:w-6 sm:h-6 text-gray-600" />
@@ -207,7 +207,7 @@ export default function BusinessUnit() {
           <button
             onClick={nextSlide}
             disabled={isTransitioning}
-            className="absolute -right-2 sm:right-0 top-1/2 transform -translate-y-1/2 z-10 bg-white rounded-full p-2 sm:p-3 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="absolute -right-2 sm:right-0 top-1/2 transform -translate-y-1/2 z-10 bg-white rounded-full p-2 sm:p-3 shadow-lg hover:shadow-xl transition-all duration-100 hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed"
             aria-label="Next slide"
           >
             <ChevronRight className="w-4 h-4 sm:w-6 sm:h-6 text-gray-600" />
@@ -217,7 +217,7 @@ export default function BusinessUnit() {
           <div className="overflow-hidden mx-4 sm:mx-8 md:mx-12">
             <div
               ref={carouselRef}
-              className="flex transition-transform duration-500 ease-out"
+              className="flex transition-transform duration-100 ease-out"
               style={{
                 transform: `translateX(${translateX}%)`,
               }}
@@ -230,13 +230,13 @@ export default function BusinessUnit() {
                   style={{ width: `${100 / itemsPerView}%` }}
                 >
                   <Link href={business.url} className="block">
-                    <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 hover:scale-105 group h-[16rem] sm:h-[20rem] md:h-[24rem] lg:h-[28rem]">
+                    <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-100 hover:scale-105 group h-[16rem] sm:h-[20rem] md:h-[24rem] lg:h-[28rem]">
                       {/* Image Section */}
                       <div className="h-[12rem] sm:h-[16rem] md:h-[20rem] lg:h-[24rem] overflow-hidden">
                         <img
                           src={business.image || "/placeholder.svg"}
                           alt={business.name}
-                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-100"
                           loading="lazy"
                         />
                       </div>

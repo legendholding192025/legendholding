@@ -1,7 +1,7 @@
 export default function HeroSection() {
   return (
     <section
-      className="relative w-full h-screen flex items-center justify-center text-center px-4 py-16 md:py-0"
+      className="relative w-full h-[90vh] flex items-center justify-center text-center px-4 py-8 md:py-12"
       style={{
         backgroundImage: "url('https://cdn.legendholding.com/images/cdn_683e899a213a61.44155039_20250603_053522.jpg')",
         backgroundSize: "cover",

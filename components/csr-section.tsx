@@ -99,54 +99,48 @@ export function CSRSection() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
           {/* Left side - Initiative tabs */}
-          <div className="space-y-4 h-full flex flex-col justify-center">
-            {csrInitiatives.map((initiative) => (
-              <button
-                key={initiative.id}
-                onClick={() => setActiveInitiative(initiative.id)}
-                className={cn(
-                  "w-full text-left p-5 rounded-lg transition-all duration-300 flex items-start gap-4 border",
-                  activeInitiative === initiative.id
-                    ? "bg-[#5E366D] shadow-lg border-[#5E366D]/20 text-white"
-                    : "bg-[#F08900] hover:bg-[#F08900]/90 hover:shadow-md border-[#F08900]/20 text-white",
-                )}
-              >
-                <div
+          <div className="h-auto md:h-[450px] flex flex-col">
+            <div className="space-y-4 md:space-y-8">
+              {csrInitiatives.map((initiative) => (
+                <button
+                  key={initiative.id}
+                  onClick={() => setActiveInitiative(initiative.id)}
                   className={cn(
-                    "p-3 rounded-full flex-shrink-0 transition-colors duration-300",
-                    activeInitiative === initiative.id ? "bg-white text-[#5E366D]" : "bg-white text-[#F08900]",
+                    "w-full text-left p-4 md:p-8 rounded-lg transition-all duration-300 flex items-start gap-4 md:gap-6 border h-auto md:h-[210px]",
+                    activeInitiative === initiative.id
+                      ? "bg-[#5E366D] shadow-lg border-[#5E366D]/20 text-white"
+                      : "bg-[#F08900] hover:bg-[#F08900]/90 hover:shadow-md border-[#F08900]/20 text-white",
                   )}
                 >
-                  {initiative.icon}
-                </div>
-                <div>
-                  <h3
+                  <div
                     className={cn(
-                      "font-semibold text-xl mb-2 transition-colors duration-300",
-                      activeInitiative === initiative.id ? "text-white" : "text-white",
+                      "p-3 md:p-4 rounded-full flex-shrink-0 transition-colors duration-300 mt-1",
+                      activeInitiative === initiative.id ? "bg-white text-[#5E366D]" : "bg-white text-[#F08900]",
                     )}
                   >
-                    {initiative.title}
-                  </h3>
-                  <p
-                    className={cn(
-                      "text-base md:text-lg transition-colors duration-300",
-                      activeInitiative === initiative.id ? "text-white/90" : "text-white/90",
-                    )}
-                  >
-                    {initiative.description}
-                  </p>
-                </div>
-              </button>
-            ))}
-
-            <Link
-              href="/csr"
-              className="inline-flex items-center text-[#EE8900] font-medium mt-6 hover:text-[#EE8900]/80 transition-colors group text-lg"
-            >
-              View All CSR Initiatives
-              <ArrowRight className="ml-2 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
-            </Link>
+                    {initiative.icon}
+                  </div>
+                  <div className="flex-1 flex flex-col">
+                    <h3
+                      className={cn(
+                        "font-semibold text-lg md:text-2xl mb-2 md:mb-4 transition-colors duration-300",
+                        activeInitiative === initiative.id ? "text-white" : "text-white",
+                      )}
+                    >
+                      {initiative.title}
+                    </h3>
+                    <p
+                      className={cn(
+                        "text-base md:text-xl transition-colors duration-300 leading-relaxed",
+                        activeInitiative === initiative.id ? "text-white/90" : "text-white/90",
+                      )}
+                    >
+                      {initiative.description}
+                    </p>
+                  </div>
+                </button>
+              ))}
+            </div>
           </div>
 
           {/* Right side - Image showcase */}
@@ -180,7 +174,16 @@ export function CSRSection() {
           </div>
         </div>
 
-      
+        {/* CSR Button - Moved outside the grid */}
+        <div className="mt-8 lg:mt-4 lg:relative lg:left-0">
+          <Link
+            href="/csr"
+            className="inline-flex items-center text-[#EE8900] font-medium hover:text-[#EE8900]/80 transition-colors group text-base md:text-lg"
+          >
+            View All CSR Initiatives
+            <ArrowRight className="ml-2 h-4 w-4 md:h-5 md:w-5 transition-transform duration-300 group-hover:translate-x-1" />
+          </Link>
+        </div>
       </div>
     </section>
   )

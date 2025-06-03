@@ -106,7 +106,7 @@ export default function GroupIndustries() {
           {/* Navigation Buttons */}
           <button
             onClick={prevSlide}
-            className="absolute -left-2 sm:left-0 top-1/2 transform -translate-y-1/2 z-10 bg-white rounded-full p-2 sm:p-3 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110"
+            className="absolute -left-2 sm:left-0 top-1/2 transform -translate-y-1/2 z-10 bg-white rounded-full p-2 sm:p-3 shadow-lg hover:shadow-xl transition-all duration-100 hover:scale-110"
             aria-label="Previous slide"
           >
             <ChevronLeft className="w-4 h-4 sm:w-6 sm:h-6 text-gray-600" />
@@ -114,7 +114,7 @@ export default function GroupIndustries() {
 
           <button
             onClick={nextSlide}
-            className="absolute -right-2 sm:right-0 top-1/2 transform -translate-y-1/2 z-10 bg-white rounded-full p-2 sm:p-3 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110"
+            className="absolute -right-2 sm:right-0 top-1/2 transform -translate-y-1/2 z-10 bg-white rounded-full p-2 sm:p-3 shadow-lg hover:shadow-xl transition-all duration-100 hover:scale-110"
             aria-label="Next slide"
           >
             <ChevronRight className="w-4 h-4 sm:w-6 sm:h-6 text-gray-600" />
@@ -122,7 +122,7 @@ export default function GroupIndustries() {
 
           {/* Carousel Track */}
           <div className="overflow-hidden mx-4 sm:mx-8 md:mx-12">
-            <div className="flex transition-transform duration-500 ease-in-out">
+            <div className="flex transition-transform duration-100 ease-in-out">
               {visibleIndustries.map((industry, index) => (
                 <div
                   key={`${industry.name}-${index}`}
@@ -130,13 +130,13 @@ export default function GroupIndustries() {
                   style={{ width: `${100 / itemsPerView}%` }}
                 >
                   {/* Industry Card */}
-                  <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 hover:scale-105 group h-[16rem] sm:h-[20rem] md:h-[24rem] lg:h-[28rem]">
+                  <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-100 hover:scale-105 group h-[16rem] sm:h-[20rem] md:h-[24rem] lg:h-[28rem]">
                     {/* Image Section */}
                     <div className="h-[12rem] sm:h-[16rem] md:h-[20rem] lg:h-[24rem] overflow-hidden">
                       <img
                         src={industry.image || "/placeholder.svg"}
                         alt={industry.name}
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-100"
                       />
                     </div>
 
