@@ -156,18 +156,18 @@ export default function ContactPage() {
         </div>
 
         {/* Main Contact Section */}
-        <section className="bg-slate-100 py-16 px-6">
+        <section className="bg-slate-100 py-16 px-4 sm:px-6">
           <div className="max-w-7xl mx-auto">
-            <div>
+            <div className="px-2 sm:px-0">
               <h1 className="text-4xl font-bold text-gray-900 mb-2">Get in Touch</h1>
               <p className="text-lg text-gray-600 mb-6">
                 Visit our office or reach out to us through any of the following channels.
               </p>
             </div>
 
-            <div className="grid lg:grid-cols-2 gap-12 items-stretch">
+            <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-stretch">
               {/* Left Side - Map and Contact Info */}
-              <div className="bg-white rounded-2xl p-6 shadow-sm flex flex-col">
+              <div className="bg-white rounded-2xl p-4 sm:p-6 shadow-sm flex flex-col">
                 <div className="mb-4">
                   <span className="text-[#EE8900] font-semibold text-lg inline-block mb-2">Our Location</span>
                   <h3 className="text-2xl font-bold text-gray-900 mb-2">Visit Our Office</h3>
@@ -219,7 +219,7 @@ export default function ContactPage() {
               </div>
 
               {/* Right Side - Contact Form */}
-              <div className="bg-white rounded-2xl p-6 shadow-sm flex flex-col">
+              <div className="bg-white rounded-2xl p-4 sm:p-6 shadow-sm flex flex-col">
                 <div className="mb-4">
                   <span className="text-[#EE8900] font-semibold text-lg inline-block mb-2">Contact Us</span>
                   <h3 className="text-2xl font-bold text-gray-900 mb-2">Fill the Form</h3>

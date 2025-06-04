@@ -123,7 +123,7 @@ export default function VisionMissionValuesPage() {
   return (
     <>
       <Header />
-      <main className="min-h-screen bg-white relative">
+      <main className="min-h-screen bg-white relative overflow-x-hidden">
         {/* Minimal Hero Section */}
         <section className="relative py-24 md:py-32 px-4 md:px-6 lg:px-8">
           <div className="max-w-7xl mx-auto">
@@ -199,7 +199,7 @@ export default function VisionMissionValuesPage() {
                   </div>
 
                   {/* Floating Stats */}
-                  <div className="absolute -bottom-6 -left-6 bg-white rounded-lg shadow-lg p-6 border border-gray-100">
+                  <div className="absolute -bottom-6 -left-6 bg-white rounded-lg shadow-lg p-6 border border-gray-100 max-w-[calc(100%-2rem)]">
                     <div className="text-2xl font-bold text-[#2b1c48] font-richmond">
                       <AnimatedCounter target={yearsTarget} suffix="+" duration={1200} startDelay={200} />
                     </div>
@@ -230,7 +230,7 @@ export default function VisionMissionValuesPage() {
                   </div>
 
                   {/* Floating Stats */}
-                  <div className="absolute -bottom-6 -right-6 bg-white rounded-lg shadow-lg p-6 border border-gray-100">
+                  <div className="absolute -bottom-6 -right-6 bg-white rounded-lg shadow-lg p-6 border border-gray-100 max-w-[calc(100%-2rem)]">
                     <div className="text-2xl font-bold text-[#E67E22] font-richmond">
                       <AnimatedCounter target={10} suffix="K+" duration={1500} startDelay={100} />
                     </div>
@@ -294,7 +294,7 @@ export default function VisionMissionValuesPage() {
             </div>
  
             {/* Values Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
               {[
                 {
                   icon: <Heart className="w-6 h-6" />,
@@ -355,9 +355,6 @@ export default function VisionMissionValuesPage() {
                       className={`w-14 h-14 ${value.bg} rounded-xl flex items-center justify-center ${value.color} group-hover:scale-110 transition-transform duration-300`}
                     >
                       {value.icon}
-                    </div>
-                    <div className="w-10 h-10 bg-gray-50 rounded-full flex items-center justify-center">
-                      <span className="text-lg font-bold text-gray-700 font-richmond">{}</span>
                     </div>
                   </div>
  

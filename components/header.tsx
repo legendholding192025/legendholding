@@ -208,7 +208,9 @@ export function Header() {
       const st = window.scrollY;
       if (st > lastScrollTop && st > 100) {
         // Scrolling down & past threshold - hide header
-        headerRef.current?.classList.add('-translate-y-full');
+        if (!mobileMenuOpen) { // Only hide header if mobile menu is not open
+          headerRef.current?.classList.add('-translate-y-full');
+        }
       } else {
         // Scrolling up or at top - show header
         headerRef.current?.classList.remove('-translate-y-full');
@@ -218,7 +220,7 @@ export function Header() {
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [lastScrollTop]);
+  }, [lastScrollTop, mobileMenuOpen]);
 
   // Handle touch events for swipe to close
   const handleTouchStart = (e: React.TouchEvent) => {
@@ -517,6 +519,8 @@ export function Header() {
                       onClick={(e) => {
                         if (item.hasSubmenu) {
                           e.preventDefault();
+                          // Toggle the dropdown on click
+                          setActiveMenu(activeMenu === item.title ? null : item.title);
                         }
                       }}
                     >
