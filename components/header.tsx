@@ -205,12 +205,13 @@ export function Header() {
   // Handle scroll direction for header visibility
   useEffect(() => {
     const handleScroll = () => {
+      // Don't handle scroll if mobile menu is open
+      if (mobileMenuOpen) return;
+
       const st = window.scrollY;
       if (st > lastScrollTop && st > 100) {
         // Scrolling down & past threshold - hide header
-        if (!mobileMenuOpen) { // Only hide header if mobile menu is not open
-          headerRef.current?.classList.add('-translate-y-full');
-        }
+        headerRef.current?.classList.add('-translate-y-full');
       } else {
         // Scrolling up or at top - show header
         headerRef.current?.classList.remove('-translate-y-full');
@@ -219,24 +220,30 @@ export function Header() {
       setIsScrolled(st > 10);
     };
 
-    // Only add scroll listener if mobile menu is closed
-    if (!mobileMenuOpen) {
-      window.addEventListener('scroll', handleScroll, { passive: true });
-    }
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
   }, [lastScrollTop, mobileMenuOpen]);
+
+  // Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [mobileMenuOpen]);
 
   // Handle touch events for swipe to close
   const handleTouchStart = (e: React.TouchEvent) => {
-    if (!mobileMenuOpen) return; // Only handle touch events if menu is open
+    if (!mobileMenuOpen) return;
     setTouchStartY(e.touches[0].clientY);
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
-    if (touchStartY === null || !mobileMenuOpen) return; // Only handle touch events if menu is open
+    if (touchStartY === null || !mobileMenuOpen) return;
     
     const touchDiff = e.touches[0].clientY - touchStartY;
     if (touchDiff > 50) { // Swipe down threshold
