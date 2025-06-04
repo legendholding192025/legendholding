@@ -205,8 +205,8 @@ export function Header() {
   // Handle scroll direction for header visibility
   useEffect(() => {
     const handleScroll = () => {
-      // Don't handle scroll if mobile menu is open
-      if (mobileMenuOpen) return;
+      // Don't handle scroll if mobile menu or any dropdown is open
+      if (mobileMenuOpen || activeMenu) return;
 
       const st = window.scrollY;
       if (st > lastScrollTop && st > 100) {
@@ -222,11 +222,11 @@ export function Header() {
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [lastScrollTop, mobileMenuOpen]);
+  }, [lastScrollTop, mobileMenuOpen, activeMenu]);
 
-  // Prevent body scroll when mobile menu is open
+  // Prevent body scroll when mobile menu or dropdown is open
   useEffect(() => {
-    if (mobileMenuOpen) {
+    if (mobileMenuOpen || activeMenu) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
@@ -234,7 +234,7 @@ export function Header() {
     return () => {
       document.body.style.overflow = '';
     };
-  }, [mobileMenuOpen]);
+  }, [mobileMenuOpen, activeMenu]);
 
   // Handle touch events for swipe to close
   const handleTouchStart = (e: React.TouchEvent) => {
@@ -390,11 +390,14 @@ export function Header() {
       }
     }
 
-    document.addEventListener("mousedown", handleClickOutside)
+    // Only add click outside listener if a dropdown is open
+    if (activeMenu) {
+      document.addEventListener("mousedown", handleClickOutside)
+    }
     return () => {
       document.removeEventListener("mousedown", handleClickOutside)
     }
-  }, [])
+  }, [activeMenu])
 
   // Clear timeout on unmount
   useEffect(() => {
