@@ -101,7 +101,7 @@ export default function CookiePolicyPage() {
                             <tr>
                               <td className="border p-2">uc_consent</td>
                               <td className="border p-2">Usercentrics</td>
-                              <td className="border p-2">1 year</td>
+                              <td className="border p-2">365 days</td>
                               <td className="border p-2">Stores user's cookie consent preferences and settings</td>
                             </tr>
                             <tr>
@@ -109,6 +109,12 @@ export default function CookiePolicyPage() {
                               <td className="border p-2">Cloudflare</td>
                               <td className="border p-2">30 minutes</td>
                               <td className="border p-2">Bot protection and security measures</td>
+                            </tr>
+                            <tr>
+                              <td className="border p-2">cf_clearance</td>
+                              <td className="border p-2">Cloudflare</td>
+                              <td className="border p-2">365 days</td>
+                              <td className="border p-2">Security and access control</td>
                             </tr>
                           </tbody>
                         </table>
@@ -148,7 +154,7 @@ export default function CookiePolicyPage() {
                             <tr>
                               <td className="border p-2">_ga</td>
                               <td className="border p-2">Google Analytics</td>
-                              <td className="border p-2">2 years</td>
+                              <td className="border p-2">730 days</td>
                               <td className="border p-2">Distinguishes unique users and tracks user behavior</td>
                             </tr>
                             <tr>
@@ -162,6 +168,12 @@ export default function CookiePolicyPage() {
                               <td className="border p-2">Google Analytics</td>
                               <td className="border p-2">1 minute</td>
                               <td className="border p-2">Controls request rate and prevents overloading</td>
+                            </tr>
+                            <tr>
+                              <td className="border p-2">_ga_*</td>
+                              <td className="border p-2">Google Analytics</td>
+                              <td className="border p-2">730 days</td>
+                              <td className="border p-2">Used to persist session state</td>
                             </tr>
                           </tbody>
                         </table>
@@ -201,14 +213,44 @@ export default function CookiePolicyPage() {
                             <tr>
                               <td className="border p-2">_fbp</td>
                               <td className="border p-2">Facebook</td>
-                              <td className="border p-2">3 months</td>
+                              <td className="border p-2">90 days</td>
                               <td className="border p-2">Tracks user behavior for Facebook advertising</td>
                             </tr>
                             <tr>
                               <td className="border p-2">_gcl_au</td>
                               <td className="border p-2">Google Adsense</td>
-                              <td className="border p-2">3 months</td>
+                              <td className="border p-2">90 days</td>
                               <td className="border p-2">Tracks conversions for Google Ads</td>
+                            </tr>
+                            <tr>
+                              <td className="border p-2">li_sugr</td>
+                              <td className="border p-2">LinkedIn</td>
+                              <td className="border p-2">90 days</td>
+                              <td className="border p-2">Used for LinkedIn ad targeting and analytics</td>
+                            </tr>
+                            <tr>
+                              <td className="border p-2">lang</td>
+                              <td className="border p-2">Twitter</td>
+                              <td className="border p-2">Session</td>
+                              <td className="border p-2">Remembers user's language preferences</td>
+                            </tr>
+                            <tr>
+                              <td className="border p-2">_tt_</td>
+                              <td className="border p-2">TikTok</td>
+                              <td className="border p-2">395 days</td>
+                              <td className="border p-2">Tracks user behavior for TikTok advertising</td>
+                            </tr>
+                            <tr>
+                              <td className="border p-2">sc_at</td>
+                              <td className="border p-2">Snapchat</td>
+                              <td className="border p-2">365 days</td>
+                              <td className="border p-2">Used for Snapchat pixel tracking</td>
+                            </tr>
+                            <tr>
+                              <td className="border p-2">_gcl_au</td>
+                              <td className="border p-2">Google Tag Manager</td>
+                              <td className="border p-2">90 days</td>
+                              <td className="border p-2">Used for conversion tracking and analytics</td>
                             </tr>
                           </tbody>
                         </table>
