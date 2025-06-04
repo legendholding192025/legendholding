@@ -205,16 +205,14 @@ export function Header() {
   // Handle scroll direction for header visibility
   useEffect(() => {
     const handleScroll = () => {
-      // Don't handle scroll if mobile menu or any dropdown is open
-      if (mobileMenuOpen || activeMenu) return;
-
       const st = window.scrollY;
-      if (st > lastScrollTop && st > 100) {
-        // Scrolling down & past threshold - hide header
-        headerRef.current?.classList.add('-translate-y-full');
-      } else {
-        // Scrolling up or at top - show header
-        headerRef.current?.classList.remove('-translate-y-full');
+      // Only handle header visibility if no menus are open
+      if (!mobileMenuOpen && !activeMenu) {
+        if (st > lastScrollTop && st > 100) {
+          headerRef.current?.classList.add('-translate-y-full');
+        } else {
+          headerRef.current?.classList.remove('-translate-y-full');
+        }
       }
       setLastScrollTop(st);
       setIsScrolled(st > 10);
@@ -224,19 +222,58 @@ export function Header() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [lastScrollTop, mobileMenuOpen, activeMenu]);
 
-  // Prevent body scroll when mobile menu or dropdown is open
+  // Prevent body scroll when any menu is open
   useEffect(() => {
     if (mobileMenuOpen || activeMenu) {
       document.body.style.overflow = 'hidden';
+      document.body.style.position = 'fixed';
+      document.body.style.width = '100%';
+      document.body.style.top = `-${window.scrollY}px`;
     } else {
+      const scrollY = document.body.style.top;
       document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.width = '';
+      document.body.style.top = '';
+      window.scrollTo(0, parseInt(scrollY || '0') * -1);
     }
     return () => {
       document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.width = '';
+      document.body.style.top = '';
     };
   }, [mobileMenuOpen, activeMenu]);
 
-  // Handle touch events for swipe to close
+  // Remove click outside handler for mobile menu
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (headerRef.current && !headerRef.current.contains(event.target as Node)) {
+        setActiveMenu(null);
+      }
+    };
+
+    if (activeMenu) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [activeMenu]);
+
+  // Close menu on escape key - only for dropdowns
+  useEffect(() => {
+    const handleEscapeKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setActiveMenu(null);
+      }
+    };
+    
+    document.addEventListener('keydown', handleEscapeKey);
+    return () => document.removeEventListener('keydown', handleEscapeKey);
+  }, []);
+
+  // Remove touch handlers for mobile menu
   const handleTouchStart = (e: React.TouchEvent) => {
     if (!mobileMenuOpen) return;
     setTouchStartY(e.touches[0].clientY);
@@ -244,10 +281,8 @@ export function Header() {
 
   const handleTouchMove = (e: React.TouchEvent) => {
     if (touchStartY === null || !mobileMenuOpen) return;
-    
     const touchDiff = e.touches[0].clientY - touchStartY;
-    if (touchDiff > 50) { // Swipe down threshold
-      setMobileMenuOpen(false);
+    if (touchDiff > 50) {
       setTouchStartY(null);
     }
   };
@@ -288,19 +323,6 @@ export function Header() {
       }
     }
   }, [mobileMenuOpen]);
-
-  // Close menu on escape key
-  useEffect(() => {
-    const handleEscapeKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        setMobileMenuOpen(false);
-        setActiveMenu(null);
-      }
-    };
-    
-    document.addEventListener('keydown', handleEscapeKey);
-    return () => document.removeEventListener('keydown', handleEscapeKey);
-  }, []);
 
   // Search functionality
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -382,23 +404,6 @@ export function Header() {
     }
   }, [isMobile, mobileMenuOpen])
 
-  // Handle clicks outside the header to close the submenu
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (headerRef.current && !headerRef.current.contains(event.target as Node)) {
-        setActiveMenu(null)
-      }
-    }
-
-    // Only add click outside listener if a dropdown is open
-    if (activeMenu) {
-      document.addEventListener("mousedown", handleClickOutside)
-    }
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside)
-    }
-  }, [activeMenu])
-
   // Clear timeout on unmount
   useEffect(() => {
     return () => {
@@ -420,44 +425,34 @@ export function Header() {
   }, [activeMenu]);
 
   const handleMenuHover = (menuTitle: string) => {
-    // Set the hovered item immediately for visual feedback
-    setHoveredItem(menuTitle)
-
-    // Clear any existing timeout
+    setHoveredItem(menuTitle);
     if (submenuTimeoutRef.current) {
-      clearTimeout(submenuTimeoutRef.current)
-      submenuTimeoutRef.current = null
+      clearTimeout(submenuTimeoutRef.current);
     }
-
-    // Set active menu with a slight delay to prevent accidental triggers
     submenuTimeoutRef.current = setTimeout(() => {
-      setActiveMenu(menuTitle)
-    }, 100)
-  }
+      setActiveMenu(menuTitle);
+    }, 100);
+  };
 
   const handleMenuLeave = () => {
-    // Clear hovered state immediately
-    setHoveredItem(null)
-
+    setHoveredItem(null);
     if (!isMobile) {
-      // Add a longer delay before closing the submenu
       if (submenuTimeoutRef.current) {
-        clearTimeout(submenuTimeoutRef.current)
+        clearTimeout(submenuTimeoutRef.current);
       }
-
       submenuTimeoutRef.current = setTimeout(() => {
-        setActiveMenu(null)
-      }, 300)
+        setActiveMenu(null);
+      }, 300);
     }
-  }
+  };
 
   const cancelMenuClose = () => {
-    setHoveredItem(activeMenu)
+    setHoveredItem(activeMenu);
     if (submenuTimeoutRef.current) {
-      clearTimeout(submenuTimeoutRef.current)
-      submenuTimeoutRef.current = null
+      clearTimeout(submenuTimeoutRef.current);
+      submenuTimeoutRef.current = null;
     }
-  }
+  };
 
   return (
     <>
@@ -961,7 +956,7 @@ export function Header() {
         </div>
       </header>
 
-      {/* Page Dimming Overlay */}
+      {/* Remove the overlay click handler */}
       <div
         className={cn(
           "fixed inset-0 bg-black/20 backdrop-blur-sm z-[9997] lg:hidden",
@@ -969,7 +964,6 @@ export function Header() {
           mobileMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
         )}
         aria-hidden="true"
-        onClick={() => setMobileMenuOpen(false)}
       />
     </>
   )
