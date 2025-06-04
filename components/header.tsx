@@ -712,56 +712,7 @@ export function Header() {
           onTouchEnd={handleTouchEnd}
         >
           <div className="h-full flex flex-col">
-            {/* Search Bar */}
-            <div 
-              className={cn(
-                "px-4 py-3 bg-white border-b border-gray-100",
-                "transition-opacity duration-300",
-                mobileMenuOpen ? "opacity-100" : "opacity-0"
-              )}
-            >
-              <div className="relative">
-                <input
-                  ref={searchInputRef}
-                  type="search"
-                  placeholder="Search menu items and brands..."
-                  value={searchQuery}
-                  onChange={handleSearch}
-                  onFocus={() => setIsSearchFocused(true)}
-                  onBlur={() => setIsSearchFocused(false)}
-                  className={cn(
-                    "w-full px-4 py-3 rounded-lg",
-                    "border border-gray-200",
-                    "focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary",
-                    "text-base appearance-none",
-                    "transition-all duration-200",
-                    isSearchFocused ? "bg-white" : "bg-gray-50"
-                  )}
-                  aria-label="Search menu items and brands"
-                  tabIndex={mobileMenuOpen ? 0 : -1}
-                />
-                <button
-                  className="absolute right-3 top-1/2 -translate-y-1/2 p-2"
-                  onClick={() => {
-                    searchInputRef.current?.focus();
-                    setSearchQuery("");
-                    setSearchResults(null);
-                  }}
-                  aria-label={searchQuery ? "Clear search" : "Focus search"}
-                  tabIndex={mobileMenuOpen ? 0 : -1}
-                >
-                  {searchQuery ? (
-                    <X className="h-5 w-5 text-gray-400" />
-                  ) : (
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                  )}
-                </button>
-              </div>
-            </div>
-
-            {/* Search Results or Regular Menu */}
+            {/* Regular Menu */}
             <div 
               className={cn(
                 "flex-1 overflow-y-auto px-4 py-2",
@@ -769,188 +720,90 @@ export function Header() {
                 mobileMenuOpen ? "opacity-100" : "opacity-0"
               )}
             >
-              {searchResults ? (
-                // Search Results
-                <div className="space-y-6">
-                  {/* Menu Item Results */}
-                  {searchResults.menuItems.length > 0 && (
-                    <div className="space-y-3">
-                      <h3 className="text-sm font-medium text-gray-500 px-1">Menu Items</h3>
-                      <nav className="flex flex-col space-y-1">
-                        {searchResults.menuItems.map((item) => (
-                          <Link
-                            key={item.title}
-                            href={item.url}
-                            className={cn(
-                              "flex items-center p-4 rounded-lg",
-                              "text-base font-medium text-gray-800",
-                              "hover:bg-gray-50 active:bg-gray-100",
-                              "transition-colors duration-200"
-                            )}
-                            onClick={() => {
-                              setMobileMenuOpen(false);
-                              setSearchQuery("");
-                              setSearchResults(null);
-                            }}
-                          >
-                            {item.title}
-                          </Link>
-                        ))}
-                      </nav>
-                    </div>
-                  )}
-
-                  {/* Brand Results */}
-                  {searchResults.brands.length > 0 && (
-                    <div className="space-y-3">
-                      <h3 className="text-sm font-medium text-gray-500 px-1">Brands</h3>
-                      <div className="grid grid-cols-1 gap-3">
-                        {searchResults.brands.map(category => 
-                          category.items.map(brand => (
-                            <Link
-                              key={brand.title}
-                              href={brand.url}
-                              className="block overflow-hidden rounded-lg hover:shadow-lg transition-all duration-300"
-                              onClick={() => {
-                                setMobileMenuOpen(false);
-                                setSearchQuery("");
-                                setSearchResults(null);
-                              }}
-                            >
-                              <div className="relative aspect-[16/9] overflow-hidden">
-                                <Image
-                                  src={brand.image}
-                                  alt={brand.title}
-                                  fill
-                                  className="object-cover transition-transform duration-300 hover:scale-105"
-                                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                                <div className="absolute bottom-0 left-0 right-0 p-4">
-                                  <h4 className="text-lg font-semibold text-white mb-1">
-                                    {brand.title}
-                                  </h4>
-                                  {brand.description && (
-                                    <p className="text-sm text-white/90 line-clamp-2">
-                                      {brand.description}
-                                    </p>
-                                  )}
-                                </div>
-                              </div>
-                            </Link>
-                          ))
-                        )}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* No Results */}
-                  {searchResults && searchResults.menuItems.length === 0 && searchResults.brands.length === 0 && (
-                    <div className="text-center py-8">
-                      <p className="text-gray-500">No results found for "{searchQuery}"</p>
-                    </div>
-                  )}
-                </div>
-              ) : (
-                // Regular Menu Items
-                <nav className="flex flex-col space-y-1">
-                  {menuItems.map((item) => (
-                    <div 
-                      key={item.title} 
-                      className="border-b border-gray-100"
-                    >
-                      {item.hasSubmenu ? (
-                        <details 
-                          className="group" 
-                          open={activeMenu === item.title}
+              <nav className="flex flex-col space-y-1">
+                {menuItems.map((item) => (
+                  <div 
+                    key={item.title} 
+                    className="border-b border-gray-100"
+                  >
+                    {item.hasSubmenu ? (
+                      <details 
+                        className="group" 
+                        open={activeMenu === item.title}
+                      >
+                        <summary 
+                          className="flex justify-between items-center p-4 cursor-pointer"
                         >
-                          <summary 
-                            className="flex justify-between items-center p-4 cursor-pointer"
-                          >
-                            <span className="text-lg font-medium text-gray-800">{item.title}</span>
-                            <ChevronDown className="h-5 w-5 text-primary" />
-                          </summary>
+                          <span className="text-lg font-medium text-gray-800">{item.title}</span>
+                          <ChevronDown className="h-5 w-5 text-primary" />
+                        </summary>
 
-                          <div className="bg-gray-50 p-4">
-                            {item.submenu && (
-                              <div className="space-y-2">
-                                {item.submenu.map((subItem) => (
+                        <div className="bg-gray-50 p-4">
+                          {item.submenu && (
+                            <div className="space-y-2">
+                              {item.submenu.map((subItem) => (
+                                <Link
+                                  key={subItem.title}
+                                  href={subItem.url}
+                                  className="block p-3 rounded-lg hover:bg-gray-100"
+                                  onClick={() => setMobileMenuOpen(false)}
+                                >
+                                  <h3 className="font-medium text-gray-800">{subItem.title}</h3>
+                                  <p className="text-sm text-gray-500">{subItem.description}</p>
+                                </Link>
+                              ))}
+                            </div>
+                          )}
+
+                          {item.businessCategories && (
+                            <div className="space-y-4">
+                              {item.businessCategories[0].items.map((business) => (
+                                <div key={business.title}>
                                   <Link
-                                    key={subItem.title}
-                                    href={subItem.url}
-                                    className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-100"
+                                    href={business.url}
+                                    className="block p-3 rounded-lg hover:bg-gray-100"
                                     onClick={() => setMobileMenuOpen(false)}
                                   >
-                                    <div className="flex-shrink-0 w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
-                                      {subItem.icon}
-                                    </div>
-                                    <div>
-                                      <h3 className="font-medium text-gray-800">{subItem.title}</h3>
-                                      <p className="text-sm text-gray-500">{subItem.description}</p>
-                                    </div>
+                                    <h3 className="font-medium text-gray-800">{business.title}</h3>
+                                    <p className="text-sm text-gray-500">{business.description}</p>
                                   </Link>
-                                ))}
-                              </div>
-                            )}
 
-                            {item.businessCategories && (
-                              <div className="space-y-4">
-                                {item.businessCategories[0].items.map((business) => (
-                                  <div key={business.title}>
-                                    <Link
-                                      href={business.url}
-                                      className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-100"
-                                      onClick={() => setMobileMenuOpen(false)}
-                                    >
-                                      <div className="flex-shrink-0 w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
-                                        <Building2 className="w-5 h-5" />
-                                      </div>
-                                      <div>
-                                        <h3 className="font-medium text-gray-800">{business.title}</h3>
-                                        <p className="text-sm text-gray-500">{business.description}</p>
-                                      </div>
-                                    </Link>
-
-                                    {/* Legend Mobility Submenu */}
-                                    {business.title === "Legend Mobility" && (
-                                      <div className="mt-2 ml-12 pl-4 border-l-2 border-primary/20 space-y-2">
-                                        {[
-                                          "Legend World Rent a Car",
-                                          "Legend Automobile Services",
-                                        ].map((service, index) => (
-                                          <Link
-                                            key={index}
-                                            href={`/our-brands/${service.toLowerCase().replace(/\s+/g, "-")}`}
-                                            className="flex items-center space-x-2 p-2 text-sm text-gray-600 hover:text-primary hover:bg-gray-50 rounded-lg transition-colors"
-                                            onClick={() => setMobileMenuOpen(false)}
-                                          >
-                                            <ChevronRight className="w-4 h-4 flex-shrink-0" />
-                                            <span>{service}</span>
-                                          </Link>
-                                        ))}
-                                      </div>
-                                    )}
-
-                                    {/* No submenu for Legend Motors */}
-                                  </div>
-                                ))}
-                              </div>
-                            )}
-                          </div>
-                        </details>
-                      ) : (
-                        <Link
-                          href={item.url}
-                          className="block p-4 text-lg font-medium text-gray-800 hover:bg-gray-50"
-                          onClick={() => setMobileMenuOpen(false)}
-                        >
-                          {item.title}
-                        </Link>
-                      )}
-                    </div>
-                  ))}
-                </nav>
-              )}
+                                  {/* Legend Mobility Submenu */}
+                                  {business.title === "Legend Mobility" && (
+                                    <div className="mt-2 ml-4 pl-4 border-l-2 border-primary/20 space-y-2">
+                                      {[
+                                        "Legend World Rent a Car",
+                                        "Legend Automobile Services",
+                                      ].map((service, index) => (
+                                        <Link
+                                          key={index}
+                                          href={`/our-brands/${service.toLowerCase().replace(/\s+/g, "-")}`}
+                                          className="block p-2 text-sm text-gray-600 hover:text-primary hover:bg-gray-50 rounded-lg transition-colors"
+                                          onClick={() => setMobileMenuOpen(false)}
+                                        >
+                                          {service}
+                                        </Link>
+                                      ))}
+                                    </div>
+                                  )}
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      </details>
+                    ) : (
+                      <Link
+                        href={item.url}
+                        className="block p-4 text-lg font-medium text-gray-800 hover:bg-gray-50"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        {item.title}
+                      </Link>
+                    )}
+                  </div>
+                ))}
+              </nav>
             </div>
           </div>
         </div>

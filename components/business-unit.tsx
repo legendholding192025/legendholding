@@ -229,10 +229,10 @@ export default function BusinessUnit() {
                   className="flex-shrink-0 px-2"
                   style={{ width: `${100 / itemsPerView}%` }}
                 >
-                  <Link href={business.url} className="block">
-                    <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-100 hover:scale-105 group h-[16rem] sm:h-[20rem] md:h-[24rem] lg:h-[28rem]">
+                  <Link href={business.url} className="block h-full">
+                    <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-100 hover:scale-105 group h-[14rem] sm:h-[20rem] md:h-[24rem] lg:h-[28rem] flex flex-col">
                       {/* Image Section */}
-                      <div className="h-[12rem] sm:h-[16rem] md:h-[20rem] lg:h-[24rem] overflow-hidden">
+                      <div className="flex-1 overflow-hidden">
                         <img
                           src={business.image || "/placeholder.svg"}
                           alt={business.name}
@@ -243,7 +243,7 @@ export default function BusinessUnit() {
 
                       {/* Content Section */}
                       <div
-                        className={`${business.bgColor} px-3 sm:px-4 md:px-6 py-2 sm:py-3 h-14 sm:h-16 flex items-center justify-center`}
+                        className={`${business.bgColor} px-3 sm:px-4 md:px-6 py-2 sm:py-3 flex items-center justify-center`}
                       >
                         <h3 className="text-sm sm:text-base md:text-lg font-bold text-center text-white leading-tight">
                           {business.name}

@@ -25,9 +25,6 @@ export function HeroBanner() {
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
             Shaping The Future Together<br />
           </h1>
-          <p className="text-lg md:text-xl text-white/90 max-w-2xl leading-relaxed">
-            Join a team of passionate innovators and problem-solvers dedicated to pushing the boundaries of what's possible.
-          </p>
         </div>
       </div>
     </div>
