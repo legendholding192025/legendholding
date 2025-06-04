@@ -218,17 +218,25 @@ export function Header() {
       setLastScrollTop(st);
       setIsScrolled(st > 10);
     };
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+
+    // Only add scroll listener if mobile menu is closed
+    if (!mobileMenuOpen) {
+      window.addEventListener('scroll', handleScroll, { passive: true });
+    }
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, [lastScrollTop, mobileMenuOpen]);
 
   // Handle touch events for swipe to close
   const handleTouchStart = (e: React.TouchEvent) => {
+    if (!mobileMenuOpen) return; // Only handle touch events if menu is open
     setTouchStartY(e.touches[0].clientY);
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
-    if (touchStartY === null) return;
+    if (touchStartY === null || !mobileMenuOpen) return; // Only handle touch events if menu is open
     
     const touchDiff = e.touches[0].clientY - touchStartY;
     if (touchDiff > 50) { // Swipe down threshold
