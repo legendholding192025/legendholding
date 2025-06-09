@@ -40,7 +40,7 @@ export function OurJourney() {
       title: "Oriental Wiseman General Trading",
       description:
         "Our journey began with the establishment of our first trading company, focusing on bringing quality products to the market with a vision for excellence.",
-      image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop",
+      image: "https://cdn.legendholding.com/images/cdn_68469e4e96d2e3.53774017_20250609_084150.jpg",
       icon: <Building className="w-6 h-6" />,
       color: "#7c3aed",
       achievements: ["Company Foundation", "First Trading Operations", "Market Entry"],
@@ -60,7 +60,7 @@ export function OurJourney() {
       title: "Multi-Brand Expansion",
       description:
         "Expanded our automotive portfolio with multiple brands and opened our second showroom, offering customers a wider range of choices.",
-      image: "https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?q=80&w=2070&auto=format&fit=crop",
+      image: "https://cdn.legendholding.com/images/cdn_68469ed48dcd56.80212229_20250609_084404.jpg",
       icon: <Car className="w-6 h-6" />,
       color: "#5b21b6",
       achievements: ["Legend Multi Motors", "Legend Motors Br-2 (116)", "Brand Portfolio Expansion"],
@@ -70,7 +70,7 @@ export function OurJourney() {
       title: "Regional Operations",
       description:
         "Established new regional operations at Jabal Al Barakha to better serve our growing customer base across different territories.",
-      image: "https://images.unsplash.com/photo-1577416412292-747c6607f055?q=80&w=2070&auto=format&fit=crop",
+      image: "https://cdn.legendholding.com/images/cdn_6846a269d5cec6.37265819_20250609_085921.jpg",
       icon: <MapPin className="w-6 h-6" />,
       color: "#4c1d95",
       achievements: ["Jabal Al Barakha Operations", "Regional Expansion", "Territory Coverage"],
@@ -80,7 +80,7 @@ export function OurJourney() {
       title: "Premium Automotive Division",
       description:
         "Launched our premium automotive divisions, catering to luxury vehicle enthusiasts and automatic transmission specialists.",
-      image: "https://images.unsplash.com/photo-1583121274602-3e2820c69888?q=80&w=2070&auto=format&fit=crop",
+      image: "https://cdn.legendholding.com/images/cdn_6846a2581107e1.59462759_20250609_085904.jpg",
       icon: <Car className="w-6 h-6" />,
       color: "#7c3aed",
       achievements: ["Highline Motors Trading", "Automatic Motors", "Premium Market Entry"],
@@ -90,7 +90,7 @@ export function OurJourney() {
       title: "Energy Sector Venture",
       description:
         "Ventured into the energy sector with Zul Energy, bringing innovative solutions and diversifying our business portfolio beyond automotive.",
-      image: "https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?q=80&w=2070&auto=format&fit=crop",
+      image: "https://cdn.legendholding.com/images/cdn_6846a246859468.98501177_20250609_085846.jpg",
       icon: <Zap className="w-6 h-6" />,
       color: "#6d28d9",
       achievements: ["Zul Energy Launch", "Energy Sector Entry", "Business Diversification"],
@@ -100,7 +100,7 @@ export function OurJourney() {
       title: "Global Investment & Tourism",
       description:
         "Established our global investment division and expanded into tourism, exploring new opportunities and markets worldwide.",
-      image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2015&auto=format&fit=crop",
+      image: "https://cdn.legendholding.com/images/cdn_6846a212a62422.28276208_20250609_085754.jpg",
       icon: <Globe className="w-6 h-6" />,
       color: "#5b21b6",
       achievements: ["Legend World Investment", "Legend Travel & Tourism", "Global Market Expansion"],
@@ -110,7 +110,7 @@ export function OurJourney() {
       title: "Continued Growth",
       description:
         "Opened our third showroom despite global challenges, demonstrating our resilience and commitment to growth.",
-      image: "https://images.unsplash.com/photo-1565043589221-1a6fd9ae45c7?q=80&w=2070&auto=format&fit=crop",
+      image: "https://cdn.legendholding.com/images/cdn_6846a2044f5c45.64466640_20250609_085740.jpg",
       icon: <Building className="w-6 h-6" />,
       color: "#4c1d95",
       achievements: ["Legend Motors Br-3 (26)", "Pandemic Resilience", "Continued Expansion"],
@@ -120,7 +120,7 @@ export function OurJourney() {
       title: "Service Excellence",
       description:
         "Expanded with our fourth showroom and comprehensive automotive services, including rental and maintenance solutions.",
-      image: "https://images.unsplash.com/photo-1613214049841-0d677ddf52af?q=80&w=2070&auto=format&fit=crop",
+      image: "https://cdn.legendholding.com/images/cdn_6846a290084766.80604483_20250609_090000.jpg",
       icon: <Car className="w-6 h-6" />,
       color: "#7c3aed",
       achievements: ["Legend Motors Br-4 (46)", "Rent A Car Services", "Automobile Services"],
@@ -130,7 +130,7 @@ export function OurJourney() {
       title: "Electric Vehicle Revolution",
       description:
         "Secured multiple prestigious dealerships including Skywell, Kaiyi, Lifan, and Li Auto, embracing the future of sustainable transportation.",
-      image: "https://images.unsplash.com/photo-1593941707882-a5bba14938c7?q=80&w=2072&auto=format&fit=crop",
+      image: "https://cdn.legendholding.com/images/cdn_6846a1dd7894d5.04152247_20250609_085701.jpg",
       icon: <Award className="w-6 h-6" />,
       color: "#6d28d9",
       achievements: ["Skywell Dealership", "Kaiyi & Lifan Partnerships", "Li Auto & Project 212"],
@@ -140,7 +140,7 @@ export function OurJourney() {
       title: "Sustainable Innovation",
       description:
         "Opened our fifth showroom in Jebel Ali and launched green energy solutions alongside comprehensive logistics services.",
-      image: "https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?q=80&w=2074&auto=format&fit=crop",
+      image: "https://cdn.legendholding.com/images/cdn_6846a1c8f3d8c5.57982348_20250609_085640.jpg",
       icon: <Zap className="w-6 h-6" />,
       color: "#5b21b6",
       achievements: ["Legend Motors Br-5 Jebel Ali", "Green Energy Solutions", "Legend Logistics"],
