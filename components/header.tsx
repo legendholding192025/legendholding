@@ -73,7 +73,7 @@ const menuItems: MenuItem[] = [
       {
         title: "Our Journey",
         url: "/who-we-are/journey",
-        image: "https://cdn.legendholding.com/images/car.jpg",
+        image: "https://cdn.legendholding.com/images/cdn_68469aa7bb4020.42147442_20250609_082615.jpg",
         description: "Follow our path of growth and milestones through the years.",
         icon: <History className="w-5 h-5" />
       },
