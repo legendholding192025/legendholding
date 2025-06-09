@@ -60,11 +60,11 @@ export default function GrowSection() {
         </div>
 
         {/* Content Section */}
-        <div className="grid md:grid-cols-2 gap-0">
+        <div className="grid md:grid-cols-2 gap-0 md:gap-0">
           {/* Left Content */}
           <div className="space-y-8 h-full">
             <div className="h-full">
-              <div className="bg-white p-6 md:p-8 rounded-l-2xl md:rounded-r-none rounded-2xl h-full flex flex-col justify-between">
+              <div className="bg-white p-6 md:p-8 rounded-2xl md:rounded-r-none md:rounded-l-2xl h-full flex flex-col justify-between">
                 <div>
                   <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#EE8900] mb-4 md:mb-6">{currentSlideData.title}</h2>
                   <p className="text-base md:text-lg text-[#5E366D] leading-relaxed">{currentSlideData.description}</p>
@@ -99,8 +99,8 @@ export default function GrowSection() {
           </div>
 
           {/* Right Image */}
-          <div className="relative h-[300px] md:h-[500px]">
-            <div className="aspect-[4/3] overflow-hidden rounded-r-2xl md:rounded-l-none rounded-2xl h-full">
+          <div className="relative h-[300px] md:h-[500px] mt-4 md:mt-0">
+            <div className="aspect-[4/3] overflow-hidden rounded-2xl md:rounded-l-none md:rounded-r-2xl h-full">
               <Image
                 src={currentSlideData.image}
                 alt={`${currentSlideData.title} - Legend Holdings team collaboration`}
@@ -129,4 +129,4 @@ export default function GrowSection() {
       </div>
     </div>
   )
-} 
+}

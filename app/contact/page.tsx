@@ -207,7 +207,7 @@ export default function ContactPage() {
                 {/* Get Directions Button */}
                 <div className="mt-4">
                   <a
-                    href="https://www.google.com/maps/search/?api=1&query=25.016667,55.116667&query_place_id=Legend+Holding+Group+-+Global+HQ+Space,+Plot+No-+S30502+-+opposite+Redington,+Gate5+-+JAFZA+-+Dubai"
+                    href="https://www.google.com/maps/search/?api=1&query=Legend+Holding+Group+Jebel+Ali+Freezone+Gate+5+Dubai"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#F08900] text-white font-semibold rounded-lg hover:bg-[#d67a00] transition-colors duration-300 w-full"
