@@ -115,35 +115,35 @@ ZUL Energy continues to expand its footprint in the energy sector while maintain
             }`}
           >
             {/* Page Header */}
-            <section className="w-full mb-16 animate-fade-in-up px-12 md:px-24">
-              <h2 className="text-2xl md:text-3xl font-semibold text-[#2b1c48] mb-6 font-richmond">
+            <section className="w-full max-w-6xl mx-auto mb-16 px-4 md:px-8 animate-fade-in-up">
+              <h2 className="text-2xl md:text-3xl font-semibold text-[#2b1c48] mb-6 font-richmond animation-delay-200">
                 Zul Energy
               </h2>
-              <div className="flex gap-2 mb-8">
+              <div className="flex gap-2">
                 <div className="h-1 w-16 bg-[#2b1c48] rounded-full animate-expand-width"></div>
                 <div className="h-1 w-8 bg-[#ee8900] rounded-full animate-expand-width animation-delay-200"></div>
               </div>
 
-              <p className="text-gray-700 text-lg max-w-3xl animation-delay-400 font-effra">
+              <p className="mt-8 text-gray-700 text-lg max-w-3xl animation-delay-400 font-effra">
                 Part of Legend Holding Group, ZUL Energy is expanding its footprint into new Energy sectors while
                 maintaining the highest standards of quality and environmental responsibility.
               </p>
             </section>
 
             {/* Single Combined Section */}
-            <section className="w-full mb-16 px-12 md:px-24">
+            <section className="w-full max-w-6xl mx-auto mb-16 px-4 md:px-8">
               {energySections.map((section, idx) => (
                 <div
                   key={section.id}
-                  className="bg-white shadow-2xl border border-gray-100 overflow-hidden transition-all duration-500 hover:shadow-3xl animate-fade-in-up rounded-xl"
+                  className="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden transition-all duration-500 hover:shadow-3xl animate-fade-in-up"
                   style={{ animationDelay: `${(idx + 1) * 200}ms` }}
                   onMouseEnter={() => setActiveSection(section.id)}
                   onMouseLeave={() => setActiveSection(null)}
                 >
                   <div className="flex flex-col md:flex-row">
                     {/* Image Section */}
-                    <div className="md:w-1/4 relative group overflow-hidden rounded-l-xl">
-                      <div className="aspect-[4/3] md:h-full w-full relative overflow-hidden bg-[#2b1c48]/5">
+                    <div className="md:w-2/5 relative group overflow-hidden">
+                      <div className="h-full w-full bg-[#2b1c48]/5 relative overflow-hidden">
                         <img
                           src={section.image}
                           alt={section.title}
@@ -154,18 +154,18 @@ ZUL Energy continues to expand its footprint in the energy sector while maintain
                     </div>
 
                     {/* Content Section */}
-                    <div className="flex-1 p-8 md:p-10 flex flex-col justify-center">
+                    <div className="flex-1 p-8 md:p-10 flex flex-col justify-center relative">
                       <h3 className="text-3xl font-richmond font-bold text-[#2b1c48] mb-4 group-hover:text-[#5d376e] transition-colors duration-300">
                         {section.title}
                       </h3>
 
                       {section.description.split('\n\n').map((paragraph, i) => (
-                        <p key={i} className="text-lg font-effra text-gray-700 mb-6 leading-relaxed">
+                        <p key={i} className="text-lg font-effra text-gray-700 mb-6 leading-relaxed max-w-3xl">
                           {paragraph}
                         </p>
                       ))}
 
-                      {/* Learn More Button */}
+                      {/* CTA Button */}
                       <div className="mt-8 w-full">
                         <button
                           onClick={handleLearnMore}
