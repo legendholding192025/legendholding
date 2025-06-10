@@ -193,7 +193,7 @@ export default function MotorsTradingPage() {
                     <div className="mt-10 w-full">
                       <button
                         className="w-full py-5 group inline-flex items-center justify-center gap-2 text-white font-semibold bg-[#F08900] hover:bg-[#d67a00] transition-colors duration-300 cursor-pointer rounded-lg text-lg"
-                        onClick={() => window.open("https://www.legendmotors.com", "_blank")}
+                        onClick={() => window.open("https://legendmotorsglobal.com/", "_blank")}
                       >
                         <span>Visit Website</span>
                         <ChevronRight
