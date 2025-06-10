@@ -14,6 +14,7 @@ const dealerships = [
       "Legend Motors is the exclusive distributor of Skywell vehicles in Dubai, offering comprehensive retail and fleet solutions across the emirate.",
     needsBackground: false,
     bgColor: "bg-transparent",
+    website: "https://skywell-uae.com/",
   },
   {
     name: "Kaiyi",
@@ -23,6 +24,7 @@ const dealerships = [
       "Legend Motors is the exclusive distributor of Kaiyi Automobiles in the UAE, proudly introducing this innovative Chinese SUV brand to the local market.",
     needsBackground: false,
     bgColor: "bg-transparent",
+    website: "https://kaiyi.ae/",
   },
   {
     name: "Li Auto",
@@ -32,6 +34,7 @@ const dealerships = [
       "Legend Motors serves as the official sales partner and authorized provider of after-sales service and maintenance for Li Auto vehicles across the UAE.",
     needsBackground: false,
     bgColor: "bg-transparent",
+    website: "https://www.liautouae.com/",
   },
   {
     name: "212",
@@ -41,6 +44,7 @@ const dealerships = [
       "Legend Motors is the exclusive distributor for 212 vehicles in the UAE, managing both sales and after-sales service with a commitment to excellence.",
     needsBackground: false,
     bgColor: "bg-transparent",
+    website: "https://212uae.com/",
   },
 ]
  
@@ -128,16 +132,33 @@ export default function LegendMotorsDealershipPage() {
  
                       {/* CTA Button */}
                       <div className="mt-8 w-full">
-                        <button
-                          className="w-full py-4 group inline-flex items-center justify-center gap-2 text-white font-semibold bg-[#F08900] hover:bg-[#d67a00] transition-colors duration-300 cursor-pointer rounded-lg"
-                        >
-                          <span>Visit Website</span>
-                          <ChevronRight
-                            className={`w-5 h-5 transform transition-transform duration-300 ${
-                              activeIndex === idx ? "translate-x-1" : ""
-                            }`}
-                          />
-                        </button>
+                        {dealership.website ? (
+                          <a
+                            href={dealership.website}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="w-full py-4 group inline-flex items-center justify-center gap-2 text-white font-semibold bg-[#F08900] hover:bg-[#d67a00] transition-colors duration-300 cursor-pointer rounded-lg"
+                          >
+                            <span>Visit Website</span>
+                            <ChevronRight
+                              className={`w-5 h-5 transform transition-transform duration-300 ${
+                                activeIndex === idx ? "translate-x-1" : ""
+                              }`}
+                            />
+                          </a>
+                        ) : (
+                          <button
+                            className="w-full py-4 group inline-flex items-center justify-center gap-2 text-white font-semibold bg-[#F08900] hover:bg-[#d67a00] transition-colors duration-300 cursor-pointer rounded-lg"
+                            disabled
+                          >
+                            <span>Visit Website</span>
+                            <ChevronRight
+                              className={`w-5 h-5 transform transition-transform duration-300 ${
+                                activeIndex === idx ? "translate-x-1" : ""
+                              }`}
+                            />
+                          </button>
+                        )}
                       </div>
                     </div>
                   </div>
