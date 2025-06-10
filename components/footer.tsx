@@ -225,7 +225,7 @@ export function Footer() {
             </h3>
             <div className="flex items-center gap-4 mb-4">
               <Link
-                href="https://facebook.com"
+                href="https://www.facebook.com/share/1XndETdEkF/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-white/80 hover:text-white transition-all duration-300"
@@ -233,7 +233,7 @@ export function Footer() {
                 <FacebookIcon size={20} />
               </Link>
               <Link
-                href="https://twitter.com"
+                href="https://x.com/Legendholding1?s=09"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-white/80 hover:text-white transition-all duration-300"
@@ -241,7 +241,7 @@ export function Footer() {
                 <TwitterIcon size={20} />
               </Link>
               <Link
-                href="https://instagram.com"
+                href="https://www.instagram.com/legendholdinggroup?igsh=MTk3Z3NqOXB4b2gzZQ=="
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-white/80 hover:text-white transition-all duration-300"
@@ -249,7 +249,7 @@ export function Footer() {
                 <InstagramIcon size={20} />
               </Link>
               <Link
-                href="https://linkedin.com"
+                href="https://www.linkedin.com/company/legend-holding-group/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-white/80 hover:text-white transition-all duration-300"
@@ -257,7 +257,7 @@ export function Footer() {
                 <LinkedInIcon size={20} />
               </Link>
               <Link
-                href="https://youtube.com"
+                href="https://youtube.com/@legendholdinggroup?si=h_xMStdscyQv_LdW"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-white/80 hover:text-white transition-all duration-300"
