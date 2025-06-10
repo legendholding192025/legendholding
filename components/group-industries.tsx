@@ -1,11 +1,14 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback, useRef } from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 
 export default function GroupIndustries() {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [itemsPerView, setItemsPerView] = useState(2) // Default to 2 items
+  const [isPaused, setIsPaused] = useState(false)
+  const [isTransitioning, setIsTransitioning] = useState(false)
+  const carouselRef = useRef<HTMLDivElement>(null)
 
   const industries = [
     {
@@ -67,25 +70,71 @@ export default function GroupIndustries() {
 
   const totalItems = industries.length
 
-  const nextSlide = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % totalItems)
-  }
+  const nextSlide = useCallback(() => {
+    if (isTransitioning) return
+    setIsTransitioning(true)
+    setCurrentIndex((prevIndex) => prevIndex + 1)
+  }, [isTransitioning])
 
-  const prevSlide = () => {
-    setCurrentIndex((prevIndex) => (prevIndex - 1 + totalItems) % totalItems)
-  }
+  const prevSlide = useCallback(() => {
+    if (isTransitioning) return
+    setIsTransitioning(true)
+    setCurrentIndex((prevIndex) => prevIndex - 1)
+  }, [isTransitioning])
 
-  // Get the visible industries based on current index
-  const getVisibleIndustries = () => {
-    const visibleItems = []
-    for (let i = 0; i < itemsPerView; i++) {
-      const index = (currentIndex + i) % totalItems
-      visibleItems.push(industries[index])
+  // Handle infinite loop transitions
+  const handleTransitionEnd = () => {
+    setIsTransitioning(false)
+
+    if (currentIndex >= totalItems) {
+      // Reset to beginning without animation
+      if (carouselRef.current) {
+        carouselRef.current.style.transition = "none"
+        setCurrentIndex(0)
+        // Force reflow
+        carouselRef.current.offsetHeight
+        carouselRef.current.style.transition = "transform 100ms ease-out"
+      }
+    } else if (currentIndex < 0) {
+      // Reset to end without animation
+      if (carouselRef.current) {
+        carouselRef.current.style.transition = "none"
+        setCurrentIndex(totalItems - 1)
+        // Force reflow
+        carouselRef.current.offsetHeight
+        carouselRef.current.style.transition = "transform 100ms ease-out"
+      }
     }
-    return visibleItems
   }
 
-  const visibleIndustries = getVisibleIndustries()
+  // Create extended array with clones for infinite effect
+  const extendedIndustries = [
+    ...industries.slice(-itemsPerView), // Clone last items at beginning
+    ...industries,
+    ...industries.slice(0, itemsPerView), // Clone first items at end
+  ]
+
+  // Calculate transform with offset for cloned items
+  const translateX = -((currentIndex + itemsPerView) * (100 / itemsPerView))
+
+  // Autoplay Effect
+  useEffect(() => {
+    let intervalId: NodeJS.Timeout
+
+    if (!isPaused) {
+      intervalId = setInterval(() => {
+        if (!isTransitioning) {
+          nextSlide()
+        }
+      }, 4000)
+    }
+
+    return () => {
+      if (intervalId) {
+        clearInterval(intervalId)
+      }
+    }
+  }, [isPaused, nextSlide, isTransitioning])
 
   return (
     <section className="py-8 sm:py-12 md:py-16 bg-gray-50 w-full">
@@ -102,11 +151,16 @@ export default function GroupIndustries() {
         </div>
 
         {/* Carousel Container */}
-        <div className="relative w-full max-w-[2000px] mx-auto">
+        <div 
+          className="relative w-full max-w-[2000px] mx-auto"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+        >
           {/* Navigation Buttons */}
           <button
             onClick={prevSlide}
-            className="absolute -left-2 sm:left-0 top-1/2 transform -translate-y-1/2 z-10 bg-white rounded-full p-2 sm:p-3 shadow-lg hover:shadow-xl transition-all duration-100 hover:scale-110"
+            disabled={isTransitioning}
+            className="absolute -left-2 sm:left-0 top-1/2 transform -translate-y-1/2 z-10 bg-white rounded-full p-2 sm:p-3 shadow-lg hover:shadow-xl transition-all duration-100 hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed"
             aria-label="Previous slide"
           >
             <ChevronLeft className="w-4 h-4 sm:w-6 sm:h-6 text-gray-600" />
@@ -114,7 +168,8 @@ export default function GroupIndustries() {
 
           <button
             onClick={nextSlide}
-            className="absolute -right-2 sm:right-0 top-1/2 transform -translate-y-1/2 z-10 bg-white rounded-full p-2 sm:p-3 shadow-lg hover:shadow-xl transition-all duration-100 hover:scale-110"
+            disabled={isTransitioning}
+            className="absolute -right-2 sm:right-0 top-1/2 transform -translate-y-1/2 z-10 bg-white rounded-full p-2 sm:p-3 shadow-lg hover:shadow-xl transition-all duration-100 hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed"
             aria-label="Next slide"
           >
             <ChevronRight className="w-4 h-4 sm:w-6 sm:h-6 text-gray-600" />
@@ -122,17 +177,24 @@ export default function GroupIndustries() {
 
           {/* Carousel Track */}
           <div className="overflow-hidden mx-4 sm:mx-8 md:mx-12">
-            <div className="flex transition-transform duration-100 ease-in-out">
-              {visibleIndustries.map((industry, index) => (
+            <div
+              ref={carouselRef}
+              className="flex transition-transform duration-100 ease-out"
+              style={{
+                transform: `translateX(${translateX}%)`,
+              }}
+              onTransitionEnd={handleTransitionEnd}
+            >
+              {extendedIndustries.map((industry, index) => (
                 <div
                   key={`${industry.name}-${index}`}
-                  className="flex-shrink-0 px-2 sm:px-3"
+                  className="flex-shrink-0 px-2"
                   style={{ width: `${100 / itemsPerView}%` }}
                 >
                   {/* Industry Card */}
-                  <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-100 hover:scale-105 group h-[16rem] sm:h-[20rem] md:h-[24rem] lg:h-[28rem]">
+                  <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-100 hover:scale-105 group h-[14rem] sm:h-[20rem] md:h-[24rem] lg:h-[28rem] flex flex-col">
                     {/* Image Section */}
-                    <div className="h-[12rem] sm:h-[16rem] md:h-[20rem] lg:h-[24rem] overflow-hidden">
+                    <div className="flex-1 overflow-hidden">
                       <img
                         src={industry.image || "/placeholder.svg"}
                         alt={industry.name}
@@ -141,7 +203,7 @@ export default function GroupIndustries() {
                     </div>
 
                     {/* Content Section */}
-                    <div className={`${industry.bgColor} px-3 sm:px-4 md:px-6 py-2 sm:py-3 h-14 sm:h-16 flex items-center justify-center`}>
+                    <div className={`${industry.bgColor} px-3 sm:px-4 md:px-6 py-2 sm:py-3 flex items-center justify-center`}>
                       <h3
                         className={`text-sm sm:text-base md:text-lg font-bold text-center ${industry.textColor || "text-white"} leading-tight`}
                       >
@@ -153,6 +215,27 @@ export default function GroupIndustries() {
               ))}
             </div>
           </div>
+        </div>
+
+        {/* Indicators */}
+        <div className="flex justify-center mt-6 space-x-2">
+          {industries.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => {
+                if (!isTransitioning) {
+                  setIsTransitioning(true)
+                  setCurrentIndex(index)
+                }
+              }}
+              className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                index === (currentIndex < 0 ? totalItems - 1 : currentIndex >= totalItems ? 0 : currentIndex)
+                  ? "bg-[#F08900] w-6"
+                  : "bg-gray-300 hover:bg-gray-400"
+              }`}
+              aria-label={`Go to slide ${index + 1}`}
+            />
+          ))}
         </div>
       </div>
 

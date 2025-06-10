@@ -51,18 +51,20 @@ export function Newsroom() {
   }
 
   const nextSlide = () => {
-    if (currentIndex < newsItems.length - itemsPerPage) {
-      setCurrentIndex(currentIndex + 1)
-    } else {
+    const nextIndex = currentIndex + itemsPerPage
+    if (nextIndex >= newsItems.length) {
       setCurrentIndex(0) // Loop back to the beginning
+    } else {
+      setCurrentIndex(nextIndex)
     }
   }
 
   const prevSlide = () => {
-    if (currentIndex > 0) {
-      setCurrentIndex(currentIndex - 1)
+    const prevIndex = currentIndex - itemsPerPage
+    if (prevIndex < 0) {
+      setCurrentIndex(Math.max(0, newsItems.length - itemsPerPage)) // Loop to the end
     } else {
-      setCurrentIndex(newsItems.length - itemsPerPage) // Loop to the end
+      setCurrentIndex(prevIndex)
     }
   }
 
@@ -157,19 +159,22 @@ export function Newsroom() {
                 <ChevronLeft className="h-5 w-5" />
               </button>
               <div className="flex items-center gap-1.5 px-3">
-                {Array.from({ length: totalPages }).map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setCurrentIndex(index * itemsPerPage)}
-                    className={cn(
-                      "w-2 h-2 rounded-full transition-all duration-300",
-                      Math.floor(currentIndex / itemsPerPage) === index
-                        ? "bg-[rgb(43,28,72)] w-6"
-                        : "bg-[rgb(234,226,214)] hover:bg-[rgb(234,226,214)]/70",
-                    )}
-                    aria-label={`Go to page ${index + 1}`}
-                  />
-                ))}
+                {Array.from({ length: totalPages }).map((_, index) => {
+                  const pageIndex = index * itemsPerPage
+                  return (
+                    <button
+                      key={index}
+                      onClick={() => setCurrentIndex(pageIndex)}
+                      className={cn(
+                        "w-2 h-2 rounded-full transition-all duration-300",
+                        currentIndex === pageIndex
+                          ? "bg-[rgb(43,28,72)] w-6"
+                          : "bg-[rgb(234,226,214)] hover:bg-[rgb(234,226,214)]/70",
+                      )}
+                      aria-label={`Go to page ${index + 1}`}
+                    />
+                  )
+                })}
               </div>
               <button
                 onClick={nextSlide}

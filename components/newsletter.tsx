@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input"
 import { useState } from "react"
 import { Loader2, CheckCircle, ArrowRight } from "lucide-react"
 import { UnsubscribeModal } from "@/components/unsubscribe-modal"
+import Link from "next/link"
 
 export default function Newsletter() {
   const [email, setEmail] = useState("")
@@ -99,13 +100,10 @@ export default function Newsletter() {
                   )}
                 </form>
                 <p className="text-sm text-muted-foreground mt-4 text-center lg:text-left">
-                  We respect your privacy.{" "}
-                  <button
-                    onClick={() => setIsUnsubscribeModalOpen(true)}
-                    className="text-[#E67E22] hover:text-[#E67E22]/80 underline focus:outline-none"
-                  >
-                    Unsubscribe at any time
-                  </button>
+                  By signing up you agree to our{" "}
+                  <Link href="/terms" className="text-[#E67E22] hover:text-[#E67E22]/80 underline focus:outline-none">
+                    Terms & Conditions
+                  </Link>
                   .
                 </p>
               </div>

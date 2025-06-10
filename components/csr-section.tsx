@@ -98,8 +98,38 @@ export function CSRSection() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
-          {/* Left side - Initiative tabs */}
-          <div className="h-auto md:h-[450px] flex flex-col">
+          {/* Right side - Image showcase - Now First on Mobile */}
+          <div className="relative h-[450px] rounded-xl overflow-hidden shadow-xl order-1 lg:order-2">
+            {csrInitiatives.map((initiative) => (
+              <div
+                key={initiative.id}
+                className={cn(
+                  "absolute inset-0 transition-opacity duration-500",
+                  activeInitiative === initiative.id ? "opacity-100 z-10" : "opacity-0 z-0",
+                )}
+              >
+                <Image
+                  src={imageError[initiative.id] ? "/placeholder.jpg" : initiative.image}
+                  alt={initiative.title}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  onError={() => handleImageError(initiative.id)}
+                  priority={activeInitiative === initiative.id}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                <div className="absolute bottom-0 left-0 p-6 text-white">
+                  <h3 className="text-2xl md:text-3xl font-bold mb-3">{initiative.title}</h3>
+                  <p className="text-white/90 text-base md:text-lg">
+                    Learn more about how we're making a difference
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Left side - Initiative tabs - Now Second on Mobile */}
+          <div className="h-auto md:h-[450px] flex flex-col order-2 lg:order-1">
             <div className="space-y-4 md:space-y-8">
               {csrInitiatives.map((initiative) => (
                 <button
@@ -141,36 +171,6 @@ export function CSRSection() {
                 </button>
               ))}
             </div>
-          </div>
-
-          {/* Right side - Image showcase */}
-          <div className="relative h-[450px] rounded-xl overflow-hidden shadow-xl">
-            {csrInitiatives.map((initiative) => (
-              <div
-                key={initiative.id}
-                className={cn(
-                  "absolute inset-0 transition-opacity duration-500",
-                  activeInitiative === initiative.id ? "opacity-100 z-10" : "opacity-0 z-0",
-                )}
-              >
-                <Image
-                  src={imageError[initiative.id] ? "/placeholder.jpg" : initiative.image}
-                  alt={initiative.title}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                  onError={() => handleImageError(initiative.id)}
-                  priority={activeInitiative === initiative.id}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
-                <div className="absolute bottom-0 left-0 p-6 text-white">
-                  <h3 className="text-2xl md:text-3xl font-bold mb-3">{initiative.title}</h3>
-                  <p className="text-white/90 text-base md:text-lg">
-                    Learn more about how we're making a difference
-                  </p>
-                </div>
-              </div>
-            ))}
           </div>
         </div>
 

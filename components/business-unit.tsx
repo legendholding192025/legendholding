@@ -62,7 +62,7 @@ export default function BusinessUnit() {
     },
     {
       name: "Legend Automobile Services",
-      image: "https://cdn.legendholding.com/images/cloudinary/cloudinary_683da82b6a2744.29951551_20250602_133331.jpg",
+      image: "https://cdn.legendholding.com/images/cdn_6846a290084766.80604483_20250609_090000.jpg",
       url: "/our-brands/legend-automobile-services",
       bgColor: "bg-[#5D376E]",
     },

@@ -169,7 +169,7 @@ export default function ContactPage() {
               {/* Left Side - Map and Contact Info */}
               <div className="bg-white rounded-2xl p-4 sm:p-6 shadow-sm flex flex-col">
                 <div className="mb-4">
-                  <span className="text-[#EE8900] font-semibold text-lg inline-block mb-2">Our Location</span>
+                  <span className="text-[#5D376E] font-semibold text-lg inline-block mb-2">Our Location</span>
                   <h3 className="text-2xl font-bold text-gray-900 mb-2">Visit Our Office</h3>
                   <div className="w-16 h-1 bg-[#EE8900] rounded-full mb-4"></div>
                 </div>
@@ -221,7 +221,7 @@ export default function ContactPage() {
               {/* Right Side - Contact Form */}
               <div className="bg-white rounded-2xl p-4 sm:p-6 shadow-sm flex flex-col">
                 <div className="mb-4">
-                  <span className="text-[#EE8900] font-semibold text-lg inline-block mb-2">Contact Us</span>
+                  <span className="text-[#5D376E] font-semibold text-lg inline-block mb-2">Contact Us</span>
                   <h3 className="text-2xl font-bold text-gray-900 mb-2">Fill the Form</h3>
                   <div className="w-16 h-1 bg-[#EE8900] rounded-full mb-4"></div>
                 </div>
@@ -291,7 +291,7 @@ export default function ContactPage() {
                         onChange={handleChange}
                         required
                         placeholder="How can we help?"
-                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#EE8900] focus:border-transparent transition-all duration-200 min-h-[120px] resize-none"
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#EE8900] focus:border-transparent transition-all duration-200 min-h-[195px] resize-none"
                       />
                     </div>
 

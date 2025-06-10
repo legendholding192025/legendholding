@@ -96,12 +96,6 @@ const menuItems: MenuItem[] = [
         description: "Discover our diverse portfolio of innovative brands across multiple sectors.",
         items: [
           { 
-            title: "Zul Energy",
-            url: "/our-brands/zul-energy",
-            image: "https://cdn.legendholding.com/images/cloudinary/cloudinary_683da403178ef3.07284478_20250602_131547.jpg",
-            description: "Pioneering sustainable energy solutions for a brighter future."
-          },
-          { 
             title: "Legend Motors Trading",
             url: "/our-brands/legend-motors-trading",
             image: "https://cdn.legendholding.com/images/cloudinary/cloudinary_683da1fac83f95.14534616_20250602_130706.png",
@@ -160,6 +154,12 @@ const menuItems: MenuItem[] = [
             url: "/our-brands/legend-commercial-vehicles",
             image: "https://cdn.legendholding.com/images/cloudinary/cloudinary_683d9eed970a05.14970741_20250602_125405.jpg",
             description: "Comprehensive commercial vehicle solutions for businesses."
+          },
+          { 
+            title: "Zul Energy",
+            url: "/our-brands/zul-energy",
+            image: "https://cdn.legendholding.com/images/cloudinary/cloudinary_683da403178ef3.07284478_20250602_131547.jpg",
+            description: "Pioneering sustainable energy solutions for a brighter future."
           },
         ],
       },
@@ -749,7 +749,6 @@ export function Header() {
                                   onClick={() => setMobileMenuOpen(false)}
                                 >
                                   <h3 className="font-medium text-gray-800">{subItem.title}</h3>
-                                  <p className="text-sm text-gray-500">{subItem.description}</p>
                                 </Link>
                               ))}
                             </div>
@@ -765,7 +764,6 @@ export function Header() {
                                     onClick={() => setMobileMenuOpen(false)}
                                   >
                                     <h3 className="font-medium text-gray-800">{business.title}</h3>
-                                    <p className="text-sm text-gray-500">{business.description}</p>
                                   </Link>
 
                                   {/* Legend Mobility Submenu */}

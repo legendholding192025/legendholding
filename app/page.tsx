@@ -17,7 +17,6 @@ export default function Home() {
     <main>
       <Header />
       <HeroSection />
-      <div className="w-full h-1 bg-[#EE8900]" />
       <AboutUsSection />
       <BusinessUnit />
       <ValueSection />

@@ -39,13 +39,13 @@ export default function ValueSection() {
         </div>
 
         {/* Mission and Vision Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 md:gap-16 mb-16 sm:mb-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-12 md:gap-16 mb-16 sm:mb-20">
           {/* Vision Column */}
           <div className="relative animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
             <img src="https://cdn.legendholding.com/images/cloudinary/cloudinary_683da9c6ede476.24969316_20250602_134022.png" alt="" className="w-full h-auto opacity-90" />
             
             {/* Vision Icon */}
-            <div className="absolute top-3 sm:top-4 right-3 sm:right-4 w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16">
+            <div className="absolute top-4 right-4 w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16">
               <Image
                 src="https://cdn.legendholding.com/images/cdn_683e960b1997b5.22165608_20250603_062827.png"
                 alt="Vision icon"
@@ -58,12 +58,12 @@ export default function ValueSection() {
             </div>
 
             {/* Content overlay */}
-            <div className="absolute inset-0 flex flex-col justify-center p-4 sm:p-6 md:p-8">
-              <div className="max-w-2xl pl-1 sm:pl-4 md:pl-6 mt-6 sm:mt-12 md:mt-16 pr-2 sm:pr-0">
-                <h3 className="text-base sm:text-xl md:text-2xl lg:text-3xl font-bold text-orange-500 mb-2 sm:mb-4">
+            <div className="absolute inset-0 flex flex-col justify-center p-6 sm:p-6 md:p-8">
+              <div className="max-w-2xl pl-3 sm:pl-4 md:pl-6 mt-10 sm:mt-12 md:mt-16 pr-4 sm:pr-0">
+                <h3 className="text-lg sm:text-2xl md:text-3xl font-bold text-orange-500 mb-3 sm:mb-4">
                   <span className="border-b-2 border-[#2B1C48] pb-1">Our</span> Vision
                 </h3>
-                <p className="text-xs sm:text-base md:text-lg lg:text-xl leading-relaxed pr-1 sm:pr-4" style={{ color: '#2B1C48' }}>
+                <p className="text-sm sm:text-lg md:text-xl leading-relaxed" style={{ color: '#2B1C48' }}>
                   To seamlessly connect the physical and digital worlds, revolutionizing supply chains with cutting-edge financial technology, and become the global leader in intelligent, data-driven solutions that empower businesses to thrive through efficiency transparency, and sustainable growth.
                 </p>
               </div>
@@ -75,7 +75,7 @@ export default function ValueSection() {
             <img src="https://cdn.legendholding.com/images/cloudinary/cloudinary_683da9c6ede476.24969316_20250602_134022.png" alt="" className="w-full h-auto opacity-90" />
             
             {/* Mission Icon */}
-            <div className="absolute top-3 sm:top-4 right-3 sm:right-4 w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16">
+            <div className="absolute top-4 right-4 w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16">
               <Image
                 src="https://cdn.legendholding.com/images/cdn_683e960b1997b5.22165608_20250603_062827.png"
                 alt="Mission icon"
@@ -88,12 +88,12 @@ export default function ValueSection() {
             </div>
 
             {/* Content overlay */}
-            <div className="absolute inset-0 flex flex-col justify-center p-4 sm:p-6 md:p-8 lg:p-10">
-              <div className="max-w-2xl pl-1 sm:pl-4 md:pl-6 mt-6 sm:mt-12 md:mt-16 pr-2 sm:pr-0">
-                <h3 className="text-base sm:text-xl md:text-2xl lg:text-3xl font-bold text-orange-500 mb-2 sm:mb-4 md:mb-6">
+            <div className="absolute inset-0 flex flex-col justify-center p-6 sm:p-6 md:p-8 lg:p-10">
+              <div className="max-w-2xl pl-3 sm:pl-4 md:pl-6 mt-4 sm:mt-12 md:mt-16 pr-4 sm:pr-0">
+                <h3 className="text-lg sm:text-2xl md:text-3xl font-bold text-orange-500 mb-3 sm:mb-4">
                   <span className="border-b-2 border-[#2B1C48] pb-1">Our</span> Mission
                 </h3>
-                <p className="text-xs sm:text-base md:text-lg lg:text-xl leading-relaxed pr-1 sm:pr-4" style={{ color: '#2B1C48' }}>
+                <p className="text-sm sm:text-lg md:text-xl leading-relaxed" style={{ color: '#2B1C48' }}>
                   To foster happiness and deliver value, with a clear focus on building a sustainable future. Every step we take is guided by purpose, progress, and a commitment to doing things the right way every time.
                 </p>
               </div>
