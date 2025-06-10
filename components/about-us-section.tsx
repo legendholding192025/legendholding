@@ -6,7 +6,7 @@ import React from "react"
 
 export function AboutUsSection() {
   return (
-    <section className="relative w-full overflow-hidden" style={{ backgroundColor: "#fff" }}>
+    <section className="relative w-full" style={{ backgroundColor: "#fff" }}>
       {/* Background Image */}
       <div className="absolute inset-0 w-full h-full z-0">
         <Image
@@ -18,7 +18,7 @@ export function AboutUsSection() {
         />
       </div>
       {/* Content */}
-      <div className="relative z-10 flex flex-col items-center justify-center px-4 py-16 md:py-20">
+      <div className="relative z-10 flex flex-col items-center justify-center py-16 md:py-20">
         {/* Heading */}
         <h2
           className="font-richmond text-3xl md:text-4xl font-bold text-[#EE8900] text-center mb-4"
