@@ -62,14 +62,14 @@ export default function GrowSection() {
         {/* Content Section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-0">
           {/* Left Content */}
-          <div className="order-1 lg:order-1">
-            <div className="bg-white p-4 sm:p-6 lg:p-8 rounded-2xl lg:rounded-r-none lg:rounded-l-2xl h-full flex flex-col justify-between min-h-[400px] sm:min-h-[450px] lg:min-h-[500px]">
+          <div className="order-2 lg:order-1">
+            <div className="bg-white p-4 sm:p-6 lg:p-8 rounded-2xl lg:rounded-r-none lg:rounded-l-2xl h-full flex flex-col justify-between min-h-[300px] sm:min-h-[400px] lg:min-h-[500px]">
               <div>
-                <h2 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-[#EE8900] mb-3 sm:mb-4 lg:mb-6">{currentSlideData.title}</h2>
+                <h2 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-[#EE8900] mb-2 sm:mb-3 lg:mb-4">{currentSlideData.title}</h2>
                 <p className="text-sm sm:text-base lg:text-lg text-[#5E366D] leading-relaxed">{currentSlideData.description}</p>
               </div>
               {/* Navigation */}
-              <div className="flex items-center justify-between pt-4 sm:pt-6 lg:pt-8 mt-4 sm:mt-6 lg:mt-8">
+              <div className="flex items-center justify-between pt-3 sm:pt-4 lg:pt-6 mt-3 sm:mt-4 lg:mt-6">
                 <div className="flex items-center space-x-4">
                   <span className="text-gray-400 text-sm sm:text-base lg:text-lg">
                     {currentSlide + 1} / {slides.length}
@@ -79,14 +79,14 @@ export default function GrowSection() {
                 <div className="flex items-center space-x-3 sm:space-x-4">
                   <button
                     onClick={prevSlide}
-                    className="w-9 h-9 sm:w-10 sm:h-10 lg:w-12 lg:h-12 rounded-full border border-[#EE8900]/30 flex items-center justify-center text-[#EE8900] hover:text-white hover:border-[#EE8900] hover:bg-[#EE8900] transition-all duration-300 group"
+                    className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 rounded-full border border-[#EE8900]/30 flex items-center justify-center text-[#EE8900] hover:text-white hover:border-[#EE8900] hover:bg-[#EE8900] transition-all duration-300 group"
                     aria-label="Previous slide"
                   >
                     <ChevronLeft className="w-4 h-4 sm:w-4 sm:h-4 lg:w-5 lg:h-5 group-hover:scale-110 transition-transform" />
                   </button>
                   <button
                     onClick={nextSlide}
-                    className="w-9 h-9 sm:w-10 sm:h-10 lg:w-12 lg:h-12 rounded-full border border-[#EE8900]/30 flex items-center justify-center text-[#EE8900] hover:text-white hover:border-[#EE8900] hover:bg-[#EE8900] transition-all duration-300 group"
+                    className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 rounded-full border border-[#EE8900]/30 flex items-center justify-center text-[#EE8900] hover:text-white hover:border-[#EE8900] hover:bg-[#EE8900] transition-all duration-300 group"
                     aria-label="Next slide"
                   >
                     <ChevronRight className="w-4 h-4 sm:w-4 sm:h-4 lg:w-5 lg:h-5 group-hover:scale-110 transition-transform" />
@@ -97,7 +97,7 @@ export default function GrowSection() {
           </div>
 
           {/* Right Image */}
-          <div className="order-2 lg:order-2 relative h-[250px] xs:h-[280px] sm:h-[320px] md:h-[400px] lg:h-[500px]">
+          <div className="order-1 lg:order-2 relative h-[250px] xs:h-[280px] sm:h-[320px] md:h-[400px] lg:h-[500px]">
             <div className="overflow-hidden rounded-2xl lg:rounded-l-none lg:rounded-r-2xl h-full w-full">
               <Image
                 src={currentSlideData.image}

@@ -19,6 +19,19 @@ export default function OpenRoles() {
               </p>
             </div>
 
+            {/* Image Side - Now between heading and card in mobile view */}
+            <div className="relative h-[300px] md:h-[500px] rounded-2xl overflow-hidden mb-8 md:hidden">
+              <Image
+                src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=1470&auto=format&fit=crop"
+                alt="Office workspace"
+                fill
+                className="object-cover"
+                priority
+              />
+              {/* Gradient Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-tr from-[#2B1C48]/20 to-transparent" />
+            </div>
+
             {/* Call to Action Cards */}
             <div className="bg-white rounded-2xl p-6 md:p-12 shadow-sm border border-[#5D376E]/10 hover:shadow-lg transition-all duration-300 group">
               <div className="flex flex-col md:flex-row items-start gap-6 md:gap-8">
@@ -47,8 +60,8 @@ export default function OpenRoles() {
             </div>
           </div>
 
-          {/* Image Side */}
-          <div className="relative h-[300px] md:h-[500px] rounded-2xl overflow-hidden">
+          {/* Image Side - Desktop only */}
+          <div className="relative h-[300px] md:h-[500px] rounded-2xl overflow-hidden hidden md:block">
             <Image
               src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=1470&auto=format&fit=crop"
               alt="Office workspace"
