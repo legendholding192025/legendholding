@@ -101,8 +101,8 @@ export default function Newsletter() {
                 </form>
                 <p className="text-sm text-muted-foreground mt-4 text-center lg:text-left">
                   By signing up you agree to our{" "}
-                  <Link href="/terms" className="text-[#E67E22] hover:text-[#E67E22]/80 underline focus:outline-none">
-                    Terms & Conditions
+                  <Link href="/privacy-policy" className="text-[#E67E22] hover:text-[#E67E22]/80 underline focus:outline-none">
+                    Privacy Policy
                   </Link>
                   .
                 </p>

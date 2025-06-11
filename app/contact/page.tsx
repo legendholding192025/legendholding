@@ -169,8 +169,8 @@ export default function ContactPage() {
               {/* Left Side - Map and Contact Info */}
               <div className="bg-white rounded-2xl p-4 sm:p-6 shadow-sm flex flex-col">
                 <div className="mb-4">
-                  <span className="text-[#5D376E] font-semibold text-lg inline-block mb-2">Our Location</span>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-2">Visit Our Office</h3>
+                  <span className="text-[#2B1C48] font-semibold text-lg inline-block mb-2">Our Location</span>
+                  <h3 className="text-2xl font-bold text-[#5D376E] mb-2">Visit Our Office</h3>
                   <div className="w-16 h-1 bg-[#EE8900] rounded-full mb-4"></div>
                 </div>
 
@@ -190,7 +190,7 @@ export default function ContactPage() {
                           {item.icon}
                         </div>
                         <div className="min-w-0 flex-1">
-                          <h3 className="text-sm font-semibold text-gray-900 mb-1">{item.title}</h3>
+                          <h3 className="text-sm font-semibold text-[#5D376E] mb-1">{item.title}</h3>
                           <div className="-space-y-1">
                             {item.details.map((detail, idx) => (
                               <p key={idx} className="text-sm text-gray-600 leading-tight break-words break-all sm:break-normal">
@@ -221,8 +221,8 @@ export default function ContactPage() {
               {/* Right Side - Contact Form */}
               <div className="bg-white rounded-2xl p-4 sm:p-6 shadow-sm flex flex-col">
                 <div className="mb-4">
-                  <span className="text-[#5D376E] font-semibold text-lg inline-block mb-2">Contact Us</span>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-2">Fill the Form</h3>
+                  <span className="text-[#2B1C48] font-semibold text-lg inline-block mb-2">Contact Us</span>
+                  <h3 className="text-2xl font-bold text-[#5D376E] mb-2">Fill the Form</h3>
                   <div className="w-16 h-1 bg-[#EE8900] rounded-full mb-4"></div>
                 </div>
 
@@ -314,17 +314,6 @@ export default function ContactPage() {
                           "Submit"
                         )}
                       </button>
-
-                      <p className="text-xs text-gray-500 text-center mt-3">
-                        By contacting us, you agree to our{" "}
-                        <Link href="/terms" className="text-[#EE8900] hover:underline">
-                          Terms of Service
-                        </Link>{" "}
-                        and{" "}
-                        <Link href="/privacy" className="text-[#EE8900] hover:underline">
-                          Privacy Policy
-                        </Link>
-                      </p>
                     </div>
                   </form>
                 ) : (

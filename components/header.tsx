@@ -748,7 +748,7 @@ export function Header() {
                                   className="block p-3 rounded-lg hover:bg-gray-100"
                                   onClick={() => setMobileMenuOpen(false)}
                                 >
-                                  <h3 className="font-medium text-gray-800">{subItem.title}</h3>
+                                  <h3 className="text-base font-medium text-gray-800">{subItem.title}</h3>
                                 </Link>
                               ))}
                             </div>
@@ -763,7 +763,7 @@ export function Header() {
                                     className="block p-3 rounded-lg hover:bg-gray-100"
                                     onClick={() => setMobileMenuOpen(false)}
                                   >
-                                    <h3 className="font-medium text-gray-800">{business.title}</h3>
+                                    <h3 className="text-base font-medium text-gray-800">{business.title}</h3>
                                   </Link>
 
                                   {/* Legend Mobility Submenu */}
