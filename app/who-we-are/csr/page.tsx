@@ -5,7 +5,8 @@ import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
 import Image from 'next/image';
 import { Heart, Leaf, Users, BookOpen, Globe, Lightbulb } from 'lucide-react';
- 
+import { PageBanner } from "@/components/page-banner"
+
 const csrInitiatives = [
   {
     icon: <Heart className="w-8 h-8" />,
@@ -68,6 +69,11 @@ export default function CSRPage() {
     <>
       <Header />
       <main className="pt-20">
+        <PageBanner 
+          title="Corporate Social Responsibility"
+          imageUrl="https://res.cloudinary.com/dosxengut/image/upload/v1746784919/1-1-2_geivzn.jpg"
+        />
+
         <div className="min-h-screen bg-white flex flex-col items-center py-12 px-4 relative overflow-hidden">
           {/* Decorative Elements */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -76,15 +82,6 @@ export default function CSRPage() {
           </div>
  
           <div className="w-full max-w-7xl relative z-10">
-            {/* Hero Section */}
-            <div className="text-center mb-16">
-              <h1 className="text-5xl md:text-6xl font-bold text-[#2C2341] mb-6 font-serif">
-                Corporate Social Responsibility
-              </h1>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                At Legend Holding Group, we believe in creating lasting positive impact through our commitment to social responsibility. Our CSR initiatives reflect our dedication to sustainable development, community welfare, and environmental stewardship.
-              </p>
-            </div>
  
             {/* Impact Areas */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
@@ -140,33 +137,6 @@ export default function CSRPage() {
                   </div>
                 </div>
               ))}
-            </div>
- 
-            {/* Commitment Section */}
-            <div className="bg-gradient-to-r from-primary/5 to-secondary/5 rounded-3xl p-12 mb-16">
-              <div className="max-w-3xl mx-auto text-center">
-                <h2 className="text-4xl font-bold text-[#2C2341] mb-6 font-serif">Our Commitment</h2>
-                <p className="text-xl text-gray-600 mb-8">
-                  We are committed to making a positive difference in the communities we serve. Through our CSR initiatives, we aim to create sustainable value for all stakeholders while contributing to the betterment of society and the environment.
-                </p>
-                <div className="flex items-center justify-center">
-                  <Heart className="w-12 h-12 text-primary" />
-                </div>
-              </div>
-            </div>
- 
-            {/* Call to Action */}
-            <div className="text-center bg-gradient-to-r from-primary/5 to-secondary/5 rounded-3xl p-12">
-              <h2 className="text-4xl font-bold text-[#2C2341] mb-6 font-serif">Join Our Impact</h2>
-              <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-                Together, we can create a more sustainable and equitable future. Learn more about our CSR initiatives and how you can get involved.
-              </p>
-              <a
-                href="/contact"
-                className="inline-block bg-primary text-white px-8 py-4 rounded-lg font-semibold hover:bg-primary/90 transition-colors duration-300"
-              >
-                Get Involved
-              </a>
             </div>
           </div>
         </div>

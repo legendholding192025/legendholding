@@ -19,11 +19,8 @@ type NewsItem = {
 }
 
 export function Newsroom() {
-  const [currentIndex, setCurrentIndex] = useState(0)
   const [newsItems, setNewsItems] = useState<NewsItem[]>([])
   const [loading, setLoading] = useState(true)
-  const itemsPerPage = 3
-  const totalPages = Math.ceil(newsItems.length / itemsPerPage)
 
   const supabase = createClientComponentClient()
 
@@ -38,7 +35,7 @@ export function Newsroom() {
         .select("*")
         .eq("published", true)
         .order("created_at", { ascending: false })
-        .limit(6)
+        .limit(3) // Only fetch 3 latest news items
 
       if (error) throw error
 
@@ -49,26 +46,6 @@ export function Newsroom() {
       setLoading(false)
     }
   }
-
-  const nextSlide = () => {
-    const nextIndex = currentIndex + itemsPerPage
-    if (nextIndex >= newsItems.length) {
-      setCurrentIndex(0) // Loop back to the beginning
-    } else {
-      setCurrentIndex(nextIndex)
-    }
-  }
-
-  const prevSlide = () => {
-    const prevIndex = currentIndex - itemsPerPage
-    if (prevIndex < 0) {
-      setCurrentIndex(Math.max(0, newsItems.length - itemsPerPage)) // Loop to the end
-    } else {
-      setCurrentIndex(prevIndex)
-    }
-  }
-
-  const visibleNews = newsItems.slice(currentIndex, currentIndex + itemsPerPage)
 
   if (loading) {
     return (
@@ -112,81 +89,42 @@ export function Newsroom() {
           </Link>
         </div>
 
-        <div className="relative">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {visibleNews.map((news) => (
-              <Link
-                key={news.id}
-                href={`/news/${news.id}`}
-                className="bg-[rgb(234,226,214)]/20 rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex flex-col h-full group relative"
-              >
-                <div 
-                  className="absolute inset-0 bg-gradient-to-br from-[rgb(234,226,214)]/50 to-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg"
-                  aria-hidden="true"
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {newsItems.map((news) => (
+            <Link
+              key={news.id}
+              href={`/news/${news.id}`}
+              className="bg-[rgb(234,226,214)]/20 rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex flex-col h-full group relative"
+            >
+              <div 
+                className="absolute inset-0 bg-gradient-to-br from-[rgb(234,226,214)]/50 to-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg"
+                aria-hidden="true"
+              />
+              <div className="relative h-48 overflow-hidden m-2 rounded-xl">
+                <Image
+                  src={news.image_url || "/placeholder.svg"}
+                  alt={news.title}
+                  width={400}
+                  height={240}
+                  className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500 rounded-xl"
                 />
-                <div className="relative h-48 overflow-hidden m-2 rounded-xl">
-                  <Image
-                    src={news.image_url || "/placeholder.svg"}
-                    alt={news.title}
-                    width={400}
-                    height={240}
-                    className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500 rounded-xl"
-                  />
-                </div>
-                <div className="p-5 flex flex-col flex-grow relative">
-                  <div className="flex items-center text-gray-500 text-sm mb-3">
-                    <Calendar className="h-4 w-4 mr-1" />
-                    {new Date(news.created_at).toLocaleDateString()}
-                  </div>
-                  <h3 className="text-lg font-semibold mb-3 text-[rgb(43,28,72)] line-clamp-2">
-                    {news.title}
-                  </h3>
-                  <p className="text-[rgb(93,55,110)] mb-4 line-clamp-3 flex-grow text-lg">{news.excerpt}</p>
-                  <div className="text-[#F39200] font-medium text-sm flex items-center">
-                    Read More
-                    <ArrowRight className="ml-1 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
-
-          {newsItems.length > itemsPerPage && (
-            <div className="flex justify-center mt-8 gap-2">
-              <button
-                onClick={prevSlide}
-                className="p-2 rounded-full bg-[rgb(234,226,214)]/20 border border-[rgb(43,28,72)]/20 text-[rgb(43,28,72)] hover:bg-[rgb(43,28,72)] hover:text-white transition-colors duration-300"
-                aria-label="Previous news"
-              >
-                <ChevronLeft className="h-5 w-5" />
-              </button>
-              <div className="flex items-center gap-1.5 px-3">
-                {Array.from({ length: totalPages }).map((_, index) => {
-                  const pageIndex = index * itemsPerPage
-                  return (
-                    <button
-                      key={index}
-                      onClick={() => setCurrentIndex(pageIndex)}
-                      className={cn(
-                        "w-2 h-2 rounded-full transition-all duration-300",
-                        currentIndex === pageIndex
-                          ? "bg-[rgb(43,28,72)] w-6"
-                          : "bg-[rgb(234,226,214)] hover:bg-[rgb(234,226,214)]/70",
-                      )}
-                      aria-label={`Go to page ${index + 1}`}
-                    />
-                  )
-                })}
               </div>
-              <button
-                onClick={nextSlide}
-                className="p-2 rounded-full bg-[rgb(234,226,214)]/20 border border-[rgb(43,28,72)]/20 text-[rgb(43,28,72)] hover:bg-[rgb(43,28,72)] hover:text-white transition-colors duration-300"
-                aria-label="Next news"
-              >
-                <ChevronRight className="h-5 w-5" />
-              </button>
-            </div>
-          )}
+              <div className="p-5 flex flex-col flex-grow relative">
+                <div className="flex items-center text-gray-500 text-sm mb-3">
+                  <Calendar className="h-4 w-4 mr-1" />
+                  {new Date(news.created_at).toLocaleDateString()}
+                </div>
+                <h3 className="text-lg font-semibold mb-3 text-[rgb(43,28,72)] line-clamp-2">
+                  {news.title}
+                </h3>
+                <p className="text-[rgb(93,55,110)] mb-4 line-clamp-3 flex-grow text-lg">{news.excerpt}</p>
+                <div className="text-[#F39200] font-medium text-sm flex items-center">
+                  Read More
+                  <ArrowRight className="ml-1 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                </div>
+              </div>
+            </Link>
+          ))}
         </div>
       </div>
     </section>

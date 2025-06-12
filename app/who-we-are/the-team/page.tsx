@@ -4,35 +4,17 @@ import React from 'react';
 import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
 import Image from 'next/image';
+import { PageBanner } from '@/components/page-banner';
 
 export default function LeadershipTeam() {
   return (
     <>
       <Header />
       <main className="pt-20">
-        {/* Hero Banner */}
-        <div className="relative bg-[#5E366D] overflow-hidden">
-          {/* Background Image */}
-          <div className="absolute inset-0">
-            <Image
-              src="https://res.cloudinary.com/dosxengut/image/upload/v1746784919/1-1-2_geivzn.jpg"
-              alt="Our Team"
-              fill
-              className="object-cover object-[center_20%]"
-              priority
-            />
-            <div className="absolute inset-0 bg-[#5E366D]/80 mix-blend-multiply" />
-          </div>
-
-          {/* Hero Content */}
-          <div className="relative container mx-auto px-4 py-24 md:py-32">
-            <div className="max-w-4xl mx-auto text-center">
-              <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
-                The Team
-              </h1>
-            </div>
-          </div>
-        </div>
+        <PageBanner 
+          title="The Team"
+          imageUrl="https://res.cloudinary.com/dosxengut/image/upload/v1746784919/1-1-2_geivzn.jpg"
+        />
 
         <div className="min-h-screen bg-white flex flex-col items-center py-12 px-4 relative overflow-hidden">
           {/* Decorative Elements */}
@@ -91,17 +73,17 @@ export default function LeadershipTeam() {
                 {
                   name: "Cannon",
                   role: "Legend Motors – Dealership",
-                  image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=800&auto=format&fit=crop&q=60"
+                  image: "https://cdn.legendholding.com/images/cdn_684a91bab382b9.55226471_20250612_083714.jpg"
                 },
                 {
                   name: "Mr. Mubasher",
                   role: "Legend Rent a Car",
-                  image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=800&auto=format&fit=crop&q=60"
+                  image: "https://cdn.legendholding.com/images/cdn_684a9178c0b480.93010827_20250612_083608.jpg"
                 },
                 {
                   name: "Mr. Tamer",
                   role: "Legend Automobile Service",
-                  image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=800&auto=format&fit=crop&q=60"
+                  image: "https://cdn.legendholding.com/images/cdn_684a912f82b802.68059638_20250612_083455.jpg"
                 },
                 {
                   name: "Mr. Raouf",
@@ -121,7 +103,7 @@ export default function LeadershipTeam() {
                 {
                   name: "Mabel Niu",
                   role: "Human Resources",
-                  image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=800&auto=format&fit=crop&q=60"
+                  image: "https://cdn.legendholding.com/images/cdn_684a90c70ffd66.48330071_20250612_083311.jpg"
                 }
               ].map((leader, index) => (
                 <div key={index} className="bg-white rounded-2xl shadow-lg p-6 transform transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">

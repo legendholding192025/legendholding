@@ -12,6 +12,10 @@ import {
   Users,
   Briefcase,
   Building2,
+  Target,
+  Heart,
+  BookOpen,
+  Award,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useMediaQuery } from "@/hooks/use-media-query"
@@ -60,29 +64,25 @@ const menuItems: MenuItem[] = [
         title: "Vision, Mission & Values",
         url: "/who-we-are/vision-mission",
         image: "https://cdn.legendholding.com/images/cdn_683e9dd2a74833.63027495_20250603_070138.jpg",
-        description: "Discover our vision, mission, and the values that drive us forward.",
-        icon: <History className="w-5 h-5" />
+        description: "Discover our vision, mission, and the values that drive us forward."
       },
       {
         title: "The Team",
         url: "/who-we-are/the-team",
         image: "https://cdn.legendholding.com/images/cdn_683e9ef4bd30c8.05897688_20250603_070628.jpg",
-        description: "Meet the dedicated professionals behind our continued growth and innovation.",
-        icon: <Users className="w-5 h-5" />
+        description: "Meet the dedicated professionals behind our continued growth and innovation."
       },
       {
         title: "Our Journey",
         url: "/who-we-are/journey",
         image: "https://cdn.legendholding.com/images/cdn_68469aa7bb4020.42147442_20250609_082615.jpg",
-        description: "Follow our path of growth and milestones through the years.",
-        icon: <History className="w-5 h-5" />
+        description: "Follow our path of growth and milestones through the years."
       },
       {
         title: "CSR",
         url: "/who-we-are/csr",
         image: "https://cdn.legendholding.com/images/cdn_683e9e33367140.14677364_20250603_070315.jpg",
-        description: "Our commitment to corporate social responsibility and community impact.",
-        icon: <Building2 className="w-5 h-5" />
+        description: "Our commitment to corporate social responsibility and community impact."
       },
     ],
   },
@@ -201,13 +201,14 @@ export function Header() {
   const [hoveredItem, setHoveredItem] = useState<string | null>(null)
   const [touchStartY, setTouchStartY] = useState<number | null>(null)
   const [lastScrollTop, setLastScrollTop] = useState(0)
+  const menuItemRefs = useRef<Record<string, HTMLDivElement | null>>({})
 
   // Handle scroll direction for header visibility
   useEffect(() => {
     const handleScroll = () => {
       const st = window.scrollY;
-      // Only handle header visibility if no menus are open
-      if (!mobileMenuOpen && !activeMenu) {
+      // Only handle header visibility if no menus are open or if Who We Are is open
+      if ((!mobileMenuOpen && !activeMenu) || activeMenu === "Who We Are") {
         if (st > lastScrollTop && st > 100) {
           headerRef.current?.classList.add('-translate-y-full');
         } else {
@@ -224,7 +225,7 @@ export function Header() {
 
   // Prevent body scroll when any menu is open
   useEffect(() => {
-    if (mobileMenuOpen || activeMenu) {
+    if (mobileMenuOpen || (activeMenu && activeMenu !== "Who We Are")) {
       document.body.style.overflow = 'hidden';
       document.body.style.position = 'fixed';
       document.body.style.width = '100%';
@@ -454,6 +455,36 @@ export function Header() {
     }
   };
 
+  // Function to get dropdown position for "Who We Are" menu
+  const getDropdownPosition = (menuTitle: string) => {
+    if (menuTitle === "Who We Are") {
+      const menuItemElement = menuItemRefs.current[menuTitle];
+      if (menuItemElement) {
+        const rect = menuItemElement.getBoundingClientRect();
+        const menuItemCenter = rect.left + rect.width / 2;
+        const dropdownWidth = 192; // w-48 = 12rem = 192px
+        const leftPosition = menuItemCenter - (dropdownWidth / 2);
+        
+        return {
+          position: 'fixed' as const,
+          top: isScrolled ? '70px' : '84px',
+          left: `${leftPosition}px`,
+          maxHeight: 'calc(100vh - 80px)',
+          overflowY: 'auto' as const,
+          transform: 'none' // Prevent any transform that might cause shifting
+        };
+      }
+    }
+    
+    // Default positioning for other menus
+    return {
+      position: 'fixed' as const,
+      top: isScrolled ? '70px' : '84px',
+      maxHeight: 'calc(100vh - 80px)',
+      overflowY: 'auto' as const,
+    };
+  };
+
   return (
     <>
       <header
@@ -519,6 +550,9 @@ export function Header() {
                 {menuItems.map((item) => (
                   <div
                     key={item.title}
+                    ref={(el) => {
+                      menuItemRefs.current[item.title] = el;
+                    }}
                     className="relative"
                     onMouseEnter={() => item.hasSubmenu && handleMenuHover(item.title)}
                     onMouseLeave={handleMenuLeave}
@@ -559,48 +593,62 @@ export function Header() {
                     {/* About Us Submenu with Images */}
                     {item.hasSubmenu && item.submenu && activeMenu === item.title && (
                       <div
-                        className="absolute left-0 right-0 top-full bg-white shadow-lg z-[9998] animate-submenu-slide-down w-screen"
+                        className={cn(
+                          "absolute top-full bg-white shadow-lg z-[9998] animate-submenu-slide-down",
+                          item.title === "Who We Are" ? "w-56" : "w-screen"
+                        )}
                         onMouseEnter={cancelMenuClose}
                         onMouseLeave={handleMenuLeave}
-                        style={{
-                          position: 'fixed',
-                          top: isScrolled ? '70px' : '84px',
-                          maxHeight: 'calc(100vh - 80px)',
-                          overflowY: 'auto'
-                        }}
+                        style={getDropdownPosition(item.title)}
                       >
-                        <div className="container mx-auto py-8 px-4">
-                          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
-                            {item.submenu.map((subItem) => (
-                              <Link
-                                key={subItem.title}
-                                href={subItem.url}
-                                className="group overflow-hidden rounded-lg border border-gray-100 hover:border-gray-200 hover:shadow-md transition-all duration-300 bg-white"
-                              >
-                                <div className="relative h-40 overflow-hidden">
-                                  <Image
-                                    src={subItem.image}
-                                    alt={subItem.title}
-                                    width={320}
-                                    height={160}
-                                    className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
-                                  />
-                                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
-                                  <div className="absolute bottom-0 left-0 p-4">
-                                    <h3 className="text-base font-semibold text-white">{subItem.title}</h3>
-                                  </div>
-                                </div>
-                                <div className="p-4">
-                                  <p className="text-gray-600 text-sm">{subItem.description}</p>
-                                  <div className="mt-3 flex items-center text-secondary font-medium text-sm">
-                                    <span> Visit Website</span>
-                                    <ChevronRight className="h-4 w-4 ml-1" />
-                                  </div>
-                                </div>
-                              </Link>
-                            ))}
+                        {item.title === "Who We Are" ? (
+                          <div className="w-full">
+                            <div className="space-y-1 p-2">
+                              {item.submenu.map((subItem) => (
+                                <Link
+                                  key={subItem.title}
+                                  href={subItem.url}
+                                  className="block px-4 py-3 text-sm text-gray-700 hover:text-primary hover:bg-gray-50 rounded-md transition-colors"
+                                >
+                                  <span className="font-medium">{subItem.title}</span>
+                                </Link>
+                              ))}
+                            </div>
                           </div>
-                        </div>
+                        ) : (
+                          <div className="container mx-auto py-8 px-4">
+                            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                              {item.submenu.map((subItem) => (
+                                <Link
+                                  key={subItem.title}
+                                  href={subItem.url}
+                                  className="group overflow-hidden rounded-lg border border-gray-100 hover:border-gray-200 hover:shadow-md transition-all duration-300 bg-white"
+                                >
+                                  <div className="relative h-40 overflow-hidden">
+                                    <Image
+                                      src={subItem.image}
+                                      alt={subItem.title}
+                                      width={320}
+                                      height={160}
+                                      className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
+                                    />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                                    <div className="absolute bottom-0 left-0 p-4">
+                                      <h3 className="text-base font-semibold text-white">{subItem.title}</h3>
+                                    </div>
+                                  </div>
+                                  <div className="p-4">
+                                    <p className="text-gray-600 text-sm">{subItem.description}</p>
+                                    <div className="mt-3 flex items-center text-secondary font-medium text-sm">
+                                      <span> Visit Website</span>
+                                      <ChevronRight className="h-4 w-4 ml-1" />
+                                    </div>
+                                  </div>
+                                </Link>
+                              ))}
+                            </div>
+                          </div>
+                        )}
                       </div>
                     )}
 
