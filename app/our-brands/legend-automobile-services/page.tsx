@@ -152,7 +152,7 @@ export default function AutomobileServicesPage() {
               <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden">
                 <div className="flex flex-col md:flex-row">
                   {/* Image Section */}
-                  <div className="md:w-2/5 relative group overflow-hidden">
+                  <div className="md:w-2/5 relative group overflow-hidden h-[300px] md:h-auto">
                     <div className="h-full w-full relative overflow-hidden">
                       <Image
                         src="https://cdn.legendholding.com/images/cloudinary/cloudinary_683d9e25db0112.44798593_20250602_125045.jpg"
