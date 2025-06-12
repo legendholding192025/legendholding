@@ -177,7 +177,7 @@ export function CSRSection() {
         {/* CSR Button - Moved outside the grid */}
         <div className="mt-8 lg:mt-4 lg:relative lg:left-0">
           <Link
-            href="/csr"
+            href="/who-we-are/csr"
             className="inline-flex items-center text-[#EE8900] font-medium hover:text-[#EE8900]/80 transition-colors group text-base md:text-lg"
           >
             View All CSR Initiatives

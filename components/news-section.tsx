@@ -88,13 +88,15 @@ export function Newsroom() {
         <div className="flex flex-col md:flex-row md:items-center justify-between mb-10">
           <div>
             <div className="flex items-center gap-3 mb-3">
-              <Image
-                src="https://cdn.legendholding.com/images/cdn_683e960b1997b5.22165608_20250603_062827.png"
-                alt="News icon"
-                width={32}
-                height={32}
-                className="object-contain"
-              />
+              <div className="flex-shrink-0 -translate-y-[5px]">
+                <Image
+                  src="https://cdn.legendholding.com/images/cdn_683e960b1997b5.22165608_20250603_062827.png"
+                  alt="News icon"
+                  width={32}
+                  height={32}
+                  className="object-contain"
+                />
+              </div>
               <h2 className="text-3xl sm:text-4xl font-bold text-[#F08900]">Latest News</h2>
             </div>
             <p className="text-[rgb(93,55,110)] max-w-2xl text-lg md:text-xl leading-relaxed">
