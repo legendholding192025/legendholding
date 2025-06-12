@@ -4,44 +4,36 @@ import React from 'react';
 import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
 import Image from 'next/image';
-import { Heart, Leaf, Users, BookOpen, Globe, Lightbulb } from 'lucide-react';
+import { Heart, Leaf, Users, BookOpen, Globe, Lightbulb, Check } from 'lucide-react';
 import { PageBanner } from "@/components/page-banner"
 
 const csrInitiatives = [
   {
-    icon: <Heart className="w-8 h-8" />,
-    title: "Community Development",
-    description: "Supporting local communities through education, healthcare, and social welfare programs.",
+    icon: <Heart className="w-5 h-5" />,
+    title: "Humanitarian Relief",
     image: "https://cdn.legendholding.com/images/cloudinary/cloudinary_683ea1e520f8a0.56379725_20250603_071901.jpg",
     initiatives: [
-      "Educational Scholarships",
-      "Healthcare Access Programs",
-      "Community Infrastructure Development",
-      "Social Welfare Support"
+      "Food Giveaways",
+      "Cancer Support",
+      "Preservation"
     ]
   },
   {
-    icon: <Leaf className="w-8 h-8" />,
-    title: "Environmental Sustainability",
-    description: "Committed to reducing our environmental footprint and promoting sustainable practices.",
+    icon: <Leaf className="w-5 h-5" />,
+    title: "Community Development",
     image: "https://cdn.legendholding.com/images/cloudinary/cloudinary_683ea60e1179f3.75648194_20250603_073646.jpg",
     initiatives: [
-      "Carbon Footprint Reduction",
-      "Renewable Energy Adoption",
-      "Waste Management Programs",
-      "Green Building Initiatives"
+      "Volunteering",
+      "Ramadan Iftar Campaigns"
     ]
   },
   {
-    icon: <Users className="w-8 h-8" />,
-    title: "Employee Well-being",
-    description: "Investing in our employees' growth, health, and professional development.",
+    icon: <Users className="w-5 h-5" />,
+    title: "Improving Lives",
     image: "https://cdn.legendholding.com/images/cloudinary/cloudinary_683ea24ace9db9.23851636_20250603_072042.jpg",
     initiatives: [
-      "Professional Development Programs",
-      "Health & Wellness Initiatives",
-      "Work-Life Balance Support",
-      "Employee Assistance Programs"
+      "Health & Wellness",
+      "Work-life Balance"
     ]
   }
 ];
@@ -102,37 +94,31 @@ export default function CSRPage() {
             </div>
  
             {/* CSR Initiatives */}
-            <div className="space-y-16 mb-16">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {csrInitiatives.map((initiative, index) => (
-                <div
-                  key={index}
-                  className="bg-white rounded-2xl shadow-lg overflow-hidden"
-                >
-                  <div className="grid grid-cols-1 md:grid-cols-2">
-                    <div className="relative h-64 md:h-full">
-                      <Image
-                        src={initiative.image}
-                        alt={initiative.title}
-                        fill
-                        className="object-cover"
-                      />
+                <div key={index} className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+                  <div className="relative h-48">
+                    <Image
+                      src={initiative.image}
+                      alt={initiative.title}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                  <div className="p-6">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="p-1.5 bg-[#2C2341] rounded-lg text-white">
+                        {initiative.icon}
+                      </div>
+                      <h3 className="text-xl font-bold text-[#2C2341]">{initiative.title}</h3>
                     </div>
-                    <div className="p-8">
-                      <div className="flex items-center mb-6">
-                        <div className="p-3 bg-primary/10 rounded-xl text-primary mr-4">
-                          {initiative.icon}
+                    <div className="space-y-2">
+                      {initiative.initiatives.map((item, idx) => (
+                        <div key={idx} className="flex items-center gap-2">
+                          <Check className="w-4 h-4 text-[#2C2341]" />
+                          <span className="text-gray-600 text-sm">{item}</span>
                         </div>
-                        <h3 className="text-2xl font-bold text-[#2C2341]">{initiative.title}</h3>
-                      </div>
-                      <p className="text-gray-600 mb-6">{initiative.description}</p>
-                      <div className="space-y-3">
-                        {initiative.initiatives.map((item, idx) => (
-                          <div key={idx} className="flex items-center text-gray-600">
-                            <div className="w-1.5 h-1.5 bg-primary rounded-full mr-3" />
-                            <span>{item}</span>
-                          </div>
-                        ))}
-                      </div>
+                      ))}
                     </div>
                   </div>
                 </div>
