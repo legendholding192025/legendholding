@@ -97,9 +97,8 @@ export default function MotorcyclesPage() {
               </div>
 
               <p className="mt-8 text-lg text-gray-700 font-effra leading-relaxed">
-                Legend Motorcycles is the official distributor and assembly of Lifan Bikes in the UAE, the leading choice for
-                delivery professionals across the country. Renowned for their efficiency, reliability, and fuel economy, 
-                Lifan Bikes are trusted across sectors, from food to pharmaceutical delivery.
+                Legend Motorcycles is the official and sole distributor of Lifan motorcycles in the Gulf region, launched in 2024. 
+                The company assembles both gasoline and electric (EV) motorcycles locally in the UAE, offering a wide range of products.
               </p>
             </section>
 
@@ -126,17 +125,16 @@ export default function MotorcyclesPage() {
                   <div className="flex-1 p-10 md:p-12 flex flex-col justify-center">
                     <div className="space-y-8 mb-8">
                       <p className="text-xl text-gray-700 font-effra leading-relaxed">
-                        Since their inception in <span className="font-semibold text-[#2b1c48]">2013</span>, Legend Motorcycles
-                        has achieved remarkable sales figures, reaching an impressive{" "}
+                        In its first year, Legend Motorcycles sold over{" "}
                         <span className="font-bold text-[#ee8900]">
-                          <AnimatedCounter target={55} suffix="M USD" duration={2000} startDelay={800} />
-                        </span>{" "}
-                        in a year.
+                          <AnimatedCounter target={1000} suffix=" units" duration={2000} startDelay={800} />
+                        </span>
+                        , showing strong demand and customer interest.
                       </p>
 
                       <p className="text-xl text-gray-700 font-effra leading-relaxed">
-                        These numbers not only validate Legend Motorcycles' position as a market leader but also affirm the trust
-                        and confidence of their valued customers across the region.
+                        Now, the company is focused on expanding by building dealership partnerships across the GCC countries, 
+                        making its motorcycles more accessible to riders throughout the region.
                       </p>
                     </div>
 

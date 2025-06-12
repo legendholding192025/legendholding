@@ -9,7 +9,6 @@ import { PageBanner } from "@/components/page-banner"
 
 const csrInitiatives = [
   {
-    icon: <Heart className="w-5 h-5" />,
     title: "Humanitarian Relief",
     image: "https://cdn.legendholding.com/images/cloudinary/cloudinary_683ea1e520f8a0.56379725_20250603_071901.jpg",
     initiatives: [
@@ -19,7 +18,6 @@ const csrInitiatives = [
     ]
   },
   {
-    icon: <Leaf className="w-5 h-5" />,
     title: "Community Development",
     image: "https://cdn.legendholding.com/images/cloudinary/cloudinary_683ea60e1179f3.75648194_20250603_073646.jpg",
     initiatives: [
@@ -28,7 +26,6 @@ const csrInitiatives = [
     ]
   },
   {
-    icon: <Users className="w-5 h-5" />,
     title: "Improving Lives",
     image: "https://cdn.legendholding.com/images/cloudinary/cloudinary_683ea24ace9db9.23851636_20250603_072042.jpg",
     initiatives: [
@@ -106,12 +103,7 @@ export default function CSRPage() {
                     />
                   </div>
                   <div className="p-6">
-                    <div className="flex items-center gap-3 mb-4">
-                      <div className="p-1.5 bg-[#2C2341] rounded-lg text-white">
-                        {initiative.icon}
-                      </div>
-                      <h3 className="text-xl font-bold text-[#2C2341]">{initiative.title}</h3>
-                    </div>
+                    <h3 className="text-xl font-bold text-[#2C2341] mb-4">{initiative.title}</h3>
                     <div className="space-y-2">
                       {initiative.initiatives.map((item, idx) => (
                         <div key={idx} className="flex items-center gap-2">

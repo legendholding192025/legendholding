@@ -131,8 +131,8 @@ export default function GlobalMediaPage() {
             }`}
           >
             {/* Page Header */}
-            <section className="w-full mb-16 animate-fade-in-up">
-              <h2 className="text-2xl md:text-3xl font-semibold text-[#2b1c48] mb-6 font-richmond">
+            <section className="w-full mb-12 animate-fade-in-up">
+              <h2 className="text-2xl md:text-3xl font-semibold text-[#2b1c48] mb-4 font-richmond">
                 Legend Global Media
               </h2>
               <div className="flex gap-2">
@@ -140,25 +140,23 @@ export default function GlobalMediaPage() {
                 <div className="h-1 w-8 bg-[#ee8900] rounded-full animate-expand-width animation-delay-200"></div>
               </div>
 
-              <p className="mt-8 text-lg text-gray-700 font-effra leading-relaxed">
-                Experience global elegance infused with local expertise. We specialize in curating events that resonate 
-                with diverse cultures while maintaining a touch of refined sophistication. Your event, be it a corporate 
-                summit or a grand celebration, becomes a masterpiece under our meticulous care.
+              <p className="mt-6 text-lg text-gray-700 font-effra leading-relaxed">
+                Legend Media is a creative production company that specializes in filming and media development. With deep expertise in 2D and 3D animation, as well as event filming, Legend Media brings ideas to life with engaging, high-quality visuals.
               </p>
             </section>
 
             {/* Main Content Section */}
-            <section className="w-full mb-16">
+            <section className="w-full mb-12">
               <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden">
                 <div className="flex flex-col md:flex-row">
                   {/* Image Section */}
-                  <div className="md:w-1/2 relative group overflow-hidden">
-                    <div className="aspect-[4/3] md:h-full w-full relative overflow-hidden">
+                  <div className="md:w-2/5 relative group overflow-hidden">
+                    <div className="relative w-full h-full min-h-[300px] md:min-h-[400px]">
                       <Image
                         src="https://cdn.legendholding.com/images/cloudinary/cloudinary_683d9f42113ba5.78852919_20250602_125530.jpg"
-                        width={1000}
-                        height={800}
-                        alt="Legend Global Media - Event Curation"
+                        width={800}
+                        height={600}
+                        alt="Legend Global Media - Creative Production"
                         className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                         priority
                       />
@@ -167,32 +165,26 @@ export default function GlobalMediaPage() {
                   </div>
 
                   {/* Content Section */}
-                  <div className="flex-1 p-10 md:p-12 flex flex-col justify-center">
-                    <div className="space-y-8 mb-8">
-                      <p className="text-xl text-gray-700 font-effra leading-relaxed">
-                        Since their inception in <span className="font-semibold text-[#2b1c48]">2013</span>, Legend Global Media
-                        has achieved remarkable sales figures, reaching an impressive{" "}
-                        <span className="font-bold text-[#ee8900]">
-                          <AnimatedCounter target={55} suffix="M USD" duration={2000} startDelay={800} />
-                        </span>{" "}
-                        in a year.
+                  <div className="flex-1 p-8 flex flex-col justify-center">
+                    <div className="space-y-4">
+                      <p className="text-lg text-gray-700 font-effra leading-relaxed">
+                        Known for delivering strong results, Legend Media has achieved an impressive engagement rate of over 20% across its clients' social media pages, proof that the content it creates truly connects with audiences.
                       </p>
 
-                      <p className="text-xl text-gray-700 font-effra leading-relaxed">
-                        These numbers not only validate Legend Global Media's position as a market leader but also affirm the trust
-                        and confidence of their valued customers across the region.
+                      <p className="text-lg text-gray-700 font-effra leading-relaxed">
+                        With over 500 satisfied customers around the world, including major global brands like Huawei, Li Auto, and many others, Legend Media has built a reputation for quality, creativity, and reliability.
                       </p>
                     </div>
 
-                    {/* Learn More Button */}
-                    <div className="mt-10 w-full">
+                    {/* Visit Website Button */}
+                    <div className="mt-6">
                       <button
-                        className="w-full py-5 group inline-flex items-center justify-center gap-2 text-white font-semibold bg-[#F08900] hover:bg-[#d67a00] transition-colors duration-300 cursor-pointer rounded-lg text-lg"
+                        className="inline-flex items-center justify-center gap-2 text-white font-semibold bg-[#F08900] hover:bg-[#d67a00] transition-colors duration-300 cursor-pointer rounded-lg px-6 py-2"
                         onClick={() => window.open("https://lgm.ae/", "_blank")}
                       >
                         <span>Visit Website</span>
                         <ChevronRight
-                          className={`w-6 h-6 transform transition-transform duration-300 ${
+                          className={`w-4 h-4 transform transition-transform duration-300 ${
                             activeSection === "media" ? "translate-x-1" : ""
                           }`}
                         />

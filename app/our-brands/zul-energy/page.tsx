@@ -125,8 +125,7 @@ ZUL Energy continues to expand its footprint in the energy sector while maintain
               </div>
 
               <p className="mt-8 text-gray-700 text-lg max-w-3xl animation-delay-400 font-effra">
-                Part of Legend Holding Group, ZUL Energy is expanding its footprint into new Energy sectors while
-                maintaining the highest standards of quality and environmental responsibility.
+                ZUL Energy is a manufacturer of premium quality chemical additives for every stage of Oil & Gas field applications. Our commitment to provide quality products, outstanding service, and zero compromises, as complemented by our business values, has seen us growing rapidly to become the preferred vendor for National and International Oil Companies and other international services providers.
               </p>
             </section>
 
@@ -159,11 +158,9 @@ ZUL Energy continues to expand its footprint in the energy sector while maintain
                         {section.title}
                       </h3>
 
-                      {section.description.split('\n\n').map((paragraph, i) => (
-                        <p key={i} className="text-lg font-effra text-gray-700 mb-6 leading-relaxed max-w-3xl">
-                          {paragraph}
-                        </p>
-                      ))}
+                      <p className="text-lg font-effra text-gray-700 mb-6 leading-relaxed max-w-3xl">
+                        Our commitment to quality chemical production and following environment regulations have been well acknowledged by the ISO 9001-2015, ISO 14001-2015 and ISO 45001-2018 certifications. Currently, ZUL Energy is also expanding its footprint to new Energy sectors.
+                      </p>
 
                       {/* CTA Button */}
                       <div className="mt-8 w-full">

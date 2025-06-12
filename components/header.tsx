@@ -156,6 +156,12 @@ const menuItems: MenuItem[] = [
             description: "Comprehensive commercial vehicle solutions for businesses."
           },
           { 
+            title: "Legend Technical Services",
+            url: "/our-brands/legend-technical-services",
+            image: "https://cdn.legendholding.com/images/cloudinary/cloudinary_683da2fc6fd9b2.48641261_20250602_131124.jpg",
+            description: "World-class facilities management and technical solutions."
+          },
+          { 
             title: "Zul Energy",
             url: "/our-brands/zul-energy",
             image: "https://cdn.legendholding.com/images/cloudinary/cloudinary_683da403178ef3.07284478_20250602_131547.jpg",

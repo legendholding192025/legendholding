@@ -76,9 +76,9 @@ export default function LegendTravelPage() {
               </div>
 
               <p className="mt-8 text-lg text-gray-700 font-effra leading-relaxed">
-                Legend Travel & Tourism, an upcoming venture under the Legend brand, is set to redefine travel experiences 
-                with personalized and memorable journeys. Offering comprehensive travel services including flights, hotels, 
-                tours, and visa assistance, we are committed to making your travel dreams a reality.
+                Legend Travel and Tourism is a leading travel and MICE (Meetings, Incentives, Conferences, and Exhibitions) 
+                solutions provider, with a strong regional footprint and headquarters in the UAE. The company operates offices 
+                across the Middle East, including strategic locations in Saudi Arabia and Iraq.
               </p>
             </section>
 
@@ -105,17 +105,15 @@ export default function LegendTravelPage() {
                   <div className="flex-1 p-10 md:p-12 flex flex-col justify-center">
                     <div className="space-y-8 mb-8">
                       <p className="text-xl text-gray-700 font-effra leading-relaxed">
-                        Since their inception in <span className="font-semibold text-[#2b1c48]">2013</span>, Legend Travel
-                        has achieved remarkable sales figures, reaching an impressive{" "}
-                        <span className="font-bold text-[#ee8900]">
-                          <AnimatedCounter target={55} suffix="M USD" duration={2000} startDelay={800} />
-                        </span>{" "}
-                        in a year.
+                        Since its inception, Legend Travel and Tourism has established itself as a trusted name in both B2B and B2C 
+                        travel services, gaining recognition as a market leader in MICE event planning and travel arrangements. As an 
+                        accredited IATA member and a Top Tier Sales Agent for Etihad Airways in the region, Legend is known for its 
+                        commitment to service excellence and global standards.
                       </p>
 
                       <p className="text-xl text-gray-700 font-effra leading-relaxed">
-                        These numbers not only validate Legend Travel's position as a market leader but also affirm the trust
-                        and confidence of their valued customers across the region.
+                        With a robust network of over 100 B2B event partners, Legend Travel and Tourism continues to drive regional 
+                        growth and is actively expanding its presence into new markets across the Middle East.
                       </p>
                     </div>
 

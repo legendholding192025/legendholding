@@ -142,9 +142,9 @@ export default function LegendRentACarPage() {
               </div>
 
               <p className="mt-8 text-lg text-gray-700 font-effra leading-relaxed">
-                Legend Rent a Car, a premier ISO 9001:2015 certified car rental company and winner of the prestigious DAST Award 2024, 
-                offers exceptional car rental services across the UAE. With branches in Dubai, Abu Dhabi, Mall of the Emirates, and Mussafah, 
-                we provide a fresh, modern fleet of vehicles for daily, weekly, and monthly rentals.
+                Legend Rent-A-Car is a proud subsidiary of Legend World Investment Group, recognized as one of the fastest-growing 
+                and most respected rent-a-car companies in Dubai. Since our inception, we have built a reputation for delivering 
+                premium, reliable, and customer-focused car rental services across Dubai and the wider UAE.
               </p>
             </section>
 
@@ -171,17 +171,16 @@ export default function LegendRentACarPage() {
                   <div className="flex-1 p-10 md:p-12 flex flex-col justify-center">
                     <div className="space-y-8 mb-8">
                       <p className="text-xl text-gray-700 font-effra leading-relaxed">
-                        Since their inception in <span className="font-semibold text-[#2b1c48]">2013</span>, Legend World Rent A Car
-                        has achieved remarkable sales figures, reaching an impressive{" "}
-                        <span className="font-bold text-[#ee8900]">
-                          <AnimatedCounter target={55} suffix="M USD" duration={2000} startDelay={800} />
-                        </span>{" "}
-                        in a year.
+                        Our commitment to excellence, consistency, and customer satisfaction has driven our growth and helped us 
+                        adapt to the evolving needs of our customers and communities.
                       </p>
 
                       <p className="text-xl text-gray-700 font-effra leading-relaxed">
-                        These numbers not only validate Legend World Rent A Car's position as a market leader but also affirm the trust
-                        and confidence of their valued customers across the region.
+                        Today, Legend World Rent-A-Car manages a fleet of over{" "}
+                        <span className="font-bold text-[#ee8900]">
+                          <AnimatedCounter target={2000} suffix=" vehicles" duration={2000} startDelay={800} />
+                        </span>{" "}
+                        and operates from more than 14 strategic meet-and-greet locations across Dubai.
                       </p>
                     </div>
 
