@@ -79,7 +79,7 @@ const menuItems: MenuItem[] = [
         description: "Follow our path of growth and milestones through the years."
       },
       {
-        title: "CSR",
+        title: "Corporate Social Responsibility",
         url: "/who-we-are/csr",
         image: "https://cdn.legendholding.com/images/cdn_683e9e33367140.14677364_20250603_070315.jpg",
         description: "Our commitment to corporate social responsibility and community impact."
