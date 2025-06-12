@@ -151,7 +151,7 @@ export default function GlobalMediaPage() {
                 <div className="flex flex-col md:flex-row">
                   {/* Image Section */}
                   <div className="md:w-2/5 relative group overflow-hidden">
-                    <div className="relative w-full h-full min-h-[300px] md:min-h-[400px]">
+                    <div className="h-full w-full relative overflow-hidden">
                       <Image
                         src="https://cdn.legendholding.com/images/cloudinary/cloudinary_683d9f42113ba5.78852919_20250602_125530.jpg"
                         width={800}

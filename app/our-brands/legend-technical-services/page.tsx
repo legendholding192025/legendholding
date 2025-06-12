@@ -132,8 +132,8 @@ export default function TechnicalServicesPage() {
             }`}
           >
             {/* Page Header */}
-            <section className="w-full mb-16 animate-fade-in-up">
-              <h2 className="text-2xl md:text-3xl font-semibold text-[#2b1c48] mb-6 font-richmond">
+            <section className="w-full mb-12 animate-fade-in-up">
+              <h2 className="text-2xl md:text-3xl font-semibold text-[#2b1c48] mb-4 font-richmond">
                 Legend Technical Services
               </h2>
               <div className="flex gap-2">
@@ -141,7 +141,7 @@ export default function TechnicalServicesPage() {
                 <div className="h-1 w-8 bg-[#ee8900] rounded-full animate-expand-width animation-delay-200"></div>
               </div>
 
-              <p className="mt-8 text-lg text-gray-700 font-effra leading-relaxed">
+              <p className="mt-6 text-lg text-gray-700 font-effra leading-relaxed">
                 Legend Technical Services is world-class facilities management. As part of our one-stop solution concept, 
                 becoming self-sufficient in facilities is a critical step. Establishing Legend Facility Management, which 
                 serves as our project control gate. In addition to its external operation as a customer-centric company, 
@@ -151,7 +151,7 @@ export default function TechnicalServicesPage() {
             </section>
 
             {/* Main Content Section */}
-            <section className="w-full mb-16">
+            <section className="w-full mb-12">
               <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden">
                 <div className="flex flex-col md:flex-row">
                   {/* Image Section */}
@@ -170,8 +170,8 @@ export default function TechnicalServicesPage() {
                   </div>
 
                   {/* Content Section */}
-                  <div className="flex-1 p-8 md:p-10 flex flex-col justify-center">
-                    <div className="space-y-6 mb-8">
+                  <div className="flex-1 p-8 flex flex-col justify-center">
+                    <div className="space-y-4">
                       <p className="text-lg text-gray-700 font-effra leading-relaxed">
                         Our comprehensive services span across governmental, commercial, residential and industrial 
                         foundations, ensuring optimal facility performance and operational excellence. Through advanced 
@@ -181,12 +181,13 @@ export default function TechnicalServicesPage() {
                     </div>
 
                     {/* Visit Website Button */}
-                    <div className="mt-auto">
+                    <div className="mt-6">
                       <button
-                        className="w-full bg-[#ee8900] text-white py-3 px-6 rounded-lg hover:bg-[#2b1c48] transition-colors duration-300 font-semibold"
+                        className="inline-flex items-center justify-center gap-2 text-white font-semibold bg-[#F08900] hover:bg-[#d67a00] transition-colors duration-300 cursor-pointer rounded-lg px-6 py-2"
                         onClick={() => window.open("https://legendtechnicalservices.com", "_blank")}
                       >
-                        Visit Website
+                        <span>Visit Website</span>
+                        <ChevronRight className="w-4 h-4" />
                       </button>
                     </div>
                   </div>

@@ -115,8 +115,8 @@ ZUL Energy continues to expand its footprint in the energy sector while maintain
             }`}
           >
             {/* Page Header */}
-            <section className="w-full max-w-6xl mx-auto mb-16 px-4 md:px-8 animate-fade-in-up">
-              <h2 className="text-2xl md:text-3xl font-semibold text-[#2b1c48] mb-6 font-richmond animation-delay-200">
+            <section className="w-full max-w-6xl mx-auto mb-12 px-4 md:px-8 animate-fade-in-up">
+              <h2 className="text-2xl md:text-3xl font-semibold text-[#2b1c48] mb-4 font-richmond">
                 Zul Energy
               </h2>
               <div className="flex gap-2">
@@ -124,13 +124,13 @@ ZUL Energy continues to expand its footprint in the energy sector while maintain
                 <div className="h-1 w-8 bg-[#ee8900] rounded-full animate-expand-width animation-delay-200"></div>
               </div>
 
-              <p className="mt-8 text-gray-700 text-lg max-w-3xl animation-delay-400 font-effra">
+              <p className="mt-6 text-gray-700 text-lg font-effra">
                 ZUL Energy is a manufacturer of premium quality chemical additives for every stage of Oil & Gas field applications. Our commitment to provide quality products, outstanding service, and zero compromises, as complemented by our business values, has seen us growing rapidly to become the preferred vendor for National and International Oil Companies and other international services providers.
               </p>
             </section>
 
             {/* Single Combined Section */}
-            <section className="w-full max-w-6xl mx-auto mb-16 px-4 md:px-8">
+            <section className="w-full max-w-6xl mx-auto mb-12 px-4 md:px-8">
               {energySections.map((section, idx) => (
                 <div
                   key={section.id}
@@ -142,7 +142,7 @@ ZUL Energy continues to expand its footprint in the energy sector while maintain
                   <div className="flex flex-col md:flex-row">
                     {/* Image Section */}
                     <div className="md:w-2/5 relative group overflow-hidden">
-                      <div className="h-full w-full bg-[#2b1c48]/5 relative overflow-hidden">
+                      <div className="h-full w-full relative overflow-hidden">
                         <img
                           src={section.image}
                           alt={section.title}
@@ -153,24 +153,24 @@ ZUL Energy continues to expand its footprint in the energy sector while maintain
                     </div>
 
                     {/* Content Section */}
-                    <div className="flex-1 p-8 md:p-10 flex flex-col justify-center relative">
-                      <h3 className="text-3xl font-richmond font-bold text-[#2b1c48] mb-4 group-hover:text-[#5d376e] transition-colors duration-300">
+                    <div className="flex-1 p-8 flex flex-col justify-center relative">
+                      <h3 className="text-2xl font-richmond font-bold text-[#2b1c48] mb-4 group-hover:text-[#5d376e] transition-colors duration-300">
                         {section.title}
                       </h3>
 
-                      <p className="text-lg font-effra text-gray-700 mb-6 leading-relaxed max-w-3xl">
+                      <p className="text-lg font-effra text-gray-700 mb-6 leading-relaxed">
                         Our commitment to quality chemical production and following environment regulations have been well acknowledged by the ISO 9001-2015, ISO 14001-2015 and ISO 45001-2018 certifications. Currently, ZUL Energy is also expanding its footprint to new Energy sectors.
                       </p>
 
                       {/* CTA Button */}
-                      <div className="mt-8 w-full">
+                      <div className="mt-6">
                         <button
                           onClick={handleLearnMore}
-                          className="w-full py-4 group inline-flex items-center justify-center gap-2 text-white font-semibold bg-[#F08900] hover:bg-[#d67a00] transition-colors duration-300 cursor-pointer rounded-lg"
+                          className="inline-flex items-center justify-center gap-2 text-white font-semibold bg-[#F08900] hover:bg-[#d67a00] transition-colors duration-300 cursor-pointer rounded-lg px-6 py-2"
                         >
                           <span>Visit Website</span>
                           <ChevronRight
-                            className={`w-5 h-5 transform transition-transform duration-300 ${
+                            className={`w-4 h-4 transform transition-transform duration-300 ${
                               activeSection === section.id ? "translate-x-1" : ""
                             }`}
                           />

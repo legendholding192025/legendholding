@@ -87,12 +87,12 @@ export default function LegendTravelPage() {
               <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden">
                 <div className="flex flex-col md:flex-row">
                   {/* Image Section */}
-                  <div className="md:w-1/2 relative group overflow-hidden">
-                    <div className="aspect-[4/3] md:h-full w-full relative overflow-hidden">
+                  <div className="md:w-2/5 relative group overflow-hidden">
+                    <div className="h-full w-full relative overflow-hidden">
                       <Image
                         src="https://cdn.legendholding.com/images/cloudinary/cloudinary_683da36902ee20.33408729_20250602_131313.jpg"
-                        width={1000}
-                        height={800}
+                        width={800}
+                        height={600}
                         alt="Legend Travel & Tourism - Premium Travel Services"
                         className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                         priority
@@ -102,30 +102,30 @@ export default function LegendTravelPage() {
                   </div>
 
                   {/* Content Section */}
-                  <div className="flex-1 p-10 md:p-12 flex flex-col justify-center">
-                    <div className="space-y-8 mb-8">
-                      <p className="text-xl text-gray-700 font-effra leading-relaxed">
+                  <div className="flex-1 p-8 flex flex-col justify-center">
+                    <div className="space-y-4">
+                      <p className="text-lg text-gray-700 font-effra leading-relaxed">
                         Since its inception, Legend Travel and Tourism has established itself as a trusted name in both B2B and B2C 
                         travel services, gaining recognition as a market leader in MICE event planning and travel arrangements. As an 
                         accredited IATA member and a Top Tier Sales Agent for Etihad Airways in the region, Legend is known for its 
                         commitment to service excellence and global standards.
                       </p>
 
-                      <p className="text-xl text-gray-700 font-effra leading-relaxed">
+                      <p className="text-lg text-gray-700 font-effra leading-relaxed">
                         With a robust network of over 100 B2B event partners, Legend Travel and Tourism continues to drive regional 
                         growth and is actively expanding its presence into new markets across the Middle East.
                       </p>
                     </div>
 
                     {/* Learn More Button */}
-                    <div className="mt-10 w-full">
+                    <div className="mt-6">
                       <button
-                        className="w-full py-5 group inline-flex items-center justify-center gap-2 text-white font-semibold bg-[#F08900] hover:bg-[#d67a00] transition-colors duration-300 cursor-pointer rounded-lg text-lg"
+                        className="inline-flex items-center justify-center gap-2 text-white font-semibold bg-[#F08900] hover:bg-[#d67a00] transition-colors duration-300 cursor-pointer rounded-lg px-6 py-2"
                         onClick={() => window.open("https://legendtravels.com/", "_blank")}
                       >
                         <span>Visit Website</span>
                         <ChevronRight
-                          className={`w-6 h-6 transform transition-transform duration-300 ${
+                          className={`w-4 h-4 transform transition-transform duration-300 ${
                             activeSection === "travel" ? "translate-x-1" : ""
                           }`}
                         />
