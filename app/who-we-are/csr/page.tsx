@@ -27,7 +27,7 @@ const csrInitiatives = [
   },
   {
     title: "Improving Lives",
-    image: "https://cdn.legendholding.com/images/cloudinary/cloudinary_683ea24ace9db9.23851636_20250603_072042.jpg",
+    image: "https://cdn.legendholding.com/images/cdn_684c0cb0b68659.28788609_20250613_113408.jpg",
     initiatives: [
       "Health & Wellness",
       "Work-life Balance"

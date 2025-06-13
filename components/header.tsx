@@ -31,6 +31,12 @@ type SubMenuItem = {
   image: string
   description: string
   icon?: React.ReactNode
+  hasNestedSubmenu?: boolean
+  nestedSubmenu?: {
+    title: string
+    url: string
+    description: string
+  }[]
 }
 
 type BusinessCategory = {
@@ -41,6 +47,12 @@ type BusinessCategory = {
     url: string
     image: string
     description: string
+    hasNestedSubmenu?: boolean
+    nestedSubmenu?: {
+      title: string
+      url: string
+      description: string
+    }[]
   }[]
 }
 
@@ -96,22 +108,38 @@ const menuItems: MenuItem[] = [
         description: "Discover our diverse portfolio of innovative brands across multiple sectors.",
         items: [
           { 
-            title: "Legend Motors Trading",
-            url: "/our-brands/legend-motors-trading",
+            title: "Legend Motors",
+            url: "/our-brands/legend-motors",
             image: "https://cdn.legendholding.com/images/cloudinary/cloudinary_683da1fac83f95.14534616_20250602_130706.png",
-            description: "Premium automotive solutions and services."
-          },
-          { 
-            title: "Legend Motors Dealership",
-            url: "/our-brands/legend-motors-dealership",
-            image: "https://cdn.legendholding.com/images/cdn_683e9c69623805.82335206_20250603_065537.jpg",
-            description: "Official dealership for premium automotive brands."
-          },
-          { 
-            title: "Legend Motorcycles",
-            url: "/our-brands/legend-motorcycles",
-            image: "https://cdn.legendholding.com/images/cloudinary/cloudinary_683da00a4a22c3.88022895_20250602_125850.png",
-            description: "Premium motorcycles and accessories."
+            description: "Comprehensive automotive solutions and services.",
+            hasNestedSubmenu: true,
+            nestedSubmenu: [
+              {
+                title: "Legend Motors Trading",
+                url: "/our-brands/legend-motors-trading",
+                description: "Premium automotive solutions and services."
+              },
+              {
+                title: "Legend Motors Dealership",
+                url: "/our-brands/legend-motors-dealership",
+                description: "Official dealership for premium automotive brands."
+              },
+              {
+                title: "Legend Commercial Vehicles",
+                url: "/our-brands/legend-commercial-vehicles",
+                description: "Comprehensive commercial vehicle solutions for businesses."
+              },
+              {
+                title: "Legend Pre-Owned Vehicles",
+                url: "/our-brands/legend-pre-owned-vehicles",
+                description: "Offering customers a wide selection of high-quality vehicles."
+              },
+              {
+                title: "Legend Motorcycles",
+                url: "/our-brands/legend-motorcycles",
+                description: "Premium motorcycles and accessories."
+              }
+            ]
           },
           { 
             title: "Legend Rent a Car",
@@ -142,18 +170,6 @@ const menuItems: MenuItem[] = [
             url: "/our-brands/legend-green-energy",
             image: "https://cdn.legendholding.com/images/cloudinary/cloudinary_683d9fb5d95276.90087674_20250602_125725.png",
             description: "Sustainable energy solutions for a greener future."
-          },
-          { 
-            title: "Legend Pre-Owned Vehicles",
-            url: "/our-brands/legend-pre-owned-vehicles",
-            image: "https://cdn.legendholding.com/images/cloudinary/cloudinary_683da26519e1d9.85792572_20250602_130853.jpg",
-            description: "Offering customers a wide selection of high-quality vehicles."
-          },
-          { 
-            title: "Legend Commercial Vehicles",
-            url: "/our-brands/legend-commercial-vehicles",
-            image: "https://cdn.legendholding.com/images/cloudinary/cloudinary_683d9eed970a05.14970741_20250602_125405.jpg",
-            description: "Comprehensive commercial vehicle solutions for businesses."
           },
           { 
             title: "Legend Technical Services",
@@ -187,6 +203,7 @@ const menuItems: MenuItem[] = [
 
 export function Header() {
   const [activeMenu, setActiveMenu] = useState<string | null>(null)
+  const [activeNestedMenu, setActiveNestedMenu] = useState<string | null>(null)
   const [isScrolled, setIsScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
@@ -203,8 +220,10 @@ export function Header() {
   const headerRef = useRef<HTMLElement>(null)
   const searchInputRef = useRef<HTMLInputElement>(null)
   const submenuTimeoutRef = useRef<TimeoutType | null>(null)
+  const nestedSubmenuTimeoutRef = useRef<TimeoutType | null>(null)
   const searchTimeoutRef = useRef<TimeoutType | null>(null)
   const [hoveredItem, setHoveredItem] = useState<string | null>(null)
+  const [hoveredNestedItem, setHoveredNestedItem] = useState<string | null>(null)
   const [touchStartY, setTouchStartY] = useState<number | null>(null)
   const [lastScrollTop, setLastScrollTop] = useState(0)
   const menuItemRefs = useRef<Record<string, HTMLDivElement | null>>({})
@@ -257,6 +276,7 @@ export function Header() {
     const handleClickOutside = (event: MouseEvent) => {
       if (headerRef.current && !headerRef.current.contains(event.target as Node)) {
         setActiveMenu(null);
+        setActiveNestedMenu(null);
       }
     };
 
@@ -273,6 +293,7 @@ export function Header() {
     const handleEscapeKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         setActiveMenu(null);
+        setActiveNestedMenu(null);
       }
     };
     
@@ -417,6 +438,9 @@ export function Header() {
       if (submenuTimeoutRef.current) {
         clearTimeout(submenuTimeoutRef.current)
       }
+      if (nestedSubmenuTimeoutRef.current) {
+        clearTimeout(nestedSubmenuTimeoutRef.current)
+      }
     }
   }, [])
 
@@ -447,10 +471,34 @@ export function Header() {
       if (submenuTimeoutRef.current) {
         clearTimeout(submenuTimeoutRef.current);
       }
+      if (nestedSubmenuTimeoutRef.current) {
+        clearTimeout(nestedSubmenuTimeoutRef.current);
+      }
       submenuTimeoutRef.current = setTimeout(() => {
-        setActiveMenu(null);
-      }, 300);
+        if (!hoveredNestedItem) {
+          setActiveMenu(null);
+          setActiveNestedMenu(null);
+        }
+      }, 100);
     }
+  };
+
+  const handleNestedMenuHover = (itemTitle: string) => {
+    setHoveredNestedItem(itemTitle);
+    if (nestedSubmenuTimeoutRef.current) {
+      clearTimeout(nestedSubmenuTimeoutRef.current);
+    }
+    setActiveNestedMenu(itemTitle);
+  };
+
+  const handleNestedMenuLeave = () => {
+    setHoveredNestedItem(null);
+    if (nestedSubmenuTimeoutRef.current) {
+      clearTimeout(nestedSubmenuTimeoutRef.current);
+    }
+    nestedSubmenuTimeoutRef.current = setTimeout(() => {
+      setActiveNestedMenu(null);
+    }, 100);
   };
 
   const cancelMenuClose = () => {
@@ -461,9 +509,17 @@ export function Header() {
     }
   };
 
+  const cancelNestedMenuClose = () => {
+    setHoveredNestedItem(activeNestedMenu);
+    if (nestedSubmenuTimeoutRef.current) {
+      clearTimeout(nestedSubmenuTimeoutRef.current);
+      nestedSubmenuTimeoutRef.current = null;
+    }
+  };
+
   // Function to get dropdown position for "Who We Are" menu
   const getDropdownPosition = (menuTitle: string) => {
-    if (menuTitle === "Who We Are") {
+    if (menuTitle === "Who We Are" || menuTitle === "Our Businesses") {
       const menuItemElement = menuItemRefs.current[menuTitle];
       if (menuItemElement) {
         const rect = menuItemElement.getBoundingClientRect();
@@ -490,6 +546,22 @@ export function Header() {
       overflowY: 'auto' as const,
     };
   };
+
+  // Remove backdrop handling effect
+  useEffect(() => {
+    if (activeMenu) {
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.width = '';
+      document.body.style.top = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.width = '';
+      document.body.style.top = '';
+    };
+  }, [activeMenu]);
 
   return (
     <>
@@ -608,7 +680,7 @@ export function Header() {
                         style={getDropdownPosition(item.title)}
                       >
                         {item.title === "Who We Are" ? (
-                          <div className="w-full">
+                          <div className="w-full bg-white rounded-lg">
                             <div className="space-y-1 p-2">
                               {item.submenu.map((subItem) => (
                                 <Link
@@ -657,77 +729,83 @@ export function Header() {
                       </div>
                     )}
 
-                    {/* Our Business Submenu with Images */}
+                    {/* Our Business Submenu with Nested Legend Motors */}
                     {item.hasSubmenu && item.businessCategories && activeMenu === item.title && (
                       <div
-                        className="absolute left-0 right-0 top-full bg-white shadow-lg z-[9998] animate-submenu-slide-down w-screen"
+                        className={cn(
+                          "absolute top-full bg-white shadow-lg z-[9998] animate-submenu-slide-down",
+                          "w-56"
+                        )}
                         onMouseEnter={cancelMenuClose}
                         onMouseLeave={handleMenuLeave}
+                        style={getDropdownPosition(item.title)}
+                      >
+                        <div className="w-full">
+                          <div className="space-y-1 p-2">
+                            {item.businessCategories[0].items.map((business) => (
+                              <div key={business.title} className="relative">
+                                {business.hasNestedSubmenu ? (
+                                  <div
+                                    className="relative"
+                                    onMouseEnter={() => handleNestedMenuHover(business.title)}
+                                    onMouseLeave={handleNestedMenuLeave}
+                                  >
+                                    <div className="flex items-center justify-between px-4 py-3 text-sm text-gray-700 hover:text-primary rounded-md transition-colors group cursor-pointer">
+                                      <span className="relative">
+                                        {business.title}
+                                        <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-secondary transition-all duration-300 group-hover:w-full"></span>
+                                      </span>
+                                      <ChevronRight className="h-4 w-4" />
+                                    </div>
+                                  </div>
+                                ) : (
+                                  <Link
+                                    href={business.url}
+                                    className="block px-4 py-3 text-sm text-gray-700 hover:text-primary rounded-md transition-colors group"
+                                  >
+                                    <span className="relative">
+                                      {business.title}
+                                      <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-secondary transition-all duration-300 group-hover:w-full"></span>
+                                    </span>
+                                  </Link>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Separate Nested submenu for Legend Motors - positioned independently */}
+                    {activeNestedMenu === "Legend Motors" && (
+                      <div
+                        className="fixed bg-white shadow-lg z-[10000] w-56 animate-submenu-slide-down"
+                        onMouseEnter={cancelNestedMenuClose}
+                        onMouseLeave={handleNestedMenuLeave}
                         style={{
-                          position: 'fixed',
                           top: isScrolled ? '70px' : '84px',
+                          left: `${(menuItemRefs.current["Our Businesses"]?.getBoundingClientRect().right || 0)}px`,
                           maxHeight: 'calc(100vh - 80px)',
-                          overflowY: 'auto'
+                          overflowY: 'auto' as const,
                         }}
                       >
-                        <div className="container mx-auto py-6 px-4 md:py-8">
-                          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6">
-                            {item.businessCategories[0].items.map((business) => (
-                              <div key={business.title} className="relative group">
-                                <Link
-                                  href={business.url}
-                                  className="block overflow-hidden rounded-lg border border-gray-100 hover:border-gray-200 hover:shadow-md transition-all duration-300 bg-white h-full"
-                                >
-                                  <div className="relative h-40 overflow-hidden">
-                                    <Image
-                                      src={business.image}
-                                      alt={business.title}
-                                      width={320}
-                                      height={180}
-                                      className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
-                                    />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                                    <div className="absolute bottom-0 left-0 p-4">
-                                      <h3 className="text-base font-semibold text-white">{business.title}</h3>
-                                    </div>
-                                  </div>
-                                  <div className="p-4">
-                                    <p className="text-gray-600 text-sm">{business.description}</p>
-                                  </div>
-                                </Link>
-
-                                {/* Legend Mobility Services Popup */}
-                                {business.title === "Legend Mobility" && (
-                                  <div className="absolute z-[9999] transition-all duration-300 lg:left-full lg:top-0 lg:ml-2 lg:opacity-0 lg:invisible group-hover:opacity-100 group-hover:visible w-[300px] lg:w-[400px]">
-                                    <div className="bg-white rounded-lg shadow-xl border border-gray-100 p-3 md:p-4 space-y-1 md:space-y-2 w-full">
-                                      <div className="flex items-center justify-end border-b border-gray-100 pb-2 mb-2 md:mb-3">
-                                        <Image
-                                          src="/images/legend-logo.png"
-                                          alt="Legend Logo"
-                                          width={20}
-                                          height={20}
-                                          className="object-contain"
-                                        />
-                                      </div>
-                                      {[
-                                        "Legend World Rent a Car",
-                                        "Legend Automobile Services",
-                                      ].map((service, index) => (
-                                        <Link
-                                          key={index}
-                                          href={`/our-brands/${service.toLowerCase().replace(/\s+/g, "-")}`}
-                                          className="flex items-center text-gray-600 hover:text-primary transition-colors p-2 rounded-lg hover:bg-gray-50 group/item text-sm md:text-base"
-                                        >
-                                          <ChevronRight className="w-4 h-4 mr-2 group-hover/item:translate-x-1 transition-transform" />
-                                          <span>{service}</span>
-                                        </Link>
-                                      ))}
-                                    </div>
-                                  </div>
-                                )}
-
-                                {/* No submenu for Legend Motors */}
-                              </div>
+                        <div className="w-full bg-white rounded-lg">
+                          <div className="space-y-1 p-2">
+                            {menuItems
+                              .find(item => item.title === "Our Businesses")
+                              ?.businessCategories?.[0]
+                              .items.find(business => business.title === "Legend Motors")
+                              ?.nestedSubmenu?.map((nestedItem) => (
+                              <Link
+                                key={nestedItem.title}
+                                href={nestedItem.url}
+                                className="block px-4 py-3 text-sm text-gray-700 hover:text-primary rounded-md transition-colors group"
+                              >
+                                <span className="relative">
+                                  {nestedItem.title}
+                                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-secondary transition-all duration-300 group-hover:w-full"></span>
+                                </span>
+                              </Link>
                             ))}
                           </div>
                         </div>
@@ -807,31 +885,36 @@ export function Header() {
                             <div className="space-y-4">
                               {item.businessCategories[0].items.map((business) => (
                                 <div key={business.title}>
-                                  <Link
-                                    href={business.url}
-                                    className="block p-3 rounded-lg hover:bg-gray-100"
-                                    onClick={() => setMobileMenuOpen(false)}
-                                  >
-                                    <h3 className="text-base font-medium text-gray-800">{business.title}</h3>
-                                  </Link>
-
-                                  {/* Legend Mobility Submenu */}
-                                  {business.title === "Legend Mobility" && (
-                                    <div className="mt-2 ml-4 pl-4 border-l-2 border-primary/20 space-y-2">
-                                      {[
-                                        "Legend World Rent a Car",
-                                        "Legend Automobile Services",
-                                      ].map((service, index) => (
-                                        <Link
-                                          key={index}
-                                          href={`/our-brands/${service.toLowerCase().replace(/\s+/g, "-")}`}
-                                          className="block p-2 text-sm text-gray-600 hover:text-primary hover:bg-gray-50 rounded-lg transition-colors"
-                                          onClick={() => setMobileMenuOpen(false)}
-                                        >
-                                          {service}
-                                        </Link>
-                                      ))}
-                                    </div>
+                                  {business.hasNestedSubmenu ? (
+                                    <details className="group">
+                                      <summary className="flex justify-between items-center p-3 rounded-lg hover:bg-gray-100 cursor-pointer">
+                                        <h3 className="text-base font-medium text-gray-800">{business.title}</h3>
+                                        <ChevronDown className="h-4 w-4 text-primary" />
+                                      </summary>
+                                      <div className="mt-2 ml-4 pl-4 border-l-2 border-primary/20 space-y-2">
+                                        {business.nestedSubmenu?.map((nestedItem) => (
+                                          <Link
+                                            key={nestedItem.title}
+                                            href={nestedItem.url}
+                                            className="block p-2 text-sm text-gray-600 hover:text-primary hover:bg-gray-50 rounded-lg transition-colors"
+                                            onClick={() => setMobileMenuOpen(false)}
+                                          >
+                                            <div>
+                                              <div className="font-medium">{nestedItem.title}</div>
+                                              <div className="text-xs text-gray-500 mt-1">{nestedItem.description}</div>
+                                            </div>
+                                          </Link>
+                                        ))}
+                                      </div>
+                                    </details>
+                                  ) : (
+                                    <Link
+                                      href={business.url}
+                                      className="block p-3 rounded-lg hover:bg-gray-100"
+                                      onClick={() => setMobileMenuOpen(false)}
+                                    >
+                                      <h3 className="text-base font-medium text-gray-800">{business.title}</h3>
+                                    </Link>
                                   )}
                                 </div>
                               ))}

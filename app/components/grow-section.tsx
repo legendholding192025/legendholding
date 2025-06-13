@@ -64,9 +64,9 @@ export default function GrowSection() {
           {/* Left Content */}
           <div className="order-2 lg:order-1">
             <div className="bg-white p-4 sm:p-6 lg:p-8 rounded-2xl lg:rounded-r-none lg:rounded-l-2xl h-full flex flex-col justify-between min-h-[250px] sm:min-h-[300px] lg:min-h-[400px]">
-              <div>
+              <div className="max-w-[90%] lg:max-w-[85%]">
                 <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#EE8900] mb-2 sm:mb-3">{currentSlideData.title}</h2>
-                <p className="text-sm sm:text-base lg:text-lg text-[#5E366D] leading-relaxed">{currentSlideData.description}</p>
+                <p className="text-sm sm:text-base lg:text-lg text-[#5E366D] leading-relaxed max-w-[90%] lg:max-w-[85%]">{currentSlideData.description}</p>
               </div>
               {/* Navigation */}
               <div className="flex items-center justify-between pt-3 sm:pt-4 mt-3 sm:mt-4">
