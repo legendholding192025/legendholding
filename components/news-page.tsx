@@ -25,6 +25,7 @@ import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
+import { PageBanner } from "@/components/page-banner"
 import {
   Sidebar,
   SidebarContent,
@@ -140,29 +141,10 @@ export function NewsPage() {
     <>
       <Header />
       <main className="pt-20">
-        {/* Hero Banner */}
-        <div className="relative bg-[#5E366D] overflow-hidden min-h-[400px] flex items-center">
-          {/* Background Image */}
-          <div className="absolute inset-0">
-            <Image
-              src="https://cdn.legendholding.com/images/cloudinary/cloudinary_683ea90f29b708.04231409_20250603_074935.jpg"
-              alt="News & Updates"
-              fill
-              className="object-cover object-[center_20%]"
-              priority
-            />
-            <div className="absolute inset-0 bg-[#5E366D]/70 mix-blend-multiply" />
-          </div>
-
-          {/* Hero Content */}
-          <div className="relative container mx-auto px-4">
-            <div className="max-w-4xl mx-auto text-center">
-              <h1 className="text-4xl md:text-5xl font-bold text-white">
-                Newsroom
-              </h1>
-            </div>
-          </div>
-        </div>
+        <PageBanner 
+          title="Newsroom"
+          imageUrl="https://cdn.legendholding.com/images/cloudinary/cloudinary_683ea90f29b708.04231409_20250603_074935.jpg"
+        />
 
         {/* Main Content */}
         <div className="min-h-screen bg-[#f8f9fa]">

@@ -614,9 +614,12 @@ export function Header() {
                                 <Link
                                   key={subItem.title}
                                   href={subItem.url}
-                                  className="block px-4 py-3 text-sm text-gray-700 hover:text-primary hover:bg-gray-50 rounded-md transition-colors"
+                                  className="block px-4 py-3 text-sm text-gray-700 hover:text-primary rounded-md transition-colors group"
                                 >
-                                  <span className="font-medium">{subItem.title}</span>
+                                  <span className="relative">
+                                    {subItem.title}
+                                    <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-secondary transition-all duration-300 group-hover:w-full"></span>
+                                  </span>
                                 </Link>
                               ))}
                             </div>
@@ -645,10 +648,6 @@ export function Header() {
                                   </div>
                                   <div className="p-4">
                                     <p className="text-gray-600 text-sm">{subItem.description}</p>
-                                    <div className="mt-3 flex items-center text-secondary font-medium text-sm">
-                                      <span> Visit Website</span>
-                                      <ChevronRight className="h-4 w-4 ml-1" />
-                                    </div>
                                   </div>
                                 </Link>
                               ))}
@@ -694,10 +693,6 @@ export function Header() {
                                   </div>
                                   <div className="p-4">
                                     <p className="text-gray-600 text-sm">{business.description}</p>
-                                    <div className="mt-3 flex items-center text-secondary font-medium text-sm">
-                                      <span>Visit Website</span>
-                                      <ChevronRight className="h-4 w-4 ml-1" />
-                                    </div>
                                   </div>
                                 </Link>
 

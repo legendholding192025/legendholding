@@ -21,6 +21,7 @@ import { toast } from "sonner"
 import Image from "next/image"
 import Link from "next/link"
 import Newsletter from "@/components/newsletter"
+import { PageBanner } from "@/components/page-banner"
 
 export default function ContactPage() {
   const supabase = createClientComponentClient()
@@ -128,32 +129,10 @@ export default function ContactPage() {
     <>
       <Header />
       <main className="pt-20">
-        {/* Hero Banner */}
-        <div className="relative bg-[#5E366D] overflow-hidden">
-          {/* Background Image */}
-          <div className="absolute inset-0">
-            <Image
-              src="https://cdn.legendholding.com/images/cloudinary/cloudinary_683ea90f29b708.04231409_20250603_074935.jpg"
-              alt="Contact Us"
-              fill
-              className="object-cover object-[center_20%]"
-              priority
-            />
-            <div className="absolute inset-0 bg-[#5E366D]/70 mix-blend-multiply" />
-          </div>
-
-          {/* Hero Content */}
-          <div className="relative container mx-auto px-4 py-32 md:py-40">
-            <div className="max-w-4xl mx-auto text-center">
-              {/* <div className="inline-flex items-center justify-center px-4 py-1.5 bg-white/10 text-white rounded-full text-sm font-medium mb-6">
-                Get in Touch
-              </div> */}
-              <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
-                Contact Us
-              </h1>
-            </div>
-          </div>
-        </div>
+        <PageBanner 
+          title="Contact Us"
+          imageUrl="https://cdn.legendholding.com/images/cloudinary/cloudinary_683ea90f29b708.04231409_20250603_074935.jpg"
+        />
 
         {/* Main Contact Section */}
         <section className="bg-slate-100 py-16 px-4 sm:px-6">
