@@ -34,7 +34,7 @@ export default function LeadershipTeam() {
                   height={500}
                   className="mb-6 rounded-xl w-full h-[500px] object-cover"
                 />
-                <h2 className="text-2xl font-bold text-[#EE8900] mb-2">Mr. Kai Zheng</h2>
+                <h2 className="text-2xl font-bold text-[#2b1c48] mb-2">Mr. Kai Zheng</h2>
                 <p className="text-lg text-gray-600 mb-2">Chairman & CEO</p>
                 <p className="text-[#5E366D] font-medium text-xl">Legend Holding Group</p>
               </div>
@@ -47,7 +47,7 @@ export default function LeadershipTeam() {
                   height={500}
                   className="mb-6 rounded-xl w-full h-[500px] object-cover"
                 />
-                <h2 className="text-2xl font-bold text-[#EE8900] mb-2">Mrs. Mira Wu</h2>
+                <h2 className="text-2xl font-bold text-[#2b1c48] mb-2">Mrs. Mira Wu</h2>
                 <p className="text-lg text-gray-600 mb-2">Co-Founder & Chief Operating Officer</p>
                 <p className="text-[#5E366D] font-medium text-xl">Legend Holding Group</p>
               </div>
@@ -55,7 +55,7 @@ export default function LeadershipTeam() {
 
             {/* Division Leaders */}
             <div className="mb-8">
-              <h2 className="text-3xl font-bold text-[#EE8900] mb-6">Division Leaders</h2>
+              <h2 className="text-3xl font-bold text-[#2b1c48] mb-6">Division Leaders</h2>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -114,10 +114,13 @@ export default function LeadershipTeam() {
                     height={300}
                     className="mb-4 mx-auto rounded-xl w-full h-[300px] object-cover"
                   />
-                  <h3 className="text-xl font-bold text-[#EE8900] text-center mb-2">{leader.name}</h3>
-                  <div className="w-12 h-1 bg-[#5E366D] mx-auto mb-3"></div>
-                  <p className="text-[#EE8900] font-semibold text-center mb-2">{leader.role}</p>
-                  <p className="text-[#5E366D] font-medium text-center text-xl">Legend Holding Group</p>
+                  <h3 className="text-xl font-bold text-[#2b1c48] mb-2">{leader.name}</h3>
+                  <div className="flex gap-2 mb-3">
+                    <div className="h-1 w-16 bg-[#5E366D] rounded-full animate-expand-width"></div>
+                    <div className="h-1 w-8 bg-[#EE8900] rounded-full animate-expand-width animation-delay-200"></div>
+                  </div>
+                  <p className="text-[#EE8900] font-semibold mb-2">{leader.role}</p>
+                  <p className="text-[#5E366D] font-medium text-xl">Legend Holding Group</p>
                 </div>
               ))}
             </div>
