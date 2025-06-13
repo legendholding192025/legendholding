@@ -13,11 +13,13 @@ export default function CareersPage() {
   return (
     <>
       <Header />
-      <main className="pt-20 overflow-x-hidden">
-        <HeroBanner />
-        <AtAGlance />
-        <GrowSection />
-        <OpenRoles />
+      <main className="pt-20 w-full overflow-x-hidden">
+        <div className="w-full max-w-full">
+          <HeroBanner />
+          <AtAGlance />
+          <GrowSection />
+          <OpenRoles />
+        </div>
       </main>
       <Footer />
     </>

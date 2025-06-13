@@ -17,7 +17,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${brandFont.variable}`}>
-      <body className="font-brand min-h-screen bg-background antialiased">
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+      </head>
+      <body className="font-brand min-h-screen bg-background antialiased overflow-x-hidden">
         {children}
         <Toaster position="top-right" />
         <CookieConsent />

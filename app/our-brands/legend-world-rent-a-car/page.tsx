@@ -153,14 +153,14 @@ export default function LegendRentACarPage() {
               <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden">
                 <div className="flex flex-col md:flex-row">
                   {/* Image Section */}
-                  <div className="md:w-2/5 relative group overflow-hidden">
-                    <div className="h-full w-full relative overflow-hidden">
+                  <div className="w-full md:w-2/5 relative group overflow-hidden">
+                    <div className="aspect-[4/3] md:aspect-auto relative w-full h-[300px] md:h-full">
                       <Image
                         src="https://cdn.legendholding.com/images/cloudinary/cloudinary_683da3d88d3185.41319420_20250602_131504.png"
-                        width={800}
-                        height={600}
                         alt="Legend Rent a Car - Premium Car Rental Services"
-                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        fill
+                        sizes="(max-width: 768px) 100vw, 40vw"
+                        className="object-cover transition-transform duration-700 group-hover:scale-105"
                         priority
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-[#2b1c48]/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
@@ -168,14 +168,14 @@ export default function LegendRentACarPage() {
                   </div>
 
                   {/* Content Section */}
-                  <div className="flex-1 p-8 flex flex-col justify-center">
+                  <div className="flex-1 p-6 md:p-8 flex flex-col justify-center">
                     <div className="space-y-4">
-                      <p className="text-lg text-gray-700 font-effra leading-relaxed">
+                      <p className="text-base md:text-lg text-gray-700 font-effra leading-relaxed">
                         Our commitment to excellence, consistency, and customer satisfaction has driven our growth and helped us 
                         adapt to the evolving needs of our customers and communities.
                       </p>
 
-                      <p className="text-lg text-gray-700 font-effra leading-relaxed">
+                      <p className="text-base md:text-lg text-gray-700 font-effra leading-relaxed">
                         Today, Legend World Rent-A-Car manages a fleet of over{" "}
                         <span className="font-bold text-[#ee8900]">
                           <AnimatedCounter target={2000} suffix=" vehicles" duration={2000} startDelay={800} />
