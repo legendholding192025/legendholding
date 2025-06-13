@@ -63,56 +63,66 @@ export default function LeadershipTeam() {
 
             {/* Division Leaders */}
             <div className="mb-8">
-              <h2 className="text-3xl font-bold text-[#2b1c48] mb-6">Division Leaders</h2>
+              <h2 className="text-3xl font-bold text-[#2b1c48] mb-6">Leadership Team</h2>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {[
                 {
+                  name: "Rejeesh Pillai",
+                  role: "Group Finance Director",
+                  company: "Legend Holding Group",
+                  image: "https://cdn.legendholding.com/images/cdn_684a91542cc7b6.90399351_20250612_083532.jpg"
+                },
+                {
+                  name: "Mabel Niu",
+                  role: "Group HR Director",
+                  company: "Legend Holding Group",
+                  image: "https://cdn.legendholding.com/images/cdn_684a90c70ffd66.48330071_20250612_083311.jpg"
+                },
+                {
+                  name: "Cannon Wang",
+                  role: "VP Dealership & Strategy of LHG",
+                  company: "Legend Motors - Dealerships",
+                  image: "https://cdn.legendholding.com/images/cdn_684a91bab382b9.55226471_20250612_083714.jpg"
+                },
+                {
+                  name: "Bo Feng",
+                  role: "Media Operations Manager",
+                  company: "Legend Media",
+                  image: "https://cdn.legendholding.com/images/cdn_684a91d8ce3885.00609400_20250612_083744.jpg"
+                },
+                {
                   name: "Emery Zhou",
                   role: "IT & Digital Transformation Director",
+                  company: "Legend Holding Group",
                   image: "https://cdn.legendholding.com/images/cdn_684a8e1f4c3372.64281750_20250612_082151.jpg"
                 },
                 {
                   name: "George Hua",
                   role: "Head of Commercial Vehicles",
+                  company: "Legend Commercial Vehicles",
                   image: "https://cdn.legendholding.com/images/cdn_684a90f5e5e897.26452583_20250612_083357.jpg"
                 },
                 {
-                  name: "Cannon Wang",
-                  role: "VP Dealership & Strategy of LHG",
-                  image: "https://cdn.legendholding.com/images/cdn_684a91bab382b9.55226471_20250612_083714.jpg"
-                },
-                {
-                  name: "Mubasher Farooq ",
+                  name: "Mubasher Farooq",
                   role: "Head of Rent a Car Division",
+                  company: "Legend Rent a Car",
                   image: "https://cdn.legendholding.com/images/cdn_684a9178c0b480.93010827_20250612_083608.jpg"
                 },
                 {
-                  name: "Tamer Moutamed Essa Khalil",
+                  name: "Tamer Khalil",
                   role: "Head of After Sales",
+                  company: "Legend World Automobile Service",
                   image: "https://cdn.legendholding.com/images/cdn_684a912f82b802.68059638_20250612_083455.jpg"
                 },
                 {
-                  name: "Rejeesh Raveendran Pillai",
-                  role: "Group Finance Director",
-                  image: "https://cdn.legendholding.com/images/cdn_684a91542cc7b6.90399351_20250612_083532.jpg"
-                },
-                {
-                  name: "Saif El-Dine El-Akkary",
+                  name: "Saif El-Akkary",
                   role: "General Manager | Premium Brands",
+                  company: "Legend Motors - Dealerships",
                   image: "https://cdn.legendholding.com/images/cdn_684a919ece14d0.18569119_20250612_083646.jpg"
-                },
-                {
-                  name: "Bo Feng",
-                  role: "Media Operations Manager",
-                  image: "https://cdn.legendholding.com/images/cdn_684a91d8ce3885.00609400_20250612_083744.jpg"
-                },
-                {
-                  name: "Mabel Niu",
-                  role: "Group HR Director",
-                  image: "https://cdn.legendholding.com/images/cdn_684a90c70ffd66.48330071_20250612_083311.jpg"
                 }
+              
               ].map((leader, index) => (
                 <div key={index} className="bg-white rounded-2xl shadow-lg p-6 transform transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
                   <Image
@@ -128,7 +138,7 @@ export default function LeadershipTeam() {
                     <div className="h-1 w-8 bg-[#EE8900] rounded-full animate-expand-width animation-delay-200"></div>
                   </div>
                   <p className="text-[#EE8900] font-semibold mb-2">{leader.role}</p>
-                  <p className="text-[#5E366D] font-medium text-xl">Legend Holding Group</p>
+                  <p className="text-[#5E366D] font-medium text-xl">{leader.company}</p>
                 </div>
               ))}
             </div>
@@ -139,4 +149,3 @@ export default function LeadershipTeam() {
     </>
   );
 }
- 

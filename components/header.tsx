@@ -133,13 +133,14 @@ const menuItems: MenuItem[] = [
                 title: "Legend Pre-Owned Vehicles",
                 url: "/our-brands/legend-pre-owned-vehicles",
                 description: "Offering customers a wide selection of high-quality vehicles."
-              },
-              {
-                title: "Legend Motorcycles",
-                url: "/our-brands/legend-motorcycles",
-                description: "Premium motorcycles and accessories."
               }
             ]
+          },
+          { 
+            title: "Legend Motorcycles",
+            url: "/our-brands/legend-motorcycles",
+            image: "https://cdn.legendholding.com/images/cloudinary/cloudinary_legend_motorcycles.png",
+            description: "Premium motorcycles and accessories."
           },
           { 
             title: "Legend Rent a Car",
@@ -227,6 +228,7 @@ export function Header() {
   const [touchStartY, setTouchStartY] = useState<number | null>(null)
   const [lastScrollTop, setLastScrollTop] = useState(0)
   const menuItemRefs = useRef<Record<string, HTMLDivElement | null>>({})
+  const legendMotorsRef = useRef<HTMLDivElement | null>(null)
 
   // Handle scroll direction for header visibility
   useEffect(() => {
@@ -547,6 +549,47 @@ export function Header() {
     };
   };
 
+  // Function to get nested dropdown position
+  const getNestedDropdownPosition = () => {
+    if (legendMotorsRef.current) {
+      const rect = legendMotorsRef.current.getBoundingClientRect();
+      const viewportWidth = window.innerWidth;
+      const dropdownWidth = 224; // w-56 = 14rem = 224px
+      
+      // Check if there's enough space to the right
+      const spaceRight = viewportWidth - rect.right;
+      
+      if (spaceRight >= dropdownWidth + 16) {
+        // Position to the right with some margin
+        return {
+          position: 'fixed' as const,
+          top: `${rect.top}px`,
+          left: `${rect.right + 8}px`, // 8px gap between dropdowns
+          maxHeight: 'calc(100vh - 80px)',
+          overflowY: 'auto' as const,
+        };
+      } else {
+        // Position to the left if not enough space on the right
+        return {
+          position: 'fixed' as const,
+          top: `${rect.top}px`,
+          left: `${rect.left - dropdownWidth - 8}px`, // 8px gap between dropdowns
+          maxHeight: 'calc(100vh - 80px)',
+          overflowY: 'auto' as const,
+        };
+      }
+    }
+    
+    // Fallback positioning
+    return {
+      position: 'fixed' as const,
+      top: isScrolled ? '70px' : '84px',
+      left: '400px',
+      maxHeight: 'calc(100vh - 80px)',
+      overflowY: 'auto' as const,
+    };
+  };
+
   // Remove backdrop handling effect
   useEffect(() => {
     if (activeMenu) {
@@ -746,6 +789,7 @@ export function Header() {
                               <div key={business.title} className="relative">
                                 {business.hasNestedSubmenu ? (
                                   <div
+                                    ref={business.title === "Legend Motors" ? legendMotorsRef : null}
                                     className="relative"
                                     onMouseEnter={() => handleNestedMenuHover(business.title)}
                                     onMouseLeave={handleNestedMenuLeave}
@@ -782,12 +826,7 @@ export function Header() {
                         className="fixed bg-white shadow-lg z-[10000] w-56 animate-submenu-slide-down"
                         onMouseEnter={cancelNestedMenuClose}
                         onMouseLeave={handleNestedMenuLeave}
-                        style={{
-                          top: isScrolled ? '70px' : '84px',
-                          left: `${(menuItemRefs.current["Our Businesses"]?.getBoundingClientRect().right || 0)}px`,
-                          maxHeight: 'calc(100vh - 80px)',
-                          overflowY: 'auto' as const,
-                        }}
+                        style={getNestedDropdownPosition()}
                       >
                         <div className="w-full bg-white rounded-lg">
                           <div className="space-y-1 p-2">
