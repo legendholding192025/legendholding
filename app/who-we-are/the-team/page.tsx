@@ -13,7 +13,7 @@ export default function LeadershipTeam() {
       <main className="pt-20">
         <PageBanner 
           title="The Team"
-          imageUrl="https://res.cloudinary.com/dosxengut/image/upload/v1746784919/1-1-2_geivzn.jpg"
+          imageUrl="https://cdn.legendholding.com/images/cdn_684c1882b54a16.04269006_20250613_122434.jpeg"
         />
 
         <div className="min-h-screen bg-white flex flex-col items-center py-12 px-4 relative overflow-hidden">
