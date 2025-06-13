@@ -22,7 +22,7 @@ export default function OpenRoles() {
             {/* Image Side - Now between heading and card in mobile view */}
             <div className="relative h-[300px] md:h-[500px] rounded-2xl overflow-hidden mb-8 md:hidden">
               <Image
-                src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=1470&auto=format&fit=crop"
+                src="https://cdn.legendholding.com/images/cdn_684bcbb1411ca6.12573119_20250613_065649.jpg"
                 alt="Office workspace"
                 fill
                 className="object-cover"
@@ -63,7 +63,7 @@ export default function OpenRoles() {
           {/* Image Side - Desktop only */}
           <div className="relative h-[300px] md:h-[500px] rounded-2xl overflow-hidden hidden md:block">
             <Image
-              src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=1470&auto=format&fit=crop"
+              src="https://cdn.legendholding.com/images/cdn_684bcbb1411ca6.12573119_20250613_065649.jpg"
               alt="Office workspace"
               fill
               className="object-cover"
