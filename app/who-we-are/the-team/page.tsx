@@ -35,7 +35,11 @@ export default function LeadershipTeam() {
                   className="mb-6 rounded-xl w-full h-[500px] object-cover"
                 />
                 <h2 className="text-2xl font-bold text-[#2b1c48] mb-2">Mr. Kai Zheng</h2>
-                <p className="text-lg text-gray-600 mb-2">Chairman & CEO</p>
+                <div className="flex gap-2 mb-3">
+                  <div className="h-1 w-16 bg-[#5E366D] rounded-full animate-expand-width"></div>
+                  <div className="h-1 w-8 bg-[#EE8900] rounded-full animate-expand-width animation-delay-200"></div>
+                </div>
+                <p className="text-lg text-[#EE8900] font-semibold mb-2">Chairman & CEO</p>
                 <p className="text-[#5E366D] font-medium text-xl">Legend Holding Group</p>
               </div>
 
@@ -48,7 +52,11 @@ export default function LeadershipTeam() {
                   className="mb-6 rounded-xl w-full h-[500px] object-cover"
                 />
                 <h2 className="text-2xl font-bold text-[#2b1c48] mb-2">Mrs. Mira Wu</h2>
-                <p className="text-lg text-gray-600 mb-2">Co-Founder & Chief Operating Officer</p>
+                <div className="flex gap-2 mb-3">
+                  <div className="h-1 w-16 bg-[#5E366D] rounded-full animate-expand-width"></div>
+                  <div className="h-1 w-8 bg-[#EE8900] rounded-full animate-expand-width animation-delay-200"></div>
+                </div>
+                <p className="text-lg text-[#EE8900] font-semibold mb-2">Co-Founder & Chief Operating Officer</p>
                 <p className="text-[#5E366D] font-medium text-xl">Legend Holding Group</p>
               </div>
             </div>
