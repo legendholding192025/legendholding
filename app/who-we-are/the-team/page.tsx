@@ -28,7 +28,7 @@ export default function LeadershipTeam() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
               <div className="bg-white rounded-2xl shadow-lg p-6">
                 <Image
-                  src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=800&auto=format&fit=crop&q=60"
+                  src="https://cdn.legendholding.com/images/cdn_684c0fb8617c81.71541014_20250613_114704.png"
                   alt="Mr. Kai Zheng"
                   width={400}
                   height={500}
@@ -41,7 +41,7 @@ export default function LeadershipTeam() {
 
               <div className="bg-white rounded-2xl shadow-lg p-6">
                 <Image
-                  src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&auto=format&fit=crop&q=60"
+                  src="https://cdn.legendholding.com/images/cdn_684c0d8b445f38.04199956_20250613_113747.jpg"
                   alt="Mrs. Mira Wu"
                   width={400}
                   height={500}
@@ -61,48 +61,48 @@ export default function LeadershipTeam() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {[
                 {
-                  name: "Mr. Nagaraj",
-                  role: "Legend Motors Trading",
-                  image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&auto=format&fit=crop&q=60"
+                  name: "Emery Zhou",
+                  role: "IT & Digital Transformation Director",
+                  image: "https://cdn.legendholding.com/images/cdn_684a8e1f4c3372.64281750_20250612_082151.jpg"
                 },
                 {
-                  name: "Mr. Waseem",
-                  role: "Brand Manager",
-                  image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=800&auto=format&fit=crop&q=60"
+                  name: "George Hua",
+                  role: "Head of Commercial Vehicles",
+                  image: "https://cdn.legendholding.com/images/cdn_684a90f5e5e897.26452583_20250612_083357.jpg"
                 },
                 {
-                  name: "Cannon",
-                  role: "Legend Motors – Dealership",
+                  name: "Cannon Wang",
+                  role: "VP Dealership & Strategy of LHG",
                   image: "https://cdn.legendholding.com/images/cdn_684a91bab382b9.55226471_20250612_083714.jpg"
                 },
                 {
-                  name: "Mr. Mubasher",
-                  role: "Legend Rent a Car",
+                  name: "Mubasher Farooq ",
+                  role: "Head of Rent a Car Division",
                   image: "https://cdn.legendholding.com/images/cdn_684a9178c0b480.93010827_20250612_083608.jpg"
                 },
                 {
-                  name: "Mr. Tamer",
-                  role: "Legend Automobile Service",
+                  name: "Tamer Moutamed Essa Khalil",
+                  role: "Head of After Sales",
                   image: "https://cdn.legendholding.com/images/cdn_684a912f82b802.68059638_20250612_083455.jpg"
                 },
                 {
-                  name: "Mr. Raouf",
-                  role: "Legend Green Energy Solutions",
-                  image: "https://images.unsplash.com/photo-1504257432389-52343af06ae3?w=800&auto=format&fit=crop&q=60"
+                  name: "Rejeesh Raveendran Pillai",
+                  role: "Group Finance Director",
+                  image: "https://cdn.legendholding.com/images/cdn_684a91542cc7b6.90399351_20250612_083532.jpg"
                 },
                 {
-                  name: "Mr. Liu",
-                  role: "Legend Travel and Tourism",
-                  image: "https://images.unsplash.com/photo-1506795660198-e95c6320213d?w=800&auto=format&fit=crop&q=60"
+                  name: "Saif El-Dine El-Akkary",
+                  role: "General Manager | Premium Brands",
+                  image: "https://cdn.legendholding.com/images/cdn_684a919ece14d0.18569119_20250612_083646.jpg"
                 },
                 {
-                  name: "Jade Li",
-                  role: "Zul Energy",
-                  image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=800&auto=format&fit=crop&q=60"
+                  name: "Bo Feng",
+                  role: "Media Operations Manager",
+                  image: "https://cdn.legendholding.com/images/cdn_684a91d8ce3885.00609400_20250612_083744.jpg"
                 },
                 {
                   name: "Mabel Niu",
-                  role: "Human Resources",
+                  role: "Group HR Director",
                   image: "https://cdn.legendholding.com/images/cdn_684a90c70ffd66.48330071_20250612_083311.jpg"
                 }
               ].map((leader, index) => (
