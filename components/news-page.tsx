@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import {
   BookmarkIcon,
   CalendarIcon,
@@ -63,7 +63,9 @@ export function NewsPage() {
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
   const [totalArticles, setTotalArticles] = useState(0)
-  const articlesPerPage = 12
+  const [isTransitioning, setIsTransitioning] = useState(false)
+  const articlesPerPage = 3
+  const carouselRef = useRef<HTMLDivElement>(null)
 
   const supabase = createClientComponentClient()
 
@@ -117,8 +119,26 @@ export function NewsPage() {
   }
 
   const handlePageChange = (newPage: number) => {
+    if (isTransitioning) return
+    setIsTransitioning(true)
     setCurrentPage(newPage)
     window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  const handleTransitionEnd = () => {
+    setIsTransitioning(false)
+  }
+
+  const nextPage = () => {
+    if (isTransitioning) return
+    setIsTransitioning(true)
+    setCurrentPage((prev) => Math.min(totalPages, prev + 1))
+  }
+
+  const prevPage = () => {
+    if (isTransitioning) return
+    setIsTransitioning(true)
+    setCurrentPage((prev) => Math.max(1, prev - 1))
   }
 
   if (loading) {
@@ -264,34 +284,11 @@ export function NewsPage() {
 
             {/* All News */}
             <div>
-              <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <div>
-                  <h2 className="text-2xl font-bold">All News</h2>
-                  <p className="text-gray-500 text-sm mt-1">
-                    Showing {recentArticles.length} of {totalArticles} articles
-                  </p>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Button 
-                    variant="outline" 
-                    className="text-[#5E366D] border-[#5E366D] hover:bg-[#5E366D] hover:text-white"
-                    onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
-                    disabled={currentPage === 1}
-                  >
-                    Previous
-                  </Button>
-                  <span className="text-sm text-gray-500 min-w-[100px] text-center">
-                    Page {currentPage} of {totalPages}
-                  </span>
-                  <Button 
-                    variant="outline" 
-                    className="text-[#5E366D] border-[#5E366D] hover:bg-[#5E366D] hover:text-white"
-                    onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
-                    disabled={currentPage === totalPages}
-                  >
-                    Next
-                  </Button>
-                </div>
+              <div className="mb-6">
+                <h2 className="text-2xl font-bold">All News</h2>
+                <p className="text-gray-500 text-sm mt-1">
+                  Showing {recentArticles.length} of {totalArticles} articles
+                </p>
               </div>
 
               {recentArticles.length === 0 ? (
@@ -300,86 +297,99 @@ export function NewsPage() {
                 </div>
               ) : (
                 <>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {recentArticles.map((article) => (
-                      <Link
-                        key={article.id}
-                        href={`/news/${article.id}`}
-                        className="bg-[rgb(234,226,214)]/20 rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex flex-col h-full group relative"
-                      >
-                        <div 
-                          className="absolute inset-0 bg-gradient-to-br from-[rgb(234,226,214)]/50 to-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg"
-                          aria-hidden="true"
-                        />
-                        <div className="relative h-48 overflow-hidden">
-                          <Image 
-                            src={article.image_url || "/placeholder.svg"} 
-                            alt={article.title} 
-                            fill 
-                            className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
+                  <div className="relative">
+                    <div
+                      ref={carouselRef}
+                      className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 transition-transform duration-300 ease-out"
+                      onTransitionEnd={handleTransitionEnd}
+                    >
+                      {recentArticles.map((article) => (
+                        <Link
+                          key={article.id}
+                          href={`/news/${article.id}`}
+                          className="bg-[rgb(234,226,214)]/20 rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex flex-col h-full group relative"
+                        >
+                          <div 
+                            className="absolute inset-0 bg-gradient-to-br from-[rgb(234,226,214)]/50 to-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg"
+                            aria-hidden="true"
                           />
-                        </div>
-                        <div className="p-5 flex flex-col flex-grow relative">
-                          <div className="flex items-center text-gray-500 text-sm mb-3">
-                            <CalendarIcon className="h-4 w-4 mr-1" />
-                            {new Date(article.created_at).toLocaleDateString()}
-                            <Clock className="h-4 w-4 ml-3 mr-1" />
-                            {article.read_time}
+                          <div className="relative h-48 overflow-hidden">
+                            <Image 
+                              src={article.image_url || "/placeholder.svg"} 
+                              alt={article.title} 
+                              fill 
+                              className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
+                            />
                           </div>
-                          <h3 className="text-lg font-semibold mb-3 text-[rgb(43,28,72)] line-clamp-2">
-                            {article.title}
-                          </h3>
-                          <p className="text-[rgb(93,55,110)] mb-4 line-clamp-3 flex-grow text-lg">
-                            {article.excerpt}
-                          </p>
-                          <div className="flex items-center justify-between">
-                            <div className="text-[#F39200] font-medium text-sm flex items-center">
-                              Read More
-                              <ArrowRight className="ml-1 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                          <div className="p-5 flex flex-col flex-grow relative">
+                            <div className="flex items-center text-gray-500 text-sm mb-3">
+                              <CalendarIcon className="h-4 w-4 mr-1" />
+                              {new Date(article.created_at).toLocaleDateString()}
+                              <Clock className="h-4 w-4 ml-3 mr-1" />
+                              {article.read_time}
                             </div>
-                            <Button variant="ghost" size="icon" className="h-7 w-7 rounded-full">
-                              <Share2 className="h-3 w-3" />
-                              <span className="sr-only">Share</span>
-                            </Button>
+                            <h3 className="text-lg font-semibold mb-3 text-[rgb(43,28,72)] line-clamp-2">
+                              {article.title}
+                            </h3>
+                            <p className="text-[rgb(93,55,110)] mb-4 line-clamp-3 flex-grow text-lg">
+                              {article.excerpt}
+                            </p>
+                            <div className="flex items-center justify-between">
+                              <div className="text-[#F39200] font-medium text-sm flex items-center">
+                                Read More
+                                <ArrowRight className="ml-1 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                              </div>
+                              <Button variant="ghost" size="icon" className="h-7 w-7 rounded-full">
+                                <Share2 className="h-3 w-3" />
+                                <span className="sr-only">Share</span>
+                              </Button>
+                            </div>
                           </div>
-                        </div>
-                      </Link>
-                    ))}
+                        </Link>
+                      ))}
+                    </div>
+
+                    {/* Navigation Buttons */}
+                    <button
+                      onClick={prevPage}
+                      disabled={isTransitioning || currentPage === 1}
+                      className="absolute -left-12 top-1/2 transform -translate-y-1/2 z-10 bg-white rounded-full p-2 shadow-lg hover:shadow-xl transition-all duration-100 hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed"
+                      aria-label="Previous page"
+                    >
+                      <ChevronLeft className="w-6 h-6 text-gray-600" />
+                    </button>
+
+                    <button
+                      onClick={nextPage}
+                      disabled={isTransitioning || currentPage === totalPages}
+                      className="absolute -right-12 top-1/2 transform -translate-y-1/2 z-10 bg-white rounded-full p-2 shadow-lg hover:shadow-xl transition-all duration-100 hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed"
+                      aria-label="Next page"
+                    >
+                      <ChevronRight className="w-6 h-6 text-gray-600" />
+                    </button>
                   </div>
 
                   {/* Bottom Pagination */}
                   <div className="flex justify-center mt-8 gap-2">
-                    <Button 
-                      variant="outline" 
-                      className="p-2 rounded-full bg-[rgb(234,226,214)]/20 border border-[rgb(43,28,72)]/20 text-[rgb(43,28,72)] hover:bg-[rgb(43,28,72)] hover:text-white transition-colors duration-300"
-                      onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
-                      disabled={currentPage === 1}
-                    >
-                      <ChevronLeft className="h-5 w-5" />
-                    </Button>
                     <div className="flex items-center gap-1.5 px-3">
-                      {Array.from({ length: totalPages }).map((_, index) => (
-                        <button
-                          key={index}
-                          onClick={() => handlePageChange(index + 1)}
-                          className={cn(
-                            "w-2 h-2 rounded-full transition-all duration-300",
-                            currentPage === index + 1
-                              ? "bg-[rgb(43,28,72)] w-6"
-                              : "bg-[rgb(234,226,214)] hover:bg-[rgb(234,226,214)]/70"
-                          )}
-                          aria-label={`Go to page ${index + 1}`}
-                        />
-                      ))}
+                      {Array.from({ length: Math.min(5, totalPages) }).map((_, index) => {
+                        const pageNumber = index + 1;
+                        const isCurrentPage = currentPage === pageNumber;
+                        return (
+                          <button
+                            key={index}
+                            onClick={() => handlePageChange(pageNumber)}
+                            className={cn(
+                              "w-2 h-2 rounded-full transition-all duration-300",
+                              isCurrentPage
+                                ? "bg-[#F08900] w-6"
+                                : "bg-gray-300 hover:bg-gray-400"
+                            )}
+                            aria-label={`Go to page ${pageNumber}`}
+                          />
+                        );
+                      })}
                     </div>
-                    <Button 
-                      variant="outline" 
-                      className="p-2 rounded-full bg-[rgb(234,226,214)]/20 border border-[rgb(43,28,72)]/20 text-[rgb(43,28,72)] hover:bg-[rgb(43,28,72)] hover:text-white transition-colors duration-300"
-                      onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
-                      disabled={currentPage === totalPages}
-                    >
-                      <ChevronRight className="h-5 w-5" />
-                    </Button>
                   </div>
                 </>
               )}

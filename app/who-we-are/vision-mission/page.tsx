@@ -189,7 +189,7 @@ export default function VisionMissionValuesPage() {
                   <div className="relative">
                     <div className="aspect-[4/3] relative overflow-hidden">
                       <Image
-                        src="https://cdn.legendholding.com/images/cloudinary/cloudinary_683ea90f29b708.04231409_20250603_074935.jpg"
+                        src="https://cdn.legendholding.com/images/cdn_684c28a05446b6.62039041_20250613_133320.jpg"
                         width={800}
                         height={600}
                         alt="Vision"
