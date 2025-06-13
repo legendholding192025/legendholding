@@ -11,7 +11,7 @@ const slides = [
     description:
       "We've built a culture rooted in trust, respect, and shared ambition. With over 35 nationalities working toward one vision, we celebrate diversity and grow together. Our leaders are transparent and accessible, and we recognize every win, big or small, because we believe that when one of us grows, we all do.",
     image:
-      "https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=1470&auto=format&fit=crop",
+      "https://cdn.legendholding.com/images/cdn_684c22e344b9e8.68563671_20250613_130851.jpeg",
   },
   {
     id: 2,
@@ -19,7 +19,7 @@ const slides = [
     description:
       "We don't believe in one-track careers. As a diversified group, we offer cross-industry exposure and clear pathways for development. Whether it's through our training academy, mentorship, or hands-on experience, we give you the tools to shape your career.",
     image:
-      "https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=1470&auto=format&fit=crop",
+      "https://cdn.legendholding.com/images/cdn_684c22c6e23ed4.90404297_20250613_130822.jpg",
   },
   {
     id: 3,
@@ -27,7 +27,7 @@ const slides = [
     description:
       "We listen to every idea. We believe great ideas can come from anyone, anywhere. That's why we encourage our team member to share their thoughts and take ownership. If you have an idea, we'll help you shape it, champion it, and bring it to life, because innovation starts with you.",
     image:
-      "https://images.unsplash.com/photo-1557804506-669a67965ba0?q=80&w=1374&auto=format&fit=crop",
+      "https://cdn.legendholding.com/images/cdn_684c23b2cdb517.97646813_20250613_131218.jpeg",
   },
 ]
 
@@ -60,10 +60,10 @@ export default function GrowSection() {
         </div>
 
         {/* Content Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-0">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-0 lg:h-[400px]">
           {/* Left Content */}
-          <div className="order-2 lg:order-1">
-            <div className="bg-white p-4 sm:p-6 lg:p-8 rounded-2xl lg:rounded-r-none lg:rounded-l-2xl h-full flex flex-col justify-between min-h-[250px] sm:min-h-[300px] lg:min-h-[400px]">
+          <div className="order-2 lg:order-1 h-full">
+            <div className="bg-white p-4 sm:p-6 lg:p-8 rounded-2xl lg:rounded-r-none lg:rounded-l-2xl h-full flex flex-col justify-between">
               <div className="max-w-[90%] lg:max-w-[85%]">
                 <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#EE8900] mb-2 sm:mb-3">{currentSlideData.title}</h2>
                 <p className="text-sm sm:text-base lg:text-lg text-[#5E366D] leading-relaxed max-w-[90%] lg:max-w-[85%]">{currentSlideData.description}</p>
@@ -97,7 +97,7 @@ export default function GrowSection() {
           </div>
 
           {/* Right Image */}
-          <div className="order-1 lg:order-2 relative h-[200px] xs:h-[250px] sm:h-[300px] md:h-[350px] lg:h-[400px]">
+          <div className="order-1 lg:order-2 relative h-[200px] xs:h-[250px] sm:h-[300px] md:h-[350px] lg:h-full">
             <div className="overflow-hidden rounded-2xl lg:rounded-l-none lg:rounded-r-2xl h-full w-full">
               <Image
                 src={currentSlideData.image}

@@ -142,7 +142,7 @@ export default function VisionMissionValuesPage() {
           {/* Hero Content */}
           <div className="relative container mx-auto px-4 py-24 md:py-32">
             <div className="max-w-4xl mx-auto text-center">
-              <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
+              <h1 className="text-4xl md:text-5xl font-bold text-white mb-6 font-richmond">
                 Our Foundation
               </h1>
             </div>

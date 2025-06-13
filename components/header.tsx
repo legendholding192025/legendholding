@@ -899,10 +899,7 @@ export function Header() {
                                             className="block p-2 text-sm text-gray-600 hover:text-primary hover:bg-gray-50 rounded-lg transition-colors"
                                             onClick={() => setMobileMenuOpen(false)}
                                           >
-                                            <div>
-                                              <div className="font-medium">{nestedItem.title}</div>
-                                              <div className="text-xs text-gray-500 mt-1">{nestedItem.description}</div>
-                                            </div>
+                                            <div className="font-medium">{nestedItem.title}</div>
                                           </Link>
                                         ))}
                                       </div>
