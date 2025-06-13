@@ -31,8 +31,8 @@ export default function LeadershipTeam() {
                   src="https://cdn.legendholding.com/images/cdn_684c0fb8617c81.71541014_20250613_114704.png"
                   alt="Mr. Kai Zheng"
                   width={400}
-                  height={500}
-                  className="mb-6 rounded-xl w-full h-[500px] object-cover"
+                  height={600}
+                  className="mb-6 rounded-xl w-full h-[600px] object-cover"
                 />
                 <h2 className="text-2xl font-bold text-[#2b1c48] mb-2">Mr. Kai Zheng</h2>
                 <div className="flex gap-2 mb-3">
@@ -48,8 +48,8 @@ export default function LeadershipTeam() {
                   src="https://cdn.legendholding.com/images/cdn_684c0d8b445f38.04199956_20250613_113747.jpg"
                   alt="Mrs. Mira Wu"
                   width={400}
-                  height={500}
-                  className="mb-6 rounded-xl w-full h-[500px] object-cover"
+                  height={600}
+                  className="mb-6 rounded-xl w-full h-[600px] object-cover"
                 />
                 <h2 className="text-2xl font-bold text-[#2b1c48] mb-2">Mrs. Mira Wu</h2>
                 <div className="flex gap-2 mb-3">
@@ -119,8 +119,8 @@ export default function LeadershipTeam() {
                     src={leader.image}
                     alt={leader.name}
                     width={250}
-                    height={300}
-                    className="mb-4 mx-auto rounded-xl w-full h-[300px] object-cover"
+                    height={400}
+                    className="mb-4 mx-auto rounded-xl w-full h-[400px] object-cover"
                   />
                   <h3 className="text-xl font-bold text-[#2b1c48] mb-2">{leader.name}</h3>
                   <div className="flex gap-2 mb-3">
