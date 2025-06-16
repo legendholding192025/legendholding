@@ -32,7 +32,7 @@ export default function LeadershipTeam() {
                   alt="Mr. Kai Zheng"
                   width={400}
                   height={600}
-                  className="mb-6 rounded-xl w-full h-[600px] object-cover"
+                  className="mb-6 rounded-xl w-full h-[400px] md:h-[500px] lg:h-[600px] object-cover"
                 />
                 <h2 className="text-2xl font-bold text-[#2b1c48] mb-2">Mr. Kai Zheng</h2>
                 <div className="flex gap-2 mb-3">
@@ -49,7 +49,7 @@ export default function LeadershipTeam() {
                   alt="Mrs. Mira Wu"
                   width={400}
                   height={600}
-                  className="mb-6 rounded-xl w-full h-[600px] object-cover"
+                  className="mb-6 rounded-xl w-full h-[400px] md:h-[500px] lg:h-[600px] object-cover"
                 />
                 <h2 className="text-2xl font-bold text-[#2b1c48] mb-2">Mrs. Mira Wu</h2>
                 <div className="flex gap-2 mb-3">
