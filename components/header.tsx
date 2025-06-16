@@ -462,9 +462,7 @@ export function Header() {
     if (submenuTimeoutRef.current) {
       clearTimeout(submenuTimeoutRef.current);
     }
-    submenuTimeoutRef.current = setTimeout(() => {
-      setActiveMenu(menuTitle);
-    }, 100);
+    setActiveMenu(menuTitle);
   };
 
   const handleMenuLeave = () => {
@@ -473,15 +471,12 @@ export function Header() {
       if (submenuTimeoutRef.current) {
         clearTimeout(submenuTimeoutRef.current);
       }
-      if (nestedSubmenuTimeoutRef.current) {
-        clearTimeout(nestedSubmenuTimeoutRef.current);
-      }
       submenuTimeoutRef.current = setTimeout(() => {
-        if (!hoveredNestedItem) {
+        // Only close the main menu if no nested menu is active
+        if (!hoveredNestedItem && !activeNestedMenu) {
           setActiveMenu(null);
-          setActiveNestedMenu(null);
         }
-      }, 100);
+      }, 300);
     }
   };
 
@@ -500,11 +495,14 @@ export function Header() {
     }
     nestedSubmenuTimeoutRef.current = setTimeout(() => {
       setActiveNestedMenu(null);
-    }, 100);
+      // Only close the main menu if we're not hovering over it
+      if (!hoveredItem) {
+        setActiveMenu(null);
+      }
+    }, 300);
   };
 
   const cancelMenuClose = () => {
-    setHoveredItem(activeMenu);
     if (submenuTimeoutRef.current) {
       clearTimeout(submenuTimeoutRef.current);
       submenuTimeoutRef.current = null;
@@ -512,7 +510,6 @@ export function Header() {
   };
 
   const cancelNestedMenuClose = () => {
-    setHoveredNestedItem(activeNestedMenu);
     if (nestedSubmenuTimeoutRef.current) {
       clearTimeout(nestedSubmenuTimeoutRef.current);
       nestedSubmenuTimeoutRef.current = null;
