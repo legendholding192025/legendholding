@@ -523,8 +523,8 @@ export function Header() {
       if (menuItemElement) {
         const rect = menuItemElement.getBoundingClientRect();
         const menuItemCenter = rect.left + rect.width / 2;
-        const dropdownWidth = 192; // w-48 = 12rem = 192px
-        const leftPosition = menuItemCenter - (dropdownWidth / 2);
+        const dropdownWidth = menuTitle === "Who We Are" ? 192 : 192; // w-48 = 12rem = 192px
+        const leftPosition = menuItemCenter - (dropdownWidth / 2) + (menuTitle === "Who We Are" ? 10 : 0); // Add 10px offset for Who We Are
         
         return {
           position: 'fixed' as const,
@@ -713,7 +713,7 @@ export function Header() {
                       <div
                         className={cn(
                           "absolute top-full bg-white shadow-lg z-[9998] animate-submenu-slide-down",
-                          item.title === "Who We Are" ? "w-56" : "w-screen"
+                          item.title === "Who We Are" ? "w-48" : "w-screen"
                         )}
                         onMouseEnter={cancelMenuClose}
                         onMouseLeave={handleMenuLeave}
@@ -726,7 +726,7 @@ export function Header() {
                                 <Link
                                   key={subItem.title}
                                   href={subItem.url}
-                                  className="block px-4 py-3 text-sm text-gray-700 hover:text-primary rounded-md transition-colors group"
+                                  className="block px-5 py-3 text-sm text-gray-700 hover:text-primary rounded-md transition-colors group"
                                 >
                                   <span className="relative">
                                     {subItem.title}
@@ -774,7 +774,7 @@ export function Header() {
                       <div
                         className={cn(
                           "absolute top-full bg-white shadow-lg z-[9998] animate-submenu-slide-down",
-                          "w-56"
+                          "w-52"
                         )}
                         onMouseEnter={cancelMenuClose}
                         onMouseLeave={handleMenuLeave}
@@ -820,7 +820,7 @@ export function Header() {
                     {/* Separate Nested submenu for Legend Motors - positioned independently */}
                     {activeNestedMenu === "Legend Motors" && (
                       <div
-                        className="fixed bg-white shadow-lg z-[10000] w-56 animate-submenu-slide-down"
+                        className="fixed bg-white shadow-lg z-[10000] w-52 animate-submenu-slide-down"
                         onMouseEnter={cancelNestedMenuClose}
                         onMouseLeave={handleNestedMenuLeave}
                         style={getNestedDropdownPosition()}
