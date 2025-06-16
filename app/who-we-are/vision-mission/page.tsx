@@ -200,11 +200,11 @@ export default function VisionMissionValuesPage() {
                     </div>
 
                     {/* Floating Stats */}
-                    <div className="absolute -bottom-6 -left-6 bg-white rounded-lg shadow-lg p-6 border border-gray-100 max-w-[calc(100%-2rem)]">
-                      <div className="text-2xl font-bold text-[#2b1c48] font-richmond">
+                    <div className="absolute -bottom-4 -left-4 sm:-bottom-6 sm:-left-6 bg-white rounded-lg shadow-lg p-3 sm:p-6 border border-gray-100 max-w-[calc(100%-1rem)] sm:max-w-[calc(100%-2rem)]">
+                      <div className="text-xl sm:text-2xl font-bold text-[#2b1c48] font-richmond">
                         <AnimatedCounter target={yearsTarget} suffix="+" duration={1200} startDelay={200} />
                       </div>
-                      <div className="text-sm text-gray-600 font-effra">Years of Excellence</div>
+                      <div className="text-xs sm:text-sm text-gray-600 font-effra">Years of Excellence</div>
                     </div>
                   </div>
                 </div>
@@ -231,11 +231,11 @@ export default function VisionMissionValuesPage() {
                     </div>
 
                     {/* Floating Stats */}
-                    <div className="absolute -bottom-6 -right-6 bg-white rounded-lg shadow-lg p-6 border border-gray-100 max-w-[calc(100%-2rem)]">
-                      <div className="text-2xl font-bold text-[#E67E22] font-richmond">
+                    <div className="absolute -bottom-4 -right-4 sm:-bottom-6 sm:-right-6 bg-white rounded-lg shadow-lg p-3 sm:p-6 border border-gray-100 max-w-[calc(100%-1rem)] sm:max-w-[calc(100%-2rem)]">
+                      <div className="text-xl sm:text-2xl font-bold text-[#E67E22] font-richmond">
                         <AnimatedCounter target={10} suffix="K+" duration={1500} startDelay={100} />
                       </div>
-                      <div className="text-sm text-gray-600 font-effra">Global Clients</div>
+                      <div className="text-xs sm:text-sm text-gray-600 font-effra">Global Clients</div>
                     </div>
                   </div>
                 </div>

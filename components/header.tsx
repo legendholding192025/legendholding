@@ -229,6 +229,7 @@ export function Header() {
   const [lastScrollTop, setLastScrollTop] = useState(0)
   const menuItemRefs = useRef<Record<string, HTMLDivElement | null>>({})
   const legendMotorsRef = useRef<HTMLDivElement | null>(null)
+  const [mobileNestedMenuOpen, setMobileNestedMenuOpen] = useState<string | null>(null);
 
   // Handle scroll direction for header visibility
   useEffect(() => {
@@ -796,7 +797,10 @@ export function Header() {
                                         {business.title}
                                         <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-secondary transition-all duration-300 group-hover:w-full"></span>
                                       </span>
-                                      <ChevronRight className="h-4 w-4" />
+                                      <ChevronRight className={cn(
+                                        "h-4 w-4 transition-transform duration-200",
+                                        activeNestedMenu === business.title && "rotate-90"
+                                      )} />
                                     </div>
                                   </div>
                                 ) : (
@@ -922,24 +926,34 @@ export function Header() {
                               {item.businessCategories[0].items.map((business) => (
                                 <div key={business.title}>
                                   {business.hasNestedSubmenu ? (
-                                    <details className="group">
-                                      <summary className="flex justify-between items-center p-3 rounded-lg hover:bg-gray-100 cursor-pointer">
+                                    <div className="group">
+                                      <button
+                                        onClick={() => setMobileNestedMenuOpen(
+                                          mobileNestedMenuOpen === business.title ? null : business.title
+                                        )}
+                                        className="w-full flex justify-between items-center p-3 rounded-lg hover:bg-gray-100 cursor-pointer"
+                                      >
                                         <h3 className="text-base font-medium text-gray-800">{business.title}</h3>
-                                        <ChevronDown className="h-4 w-4 text-primary" />
-                                      </summary>
-                                      <div className="mt-2 ml-4 pl-4 border-l-2 border-primary/20 space-y-2">
-                                        {business.nestedSubmenu?.map((nestedItem) => (
-                                          <Link
-                                            key={nestedItem.title}
-                                            href={nestedItem.url}
-                                            className="block p-2 text-sm text-gray-600 hover:text-primary hover:bg-gray-50 rounded-lg transition-colors"
-                                            onClick={() => setMobileMenuOpen(false)}
-                                          >
-                                            <div className="font-medium">{nestedItem.title}</div>
-                                          </Link>
-                                        ))}
-                                      </div>
-                                    </details>
+                                        <ChevronRight className={cn(
+                                          "h-4 w-4 text-primary transition-transform duration-200",
+                                          mobileNestedMenuOpen === business.title && "rotate-90"
+                                        )} />
+                                      </button>
+                                      {mobileNestedMenuOpen === business.title && (
+                                        <div className="mt-2 ml-4 pl-4 border-l-2 border-primary/20 space-y-2">
+                                          {business.nestedSubmenu?.map((nestedItem) => (
+                                            <Link
+                                              key={nestedItem.title}
+                                              href={nestedItem.url}
+                                              className="block p-2 text-sm text-gray-600 hover:text-primary hover:bg-gray-50 rounded-lg transition-colors"
+                                              onClick={() => setMobileMenuOpen(false)}
+                                            >
+                                              <div className="font-medium">{nestedItem.title}</div>
+                                            </Link>
+                                          ))}
+                                        </div>
+                                      )}
+                                    </div>
                                   ) : (
                                     <Link
                                       href={business.url}
