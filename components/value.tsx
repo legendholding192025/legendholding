@@ -64,7 +64,7 @@ export default function ValueSection() {
                   <span className="border-b-2 border-[#2B1C48] pb-1">Our</span> Vision
                 </h3>
                 <p className="text-sm sm:text-lg md:text-xl leading-relaxed" style={{ color: '#2B1C48' }}>
-                  To seamlessly connect the physical and digital worlds, revolutionizing supply chains with cutting-edge financial technology, and become the global leader in intelligent, data-driven solutions that empower businesses to thrive through efficiency transparency, and sustainable growth.
+                  To seamlessly connect the physical and digital worlds, revolutionizing supply chains with cutting-edge financial technology, and become the global leader in intelligent, data-driven solutions that empower businesses to thrive through efficiency transparency, <br className="block sm:hidden" /> and sustainable growth.
                 </p>
               </div>
             </div>
