@@ -74,7 +74,7 @@ export default function BusinessUnit() {
     },
     {
       name: "Legend Travel and Tourism",
-      image: "https://cdn.legendholding.com/images/cdn_6851436d0901d6.50729255_20250617_102901.png",
+      image: "https://cdn.legendholding.com/images/cdn_68514642e8cbf6.54823807_20250617_104106.jpeg",
       url: "/our-brands/legend-travel",
       bgColor: "bg-[#EE8900]",
     },
@@ -232,13 +232,50 @@ export default function BusinessUnit() {
                   <Link href={business.url} className="block h-full">
                     <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-100 hover:scale-105 group h-[14rem] sm:h-[20rem] md:h-[24rem] lg:h-[28rem] flex flex-col">
                       {/* Image Section */}
-                      <div className="flex-1 overflow-hidden">
+                      <div className="flex-1 overflow-hidden relative">
                         <img
                           src={business.image || "/placeholder.svg"}
                           alt={business.name}
                           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-100"
+                          style={business.name === "212" ? { objectPosition: "38% center" } : undefined}
                           loading="lazy"
                         />
+                        {business.name === "Skywell" && (
+                          <div className="absolute bottom-0 right-4 w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24">
+                            <img
+                              src="https://res.cloudinary.com/dosxengut/image/upload/v1746788882/logo_sisnn9.png"
+                              alt="Skywell Logo"
+                              className="w-full h-full object-contain"
+                            />
+                          </div>
+                        )}
+                        {business.name === "Kaiyi" && (
+                          <div className="absolute bottom-0 right-4 w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24">
+                            <img
+                              src="https://res.cloudinary.com/dosxengut/image/upload/v1746788951/download_wmkc6s.png"
+                              alt="Kaiyi Logo"
+                              className="w-full h-full object-contain"
+                            />
+                          </div>
+                        )}
+                        {business.name === "Li Auto" && (
+                          <div className="absolute bottom-0 right-4 w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24">
+                            <img
+                              src="https://res.cloudinary.com/dosxengut/image/upload/v1746788883/logo-text-black-en.e6782a94_chlojl.svg"
+                              alt="Li Auto Logo"
+                              className="w-full h-full object-contain"
+                            />
+                          </div>
+                        )}
+                        {business.name === "212" && (
+                          <div className="absolute bottom-0 right-4 w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24">
+                            <img
+                              src="https://res.cloudinary.com/dosxengut/image/upload/v1746788882/logo212b_qk5xsj.png"
+                              alt="212 Logo"
+                              className="w-full h-full object-contain"
+                            />
+                          </div>
+                        )}
                       </div>
 
                       {/* Content Section */}
