@@ -87,6 +87,12 @@ export default function LeadershipTeam() {
                   image: "https://cdn.legendholding.com/images/cdn_684a91bab382b9.55226471_20250612_083714.jpg"
                 },
                 {
+                  name: "Nagaraj P.",
+                  role: "General Manager",
+                  company: "Legend Motors - Trading",
+                  image: "https://cdn.legendholding.com/images/cdn_685170f8cda310.20304631_20250617_134320.jpeg"
+                },
+                {
                   name: "Bo Feng",
                   role: "Media Operations Manager",
                   company: "Legend Media",
@@ -143,7 +149,7 @@ export default function LeadershipTeam() {
                     width={250}
                     height={400}
                     className={`mb-4 mx-auto rounded-xl w-full h-[400px] object-cover ${
-                      leader.name === "Liu" ? "object-[center_30%]" : 
+                      leader.name === "Liu Xiaochen" ? "object-[center_20%]" : 
                       leader.name === "Waseem Khalayleh" ? "object-[center_60%]" : ""
                     }`}
                   />
