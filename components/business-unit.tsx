@@ -74,13 +74,13 @@ export default function BusinessUnit() {
     },
     {
       name: "Legend Travel and Tourism",
-      image: "https://cdn.legendholding.com/images/cloudinary/cloudinary_683da8647f3229.83699836_20250602_133428.jpg",
+      image: "https://cdn.legendholding.com/images/cdn_6851436d0901d6.50729255_20250617_102901.png",
       url: "/our-brands/legend-travel",
       bgColor: "bg-[#EE8900]",
     },
     {
       name: "Legend Green Energy Solutions",
-      image: "https://cdn.legendholding.com/images/cloudinary/cloudinary_683da878b846d7.93249932_20250602_133448.jpg",
+      image: "https://cdn.legendholding.com/images/cloudinary/cloudinary_683d9fb5d95276.90087674_20250602_125725.png",
       url: "/our-brands/legend-green-energy",
       bgColor: "bg-[#2B1C48]",
     },

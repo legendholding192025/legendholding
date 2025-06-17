@@ -23,7 +23,7 @@ export default function GroupIndustries() {
     },
     {
       name: "Travel & Tourism",
-      image: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&q=80&w=1000",
+      image: "https://cdn.legendholding.com/images/cdn_6851436d0901d6.50729255_20250617_102901.png",
       bgColor: "bg-[#EE8900]",
       textColor: "text-white",
     },
