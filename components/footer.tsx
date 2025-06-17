@@ -135,14 +135,14 @@ export function Footer() {
               </li>
               <li>
                 <Link 
-                  href="/who-we-are/csr" 
+                  href="/who-we-are/journey" 
                   className="text-white/80 hover:text-white transition-colors flex items-center group"
                 >
                   <ChevronRight
                     size={16}
                     className="mr-2 text-secondary group-hover:translate-x-1 transition-transform"
                   />
-                  CSR Initiatives
+                  Our Journey
                 </Link>
               </li>
               <li>
