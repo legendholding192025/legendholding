@@ -175,7 +175,7 @@ export function CSRSection() {
         </div>
 
         {/* CSR Button - Moved outside the grid */}
-        <div className="mt-8 lg:mt-4 lg:relative lg:left-0">
+        {/* <div className="mt-8 lg:mt-4 lg:relative lg:left-0">
           <Link
             href="/who-we-are/csr"
             className="inline-flex items-center text-[#EE8900] font-medium hover:text-[#EE8900]/80 transition-colors group text-base md:text-lg"
@@ -183,7 +183,7 @@ export function CSRSection() {
             View All CSR Initiatives
             <ArrowRight className="ml-2 h-4 w-4 md:h-5 md:w-5 transition-transform duration-300 group-hover:translate-x-1" />
           </Link>
-        </div>
+        </div> */}
       </div>
     </section>
   )
