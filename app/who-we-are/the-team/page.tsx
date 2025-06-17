@@ -28,11 +28,11 @@ export default function LeadershipTeam() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
               <div className="bg-white rounded-2xl shadow-lg p-6">
                 <Image
-                  src="https://cdn.legendholding.com/images/cdn_684c0fb8617c81.71541014_20250613_114704.png"
+                  src="https://cdn.legendholding.com/images/cdn_68513066e231f1.05737267_20250617_090750.jpeg"
                   alt="Mr. Kai Zheng"
                   width={400}
                   height={600}
-                  className="mb-6 rounded-xl w-full h-[400px] md:h-[500px] lg:h-[600px] object-cover"
+                  className="mb-6 rounded-xl w-full h-[400px] md:h-[500px] lg:h-[600px] object-cover object-[center_30%]"
                 />
                 <h2 className="text-2xl font-bold text-[#2b1c48] mb-2">Mr. Kai Zheng</h2>
                 <div className="flex gap-2 mb-3">
@@ -105,6 +105,12 @@ export default function LeadershipTeam() {
                   image: "https://cdn.legendholding.com/images/cdn_684a90f5e5e897.26452583_20250612_083357.jpg"
                 },
                 {
+                  name: "Liu",
+                  role: "General Manager | Operations",
+                  company: "Legend Travel and Tourism",
+                  image: "https://cdn.legendholding.com/images/cdn_68512fb352e378.07080550_20250617_090451.jpeg"
+                },
+                {
                   name: "Mubasher Farooq",
                   role: "Head of Rent a Car Division",
                   company: "Legend Rent a Car",
@@ -130,7 +136,7 @@ export default function LeadershipTeam() {
                     alt={leader.name}
                     width={250}
                     height={400}
-                    className="mb-4 mx-auto rounded-xl w-full h-[400px] object-cover"
+                    className={`mb-4 mx-auto rounded-xl w-full h-[400px] object-cover ${leader.name === "Liu" ? "object-[center_30%]" : ""}`}
                   />
                   <h3 className="text-xl font-bold text-[#2b1c48] mb-2">{leader.name}</h3>
                   <div className="flex gap-2 mb-3">
