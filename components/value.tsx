@@ -59,7 +59,7 @@ export default function ValueSection() {
 
             {/* Content overlay */}
             <div className="absolute inset-0 flex flex-col justify-center p-6 sm:p-8 md:p-10">
-              <div className="max-w-2xl pl-3 sm:pl-4 md:pl-6 mt-12 sm:mt-16 md:mt-20 pr-4 sm:pr-0">
+              <div className="max-w-2xl pl-3 sm:pl-4 md:pl-6 mt-20 sm:mt-16 md:mt-20 pr-4 sm:pr-0">
                 <h3 className="text-lg sm:text-2xl md:text-3xl font-bold text-orange-500 mb-3 sm:mb-4">
                   <span className="border-b-2 border-[#2B1C48] pb-1">Our</span> Vision
                 </h3>
