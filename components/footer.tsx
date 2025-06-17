@@ -99,18 +99,6 @@ export function Footer() {
             <ul className="space-y-3">
               <li>
                 <Link
-                  href="/about"
-                  className="text-white/80 hover:text-white transition-colors flex items-center group"
-                >
-                  <ChevronRight
-                    size={16}
-                    className="mr-2 text-secondary group-hover:translate-x-1 transition-transform"
-                  />
-                  About Us
-                </Link>
-              </li>
-              <li>
-                <Link
                   href="/business"
                   className="text-white/80 hover:text-white transition-colors flex items-center group"
                 >
