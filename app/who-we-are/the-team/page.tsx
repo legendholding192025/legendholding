@@ -105,10 +105,16 @@ export default function LeadershipTeam() {
                   image: "https://cdn.legendholding.com/images/cdn_684a90f5e5e897.26452583_20250612_083357.jpg"
                 },
                 {
-                  name: "Liu",
+                  name: "Liu Xiaochen",
                   role: "General Manager | Operations",
                   company: "Legend Travel and Tourism",
                   image: "https://cdn.legendholding.com/images/cdn_68512fb352e378.07080550_20250617_090451.jpeg"
+                },
+                {
+                  name: "Waseem Khalayleh",
+                  role: "Brand Manager",
+                  company: "Legend Holding Group",
+                  image: "https://cdn.legendholding.com/images/cdn_68513f59936779.13006930_20250617_101137.jpeg"
                 },
                 {
                   name: "Mubasher Farooq",
@@ -136,7 +142,10 @@ export default function LeadershipTeam() {
                     alt={leader.name}
                     width={250}
                     height={400}
-                    className={`mb-4 mx-auto rounded-xl w-full h-[400px] object-cover ${leader.name === "Liu" ? "object-[center_30%]" : ""}`}
+                    className={`mb-4 mx-auto rounded-xl w-full h-[400px] object-cover ${
+                      leader.name === "Liu" ? "object-[center_30%]" : 
+                      leader.name === "Waseem Khalayleh" ? "object-[center_60%]" : ""
+                    }`}
                   />
                   <h3 className="text-xl font-bold text-[#2b1c48] mb-2">{leader.name}</h3>
                   <div className="flex gap-2 mb-3">

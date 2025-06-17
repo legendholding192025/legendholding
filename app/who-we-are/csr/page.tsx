@@ -52,7 +52,7 @@ const impactAreas = [
     icon: <Lightbulb className="w-6 h-6" />
   }
 ];
- 
+
 export default function CSRPage() {
   return (
     <>
