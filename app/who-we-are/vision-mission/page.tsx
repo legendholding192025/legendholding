@@ -12,10 +12,11 @@ import { PageBanner } from "@/components/page-banner"
 type AnimatedCounterProps = {
   target: number;
   suffix?: string;
+  prefix?: string;
   duration?: number;
   startDelay?: number;
 };
-function AnimatedCounter({ target, suffix = "", duration = 2000, startDelay = 0 }: AnimatedCounterProps) {
+function AnimatedCounter({ target, suffix = "", prefix = "", duration = 2000, startDelay = 0 }: AnimatedCounterProps) {
   const [count, setCount] = useState(0)
   const [isVisible, setIsVisible] = useState(false)
  
@@ -69,8 +70,7 @@ function AnimatedCounter({ target, suffix = "", duration = 2000, startDelay = 0 
         transition: "all 0.5s ease-out",
       }}
     >
-      {count}
-      {suffix}
+      {prefix}{count}{suffix}
     </span>
   )
 }
@@ -202,7 +202,7 @@ export default function VisionMissionValuesPage() {
                     {/* Floating Stats */}
                     <div className="absolute -bottom-4 -left-4 sm:-bottom-6 sm:-left-6 bg-white rounded-lg shadow-lg p-3 sm:p-6 border border-gray-100 max-w-[calc(100%-1rem)] sm:max-w-[calc(100%-2rem)]">
                       <div className="text-xl sm:text-2xl font-bold text-[#2b1c48] font-richmond">
-                        <AnimatedCounter target={yearsTarget} suffix="+" duration={1200} startDelay={200} />
+                        <AnimatedCounter target={yearsTarget} prefix="+" duration={1200} startDelay={200} />
                       </div>
                       <div className="text-xs sm:text-sm text-gray-600 font-effra">Years of Excellence</div>
                     </div>
@@ -233,7 +233,7 @@ export default function VisionMissionValuesPage() {
                     {/* Floating Stats */}
                     <div className="absolute -bottom-4 -right-4 sm:-bottom-6 sm:-right-6 bg-white rounded-lg shadow-lg p-3 sm:p-6 border border-gray-100 max-w-[calc(100%-1rem)] sm:max-w-[calc(100%-2rem)]">
                       <div className="text-xl sm:text-2xl font-bold text-[#E67E22] font-richmond">
-                        <AnimatedCounter target={10} suffix="K+" duration={1500} startDelay={100} />
+                        <AnimatedCounter target={1} suffix="M" prefix="+" duration={1500} startDelay={100} />
                       </div>
                       <div className="text-xs sm:text-sm text-gray-600 font-effra">Global Clients</div>
                     </div>
@@ -257,17 +257,20 @@ export default function VisionMissionValuesPage() {
                   {/* Mission Pillars */}
                   <div className="grid grid-cols-3 gap-6 mt-6">
                     {[
-                      { title: "Excellence", desc: "Highest standards" },
-                      { title: "Collaboration", desc: "Working together" },
-                      { title: "Impact", desc: "Meaningful change" },
+                      { title: "Happiness", desc: "Excellence" },
+                      { title: "Value", desc: "Impact" },
+                      { title: "Future", desc: "Sustainability" },
                     ].map((pillar, index) => (
                       <div key={index} className="text-center">
                         <div className="w-2 h-2 bg-[#27AE60] rounded-full mx-auto mb-3" />
-                        <h4 className="text-sm font-semibold text-gray-900 mb-2 font-richmond">{pillar.title}</h4>
+                        <h4 className="text-sm font-semibold text-gray-900 font-richmond">{pillar.title}</h4>
+                        <div className="text-xs text-gray-500 font-effra my-1">&</div>
                         <p className="text-xs text-gray-600 font-effra">{pillar.desc}</p>
                       </div>
                     ))}
                   </div>
+
+
                 </div>
               </div>
             </div>
@@ -284,7 +287,7 @@ export default function VisionMissionValuesPage() {
                 </h2>
 
                 <p className="text-lg text-gray-600 font-effra leading-relaxed max-w-3xl mx-auto">
-                  Our values spell out <span className="font-semibold text-[#2b1c48]">LEGEND</span> — the principles that guide every decision and action we take.
+                 Are the principles that guide every decision and action we take.
                 </p>
               </div>
 

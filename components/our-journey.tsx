@@ -348,32 +348,36 @@ export function OurJourney() {
                         </motion.div>
                       )}
 
-                      {/* Enhanced Header */}
-                      <div className="flex flex-col md:flex-row items-center justify-center gap-6 mb-8">
-                        <motion.div
-                          className="bg-[#F08900] p-4 rounded-2xl shadow-2xl"
-                          whileHover={{ scale: 1.1, rotate: 5 }}
-                          transition={{ duration: 0.3 }}
-                        >
-                          {milestone.icon}
-                        </motion.div>
-                        <div className="text-center md:text-left">
-                          <motion.h1
-                            className="text-3xl md:text-5xl lg:text-6xl font-bold mb-3 leading-tight font-[var(--heading-font)]"
-                            initial={{ opacity: 0, x: -30 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            transition={{ duration: 0.6, delay: 0.4 }}
+                      {/* Title Section - Moved to top */}
+                      <motion.div
+                        className="mb-12"
+                        initial={{ opacity: 0, y: -30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6, delay: 0.4 }}
+                      >
+                        <div className="flex items-start justify-start gap-6">
+                          <motion.div
+                            className="bg-[#F08900] p-4 rounded-2xl shadow-2xl mt-0.5"
+                            whileHover={{ scale: 1.1, rotate: 5 }}
+                            transition={{ duration: 0.3 }}
                           >
-                            {milestone.title}
-                          </motion.h1>
-                          <Badge
-                            variant="secondary"
-                            className="text-lg md:text-xl px-6 py-3 bg-[#F08900]/95 text-white hover:bg-[#F08900] shadow-lg border-0 font-[var(--body-font)]"
-                          >
-                            {milestone.year}
-                          </Badge>
+                            {milestone.icon}
+                          </motion.div>
+                          <div className="text-left">
+                            <motion.h1
+                              className="text-3xl md:text-5xl lg:text-6xl font-bold leading-tight font-[var(--heading-font)]"
+                            >
+                              {milestone.title}
+                            </motion.h1>
+                            <Badge
+                              variant="secondary"
+                              className="text-lg md:text-xl px-6 py-3 bg-[#F08900]/95 text-white hover:bg-[#F08900] shadow-lg border-0 font-[var(--body-font)] mt-3"
+                            >
+                              {milestone.year}
+                            </Badge>
+                          </div>
                         </div>
-                      </div>
+                      </motion.div>
 
                       {/* Enhanced Description and Achievements */}
                       <motion.div
