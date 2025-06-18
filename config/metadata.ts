@@ -12,8 +12,8 @@ export const defaultMetadata: Metadata = {
     default: 'Legend Holding Group',
     template: '%s | Legend Holding Group'
   },
-  description: 'Legend Holding Group - Building a sustainable future through innovation and excellence',
-  keywords: 'Legend Holding Group, Business, Innovation, Sustainability',
+  description: 'Legend Holding Group | Global Diversified Holding Group | Moving The World',
+  keywords: 'Holding Group, Investment Company, Automotive dealership, Asset Management, Automotive group UAE, Dubai based conglomerate',
   openGraph: {
     type: 'website',
     locale: 'en_US',

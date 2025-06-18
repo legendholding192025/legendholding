@@ -30,6 +30,10 @@ interface NewsArticle {
   read_time: string
   is_featured: boolean
   published: boolean
+  seo_title?: string
+  seo_description?: string
+  seo_keywords?: string
+  seo_image_url?: string
 }
 
 const FacebookIcon = ({ size = 20, className = "" }) => (

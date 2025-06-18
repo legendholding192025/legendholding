@@ -40,6 +40,17 @@ interface NewsArticle {
   read_time: string
   is_featured: boolean
   published: boolean
+  seo_title?: string
+  seo_description?: string
+  seo_keywords?: string
+  seo_image_url?: string
+}
+
+type FormData = Omit<NewsArticle, 'id' | 'created_at'> & {
+  seo_title: string
+  seo_description: string
+  seo_keywords: string
+  seo_image_url: string
 }
 
 export default function NewsManagement() {
@@ -91,7 +102,7 @@ export default function NewsManagement() {
     }
   }
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     title: "",
     excerpt: "",
     content: "",
@@ -101,6 +112,10 @@ export default function NewsManagement() {
     read_time: "",
     is_featured: false,
     published: true,
+    seo_title: "",
+    seo_description: "",
+    seo_keywords: "",
+    seo_image_url: "",
   })
 
   // Fetch articles on component mount
@@ -158,6 +173,10 @@ export default function NewsManagement() {
         read_time: "",
         is_featured: false,
         published: true,
+        seo_title: "",
+        seo_description: "",
+        seo_keywords: "",
+        seo_image_url: "",
       })
       toast.success("Article added successfully")
     } catch (error) {
@@ -252,7 +271,13 @@ export default function NewsManagement() {
                           variant="ghost"
                           size="icon"
                           onClick={() => {
-                            setFormData(article)
+                            setFormData({
+                              ...article,
+                              seo_title: article.seo_title || "",
+                              seo_description: article.seo_description || "",
+                              seo_keywords: article.seo_keywords || "",
+                              seo_image_url: article.seo_image_url || "",
+                            })
                             setEditingArticle(article)
                           }}
                         >
@@ -328,6 +353,10 @@ export default function NewsManagement() {
                 read_time: "",
                 is_featured: false,
                 published: true,
+                seo_title: "",
+                seo_description: "",
+                seo_keywords: "",
+                seo_image_url: "",
               })
             }
           }}
@@ -443,6 +472,80 @@ export default function NewsManagement() {
                 <p className="text-sm text-gray-500">
                   Use the toolbar above to format your content, add images, and more.
                 </p>
+              </div>
+
+              {/* SEO Section */}
+              <div className="border-t pt-6">
+                <h3 className="text-lg font-semibold text-[#5E366D] mb-4">SEO Settings (Optional)</h3>
+                <div className="grid gap-4">
+                  {/* SEO Title */}
+                  <div className="space-y-2">
+                    <Label htmlFor="seo_title" className="font-semibold">
+                      SEO Title
+                    </Label>
+                    <Input
+                      id="seo_title"
+                      placeholder="Custom title for search engines (optional)"
+                      className="border-gray-300 focus:border-[#5E366D] focus:ring-[#5E366D]"
+                      value={formData.seo_title || ""}
+                      onChange={(e) => setFormData({ ...formData, seo_title: e.target.value })}
+                    />
+                    <p className="text-sm text-gray-500">
+                      Leave empty to use the article title. Recommended length: 50-60 characters.
+                    </p>
+                  </div>
+
+                  {/* SEO Description */}
+                  <div className="space-y-2">
+                    <Label htmlFor="seo_description" className="font-semibold">
+                      SEO Description
+                    </Label>
+                    <Textarea
+                      id="seo_description"
+                      placeholder="Custom description for search engines (optional)"
+                      className="border-gray-300 focus:border-[#5E366D] focus:ring-[#5E366D] min-h-[80px]"
+                      value={formData.seo_description || ""}
+                      onChange={(e) => setFormData({ ...formData, seo_description: e.target.value })}
+                    />
+                    <p className="text-sm text-gray-500">
+                      Leave empty to use the article excerpt. Recommended length: 150-160 characters.
+                    </p>
+                  </div>
+
+                  {/* SEO Keywords */}
+                  <div className="space-y-2">
+                    <Label htmlFor="seo_keywords" className="font-semibold">
+                      SEO Keywords
+                    </Label>
+                    <Input
+                      id="seo_keywords"
+                      placeholder="Comma-separated keywords (optional)"
+                      className="border-gray-300 focus:border-[#5E366D] focus:ring-[#5E366D]"
+                      value={formData.seo_keywords || ""}
+                      onChange={(e) => setFormData({ ...formData, seo_keywords: e.target.value })}
+                    />
+                    <p className="text-sm text-gray-500">
+                      Example: Legend Holding Group, automotive, UAE, innovation, sustainability
+                    </p>
+                  </div>
+
+                  {/* SEO Image URL */}
+                  <div className="space-y-2">
+                    <Label htmlFor="seo_image_url" className="font-semibold">
+                      SEO Image URL
+                    </Label>
+                    <Input
+                      id="seo_image_url"
+                      placeholder="Custom image for social sharing (optional)"
+                      className="border-gray-300 focus:border-[#5E366D] focus:ring-[#5E366D]"
+                      value={formData.seo_image_url || ""}
+                      onChange={(e) => setFormData({ ...formData, seo_image_url: e.target.value })}
+                    />
+                    <p className="text-sm text-gray-500">
+                      Leave empty to use the article image. Recommended size: 1200x630 pixels.
+                    </p>
+                  </div>
+                </div>
               </div>
 
               {/* Checkboxes Section */}
