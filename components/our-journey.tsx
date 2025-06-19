@@ -50,7 +50,7 @@ export function OurJourney() {
       title: "Legend Motors FZCO",
       description:
         "Established our first automotive company in the free zone, marking our entry into the automotive industry with our first showroom.",
-      image: "https://cdn.legendholding.com/images/cloudinary/cloudinary_683eab0e39b1c2.37745865_20250603_075806.webp",
+      image: "https://cdn.legendholding.com/images/cdn_6853a97083e772.65742425_20250619_060848.jpeg",
       icon: <Car className="w-6 h-6" />,
       color: "#6d28d9",
       achievements: ["Legend Motors FZCO", "Legend Motors Br-1 (268)", "Automotive Industry Entry"],

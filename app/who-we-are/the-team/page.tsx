@@ -111,6 +111,12 @@ export default function LeadershipTeam() {
                   image: "https://cdn.legendholding.com/images/cdn_684a90f5e5e897.26452583_20250612_083357.jpg"
                 },
                 {
+                  name: "Xiaolong Ma",
+                  role: "Branch Manager - KSA",
+                  company: "Legend Commercial Vehicles",
+                  image: "https://cdn.legendholding.com/images/cdn_6853a98c806019.78549307_20250619_060916.png"
+                },
+                {
                   name: "Liu Xiaochen",
                   role: "General Manager | Operations",
                   company: "Legend Travel and Tourism",

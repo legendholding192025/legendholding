@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Toaster } from 'sonner'
 import CookieConsent from "@/components/cookie-consent"
+import { ScrollToTop } from "@/components/scroll-to-top"
 
 import './globals.css'
 import { brandFont } from './fonts'
@@ -24,6 +25,7 @@ export default function RootLayout({
         {children}
         <Toaster position="top-right" />
         <CookieConsent />
+        <ScrollToTop />
       </body>
     </html>
   )
