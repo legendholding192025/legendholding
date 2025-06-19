@@ -82,7 +82,14 @@ export default function NewsManagement() {
       'bold italic forecolor | alignleft aligncenter ' +
       'alignright alignjustify | bullist numlist outdent indent | ' +
       'removeformat | image media | help',
-    content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+    content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+    promotion: false,
+    branding: false,
+    setup: function(editor: any) {
+      editor.on('init', function() {
+        editor.getContainer().style.visibility = 'visible';
+      });
+    }
   }
 
   // Handle editor content change
@@ -463,10 +470,10 @@ export default function NewsManagement() {
                 <div className="border rounded-md overflow-hidden">
                   <Editor
                     id="content"
-                    apiKey="yskbz96z5yqtsgand5dgq29lr1ju0xilsvyo0phv6b1xnkqq"
                     init={editorConfig}
                     value={formData.content}
                     onEditorChange={handleEditorChange}
+                    tinymceScriptSrc="/tinymce/tinymce.min.js"
                   />
                 </div>
                 <p className="text-sm text-gray-500">

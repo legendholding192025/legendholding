@@ -9,6 +9,14 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
+  async rewrites() {
+    return [
+      {
+        source: '/tinymce/:path*',
+        destination: '/tinymce/:path*',
+      },
+    ]
+  },
 }
 
 export default nextConfig
