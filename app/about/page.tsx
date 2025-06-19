@@ -13,7 +13,7 @@ export default function AboutPage() {
         {/* Background Image */}
         <div className="absolute inset-0 w-full h-full z-0">
           <Image
-            src="https://res.cloudinary.com/dckrspiqe/image/upload/v1748417832/about-us_yzut9i.png"
+            src="https://cdn.legendholding.com/images/cloudinary/cloudinary_683d3c6534d604.31267381_20250602_055341.png"
             alt="About Us Background"
             fill
             className="object-cover object-center opacity-100"
@@ -54,7 +54,7 @@ export default function AboutPage() {
           <div className="w-full flex justify-center">
             <div className="relative w-full max-w-2xl aspect-[2.5/1] md:aspect-[2.8/1]">
               <Image
-                src="https://res.cloudinary.com/dckrspiqe/image/upload/v1748418916/lumo_rlzjdt.png"
+                src="https://cdn.legendholding.com/images/cdn_683e937dd5c436.17836257_20250603_061733.png"
                 alt="About Us Illustration"
                 fill
                 className="object-contain object-center select-none pointer-events-none"
