@@ -68,7 +68,7 @@ export function ScrollToTop() {
       <button
         onClick={scrollToTop}
         className={cn(
-          "group relative w-14 h-14 bg-[#5E366D] hover:bg-[#EE8900] text-white rounded-full",
+          "group relative w-12 h-12 md:w-14 md:h-14 bg-[#5E366D] hover:bg-[#EE8900] text-white rounded-full",
           "shadow-lg hover:shadow-xl transition-all duration-300",
           "flex items-center justify-center",
           "transform hover:scale-110 active:scale-95"
@@ -102,23 +102,7 @@ export function ScrollToTop() {
         </svg>
         
         {/* Icon */}
-        <ChevronUp className="w-6 h-6 relative z-10 group-hover:transform group-hover:-translate-y-0.5 transition-transform duration-300" />
-        
-        {/* Tooltip */}
-        <div className="absolute bottom-full right-0 mb-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-          <div className="bg-gray-900 text-white text-sm px-3 py-2 rounded-lg whitespace-nowrap">
-            <div className="flex items-center gap-2">
-              <span>Scroll to top</span>
-              <span className="text-xs text-gray-300">({Math.round(scrollProgress)}%)</span>
-            </div>
-            {/* Triangle pointer */}
-            <div className="absolute -bottom-1 right-4 w-0 h-0 
-              border-l-[4px] border-l-transparent
-              border-t-[4px] border-t-gray-900
-              border-r-[4px] border-r-transparent">
-            </div>
-          </div>
-        </div>
+        <ChevronUp className="w-5 h-5 md:w-6 md:h-6 relative z-10 group-hover:transform group-hover:-translate-y-0.5 transition-transform duration-300" />
       </button>
     </div>
   )
