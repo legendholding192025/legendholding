@@ -105,7 +105,7 @@ export function OurJourney() {
     },
     {
       year: 2014,
-      title: "Legend Motors",
+      title: "Legend Motors Expansion",
       description:
         "Expanded our automotive portfolio with multiple brands and opened our second showroom, offering customers a wider range of choices.",
       image: "https://cdn.legendholding.com/images/cdn_68469ed48dcd56.80212229_20250609_084404.jpg",
@@ -165,7 +165,7 @@ export function OurJourney() {
     },
     {
       year: 2021,
-      title: "Service Excellence",
+      title: "New Industry Entrance",
       description:
         "Expanded with our fourth showroom and comprehensive automotive services, including rental and maintenance solutions.",
       image: "https://cdn.legendholding.com/images/cdn_6846a290084766.80604483_20250609_090000.jpg",
@@ -175,17 +175,17 @@ export function OurJourney() {
     },
     {
       year: 2022,
-      title: "Legend Motors - Dealership",
+      title: "Legend Motors - Dealerships",
       description:
         "Secured multiple prestigious dealerships including Skywell, Kaiyi, Lifan, and Li Auto, embracing the future of sustainable transportation.",
       image: "https://cdn.legendholding.com/images/cdn_6854fcb990fac6.50629202_20250620_061625.webp",
       icon: <Award className="w-6 h-6" />,
       color: "#6d28d9",
-      achievements: ["Skywell Dealership", "Kaiyi & Lifan Partnerships", "Li Auto & Project 212"],
+      achievements: ["Skywell Dealership", "Kaiyi & 212 Partnerships", "Lifan"],
     },
     {
       year: 2023,
-      title: "Headquarter Operations",
+      title: "Sustainability and Logistics",
       description:
         "Opened our fifth showroom in Jebel Ali and launched green energy solutions alongside comprehensive logistics services.",
       image: "https://cdn.legendholding.com/images/cdn_6846a1c8f3d8c5.57982348_20250609_085640.jpg",
