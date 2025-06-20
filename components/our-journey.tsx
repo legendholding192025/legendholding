@@ -26,6 +26,7 @@ const ITEM_WIDTH = 120
 export function OurJourney() {
   const [activeYearIndex, setActiveYearIndex] = useState(0)
   const [isScrolling, setIsScrolling] = useState(false)
+  const [showTimeline, setShowTimeline] = useState(false)
   const timelineRef = useRef<HTMLDivElement>(null)
   const sectionsRef = useRef<Array<HTMLDivElement | null>>([])
   const scrollTimeoutRef = useRef<NodeJS.Timeout | undefined>(undefined)
@@ -202,7 +203,17 @@ export function OurJourney() {
     const handleScroll = () => {
       if (!ticking && !isScrolling) {
         requestAnimationFrame(() => {
-          const scrollPosition = window.scrollY + TIMELINE_HEIGHT
+          const scrollY = window.scrollY
+          
+          // Show timeline when scrolling down past first section
+          if (scrollY > 100) {
+            setShowTimeline(true)
+          } else {
+            setShowTimeline(false)
+          }
+
+          // Calculate scroll position for section detection
+          const scrollPosition = showTimeline ? scrollY + TIMELINE_HEIGHT + 20 : scrollY + 100
 
           sectionsRef.current.forEach((section, index) => {
             if (section) {
@@ -229,24 +240,29 @@ export function OurJourney() {
         clearTimeout(scrollTimeoutRef.current)
       }
     }
-  }, [activeYearIndex, isScrolling])
+  }, [activeYearIndex, isScrolling, showTimeline])
 
   // Update timeline scroll position when active year changes
   useEffect(() => {
-    scrollToActiveYear(activeYearIndex)
-  }, [activeYearIndex, scrollToActiveYear])
+    if (showTimeline) {
+      scrollToActiveYear(activeYearIndex)
+    }
+  }, [activeYearIndex, scrollToActiveYear, showTimeline])
 
   return (
     <>
       <Header />
       <div className="relative w-full overflow-x-hidden">
-        {/* Enhanced Timeline Header */}
-        <div
+        {/* Enhanced Timeline Header - Only show when scrolling */}
+        <motion.div
           className="fixed top-0 left-0 right-0 z-50 shadow-lg backdrop-blur-sm"
           style={{ 
             height: `${TIMELINE_HEIGHT}px`,
             backgroundColor: '#5E366D'
           }}
+          initial={{ y: -TIMELINE_HEIGHT }}
+          animate={{ y: showTimeline ? 0 : -TIMELINE_HEIGHT }}
+          transition={{ duration: 0.3, ease: "easeInOut" }}
         >
           <div className="h-full flex items-center">
             <div
@@ -254,7 +270,7 @@ export function OurJourney() {
               className="flex items-center overflow-x-auto scrollbar-hide w-full px-4"
               style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
             >
-              <div className="flex items-center space-x-6 mx-auto">
+              <div className="flex items-center space-x-4 md:space-x-6 mx-auto">
                 {milestones.map((milestone, index) => (
                   <button
                     key={milestone.year}
@@ -263,7 +279,7 @@ export function OurJourney() {
                       scrollToSection(index)
                     }}
                     className={cn(
-                      "flex flex-col items-center min-w-[100px] transition-all duration-300 py-2 px-4 rounded-xl group",
+                      "flex flex-col items-center min-w-[80px] md:min-w-[100px] transition-all duration-300 py-2 px-3 md:px-4 rounded-xl group",
                       index === activeYearIndex
                         ? "bg-white text-[#5E366D] scale-110 shadow-lg"
                         : "hover:bg-white/20 text-white hover:scale-105",
@@ -272,8 +288,8 @@ export function OurJourney() {
                   >
                     <span
                       className={cn(
-                        "font-bold text-lg transition-all duration-300",
-                        index === activeYearIndex ? "text-[#5E366D] text-xl" : "text-white/95 group-hover:text-white",
+                        "font-bold text-sm md:text-lg transition-all duration-300",
+                        index === activeYearIndex ? "text-[#5E366D] text-base md:text-xl" : "text-white/95 group-hover:text-white",
                       )}
                     >
                       {milestone.year}
@@ -291,7 +307,7 @@ export function OurJourney() {
               </div>
             </div>
           </div>
-        </div>
+        </motion.div>
 
         {/* Enhanced Sections */}
         <div className="w-full">
@@ -300,7 +316,10 @@ export function OurJourney() {
               key={milestone.year}
               ref={(el) => setSectionRef(el as HTMLDivElement | null, index)}
               className="relative w-full"
-              style={{ height: `100vh` }}
+              style={{ 
+                height: `100vh`,
+                minHeight: '100vh'
+              }}
               aria-label={`${milestone.year} - ${milestone.title}`}
             >
               <div className="relative w-full h-full">
@@ -327,39 +346,16 @@ export function OurJourney() {
                       viewport={{ once: true, amount: 0.3 }}
                       className="space-y-8"
                     >
-                      {/* Scroll Down Indicator - Only show on first section */}
-                      {index === 0 && (
-                        <motion.div 
-                          className="absolute -top-40 left-0 right-0 mx-auto w-fit cursor-pointer"
-                          initial={{ opacity: 0, y: -20 }}
-                          animate={{ 
-                            opacity: 1, 
-                            y: 0,
-                          }}
-                          transition={{
-                            duration: 1.5,
-                            repeat: Infinity,
-                            repeatType: "reverse",
-                          }}
-                          onClick={() => scrollToSection(1)}
-                        >
-                          <div className="flex flex-col items-center text-white gap-1">
-                            <span className="text-base md:text-lg font-medium tracking-wider">Scroll Down</span>
-                            <ChevronDown className="w-5 h-5 text-[#F08900]" />
-                          </div>
-                        </motion.div>
-                      )}
-
                       {/* Title Section - Moved to top */}
                       <motion.div
-                        className="mb-12"
+                        className="mb-8 md:mb-12"
                         initial={{ opacity: 0, y: -30 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6, delay: 0.4 }}
                       >
-                        <div className="flex items-start justify-start gap-6">
+                        <div className="flex items-start justify-start gap-4 md:gap-6">
                           <motion.div
-                            className="bg-[#F08900] p-4 rounded-2xl shadow-2xl mt-0.5"
+                            className="bg-[#F08900] p-3 md:p-4 rounded-2xl shadow-2xl mt-0.5"
                             whileHover={{ scale: 1.1, rotate: 5 }}
                             transition={{ duration: 0.3 }}
                           >
@@ -367,13 +363,13 @@ export function OurJourney() {
                           </motion.div>
                           <div className="text-left">
                             <motion.h1
-                              className="text-3xl md:text-5xl lg:text-6xl font-bold leading-tight font-[var(--heading-font)]"
+                              className="text-2xl md:text-5xl lg:text-6xl font-bold leading-tight font-[var(--heading-font)]"
                             >
                               {milestone.title}
                             </motion.h1>
                             <Badge
                               variant="secondary"
-                              className="text-lg md:text-xl px-6 py-3 bg-[#F08900]/95 text-white hover:bg-[#F08900] shadow-lg border-0 font-[var(--body-font)] mt-3"
+                              className="text-base md:text-xl px-4 md:px-6 py-2 md:py-3 bg-[#F08900]/95 text-white hover:bg-[#F08900] shadow-lg border-0 font-[var(--body-font)] mt-2 md:mt-3"
                             >
                               {milestone.year}
                             </Badge>
@@ -383,17 +379,17 @@ export function OurJourney() {
 
                       {/* Enhanced Description and Achievements */}
                       <motion.div
-                        className="space-y-6 max-w-5xl mx-auto"
+                        className="space-y-4 md:space-y-6 max-w-5xl mx-auto"
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6, delay: 0.6 }}
                       >
-                        <p className="text-lg md:text-xl lg:text-2xl leading-relaxed text-gray-100 font-[var(--body-font)]">
+                        <p className="text-base md:text-xl lg:text-2xl leading-relaxed text-gray-100 font-[var(--body-font)]">
                           {milestone.description}
                         </p>
                         
                         {/* Bullet Points Achievements Display */}
-                        <div className="mt-8 space-y-3">
+                        <div className="mt-6 md:mt-8 space-y-2 md:space-y-3">
                           {milestone.achievements.map((achievement, achievementIndex) => (
                             <motion.div
                               key={achievement}
@@ -401,9 +397,9 @@ export function OurJourney() {
                               whileInView={{ opacity: 1, x: 0 }}
                               transition={{ delay: 0.7 + achievementIndex * 0.1, duration: 0.5 }}
                               viewport={{ once: true }}
-                              className="flex items-center gap-3 text-lg md:text-xl text-white/90 font-medium font-[var(--body-font)]"
+                              className="flex items-center gap-3 text-base md:text-xl text-white/90 font-medium font-[var(--body-font)]"
                             >
-                              <div className="w-2 h-2 rounded-full bg-[#F08900]" />
+                              <div className="w-2 h-2 rounded-full bg-[#F08900] flex-shrink-0" />
                               {achievement}
                             </motion.div>
                           ))}
@@ -412,6 +408,29 @@ export function OurJourney() {
                     </motion.div>
                   </div>
                 </div>
+
+                {/* Scroll Down Indicator - Only show on first section */}
+                {index === 0 && (
+                  <motion.div 
+                    className="absolute left-0 right-0 mx-auto w-fit cursor-pointer top-20 md:top-10"
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={{ 
+                      opacity: 1, 
+                      y: 0,
+                    }}
+                    transition={{
+                      duration: 1.5,
+                      repeat: Infinity,
+                      repeatType: "reverse",
+                    }}
+                    onClick={() => scrollToSection(1)}
+                  >
+                    <div className="flex flex-col items-center text-white gap-1">
+                      <span className="text-sm md:text-lg font-medium tracking-wider">Scroll Down</span>
+                      <ChevronDown className="w-4 h-4 md:w-5 md:h-5 text-[#F08900]" />
+                    </div>
+                  </motion.div>
+                )}
               </div>
             </section>
           ))}
