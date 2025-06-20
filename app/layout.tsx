@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import { Toaster } from 'sonner'
 import CookieConsent from "@/components/cookie-consent"
 import { ScrollToTop } from "@/components/scroll-to-top"
+import GoogleTagManager from "@/components/GoogleTagManager"
+import PageTracker from "@/components/PageTracker"
 
 import './globals.css'
 import { brandFont } from './fonts'
@@ -22,6 +24,8 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
       </head>
       <body className="font-brand min-h-screen bg-background antialiased overflow-x-hidden">
+        <GoogleTagManager />
+        <PageTracker />
         {children}
         <Toaster position="top-right" />
         <CookieConsent />

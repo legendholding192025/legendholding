@@ -48,7 +48,7 @@ export function OurJourney() {
     },
     {
       year: 2013,
-      title: "Legend Motors FZCO",
+      title: "Legend Motors - Trading",
       description:
         "Established our first automotive company in the free zone, marking our entry into the automotive industry with our first showroom.",
       image: "https://cdn.legendholding.com/images/cdn_6854fb071811c6.44383277_20250620_060911.webp",
@@ -58,7 +58,7 @@ export function OurJourney() {
     },
     {
       year: 2014,
-      title: "Multi-Brand Expansion",
+      title: "Legend Motors",
       description:
         "Expanded our automotive portfolio with multiple brands and opened our second showroom, offering customers a wider range of choices.",
       image: "https://cdn.legendholding.com/images/cdn_68469ed48dcd56.80212229_20250609_084404.jpg",
@@ -128,7 +128,7 @@ export function OurJourney() {
     },
     {
       year: 2022,
-      title: "Electric Vehicle Revolution",
+      title: "Legend Motors - Dealership",
       description:
         "Secured multiple prestigious dealerships including Skywell, Kaiyi, Lifan, and Li Auto, embracing the future of sustainable transportation.",
       image: "https://cdn.legendholding.com/images/cdn_6854fcb990fac6.50629202_20250620_061625.webp",
@@ -138,7 +138,7 @@ export function OurJourney() {
     },
     {
       year: 2023,
-      title: "Sustainable Innovation",
+      title: "Headquarter Operations",
       description:
         "Opened our fifth showroom in Jebel Ali and launched green energy solutions alongside comprehensive logistics services.",
       image: "https://cdn.legendholding.com/images/cdn_6846a1c8f3d8c5.57982348_20250609_085640.jpg",
