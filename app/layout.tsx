@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { Suspense } from 'react'
 import { Toaster } from 'sonner'
 import CookieConsent from "@/components/cookie-consent"
 import { ScrollToTop } from "@/components/scroll-to-top"
@@ -25,7 +26,9 @@ export default function RootLayout({
       </head>
       <body className="font-brand min-h-screen bg-background antialiased overflow-x-hidden">
         <GoogleTagManager />
-        <PageTracker />
+        <Suspense fallback={null}>
+          <PageTracker />
+        </Suspense>
         {children}
         <Toaster position="top-right" />
         <CookieConsent />
