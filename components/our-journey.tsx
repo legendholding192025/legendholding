@@ -27,6 +27,8 @@ export function OurJourney() {
   const [activeYearIndex, setActiveYearIndex] = useState(0)
   const [isScrolling, setIsScrolling] = useState(false)
   const [showTimeline, setShowTimeline] = useState(false)
+  const [lastScrollY, setLastScrollY] = useState(0)
+  const [isScrollingUp, setIsScrollingUp] = useState(false)
   const timelineRef = useRef<HTMLDivElement>(null)
   const sectionsRef = useRef<Array<HTMLDivElement | null>>([])
   const scrollTimeoutRef = useRef<NodeJS.Timeout | undefined>(undefined)
@@ -34,6 +36,51 @@ export function OurJourney() {
   const setSectionRef = useCallback((el: HTMLDivElement | null, index: number) => {
     sectionsRef.current[index] = el
   }, [])
+
+  // Override header scroll behavior for this page
+  useEffect(() => {
+    let lastScrollY = 0;
+    
+    const handleHeaderScroll = () => {
+      const currentScrollY = window.scrollY;
+      const isScrollingUp = currentScrollY < lastScrollY;
+      const isAtTop = currentScrollY <= 100;
+      
+      const header = document.querySelector('header');
+      if (header) {
+        if (isAtTop) {
+          // Show header when at the top
+          header.classList.remove('-translate-y-full');
+          header.style.transform = 'translateY(0) !important';
+          header.style.visibility = 'visible';
+          header.style.opacity = '1';
+        } else {
+          // Hide header when scrolling (both up and down)
+          header.classList.add('-translate-y-full');
+          header.style.transform = 'translateY(-100%) !important';
+          header.style.visibility = 'hidden';
+          header.style.opacity = '0';
+        }
+      }
+      
+      lastScrollY = currentScrollY;
+    };
+
+    // Run immediately and on scroll
+    handleHeaderScroll();
+    window.addEventListener('scroll', handleHeaderScroll, { passive: true });
+    
+    return () => {
+      window.removeEventListener('scroll', handleHeaderScroll);
+      // Restore header visibility when leaving the page
+      const header = document.querySelector('header');
+      if (header) {
+        header.style.transform = '';
+        header.style.visibility = '';
+        header.style.opacity = '';
+      }
+    };
+  }, []);
 
   const milestones: MilestoneType[] = [
     {
@@ -196,7 +243,7 @@ export function OurJourney() {
     }
   }, [])
 
-  // Optimized scroll detection with throttling
+  // Optimized scroll detection with throttling and direction detection
   useEffect(() => {
     let ticking = false
 
@@ -204,8 +251,13 @@ export function OurJourney() {
       if (!ticking && !isScrolling) {
         requestAnimationFrame(() => {
           const scrollY = window.scrollY
+          const isUp = scrollY < lastScrollY
           
-          // Show timeline when scrolling down past first section
+          // Update scroll direction
+          setIsScrollingUp(isUp)
+          setLastScrollY(scrollY)
+          
+          // Show timeline when past 100px (both scrolling up and down), hide only at top
           if (scrollY > 100) {
             setShowTimeline(true)
           } else {
@@ -213,7 +265,7 @@ export function OurJourney() {
           }
 
           // Calculate scroll position for section detection
-          const scrollPosition = showTimeline ? scrollY + TIMELINE_HEIGHT + 20 : scrollY + 100
+          const scrollPosition = scrollY + 100
 
           sectionsRef.current.forEach((section, index) => {
             if (section) {
@@ -240,7 +292,7 @@ export function OurJourney() {
         clearTimeout(scrollTimeoutRef.current)
       }
     }
-  }, [activeYearIndex, isScrolling, showTimeline])
+  }, [activeYearIndex, isScrolling, lastScrollY])
 
   // Update timeline scroll position when active year changes
   useEffect(() => {
@@ -252,6 +304,18 @@ export function OurJourney() {
   return (
     <>
       <Header />
+      <style jsx global>{`
+        /* Header behavior for this page */
+        header {
+          transition: transform 0.3s ease, opacity 0.3s ease, visibility 0.3s ease !important;
+        }
+        /* Hide header when scrolling */
+        header.-translate-y-full {
+          transform: translateY(-100%) !important;
+          visibility: hidden !important;
+          opacity: 0 !important;
+        }
+      `}</style>
       <div className="relative w-full overflow-x-hidden">
         {/* Enhanced Timeline Header - Only show when scrolling */}
         <motion.div

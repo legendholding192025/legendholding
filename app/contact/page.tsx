@@ -138,7 +138,7 @@ export default function ContactPage() {
         <section className="bg-slate-100 py-16 px-4 sm:px-6">
           <div className="max-w-7xl mx-auto">
             <div className="px-2 sm:px-0">
-              <h1 className="text-4xl font-bold text-gray-900 mb-2">Get in Touch</h1>
+              <h1 className="text-4xl font-bold text-[#5D376E] mb-2">Get in Touch</h1>
               <p className="text-lg text-gray-600 mb-6">
                 Visit our office or reach out to us through any of the following channels.
               </p>
