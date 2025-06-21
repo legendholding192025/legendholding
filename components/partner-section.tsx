@@ -26,15 +26,20 @@ export function PartnerSection() {
   const carouselRef = useRef<HTMLDivElement>(null)
   const [scrollPosition, setScrollPosition] = useState(0)
   const [isVisible, setIsVisible] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
 
-  const isMobile = useMediaQuery("(max-width: 640px)")
+  const isMobileQuery = useMediaQuery("(max-width: 640px)")
   const isTablet = useMediaQuery("(min-width: 641px) and (max-width: 100% )")
 
   // Determine how many partners to show based on screen size
-  const partnersToShow = isMobile ? 2 : isTablet ? 3 : 6
+  const partnersToShow = isMobileQuery ? 2 : isTablet ? 3 : 6
 
   // Create extended array for infinite scroll
   const extendedPartners = [...partners, ...partners, ...partners]
+
+  useEffect(() => {
+    setIsMobile(window.innerWidth < 768)
+  }, [])
 
   useEffect(() => {
     let animationId: number
@@ -120,7 +125,7 @@ export function PartnerSection() {
                   key={`${partner.id}-${index}`}
                   className={cn(
                     "flex-shrink-0 px-2 flex items-center justify-center transition-transform duration-300",
-                    isMobile ? "w-1/2" : isTablet ? "w-1/3" : "w-1/6"
+                    isMobileQuery ? "w-1/2" : isTablet ? "w-1/3" : "w-1/6"
                   )}
                 >
                   <div className="rounded-lg p-4 h-28 flex items-center justify-center border transition-all duration-300 mx-1 bg-white hover:shadow-md border-gray-200">
@@ -189,15 +194,15 @@ export function PartnerSection() {
             <div 
               className="absolute w-3 h-3 sm:w-4 sm:h-4 md:w-6 md:h-6 border-l-2 border-t-2 border-[#2B1C48]/30"
               style={{ 
-                left: window.innerWidth < 768 ? '20px' : '120px', 
-                top: window.innerWidth < 768 ? '-5px' : '-10px' 
+                left: isMobile ? '20px' : '120px', 
+                top: isMobile ? '-5px' : '-10px' 
               }}
             ></div>
             <div 
               className="absolute w-3 h-3 sm:w-4 sm:h-4 md:w-6 md:h-6 border-r-2 border-b-2 border-[#2B1C48]/30"
               style={{ 
-                right: window.innerWidth < 768 ? '20px' : '120px', 
-                bottom: window.innerWidth < 768 ? '-5px' : '-10px' 
+                right: isMobile ? '20px' : '120px', 
+                bottom: isMobile ? '-5px' : '-10px' 
               }}
             ></div>
           </div>
