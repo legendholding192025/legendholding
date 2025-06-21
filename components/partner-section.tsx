@@ -186,8 +186,20 @@ export function PartnerSection() {
             </p>
             
             {/* Decorative Elements */}
-            <div className="absolute -left-2 sm:-left-3 md:-left-4 -top-2 sm:-top-3 md:-top-4 w-4 h-4 sm:w-6 sm:h-6 md:w-8 md:h-8 border-l-2 border-t-2 border-[#2B1C48]/30"></div>
-            <div className="absolute -right-2 sm:-right-3 md:-right-4 -bottom-2 sm:-bottom-3 md:-bottom-4 w-4 h-4 sm:w-6 sm:h-6 md:w-8 md:h-8 border-r-2 border-b-2 border-[#2B1C48]/30"></div>
+            <div 
+              className="absolute w-3 h-3 sm:w-4 sm:h-4 md:w-6 md:h-6 border-l-2 border-t-2 border-[#2B1C48]/30"
+              style={{ 
+                left: window.innerWidth < 768 ? '20px' : '120px', 
+                top: window.innerWidth < 768 ? '-5px' : '-10px' 
+              }}
+            ></div>
+            <div 
+              className="absolute w-3 h-3 sm:w-4 sm:h-4 md:w-6 md:h-6 border-r-2 border-b-2 border-[#2B1C48]/30"
+              style={{ 
+                right: window.innerWidth < 768 ? '20px' : '120px', 
+                bottom: window.innerWidth < 768 ? '-5px' : '-10px' 
+              }}
+            ></div>
           </div>
         </div>
       </section>
