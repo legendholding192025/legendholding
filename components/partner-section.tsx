@@ -7,23 +7,6 @@ import { ArrowRight } from 'lucide-react'
 import { cn } from "@/lib/utils"
 import { useMediaQuery } from "@/hooks/use-media-query"
 
-// Add custom styles for the background
-const backgroundStyles = `
-  .bg-together-we-grow {
-    background-image: url('https://cdn.legendholding.com/images/cloudinary/cloudinary_683ea373547101.30987392_20250603_072539.jpg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-  }
-  
-  @media (max-width: 640px) {
-    .bg-together-we-grow {
-      background-size: cover;
-      background-position: right center;
-    }
-  }
-`
-
 const partners = [
     { id: 1, logo: 'https://cdn.legendholding.com/images/cdn_683eb86e45e183.72081489_20250603_085510.jpg', name: 'Partner 1' },
     { id: 2, logo: 'https://cdn.legendholding.com/images/cdn_683eb8920b65a7.63176838_20250603_085546.png', name: 'Partner 2' },
@@ -115,9 +98,6 @@ export function PartnerSection() {
 
   return (
     <>
-      {/* Inject custom styles */}
-      <style jsx>{backgroundStyles}</style>
-      
       <section className="py-12 sm:py-16 bg-white">
         <div className="container mx-auto px-4">
           <div className="flex flex-col items-center mb-12">
@@ -166,9 +146,18 @@ export function PartnerSection() {
       </section>
 
       {/* Animated Text Section - FIXED */}
-      <section 
-        className="py-16 overflow-hidden relative bg-together-we-grow"
-      >
+      <section className="py-16 overflow-hidden relative bg-gray-50 flex items-center justify-center">
+        {/* Responsive Background Image Container */}
+        <div className="absolute inset-0 w-full h-full">
+          <Image
+            src="https://cdn.legendholding.com/images/cloudinary/cloudinary_683ea373547101.30987392_20250603_072539.jpg"
+            alt="Together We Grow Background"
+            fill
+            className="object-contain md:object-cover w-full h-full"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 100vw"
+            priority
+          />
+        </div>
         
         <div 
           id="animated-text"

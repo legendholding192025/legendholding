@@ -52,7 +52,7 @@ export default function Newsletter() {
             <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
               {/* Content Section */}
               <div className="flex-1 text-center lg:text-left space-y-4">
-                <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight">Never miss an update</h2>
+                <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight">Never Miss An Update</h2>
                 <p className="text-lg md:text-xl text-[#5D376E]">
                 Stay connected to the latest news of Legend Holding Group
                 </p>

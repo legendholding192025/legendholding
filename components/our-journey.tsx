@@ -181,7 +181,7 @@ export function OurJourney() {
       image: "https://cdn.legendholding.com/images/cdn_6854fcb990fac6.50629202_20250620_061625.webp",
       icon: <Award className="w-6 h-6" />,
       color: "#6d28d9",
-      achievements: ["Skywell Dealership", "Kaiyi & 212 Partnerships", "Lifan"],
+      achievements: ["Skywell Dealership", "Kaiyi & 212 Dealership", "Lifan Dealership"],
     },
     {
       year: 2023,
