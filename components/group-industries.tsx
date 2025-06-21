@@ -13,12 +13,12 @@ export default function GroupIndustries() {
   const industries = [
     {
       name: "Automotive",
-      image: "https://images.unsplash.com/photo-1567789884554-0b844b597180?auto=format&fit=crop&q=80&w=1000",
+      image: "https://cdn.legendholding.com/images/cdn_685659063a1568.38125193_20250621_070230.png",
       bgColor: "bg-[#2B1C48]",
     },
     {
       name: "Oil & Gas",
-      image: "https://images.unsplash.com/photo-1498084393753-b411b2d26b34?auto=format&fit=crop&q=80&w=1000",
+      image: "https://cdn.legendholding.com/images/cdn_6856599ed32869.86610075_20250621_070502.png",
       bgColor: "bg-[#5D376E]",
     },
     {
@@ -29,18 +29,18 @@ export default function GroupIndustries() {
     },
     {
       name: "Technology",
-      image: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&q=80&w=1000",
+      image: "https://cdn.legendholding.com/images/cdn_68565a0f82d193.91550960_20250621_070655.png",
       bgColor: "bg-[#EE8900]/80",
       textColor: "text-white",
     },
     {
       name: "Logistics",
-      image: "https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&q=80&w=1000",
+      image: "https://cdn.legendholding.com/images/cdn_685659e09b90b7.91237605_20250621_070608.png",
       bgColor: "bg-[#2B1C48]",
     },
     {
       name: "Media",
-      image: "https://images.unsplash.com/photo-1495020689067-958852a7765e?auto=format&fit=crop&q=80&w=1000",
+      image: "https://cdn.legendholding.com/images/cdn_685659f636c781.49320953_20250621_070630.png",
       bgColor: "bg-[#5D376E]",
     },
   ]

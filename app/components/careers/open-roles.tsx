@@ -40,7 +40,7 @@ export default function OpenRoles() {
                 </div>
 
                 <div className="flex-1">
-                  <h3 className="text-2xl md:text-3xl font-bold text-[#2B1C48] mb-4">Explore open roles</h3>
+                  <h3 className="text-2xl md:text-3xl font-bold text-[#2B1C48] mb-4">Explore Open Roles</h3>
                   <p className="text-base md:text-xl text-gray-600 mb-6 leading-relaxed">
                     Discover exciting career opportunities across our diverse industries and find the perfect role to advance
                     your career.
