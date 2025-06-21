@@ -146,15 +146,25 @@ export function PartnerSection() {
       </section>
 
       {/* Animated Text Section - FIXED */}
-      <section className="py-16 overflow-hidden relative bg-gray-50 flex items-center justify-center">
+      <section className="py-8 sm:py-12 md:py-16 overflow-hidden relative bg-gray-50 flex items-center justify-center">
         {/* Responsive Background Image Container */}
         <div className="absolute inset-0 w-full h-full">
+          {/* Mobile Background Image */}
+          <Image
+            src="https://cdn.legendholding.com/images/cdn_68564e06066870.03563987_20250621_061534.jpg"
+            alt="Together We Grow Background"
+            fill
+            className="object-cover w-full h-full lg:hidden"
+            sizes="100vw"
+            priority
+          />
+          {/* Desktop Background Image */}
           <Image
             src="https://cdn.legendholding.com/images/cloudinary/cloudinary_683ea373547101.30987392_20250603_072539.jpg"
             alt="Together We Grow Background"
             fill
-            className="object-contain md:object-cover w-full h-full"
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 100vw"
+            className="object-cover w-full h-full hidden lg:block"
+            sizes="100vw"
             priority
           />
         </div>
@@ -162,21 +172,22 @@ export function PartnerSection() {
         <div 
           id="animated-text"
           className={cn(
-            "container mx-auto px-4 text-center transform transition-all duration-1000 relative z-10",
+            "container mx-auto px-3 sm:px-4 text-center transform transition-all duration-1000 relative z-10",
+            "max-w-xs sm:max-w-sm md:max-w-md lg:max-w-2xl xl:max-w-4xl",
             isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
           )}
         >
           <div className="relative">
-            <h2 className="text-3xl sm:text-4xl font-bold text-[#EE8900] mb-4 animate-float">
+            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-[#EE8900] mb-2 sm:mb-3 md:mb-4 animate-float">
               Together We Grow
             </h2>
-            <p className="text-lg md:text-xl text-[#5E366D] max-w-2xl mx-auto animate-float-delayed">
+            <p className="text-sm sm:text-base md:text-lg lg:text-xl text-[#5E366D] max-w-xs sm:max-w-sm md:max-w-md lg:max-w-2xl mx-auto animate-float-delayed leading-relaxed">
               Building partnerships that drive success and innovation
             </p>
             
             {/* Decorative Elements */}
-            <div className="absolute -left-4 -top-4 w-8 h-8 border-l-2 border-t-2 border-[#2B1C48]/30"></div>
-            <div className="absolute -right-4 -bottom-4 w-8 h-8 border-r-2 border-b-2 border-[#2B1C48]/30"></div>
+            <div className="absolute -left-2 sm:-left-3 md:-left-4 -top-2 sm:-top-3 md:-top-4 w-4 h-4 sm:w-6 sm:h-6 md:w-8 md:h-8 border-l-2 border-t-2 border-[#2B1C48]/30"></div>
+            <div className="absolute -right-2 sm:-right-3 md:-right-4 -bottom-2 sm:-bottom-3 md:-bottom-4 w-4 h-4 sm:w-6 sm:h-6 md:w-8 md:h-8 border-r-2 border-b-2 border-[#2B1C48]/30"></div>
           </div>
         </div>
       </section>
