@@ -17,17 +17,16 @@ interface Job {
   title: string
   department: string
   location: string
-  type: string
   description: string
   requirements: string[]
   responsibilities: string[]
-  benefits: string[]
-  salary_range?: string
-  experience_level?: string
-  team_size?: number
+  job_type: string
   created_at: string
   status: 'active' | 'inactive'
   company: string
+  benefits?: string[]
+  experience_level?: string
+  team_size?: number | null
 }
 
 export default function JobDetails() {
@@ -48,6 +47,18 @@ export default function JobDetails() {
     try {
       setLoading(true)
       
+      console.log('Fetching job with ID:', jobId)
+      
+      // Check if we have a valid jobId
+      if (!jobId || jobId === 'undefined' || jobId === 'null') {
+        console.error('Invalid job ID:', jobId)
+        toast.error("Invalid job ID")
+        return
+      }
+
+      // Check Supabase client
+      console.log('Supabase client:', supabase)
+      
       // Fetch job details
       const { data: jobData, error: jobError } = await supabase
         .from('jobs')
@@ -55,25 +66,44 @@ export default function JobDetails() {
         .eq('id', jobId)
         .single()
 
-      if (jobError) throw jobError
+      console.log('Supabase response - data:', jobData)
+      console.log('Supabase response - error:', jobError)
+
+      if (jobError) {
+        console.error('Supabase error details:', {
+          message: jobError.message,
+          code: jobError.code,
+          details: jobError.details,
+          hint: jobError.hint,
+          fullError: jobError
+        })
+        throw jobError
+      }
 
       if (!jobData) {
-        console.warn('No job data returned')
+        console.warn('No job data returned for ID:', jobId)
+        toast.error("Job not found")
         return
       }
 
+      console.log('Raw job data:', jobData)
+
       const job = {
         ...jobData,
+        job_type: jobData.job_type || 'Full-time',
+        company: jobData.company || 'Legend Holding Group',
         requirements: Array.isArray(jobData.requirements) ? jobData.requirements : [],
         responsibilities: Array.isArray(jobData.responsibilities) ? jobData.responsibilities : [],
         benefits: Array.isArray(jobData.benefits) ? jobData.benefits : [],
-        company: jobData.company || ''
+        experience_level: jobData.experience_level || '',
+        team_size: jobData.team_size || null
       }
 
+      console.log('Processed job data:', job)
       setJob(job)
 
       // Fetch similar jobs
-      const { data: similarJobsData } = await supabase
+      const { data: similarJobsData, error: similarError } = await supabase
         .from('jobs')
         .select('*')
         .eq('department', job.department)
@@ -81,12 +111,32 @@ export default function JobDetails() {
         .eq('status', 'active')
         .limit(3)
 
+      if (similarError) {
+        console.error('Error fetching similar jobs:', similarError)
+      }
+
       if (similarJobsData) {
         setSimilarJobs(similarJobsData)
       }
 
     } catch (error) {
       console.error('Error in fetchJobDetails:', error)
+      console.error('Error type:', typeof error)
+      console.error('Error constructor:', error?.constructor?.name)
+      console.error('Error details:', {
+        message: (error as any)?.message,
+        code: (error as any)?.code,
+        details: (error as any)?.details,
+        hint: (error as any)?.hint,
+        stack: (error as any)?.stack
+      })
+      
+      // Try to get more specific error information
+      if (error && typeof error === 'object') {
+        console.error('Error keys:', Object.keys(error))
+        console.error('Error stringified:', JSON.stringify(error, null, 2))
+      }
+      
       toast.error("Failed to fetch job details")
     } finally {
       setLoading(false)
@@ -178,7 +228,7 @@ export default function JobDetails() {
                 </div>
                 <div className="flex items-center gap-2">
                   <Clock className="h-5 w-5" />
-                  <span>{job.type}</span>
+                  <span>{job.job_type}</span>
                 </div>
                 {job.experience_level && (
                   <div className="flex items-center gap-2">
@@ -228,14 +278,14 @@ export default function JobDetails() {
                 {/* Job Description */}
                 <section>
                   <h2 className="text-2xl font-semibold text-gray-900 mb-4">Job Description</h2>
-                  <div className="prose max-w-none text-gray-600">
+                  <div className="prose max-w-none text-gray-600 whitespace-pre-wrap">
                     {job.description}
                   </div>
                 </section>
 
-                {/* Key Responsibilities */}
+                {/* Responsibilities */}
                 <section>
-                  <h2 className="text-2xl font-semibold text-gray-900 mb-4">Key Responsibilities</h2>
+                  <h2 className="text-2xl font-semibold text-gray-900 mb-4">Responsibilities</h2>
                   <ul className="space-y-3">
                     {job.responsibilities.map((responsibility, index) => (
                       <li key={index} className="flex gap-3 text-gray-600">
@@ -300,7 +350,7 @@ export default function JobDetails() {
                           </div>
                           <div className="flex items-center gap-2">
                             <Clock className="h-4 w-4" />
-                            <span>{similarJob.type}</span>
+                            <span>{similarJob.job_type}</span>
                           </div>
                         </div>
                       </Link>

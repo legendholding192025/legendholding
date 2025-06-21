@@ -14,7 +14,7 @@ interface Job {
   title: string
   department: string
   location: string
-  type: string
+  job_type: string
   description: string
   requirements: string[]
   responsibilities: string[]
@@ -64,7 +64,8 @@ export default function JobsPage() {
         ...job,
         requirements: Array.isArray(job.requirements) ? job.requirements : [],
         responsibilities: Array.isArray(job.responsibilities) ? job.responsibilities : [],
-        status: job.status || 'active'
+        status: job.status || 'active',
+        company: job.company || ''
       }))
 
       setJobs(validJobs)
@@ -265,7 +266,7 @@ export default function JobsPage() {
                         </div>
                         <div className="flex items-center gap-1">
                           <Clock className="h-4 w-4 text-[#5D376E]" />
-                          <span>{job.type}</span>
+                          <span>{job.job_type}</span>
                         </div>
                       </div>
                     </div>

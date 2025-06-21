@@ -82,10 +82,6 @@ export default function JobsManagement() {
       toast.error("Job title is required")
       return false
     }
-    if (!newJob.company.trim()) {
-      toast.error("Company name is required")
-      return false
-    }
     if (!newJob.department.trim()) {
       toast.error("Department is required")
       return false
@@ -106,6 +102,10 @@ export default function JobsManagement() {
       toast.error("At least one responsibility is needed")
       return false
     }
+    if (!newJob.company.trim()) {
+      toast.error("Company name is required")
+      return false
+    }
     return true
   }
 
@@ -124,23 +124,12 @@ export default function JobsManagement() {
         .map(resp => resp.trim())
         .filter(resp => resp !== '')
 
-      // Include requirements and responsibilities in the description
-      const formattedDescription = `
-${newJob.description}
-
-Requirements:
-${requirements.map(req => `• ${req}`).join('\n')}
-
-Responsibilities:
-${responsibilities.map(resp => `• ${resp}`).join('\n')}
-      `.trim()
-
       // Create the job data object
       const jobData = {
         title: newJob.title,
         department: newJob.department,
         location: newJob.location,
-        description: formattedDescription,
+        description: newJob.description,
         status: newJob.status,
         job_type: newJob.job_type,
         requirements: requirements,
@@ -148,15 +137,15 @@ ${responsibilities.map(resp => `• ${resp}`).join('\n')}
         company: newJob.company
       }
 
-      console.log('Sending job data:', jobData)
-
       const { data, error } = await supabase
         .from('jobs')
         .insert([jobData])
         .select()
 
+      console.log('Supabase response data:', data);
+      console.log('Supabase response error:', error);
+
       if (error) {
-        console.error('Supabase error:', error)
         throw error
       }
 
@@ -178,7 +167,13 @@ ${responsibilities.map(resp => `• ${resp}`).join('\n')}
       fetchJobs()
     } catch (error: any) {
       console.error('Error adding job:', error)
-      toast.error(`Failed to post job: ${error.message || 'Unknown error'}`)
+      console.error('Supabase error details:', {
+          message: error.message,
+          code: error.code,
+          details: error.details,
+          hint: error.hint,
+      })
+      toast.error(`Failed to post job: ${error.message || 'An unknown error occurred'}`)
     }
   }
 
@@ -277,14 +272,14 @@ ${responsibilities.map(resp => `• ${resp}`).join('\n')}
                   id="company"
                   value={newJob.company}
                   onChange={(e) => setNewJob(prev => ({ ...prev, company: e.target.value }))}
-                  placeholder="e.g. Tech Corp"
+                  placeholder="e.g. Legend Motors"
                   required
                 />
               </div>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label htmlFor="department">Department </Label>
+                <Label htmlFor="department">Department *</Label>
                 <Input
                   id="department"
                   value={newJob.department}

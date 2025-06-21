@@ -121,7 +121,7 @@ export function JobsTable({ jobs = [], loading, onDelete, onUpdate }: JobsTableP
           </TableHeader>
           <TableBody>
             {paginatedJobs.map((job, index) => (
-              <TableRow key={job?.id || index}>
+              <TableRow key={job?.id || index} className="hover:bg-gray-50">
                 <TableCell>{startIndex + index + 1}</TableCell>
                 <TableCell className="font-medium">{job?.title || 'N/A'}</TableCell>
                 <TableCell>{job?.company || 'N/A'}</TableCell>
@@ -250,7 +250,7 @@ export function JobsTable({ jobs = [], loading, onDelete, onUpdate }: JobsTableP
                 />
               </div>
               <div>
-                <Label htmlFor="edit-description">Description</Label>
+                <Label htmlFor="edit-description">Job Description</Label>
                 <Textarea
                   id="edit-description"
                   value={editingJob.description}
@@ -260,6 +260,40 @@ export function JobsTable({ jobs = [], loading, onDelete, onUpdate }: JobsTableP
                     )
                   }
                   className="h-32"
+                />
+              </div>
+              <div>
+                <Label htmlFor="edit-requirements">Requirements (one per line)</Label>
+                <Textarea
+                  id="edit-requirements"
+                  value={Array.isArray(editingJob.requirements) ? editingJob.requirements.join('\n') : ''}
+                  onChange={(e) =>
+                    setEditingJob((prev) =>
+                      prev ? { 
+                        ...prev, 
+                        requirements: e.target.value.split('\n').map(req => req.trim()).filter(req => req !== '')
+                      } : null
+                    )
+                  }
+                  className="h-32"
+                  placeholder="Enter each requirement on a new line"
+                />
+              </div>
+              <div>
+                <Label htmlFor="edit-responsibilities">Responsibilities (one per line)</Label>
+                <Textarea
+                  id="edit-responsibilities"
+                  value={Array.isArray(editingJob.responsibilities) ? editingJob.responsibilities.join('\n') : ''}
+                  onChange={(e) =>
+                    setEditingJob((prev) =>
+                      prev ? { 
+                        ...prev, 
+                        responsibilities: e.target.value.split('\n').map(resp => resp.trim()).filter(resp => resp !== '')
+                      } : null
+                    )
+                  }
+                  className="h-32"
+                  placeholder="Enter each responsibility on a new line"
                 />
               </div>
               <div>

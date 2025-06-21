@@ -8,13 +8,12 @@ interface Job {
   title: string
   department: string
   location: string
-  type: string
+  job_type: string
   description: string
   requirements: string[]
   responsibilities: string[]
   created_at: string
   status: 'active' | 'inactive'
-  company: string
 }
 
 interface JobListingsProps {
@@ -101,10 +100,6 @@ export function JobListings({
                   </h3>
                   <div className="flex items-center gap-6 mt-2">
                     <div className="flex items-center gap-2 text-gray-600">
-                      <Building2 className="w-4 h-4" />
-                      <span>{job.company}</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-gray-600">
                       <Briefcase className="w-4 h-4" />
                       <span>{job.department}</span>
                     </div>
@@ -116,7 +111,7 @@ export function JobListings({
                     </span>
                     <span className="inline-flex items-center px-3 py-1.5 rounded-full bg-gray-100 text-gray-800 text-base">
                       <Clock className="w-4 h-4 mr-1" />
-                      {job.type}
+                      {job.job_type}
                     </span>
                   </div>
                 </div>
