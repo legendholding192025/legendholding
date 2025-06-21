@@ -50,7 +50,7 @@ export default function BusinessUnit() {
     },
     {
       name: "Legend Motorcycles",
-      image: "https://cdn.legendholding.com/images/cloudinary/cloudinary_683da00a4a22c3.88022895_20250602_125850.png",
+      image: "https://cdn.legendholding.com/images/cdn_685659c0744167.39065701_20250621_070536.png",
       url: "/our-brands/legend-motorcycles",
       bgColor: "bg-[#EE8900]",
     },
@@ -62,13 +62,13 @@ export default function BusinessUnit() {
     },
     {
       name: "Legend Automobile Services",
-      image: "https://cdn.legendholding.com/images/cdn_6846a290084766.80604483_20250609_090000.jpg",
+      image: "https://cdn.legendholding.com/images/cdn_685659501dfc76.49951087_20250621_070344.png",
       url: "/our-brands/legend-automobile-services",
       bgColor: "bg-[#5D376E]",
     },
     {
       name: "Legend Global Media",
-      image: "https://cdn.legendholding.com/images/cloudinary/cloudinary_683da84af1b770.67607576_20250602_133402.jpg",
+      image: "https://cdn.legendholding.com/images/cdn_685659f636c781.49320953_20250621_070630.png",
       url: "/our-brands/legend-global-media",
       bgColor: "bg-[#5D376E]",
     },
@@ -80,13 +80,13 @@ export default function BusinessUnit() {
     },
     {
       name: "Legend Green Energy Solutions",
-      image: "https://cdn.legendholding.com/images/cloudinary/cloudinary_683d9fb5d95276.90087674_20250602_125725.png",
+      image: "https://cdn.legendholding.com/images/cdn_6856599ed32869.86610075_20250621_070502.png",
       url: "/our-brands/legend-green-energy",
       bgColor: "bg-[#2B1C48]",
     },
     {
       name: "Legend Commercial Vehicles",
-      image: "https://cdn.legendholding.com/images/cdn_683ab636326ef8.83143422_20250531_075638.jpg",
+      image: "https://cdn.legendholding.com/images/cdn_685659607e1e62.29050672_20250621_070400.png",
       url: "/our-brands/legend-commercial-vehicles",
       bgColor: "bg-[#EE8900]/80",
     },
