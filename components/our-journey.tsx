@@ -392,6 +392,9 @@ export function OurJourney() {
                   alt={`${milestone.title} - ${milestone.year}`}
                   fill
                   className="object-cover"
+                  style={{
+                    transform: milestone.title === "Oriental Wiseman General Trading" ? "scale(1.1)" : "scale(1)",
+                  }}
                   sizes="100vw"
                   priority={index < 3}
                   quality={85}

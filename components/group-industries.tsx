@@ -199,6 +199,9 @@ export default function GroupIndustries() {
                         src={industry.image || "/placeholder.svg"}
                         alt={industry.name}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-100"
+                        style={{
+                          transform: industry.name === "Media" || industry.name === "Automotive" ? "scale(1.15)" : "scale(1)",
+                        }}
                       />
                     </div>
 

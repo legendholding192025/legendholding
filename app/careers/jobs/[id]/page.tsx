@@ -309,7 +309,7 @@ export default function JobDetails() {
 
                 {/* Requirements */}
                 <section>
-                  <h2 className="text-2xl font-semibold text-gray-900 mb-4">Requirements</h2>
+                  <h2 className="text-2xl font-semibold text-gray-900 mb-4">Preferred Skills</h2>
                   <ul className="space-y-3">
                     {job.requirements.map((requirement, index) => (
                       <li key={index} className="flex gap-3 text-gray-600">

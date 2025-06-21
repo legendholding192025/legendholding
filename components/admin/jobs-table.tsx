@@ -269,23 +269,6 @@ export function JobsTable({ jobs = [], loading, onDelete, onUpdate }: JobsTableP
                 />
               </div>
               <div>
-                <Label htmlFor="edit-requirements">Requirements (one per line)</Label>
-                <Textarea
-                  id="edit-requirements"
-                  value={Array.isArray(editingJob.requirements) ? editingJob.requirements.join('\n') : ''}
-                  onChange={(e) =>
-                    setEditingJob((prev) =>
-                      prev ? { 
-                        ...prev, 
-                        requirements: e.target.value.split('\n').map(req => req.trim()).filter(req => req !== '')
-                      } : null
-                    )
-                  }
-                  className="h-32"
-                  placeholder="Enter each requirement on a new line"
-                />
-              </div>
-              <div>
                 <Label htmlFor="edit-responsibilities">Responsibilities (one per line)</Label>
                 <Textarea
                   id="edit-responsibilities"
@@ -300,6 +283,23 @@ export function JobsTable({ jobs = [], loading, onDelete, onUpdate }: JobsTableP
                   }
                   className="h-32"
                   placeholder="Enter each responsibility on a new line"
+                />
+              </div>
+              <div>
+                <Label htmlFor="edit-requirements">Preferred Skills (one per line)</Label>
+                <Textarea
+                  id="edit-requirements"
+                  value={Array.isArray(editingJob.requirements) ? editingJob.requirements.join('\n') : ''}
+                  onChange={(e) =>
+                    setEditingJob((prev) =>
+                      prev ? { 
+                        ...prev, 
+                        requirements: e.target.value.split('\n').map(req => req.trim()).filter(req => req !== '')
+                      } : null
+                    )
+                  }
+                  className="h-32"
+                  placeholder="Enter each requirement on a new line"
                 />
               </div>
               <div>

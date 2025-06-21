@@ -337,7 +337,7 @@ const JobDetails = () => {
                     ))}
                   </ul>
 
-                  <h2 className="text-xl font-semibold mt-8 mb-4">Requirements</h2>
+                  <h2 className="text-xl font-semibold mt-8 mb-4">Preferred Skills</h2>
                   <ul className="list-disc pl-5">
                     {(Array.isArray(job.requirements) ? job.requirements : []).map((req, index) => (
                       <li key={index} className="break-words">{req}</li>

@@ -341,23 +341,23 @@ export default function JobsManagement() {
               />
             </div>
             <div>
-              <Label htmlFor="requirements">Requirements * (one per line)</Label>
-              <Textarea
-                id="requirements"
-                value={requirementsText}
-                onChange={(e) => setRequirementsText(e.target.value)}
-                placeholder="Enter each requirement on a new line"
-                className="h-32"
-                required
-              />
-            </div>
-            <div>
               <Label htmlFor="responsibilities">Responsibilities * (one per line)</Label>
               <Textarea
                 id="responsibilities"
                 value={responsibilitiesText}
                 onChange={(e) => setResponsibilitiesText(e.target.value)}
                 placeholder="Enter each responsibility on a new line"
+                className="h-32"
+                required
+              />
+            </div>
+            <div>
+              <Label htmlFor="requirements">Preferred Skills * (one per line)</Label>
+              <Textarea
+                id="requirements"
+                value={requirementsText}
+                onChange={(e) => setRequirementsText(e.target.value)}
+                placeholder="Enter each requirement on a new line"
                 className="h-32"
                 required
               />
