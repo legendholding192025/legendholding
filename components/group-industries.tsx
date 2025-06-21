@@ -13,12 +13,12 @@ export default function GroupIndustries() {
   const industries = [
     {
       name: "Automotive",
-      image: "https://cdn.legendholding.com/images/cdn_685659063a1568.38125193_20250621_070230.png",
+      image: "https://cdn.legendholding.com/images/cdn_68567a04116383.04854017_20250621_092316.jpg",
       bgColor: "bg-[#2B1C48]",
     },
     {
       name: "Oil & Gas",
-      image: "https://cdn.legendholding.com/images/cdn_6856599ed32869.86610075_20250621_070502.png",
+      image: "https://cdn.legendholding.com/images/cdn_68567c2ec9a918.06068596_20250621_093230.jpg",
       bgColor: "bg-[#5D376E]",
     },
     {
@@ -40,7 +40,7 @@ export default function GroupIndustries() {
     },
     {
       name: "Media",
-      image: "https://cdn.legendholding.com/images/cdn_685659f636c781.49320953_20250621_070630.png",
+      image: "https://cdn.legendholding.com/images/cdn_6856760046ba73.90510735_20250621_090608.png",
       bgColor: "bg-[#5D376E]",
     },
   ]
@@ -198,7 +198,7 @@ export default function GroupIndustries() {
                       <img
                         src={industry.image || "/placeholder.svg"}
                         alt={industry.name}
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-100"
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-100"
                       />
                     </div>
 

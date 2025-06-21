@@ -68,7 +68,7 @@ export default function BusinessUnit() {
     },
     {
       name: "Legend Global Media",
-      image: "https://cdn.legendholding.com/images/cdn_685659f636c781.49320953_20250621_070630.png",
+      image: "https://cdn.legendholding.com/images/cdn_6856760046ba73.90510735_20250621_090608.png",
       url: "/our-brands/legend-global-media",
       bgColor: "bg-[#5D376E]",
     },

@@ -153,7 +153,7 @@ export default function GlobalMediaPage() {
                   <div className="md:w-2/5 relative group overflow-hidden h-[300px] md:h-auto">
                     <div className="h-full w-full relative overflow-hidden">
                       <Image
-                        src="https://cdn.legendholding.com/images/cdn_685659f636c781.49320953_20250621_070630.png"
+                        src="https://cdn.legendholding.com/images/cdn_6856760046ba73.90510735_20250621_090608.png"
                         width={800}
                         height={600}
                         alt="Legend Global Media - Creative Production"

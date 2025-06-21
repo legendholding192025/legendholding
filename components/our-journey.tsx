@@ -88,7 +88,7 @@ export function OurJourney() {
       title: "Oriental Wiseman General Trading",
       description:
         "Our journey began with the establishment of our first trading company, focusing on bringing quality products to the market with a vision for excellence.",
-      image: "https://cdn.legendholding.com/images/cdn_68469e4e96d2e3.53774017_20250609_084150.jpg",
+      image: "https://cdn.legendholding.com/images/cdn_685677c0f3ead9.36789309_20250621_091336.jpeg",
       icon: <Building className="w-6 h-6" />,
       color: "#7c3aed",
       achievements: ["Company Foundation", "First Trading Operations", "Market Entry"],

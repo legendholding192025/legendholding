@@ -186,12 +186,9 @@ export function PartnerSection() {
             <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-[#EE8900] mb-2 sm:mb-3 md:mb-4 animate-float">
               Together We Grow
             </h2>
-            <p className="text-sm sm:text-base md:text-lg lg:text-xl text-[#5E366D] max-w-xs sm:max-w-sm md:max-w-md lg:max-w-2xl mx-auto animate-float-delayed leading-relaxed">
-              Building partnerships that drive success and innovation
-            </p>
             
             {/* Decorative Elements */}
-            <div 
+            {/* <div 
               className="absolute w-3 h-3 sm:w-4 sm:h-4 md:w-6 md:h-6 border-l-2 border-t-2 border-[#2B1C48]/30"
               style={{ 
                 left: isMobile ? '20px' : '120px', 
@@ -204,7 +201,7 @@ export function PartnerSection() {
                 right: isMobile ? '20px' : '120px', 
                 bottom: isMobile ? '-5px' : '-10px' 
               }}
-            ></div>
+            ></div> */}
           </div>
         </div>
       </section>
