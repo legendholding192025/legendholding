@@ -81,11 +81,15 @@ export function Footer() {
           <div className="space-y-6 flex items-center justify-center pt-4">
             <Link href="/" className="inline-block">
               <Image
-                src="https://res.cloudinary.com/dosxengut/image/upload/v1746802991/image_ummqsj.png"
+                src="https://cdn.legendholding.com/images/cdn_68566af4952c38.73080836_20250621_081900.jpeg"
                 alt="Legend Holding Group"
                 width={450}
                 height={200}
-                className="w-auto"
+                className="w-auto bg-transparent invert saturate-0"
+                style={{
+                  filter: 'invert(1) saturate(0) brightness(1.1)',
+                  mixBlendMode: 'screen'
+                }}
               />
             </Link>
           </div>
