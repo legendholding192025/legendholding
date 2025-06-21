@@ -155,7 +155,7 @@ export default function AutomobileServicesPage() {
                   <div className="md:w-2/5 relative group overflow-hidden h-[300px] md:h-auto">
                     <div className="h-full w-full relative overflow-hidden">
                       <Image
-                        src="https://cdn.legendholding.com/images/cloudinary/cloudinary_683d9e25db0112.44798593_20250602_125045.jpg"
+                        src="https://cdn.legendholding.com/images/cdn_685659501dfc76.49951087_20250621_070344.png"
                         width={800}
                         height={600}
                         alt="Legend Automobile Services - Professional Service Bay"
