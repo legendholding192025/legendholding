@@ -25,13 +25,24 @@ interface Job {
   title: string
   department: string
   location: string
-  description: string
+  description: string[]
   requirements: string[]
   responsibilities: string[]
   job_type: string
   created_at: string
   status: 'active' | 'inactive'
   company: string
+}
+
+// Helper function to convert description text to bullet points for display
+const convertDescriptionToBulletPoints = (description: string | null | undefined): string[] => {
+  if (!description || typeof description !== 'string') return []
+  return description.split('\n').map(line => line.trim()).filter(line => line !== '')
+}
+
+// Helper function to convert bullet points back to text for storage
+const convertBulletPointsToText = (bulletPoints: string[]): string => {
+  return bulletPoints.join('\n')
 }
 
 export default function JobsManagement() {
@@ -44,7 +55,7 @@ export default function JobsManagement() {
     title: "",
     department: "",
     location: "",
-    description: "",
+    description: [],
     requirements: [],
     responsibilities: [],
     job_type: "Full-time",
@@ -53,6 +64,7 @@ export default function JobsManagement() {
   })
   const [requirementsText, setRequirementsText] = useState("")
   const [responsibilitiesText, setResponsibilitiesText] = useState("")
+  const [descriptionText, setDescriptionText] = useState("")
 
 
   useEffect(() => {
@@ -90,7 +102,7 @@ export default function JobsManagement() {
       toast.error("Location is required")
       return false
     }
-    if (!newJob.description.trim()) {
+    if (!descriptionText.trim()) {
       toast.error("Description is required")
       return false
     }
@@ -113,29 +125,35 @@ export default function JobsManagement() {
     try {
       if (!validateJob()) return
 
-      // Format requirements and responsibilities as arrays
+      const description = descriptionText
+        .split("\n")
+        .map((desc) => desc.trim())
+        .filter((desc) => desc !== "");
+
       const requirements = requirementsText
-        .split('\n')
-        .map(req => req.trim())
-        .filter(req => req !== '')
+        .split("\n")
+        .map((req) => req.trim())
+        .filter((req) => req !== "");
 
       const responsibilities = responsibilitiesText
-        .split('\n')
-        .map(resp => resp.trim())
-        .filter(resp => resp !== '')
+        .split("\n")
+        .map((resp) => resp.trim())
+        .filter((resp) => resp !== "");
 
       // Create the job data object
       const jobData = {
-        title: newJob.title,
-        department: newJob.department,
-        location: newJob.location,
-        description: newJob.description,
-        status: newJob.status,
-        job_type: newJob.job_type,
+        title: newJob.title ?? '',
+        department: newJob.department ?? '',
+        location: newJob.location ?? '',
+        description: description,
+        status: newJob.status ?? 'active',
+        job_type: newJob.job_type ?? 'Full-time',
         requirements: requirements,
         responsibilities: responsibilities,
-        company: newJob.company
+        company: newJob.company ?? ''
       }
+
+      console.log('jobData to insert:', jobData)
 
       const { data, error } = await supabase
         .from('jobs')
@@ -155,24 +173,20 @@ export default function JobsManagement() {
         title: "",
         department: "",
         location: "",
-        description: "",
+        description: [],
         requirements: [],
         responsibilities: [],
         job_type: "Full-time",
         status: 'active',
         company: ""
       })
+      setDescriptionText("")
       setRequirementsText("")
       setResponsibilitiesText("")
       fetchJobs()
     } catch (error: any) {
       console.error('Error adding job:', error)
-      console.error('Supabase error details:', {
-          message: error.message,
-          code: error.code,
-          details: error.details,
-          hint: error.hint,
-      })
+      console.error('Supabase error details:', error)
       toast.error(`Failed to post job: ${error.message || 'An unknown error occurred'}`)
     }
   }
@@ -251,7 +265,7 @@ export default function JobsManagement() {
           <DialogHeader>
             <DialogTitle>Post New Job</DialogTitle>
             <DialogDescription>
-              Fill in the details for the new job posting. Enter each requirement and responsibility on a new line.
+              Fill in the details for the new job posting. Enter each description point, requirement, and responsibility on a new line - each line will become a bullet point.
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
@@ -316,12 +330,12 @@ export default function JobsManagement() {
               </div>
             </div>
             <div>
-              <Label htmlFor="description">Job Description *</Label>
+              <Label htmlFor="description">Job Description * (each line will become a bullet point)</Label>
               <Textarea
                 id="description"
-                value={newJob.description}
-                onChange={(e) => setNewJob(prev => ({ ...prev, description: e.target.value }))}
-                placeholder="Enter detailed job description"
+                value={descriptionText}
+                onChange={(e) => setDescriptionText(e.target.value)}
+                placeholder="Enter each description point on a new line&#10;For example:&#10;• Lead development of new features&#10;• Collaborate with cross-functional teams&#10;• Maintain code quality and standards"
                 className="h-32"
                 required
               />

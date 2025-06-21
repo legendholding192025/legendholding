@@ -17,7 +17,7 @@ interface Job {
   title: string
   department: string
   location: string
-  description: string
+  description: string[]
   requirements: string[]
   responsibilities: string[]
   job_type: string
@@ -27,6 +27,12 @@ interface Job {
   benefits?: string[]
   experience_level?: string
   team_size?: number | null
+}
+
+// Helper function to convert description text to bullet points for display
+const convertDescriptionToBulletPoints = (description: string | null | undefined): string[] => {
+  if (!description || typeof description !== 'string') return []
+  return description.split('\n').map(line => line.trim()).filter(line => line !== '')
 }
 
 export default function JobDetails() {
@@ -278,9 +284,14 @@ export default function JobDetails() {
                 {/* Job Description */}
                 <section>
                   <h2 className="text-2xl font-semibold text-gray-900 mb-4">Job Description</h2>
-                  <div className="prose max-w-none text-gray-600 whitespace-pre-wrap">
-                    {job.description}
-                  </div>
+                  <ul className="space-y-3">
+                    {(Array.isArray(job.description) ? job.description : []).map((description, index) => (
+                      <li key={index} className="flex gap-3 text-gray-600">
+                        <span className="flex-shrink-0 w-1.5 h-1.5 rounded-full bg-[#EE8900] mt-2"></span>
+                        <span className="break-words">{description}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </section>
 
                 {/* Responsibilities */}
@@ -290,7 +301,7 @@ export default function JobDetails() {
                     {job.responsibilities.map((responsibility, index) => (
                       <li key={index} className="flex gap-3 text-gray-600">
                         <span className="flex-shrink-0 w-1.5 h-1.5 rounded-full bg-[#EE8900] mt-2"></span>
-                        <span>{responsibility}</span>
+                        <span className="break-words">{responsibility}</span>
                       </li>
                     ))}
                   </ul>
@@ -303,7 +314,7 @@ export default function JobDetails() {
                     {job.requirements.map((requirement, index) => (
                       <li key={index} className="flex gap-3 text-gray-600">
                         <span className="flex-shrink-0 w-1.5 h-1.5 rounded-full bg-[#EE8900] mt-2"></span>
-                        <span>{requirement}</span>
+                        <span className="break-words">{requirement}</span>
                       </li>
                     ))}
                   </ul>
@@ -317,7 +328,7 @@ export default function JobDetails() {
                       {job.benefits.map((benefit, index) => (
                         <li key={index} className="flex gap-3 text-gray-600">
                           <span className="flex-shrink-0 w-1.5 h-1.5 rounded-full bg-[#EE8900] mt-2"></span>
-                          <span>{benefit}</span>
+                          <span className="break-words">{benefit}</span>
                         </li>
                       ))}
                     </ul>

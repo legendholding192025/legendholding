@@ -9,7 +9,7 @@ interface Job {
   department: string
   location: string
   job_type: string
-  description: string
+  description: string[]
   requirements: string[]
   responsibilities: string[]
   created_at: string
@@ -61,80 +61,93 @@ export function JobListings({
           </p>
         </div>
 
-        {/* Department Filters */}
-        <div className="mt-12 flex flex-wrap gap-3">
-          <button
-            onClick={() => setSelectedDepartment("all")}
-            className={`px-4 py-2 rounded-full text-base font-medium transition-colors
-              ${selectedDepartment === "all" 
-                ? "bg-[#5E366D] text-white" 
-                : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}
-          >
-            View all
-          </button>
-          {departments.map(dept => (
+        {/* Department Filters - Only show if there are jobs */}
+        {jobs.length > 0 && (
+          <div className="mt-12 flex flex-wrap gap-3">
             <button
-              key={dept}
-              onClick={() => setSelectedDepartment(dept)}
+              onClick={() => setSelectedDepartment("all")}
               className={`px-4 py-2 rounded-full text-base font-medium transition-colors
-                ${selectedDepartment === dept 
+                ${selectedDepartment === "all" 
                   ? "bg-[#5E366D] text-white" 
                   : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}
             >
-              {dept}
+              View all
             </button>
-          ))}
-        </div>
+            {departments.map(dept => (
+              <button
+                key={dept}
+                onClick={() => setSelectedDepartment(dept)}
+                className={`px-4 py-2 rounded-full text-base font-medium transition-colors
+                  ${selectedDepartment === dept 
+                    ? "bg-[#5E366D] text-white" 
+                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}
+              >
+                {dept}
+              </button>
+            ))}
+          </div>
+        )}
 
         {/* Job Listings */}
         <div className="mt-12 space-y-6">
-          {filteredJobs.map((job) => (
-            <div
-              key={job.id}
-              className="group border-b border-gray-100 pb-6 last:border-0"
-            >
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <div>
-                  <h3 className="text-xl font-semibold text-gray-900 group-hover:text-[#5E366D] transition-colors">
-                    {job.title}
-                  </h3>
-                  <div className="flex items-center gap-6 mt-2">
-                    <div className="flex items-center gap-2 text-gray-600">
-                      <Briefcase className="w-4 h-4" />
-                      <span>{job.department}</span>
+          {filteredJobs.length > 0 ? (
+            filteredJobs.map((job) => (
+              <div
+                key={job.id}
+                className="group border-b border-gray-100 pb-6 last:border-0"
+              >
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                  <div>
+                    <h3 className="text-xl font-semibold text-gray-900 group-hover:text-[#5E366D] transition-colors">
+                      {job.title}
+                    </h3>
+                    <div className="flex items-center gap-6 mt-2">
+                      <div className="flex items-center gap-2 text-gray-600">
+                        <Briefcase className="w-4 h-4" />
+                        <span>{job.department}</span>
+                      </div>
+                    </div>
+                    <div className="flex gap-3 mt-3">
+                      <span className="inline-flex items-center px-3 py-1.5 rounded-full bg-gray-100 text-gray-800 text-base">
+                        <MapPin className="w-4 h-4 mr-1" />
+                        {job.location}
+                      </span>
+                      <span className="inline-flex items-center px-3 py-1.5 rounded-full bg-gray-100 text-gray-800 text-base">
+                        <Clock className="w-4 h-4 mr-1" />
+                        {job.job_type}
+                      </span>
                     </div>
                   </div>
-                  <div className="flex gap-3 mt-3">
-                    <span className="inline-flex items-center px-3 py-1.5 rounded-full bg-gray-100 text-gray-800 text-base">
-                      <MapPin className="w-4 h-4 mr-1" />
-                      {job.location}
-                    </span>
-                    <span className="inline-flex items-center px-3 py-1.5 rounded-full bg-gray-100 text-gray-800 text-base">
-                      <Clock className="w-4 h-4 mr-1" />
-                      {job.job_type}
-                    </span>
+                  <div>
+                    <Button
+                      onClick={() => router.push(`/careers/jobs/${job.id}`)}
+                      className="flex items-center gap-2 bg-[#EE8900] hover:bg-[#EE8900]/90 text-white border-0 font-medium px-6 text-base"
+                    >
+                      Apply Now
+                      <ChevronRight className="w-4 h-4" />
+                    </Button>
                   </div>
                 </div>
-                <div>
-                  <Button
-                    onClick={() => router.push(`/careers/jobs/${job.id}`)}
-                    className="flex items-center gap-2 bg-[#EE8900] hover:bg-[#EE8900]/90 text-white border-0 font-medium px-6 text-base"
-                  >
-                    Apply Now
-                    <ChevronRight className="w-4 h-4" />
-                  </Button>
-                </div>
               </div>
-            </div>
-          ))}
-
-          {filteredJobs.length === 0 && (
+            ))
+          ) : (
             <div className="text-center py-12">
               <Briefcase className="mx-auto h-12 w-12 text-gray-400 mb-4" />
-              <h3 className="text-2xl font-medium text-gray-900 mb-2">No positions found</h3>
-              <p className="text-lg text-gray-500">
-                We couldn't find any positions matching your criteria.
-              </p>
+              {jobs.length > 0 ? (
+                <>
+                  <h3 className="text-2xl font-medium text-gray-900 mb-2">No positions found</h3>
+                  <p className="text-lg text-gray-500">
+                    We couldn't find any positions matching your criteria.
+                  </p>
+                </>
+              ) : (
+                <>
+                  <h3 className="text-2xl font-medium text-gray-900 mb-2">No open positions</h3>
+                  <p className="text-lg text-gray-500">
+                    There are currently no open positions. Please check back later.
+                  </p>
+                </>
+              )}
             </div>
           )}
         </div>

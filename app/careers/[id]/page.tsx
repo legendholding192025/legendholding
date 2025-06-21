@@ -25,7 +25,7 @@ interface Job {
   title: string
   department: string
   location: string
-  description: string
+  description: string[]
   requirements: string[]
   responsibilities: string[]
   job_type: string
@@ -194,6 +194,12 @@ const ApplicationForm = ({ isOpen, onClose, jobId, jobTitle }: ApplicationFormPr
   )
 }
 
+// Helper function to convert description text to bullet points for display
+const convertDescriptionToBulletPoints = (description: string | null | undefined): string[] => {
+  if (!description || typeof description !== 'string') return []
+  return description.split('\n').map(line => line.trim()).filter(line => line !== '')
+}
+
 // Main component
 const JobDetails = () => {
   const params = useParams()
@@ -325,19 +331,23 @@ const JobDetails = () => {
               <div className="px-6 py-8">
                 <div className="prose max-w-none">
                   <h2 className="text-xl font-semibold mb-4">Job Description</h2>
-                  <div className="whitespace-pre-wrap">{job.description}</div>
+                  <ul className="list-disc pl-5">
+                    {(Array.isArray(job.description) ? job.description : []).map((desc, index) => (
+                      <li key={index} className="break-words">{desc}</li>
+                    ))}
+                  </ul>
 
                   <h2 className="text-xl font-semibold mt-8 mb-4">Requirements</h2>
                   <ul className="list-disc pl-5">
                     {(Array.isArray(job.requirements) ? job.requirements : []).map((req, index) => (
-                      <li key={index}>{req}</li>
+                      <li key={index} className="break-words">{req}</li>
                     ))}
                   </ul>
 
                   <h2 className="text-xl font-semibold mt-8 mb-4">Responsibilities</h2>
                   <ul className="list-disc pl-5">
                     {(Array.isArray(job.responsibilities) ? job.responsibilities : []).map((resp, index) => (
-                      <li key={index}>{resp}</li>
+                      <li key={index} className="break-words">{resp}</li>
                     ))}
                   </ul>
                 </div>

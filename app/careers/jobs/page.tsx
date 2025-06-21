@@ -103,127 +103,129 @@ export default function JobsPage() {
         </div>
 
         <div className="container mx-auto px-4 py-12">
-          {/* Search and Filters */}
-          <div className="bg-white rounded-xl shadow-sm p-6 mb-8 border border-[#5D376E]/10">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              {/* Search Input */}
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-[#5D376E] h-5 w-5" />
-                <input
-                  type="text"
-                  placeholder="Search jobs..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#5D376E]/20 focus:border-[#5D376E]"
-                />
-              </div>
+          {/* Search and Filters - Only show if loading is false AND there are jobs */}
+          {!loading && jobs.length > 0 && (
+            <div className="bg-white rounded-xl shadow-sm p-6 mb-8 border border-[#5D376E]/10">
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                {/* Search Input */}
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-[#5D376E] h-5 w-5" />
+                  <input
+                    type="text"
+                    placeholder="Search jobs..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#5D376E]/20 focus:border-[#5D376E]"
+                  />
+                </div>
 
-              {/* Department Filter */}
-              <div className="relative">
-                <button
-                  onClick={() => {
-                    setIsDepartmentOpen(!isDepartmentOpen)
-                    setIsLocationOpen(false)
-                  }}
-                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#5D376E]/20 focus:border-[#5D376E] text-gray-700 flex items-center justify-between"
-                >
-                  <span>{selectedDepartment === "all" ? "All Departments" : selectedDepartment}</span>
-                  <ChevronDown className={`h-4 w-4 transition-transform ${isDepartmentOpen ? "rotate-180" : ""}`} />
-                </button>
-                {isDepartmentOpen && (
-                  <div className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-[300px] overflow-y-auto">
-                    <div className="p-2">
-                      <button
-                        onClick={() => {
-                          setSelectedDepartment("all")
-                          setIsDepartmentOpen(false)
-                        }}
-                        className={`w-full text-left px-3 py-2 rounded-md hover:bg-gray-100 ${
-                          selectedDepartment === "all" ? "bg-[#5D376E]/10 text-[#5D376E]" : ""
-                        }`}
-                      >
-                        All Departments
-                      </button>
-                      {departments.map((dept) => (
+                {/* Department Filter */}
+                <div className="relative">
+                  <button
+                    onClick={() => {
+                      setIsDepartmentOpen(!isDepartmentOpen)
+                      setIsLocationOpen(false)
+                    }}
+                    className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#5D376E]/20 focus:border-[#5D376E] text-gray-700 flex items-center justify-between"
+                  >
+                    <span>{selectedDepartment === "all" ? "All Departments" : selectedDepartment}</span>
+                    <ChevronDown className={`h-4 w-4 transition-transform ${isDepartmentOpen ? "rotate-180" : ""}`} />
+                  </button>
+                  {isDepartmentOpen && (
+                    <div className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-[300px] overflow-y-auto">
+                      <div className="p-2">
                         <button
-                          key={dept}
                           onClick={() => {
-                            setSelectedDepartment(dept)
+                            setSelectedDepartment("all")
                             setIsDepartmentOpen(false)
                           }}
                           className={`w-full text-left px-3 py-2 rounded-md hover:bg-gray-100 ${
-                            selectedDepartment === dept ? "bg-[#5D376E]/10 text-[#5D376E]" : ""
+                            selectedDepartment === "all" ? "bg-[#5D376E]/10 text-[#5D376E]" : ""
                           }`}
                         >
-                          {dept}
+                          All Departments
                         </button>
-                      ))}
+                        {departments.map((dept) => (
+                          <button
+                            key={dept}
+                            onClick={() => {
+                              setSelectedDepartment(dept)
+                              setIsDepartmentOpen(false)
+                            }}
+                            className={`w-full text-left px-3 py-2 rounded-md hover:bg-gray-100 ${
+                              selectedDepartment === dept ? "bg-[#5D376E]/10 text-[#5D376E]" : ""
+                            }`}
+                          >
+                            {dept}
+                          </button>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                )}
-              </div>
+                  )}
+                </div>
 
-              {/* Location Filter */}
-              <div className="relative">
-                <button
-                  onClick={() => {
-                    setIsLocationOpen(!isLocationOpen)
-                    setIsDepartmentOpen(false)
-                  }}
-                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#5D376E]/20 focus:border-[#5D376E] text-gray-700 flex items-center justify-between"
-                >
-                  <span>{selectedLocation === "all" ? "All Locations" : selectedLocation}</span>
-                  <ChevronDown className={`h-4 w-4 transition-transform ${isLocationOpen ? "rotate-180" : ""}`} />
-                </button>
-                {isLocationOpen && (
-                  <div className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-[300px] overflow-y-auto">
-                    <div className="p-2">
-                      <button
-                        onClick={() => {
-                          setSelectedLocation("all")
-                          setIsLocationOpen(false)
-                        }}
-                        className={`w-full text-left px-3 py-2 rounded-md hover:bg-gray-100 ${
-                          selectedLocation === "all" ? "bg-[#5D376E]/10 text-[#5D376E]" : ""
-                        }`}
-                      >
-                        All Locations
-                      </button>
-                      {locations.map((loc) => (
+                {/* Location Filter */}
+                <div className="relative">
+                  <button
+                    onClick={() => {
+                      setIsLocationOpen(!isLocationOpen)
+                      setIsDepartmentOpen(false)
+                    }}
+                    className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#5D376E]/20 focus:border-[#5D376E] text-gray-700 flex items-center justify-between"
+                  >
+                    <span>{selectedLocation === "all" ? "All Locations" : selectedLocation}</span>
+                    <ChevronDown className={`h-4 w-4 transition-transform ${isLocationOpen ? "rotate-180" : ""}`} />
+                  </button>
+                  {isLocationOpen && (
+                    <div className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-[300px] overflow-y-auto">
+                      <div className="p-2">
                         <button
-                          key={loc}
                           onClick={() => {
-                            setSelectedLocation(loc)
+                            setSelectedLocation("all")
                             setIsLocationOpen(false)
                           }}
                           className={`w-full text-left px-3 py-2 rounded-md hover:bg-gray-100 ${
-                            selectedLocation === loc ? "bg-[#5D376E]/10 text-[#5D376E]" : ""
+                            selectedLocation === "all" ? "bg-[#5D376E]/10 text-[#5D376E]" : ""
                           }`}
                         >
-                          {loc}
+                          All Locations
                         </button>
-                      ))}
+                        {locations.map((loc) => (
+                          <button
+                            key={loc}
+                            onClick={() => {
+                              setSelectedLocation(loc)
+                              setIsLocationOpen(false)
+                            }}
+                            className={`w-full text-left px-3 py-2 rounded-md hover:bg-gray-100 ${
+                              selectedLocation === loc ? "bg-[#5D376E]/10 text-[#5D376E]" : ""
+                            }`}
+                          >
+                            {loc}
+                          </button>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                )}
-              </div>
+                  )}
+                </div>
 
-              {/* Clear Filters */}
-              <div>
-                <Button
-                  onClick={() => {
-                    setSearchQuery("")
-                    setSelectedDepartment("all")
-                    setSelectedLocation("all")
-                  }}
-                  variant="outline"
-                  className="w-full border-[#5D376E] text-[#5D376E] hover:bg-[#5D376E]/5"
-                >
-                  Clear Filters
-                </Button>
+                {/* Clear Filters */}
+                <div>
+                  <Button
+                    onClick={() => {
+                      setSearchQuery("")
+                      setSelectedDepartment("all")
+                      setSelectedLocation("all")
+                    }}
+                    variant="outline"
+                    className="w-full border-[#5D376E] text-[#5D376E] hover:bg-[#5D376E]/5"
+                  >
+                    Clear Filters
+                  </Button>
+                </div>
               </div>
             </div>
-          </div>
+          )}
 
           {/* Jobs List */}
           {loading ? (
@@ -238,8 +240,18 @@ export default function JobsPage() {
               <div className="text-[#5D376E] mb-4">
                 <Briefcase className="h-12 w-12 mx-auto" />
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">No jobs found</h3>
-              <p className="text-gray-600">Try adjusting your search or filters</p>
+              {/* Check if the original jobs array is empty or if filters are just not matching */}
+              {jobs.length === 0 ? (
+                <>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">No open positions</h3>
+                  <p className="text-gray-600">Please check back later for new opportunities.</p>
+                </>
+              ) : (
+                <>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">No jobs found</h3>
+                  <p className="text-gray-600">Try adjusting your search or filters</p>
+                </>
+              )}
             </div>
           ) : (
             <div className="grid gap-6">

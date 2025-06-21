@@ -23,7 +23,7 @@ interface Job {
   title: string
   department: string
   location: string
-  description: string
+  description: string[]
   requirements: string[]
   responsibilities: string[]
   job_type: string
@@ -250,16 +250,22 @@ export function JobsTable({ jobs = [], loading, onDelete, onUpdate }: JobsTableP
                 />
               </div>
               <div>
-                <Label htmlFor="edit-description">Job Description</Label>
+                <Label htmlFor="edit-description">Job Description (each line will become a bullet point)</Label>
                 <Textarea
                   id="edit-description"
-                  value={editingJob.description}
+                  value={editingJob.description.join('\n')}
                   onChange={(e) =>
                     setEditingJob((prev) =>
-                      prev ? { ...prev, description: e.target.value } : null
+                      prev
+                        ? {
+                            ...prev,
+                            description: e.target.value.split('\n'),
+                          }
+                        : null
                     )
                   }
                   className="h-32"
+                  placeholder="Enter each description point on a new line"
                 />
               </div>
               <div>
