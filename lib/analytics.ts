@@ -6,7 +6,7 @@ export const ANALYTICS_CONFIG = {
   GTM_ID: process.env.NEXT_PUBLIC_GTM_ID || 'GTM-XXXXXXX',
   
   // Google Analytics 4
-  GA4_ID: process.env.NEXT_PUBLIC_GA4_ID || 'G-XXXXXXXXXX',
+  GA4_ID: process.env.NEXT_PUBLIC_GA4_ID || 'G-JN8TMP89PM',
   
   // Google Ads
   GOOGLE_ADS_ID: process.env.NEXT_PUBLIC_GOOGLE_ADS_ID || 'AW-XXXXXXXXXX',

@@ -50,28 +50,24 @@ export default function GoogleTagManager({ gtmId }: GoogleTagManagerProps) {
       />
 
       {/* Google Analytics 4 */}
-      {ANALYTICS_CONFIG.GA4_ID !== 'G-XXXXXXXXXX' && (
-        <Script
-          src={`https://www.googletagmanager.com/gtag/js?id=${ANALYTICS_CONFIG.GA4_ID}`}
-          strategy="afterInteractive"
-        />
-      )}
+      <Script
+        src={`https://www.googletagmanager.com/gtag/js?id=${ANALYTICS_CONFIG.GA4_ID}`}
+        strategy="afterInteractive"
+      />
 
       {/* Google Analytics 4 Configuration */}
-      {ANALYTICS_CONFIG.GA4_ID !== 'G-XXXXXXXXXX' && (
-        <Script id="ga4-config" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', '${ANALYTICS_CONFIG.GA4_ID}', {
-              page_title: document.title,
-              page_location: window.location.href,
-              send_page_view: true
-            });
-          `}
-        </Script>
-      )}
+      <Script id="ga4-config" strategy="afterInteractive">
+        {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', '${ANALYTICS_CONFIG.GA4_ID}', {
+            page_title: document.title,
+            page_location: window.location.href,
+            send_page_view: true
+          });
+        `}
+      </Script>
 
       {/* Google Ads */}
       {ANALYTICS_CONFIG.GOOGLE_ADS_ID !== 'AW-XXXXXXXXXX' && (
