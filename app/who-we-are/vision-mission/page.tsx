@@ -182,6 +182,7 @@ export default function VisionMissionValuesPage() {
                       <div key={index} className="text-center">
                         <div className="w-2 h-2 bg-[#E67E22] rounded-full mx-auto mb-3" />
                         <h4 className="text-sm font-semibold text-gray-900 mb-2 font-richmond">{pillar.title}</h4>
+                        <div className="text-xs text-gray-500 font-effra my-1">&</div>
                         <p className="text-xs text-gray-600 font-effra">{pillar.desc}</p>
                       </div>
                     ))}
