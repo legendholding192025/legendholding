@@ -3,6 +3,7 @@
 import { useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
+import { usePathname } from "next/navigation"
 import { 
   LayoutDashboard, 
   MessageSquare, 
@@ -66,11 +67,6 @@ const menuItems = [
     href: "/admin/applications"
   },
   {
-    title: "Team Management",
-    icon: Users,
-    href: "/admin/team"
-  },
-  {
     title: "Newsletter",
     icon: Mail,
     href: "/admin/newsletters"
@@ -87,6 +83,7 @@ const systemMenuItems = [
 
 export function AdminDashboardLayout({ children, onSignOut }: AdminDashboardLayoutProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const pathname = usePathname()
 
   return (
     <SidebarProvider defaultOpen>
@@ -128,18 +125,22 @@ export function AdminDashboardLayout({ children, onSignOut }: AdminDashboardLayo
                   Menu
                 </h2>
                 <SidebarMenu>
-                  {menuItems.map((item) => (
-                    <SidebarMenuItem key={item.href} className="mb-2">
-                      <Link href={item.href} passHref legacyBehavior>
-                        <SidebarMenuButton
-                          className="w-full px-4 py-2.5 justify-start gap-3 rounded-lg hover:bg-primary/5 hover:text-primary data-[active=true]:bg-primary/10 data-[active=true]:text-primary group transition-colors"
-                        >
-                          <item.icon className="h-5 w-5 transition-colors group-hover:text-primary shrink-0" />
-                          <span className="font-medium">{item.title}</span>
-                        </SidebarMenuButton>
-                      </Link>
-                    </SidebarMenuItem>
-                  ))}
+                  {menuItems.map((item) => {
+                    const isActive = pathname === item.href
+                    return (
+                      <SidebarMenuItem key={item.href} className="mb-2">
+                        <Link href={item.href} passHref legacyBehavior>
+                          <SidebarMenuButton
+                            data-active={isActive}
+                            className="w-full px-4 py-2.5 justify-start gap-3 rounded-lg hover:bg-primary/5 hover:text-primary data-[active=true]:bg-primary/10 data-[active=true]:text-primary group transition-colors"
+                          >
+                            <item.icon className="h-5 w-5 transition-colors group-hover:text-primary shrink-0" />
+                            <span className="font-medium">{item.title}</span>
+                          </SidebarMenuButton>
+                        </Link>
+                      </SidebarMenuItem>
+                    )
+                  })}
                 </SidebarMenu>
               </div>
 
@@ -151,18 +152,22 @@ export function AdminDashboardLayout({ children, onSignOut }: AdminDashboardLayo
                   System
                 </h2>
                 <SidebarMenu>
-                  {systemMenuItems.map((item) => (
-                    <SidebarMenuItem key={item.href} className="mb-2">
-                      <Link href={item.href} passHref legacyBehavior>
-                        <SidebarMenuButton
-                          className="w-full px-4 py-2.5 justify-start gap-3 rounded-lg hover:bg-gray-100 group transition-colors"
-                        >
-                          <item.icon className="h-5 w-5 text-gray-500 transition-colors group-hover:text-gray-900 shrink-0" />
-                          <span>{item.title}</span>
-                        </SidebarMenuButton>
-                      </Link>
-                    </SidebarMenuItem>
-                  ))}
+                  {systemMenuItems.map((item) => {
+                    const isActive = pathname === item.href
+                    return (
+                      <SidebarMenuItem key={item.href} className="mb-2">
+                        <Link href={item.href} passHref legacyBehavior>
+                          <SidebarMenuButton
+                            data-active={isActive}
+                            className="w-full px-4 py-2.5 justify-start gap-3 rounded-lg hover:bg-gray-100 group transition-colors data-[active=true]:bg-gray-200 data-[active=true]:text-gray-900"
+                          >
+                            <item.icon className="h-5 w-5 text-gray-500 transition-colors group-hover:text-gray-900 shrink-0" />
+                            <span>{item.title}</span>
+                          </SidebarMenuButton>
+                        </Link>
+                      </SidebarMenuItem>
+                    )
+                  })}
                 </SidebarMenu>
               </div>
             </div>
