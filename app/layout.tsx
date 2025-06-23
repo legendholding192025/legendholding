@@ -12,6 +12,11 @@ import { brandFont } from './fonts'
 export const metadata: Metadata = {
   title: 'Legend Web',
   description: 'Legend Web - Your trusted partner in digital solutions',
+  icons: {
+    icon: '/images/url_logo.png',
+    shortcut: '/images/url_logo.png',
+    apple: '/images/url_logo.png',
+  },
 }
 
 export default function RootLayout({
