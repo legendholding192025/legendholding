@@ -159,7 +159,7 @@ export function PartnerSection() {
             src="https://cdn.legendholding.com/images/cdn_68564e06066870.03563987_20250621_061534.jpg"
             alt="Together We Grow Background"
             fill
-            className="object-cover w-full h-full lg:hidden"
+            className="object-contain object-right w-full h-full lg:hidden"
             sizes="100vw"
             priority
           />
@@ -173,6 +173,9 @@ export function PartnerSection() {
             priority
           />
         </div>
+        
+        {/* White overlay for left side */}
+        <div className="absolute inset-0 w-1/2 bg-white lg:hidden"></div>
         
         <div 
           id="animated-text"

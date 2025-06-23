@@ -3,10 +3,10 @@
 
 export const ANALYTICS_CONFIG = {
   // Google Tag Manager
-  GTM_ID: process.env.NEXT_PUBLIC_GTM_ID || 'GTM-XXXXXXX',
+  GTM_ID: process.env.NEXT_PUBLIC_GTM_ID || 'GT-K8GMBZG5',
   
   // Google Analytics 4
-  GA4_ID: process.env.NEXT_PUBLIC_GA4_ID || 'G-JN8TMP89PM',
+  GA4_ID: process.env.NEXT_PUBLIC_GA4_ID || 'G-TFC4L94QL6',
   
   // Google Ads
   GOOGLE_ADS_ID: process.env.NEXT_PUBLIC_GOOGLE_ADS_ID || 'AW-XXXXXXXXXX',
