@@ -204,130 +204,167 @@ export function JobApplicationForm({ jobId, jobTitle, company, isOpen, onClose }
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent 
-        className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] z-[100] bg-white"
+        className="w-[95vw] max-w-[600px] h-[90vh] max-h-[90vh] flex flex-col p-0 rounded-lg"
         style={{
           position: 'fixed',
-          top: '50%',
           left: '50%',
+          top: '50%',
           transform: 'translate(-50%, -50%)',
+          margin: '0',
+          zIndex: 60,
         }}
       >
-        <DialogHeader className="sticky top-0 bg-white z-[101] pb-4 border-b">
-          <DialogTitle className="text-2xl">Apply for {jobTitle} at {company}</DialogTitle>
-          <DialogDescription>
-            Please fill out the form below to submit your application. All fields marked with * are required.
-          </DialogDescription>
-        </DialogHeader>
-
-        <form onSubmit={handleSubmit} className="space-y-6 mt-4">
-          <div className="space-y-4">
-            <div>
-              <Label htmlFor="fullName" className="text-base">
-                Full Name <span className="text-red-500">*</span>
-              </Label>
-              <Input
-                id="fullName"
-                name="fullName"
-                value={formData.fullName}
-                onChange={handleInputChange}
-                className={`mt-1.5 ${formErrors.fullName ? 'border-red-500 focus:ring-red-500' : ''}`}
-                placeholder="Enter your full name"
-                aria-invalid={!!formErrors.fullName}
-                aria-describedby={formErrors.fullName ? "fullName-error" : undefined}
-              />
-              {formErrors.fullName && (
-                <p id="fullName-error" className="text-sm text-red-500 mt-1">{formErrors.fullName}</p>
-              )}
+        {/* Fixed Header */}
+        <div className="sticky top-0 bg-white border-b border-gray-200 px-4 sm:px-6 py-4 z-10 rounded-t-lg">
+          <div className="flex items-start justify-between gap-3">
+            <div className="flex-1 min-w-0">
+              <DialogTitle className="text-lg sm:text-2xl leading-tight">Apply for {jobTitle} at {company}</DialogTitle>
+              <DialogDescription className="text-sm sm:text-base mt-1">
+                Please fill out the form below to submit your application. All fields marked with * are required.
+              </DialogDescription>
             </div>
-
-            <div>
-              <Label htmlFor="email" className="text-base">
-                Email Address <span className="text-red-500">*</span>
-              </Label>
-              <Input
-                id="email"
-                name="email"
-                type="email"
-                value={formData.email}
-                onChange={handleInputChange}
-                className={`mt-1.5 ${formErrors.email ? 'border-red-500 focus:ring-red-500' : ''}`}
-                placeholder="Enter your email address"
-                aria-invalid={!!formErrors.email}
-                aria-describedby={formErrors.email ? "email-error" : undefined}
-              />
-              {formErrors.email && (
-                <p id="email-error" className="text-sm text-red-500 mt-1">{formErrors.email}</p>
-              )}
-            </div>
-
-            <div>
-              <Label htmlFor="phone" className="text-base">
-                Phone Number <span className="text-red-500">*</span>
-              </Label>
-              <Input
-                id="phone"
-                name="phone"
-                type="tel"
-                value={formData.phone}
-                onChange={handleInputChange}
-                className={`mt-1.5 ${formErrors.phone ? 'border-red-500 focus:ring-red-500' : ''}`}
-                placeholder="Enter your phone number"
-                aria-invalid={!!formErrors.phone}
-                aria-describedby={formErrors.phone ? "phone-error" : undefined}
-              />
-              {formErrors.phone && (
-                <p id="phone-error" className="text-sm text-red-500 mt-1">{formErrors.phone}</p>
-              )}
-            </div>
-
-            <div>
-              <Label htmlFor="resume" className="text-base">
-                Resume <span className="text-red-500">*</span>
-              </Label>
-              <Input
-                id="resume"
-                name="resume"
-                type="file"
-                onChange={handleFileChange}
-                className="mt-1.5"
-                accept=".pdf,.doc,.docx"
-              />
-              <p className="text-sm text-gray-500 mt-1.5">
-                Accepted formats: PDF, DOC, DOCX (Max 5MB)
-              </p>
-            </div>
-
-            <div>
-              <Label htmlFor="coverLetter" className="text-base">
-                Cover Letter
-              </Label>
-              <Textarea
-                id="coverLetter"
-                name="coverLetter"
-                value={formData.coverLetter}
-                onChange={handleInputChange}
-                className="mt-1.5 min-h-[150px]"
-                placeholder="Tell us why you're interested in this position and what makes you a great fit..."
-              />
-              <p className="text-sm text-gray-500 mt-1.5">
-                Optional but recommended. Help us understand why you're the perfect candidate.
-              </p>
-            </div>
+            <button
+              onClick={onClose}
+              className="flex-shrink-0 ml-2 p-2 rounded-md hover:bg-gray-100 transition-colors"
+              aria-label="Close dialog"
+            >
+              <svg
+                className="w-5 h-5 text-gray-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
           </div>
+        </div>
 
-          <div className="flex justify-end gap-4 pt-4 border-t sticky bottom-0 bg-white z-[101]">
+        {/* Scrollable Content */}
+        <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-4">
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="space-y-4">
+              <div>
+                <Label htmlFor="fullName" className="text-sm sm:text-base">
+                  Full Name <span className="text-red-500">*</span>
+                </Label>
+                <Input
+                  id="fullName"
+                  name="fullName"
+                  value={formData.fullName}
+                  onChange={handleInputChange}
+                  className={`mt-1.5 text-sm sm:text-base ${formErrors.fullName ? 'border-red-500 focus:ring-red-500' : ''}`}
+                  placeholder="Enter your full name"
+                  aria-invalid={!!formErrors.fullName}
+                  aria-describedby={formErrors.fullName ? "fullName-error" : undefined}
+                />
+                {formErrors.fullName && (
+                  <p id="fullName-error" className="text-sm text-red-500 mt-1">{formErrors.fullName}</p>
+                )}
+              </div>
+
+              <div>
+                <Label htmlFor="email" className="text-sm sm:text-base">
+                  Email Address <span className="text-red-500">*</span>
+                </Label>
+                <Input
+                  id="email"
+                  name="email"
+                  type="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  className={`mt-1.5 text-sm sm:text-base ${formErrors.email ? 'border-red-500 focus:ring-red-500' : ''}`}
+                  placeholder="Enter your email address"
+                  aria-invalid={!!formErrors.email}
+                  aria-describedby={formErrors.email ? "email-error" : undefined}
+                />
+                {formErrors.email && (
+                  <p id="email-error" className="text-sm text-red-500 mt-1">{formErrors.email}</p>
+                )}
+              </div>
+
+              <div>
+                <Label htmlFor="phone" className="text-sm sm:text-base">
+                  Phone Number <span className="text-red-500">*</span>
+                </Label>
+                <Input
+                  id="phone"
+                  name="phone"
+                  type="tel"
+                  value={formData.phone}
+                  onChange={handleInputChange}
+                  className={`mt-1.5 text-sm sm:text-base ${formErrors.phone ? 'border-red-500 focus:ring-red-500' : ''}`}
+                  placeholder="Enter your phone number"
+                  aria-invalid={!!formErrors.phone}
+                  aria-describedby={formErrors.phone ? "phone-error" : undefined}
+                />
+                {formErrors.phone && (
+                  <p id="phone-error" className="text-sm text-red-500 mt-1">{formErrors.phone}</p>
+                )}
+              </div>
+
+              <div>
+                <Label htmlFor="resume" className="text-sm sm:text-base">
+                  Resume <span className="text-red-500">*</span>
+                </Label>
+                <Input
+                  id="resume"
+                  name="resume"
+                  type="file"
+                  onChange={handleFileChange}
+                  className="mt-1.5 text-sm"
+                  accept=".pdf,.doc,.docx"
+                />
+                <p className="text-xs sm:text-sm text-gray-500 mt-1.5">
+                  Accepted formats: PDF, DOC, DOCX (Max 5MB)
+                </p>
+              </div>
+
+              <div>
+                <Label htmlFor="coverLetter" className="text-sm sm:text-base">
+                  Cover Letter
+                </Label>
+                <Textarea
+                  id="coverLetter"
+                  name="coverLetter"
+                  value={formData.coverLetter}
+                  onChange={handleInputChange}
+                  className="mt-1.5 min-h-[120px] sm:min-h-[150px] text-sm sm:text-base"
+                  placeholder="Tell us why you're interested in this position and what makes you a great fit..."
+                />
+                <p className="text-xs sm:text-sm text-gray-500 mt-1.5">
+                  Optional but recommended. Help us understand why you're the perfect candidate.
+                </p>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        {/* Fixed Footer */}
+        <div className="bg-white border-t border-gray-200 px-4 sm:px-6 py-4 rounded-b-lg">
+          <div className="flex flex-col sm:flex-row justify-end gap-3 sm:gap-4">
             <Button
               type="button"
               variant="outline"
               onClick={onClose}
               disabled={loading}
+              className="w-full sm:w-auto"
             >
               Cancel
             </Button>
             <Button
               type="submit"
-              className="bg-[#EE8900] hover:bg-[#EE8900]/90 text-white min-w-[120px]"
+              className="bg-[#EE8900] hover:bg-[#EE8900]/90 text-white w-full sm:w-auto min-w-[120px]"
               disabled={loading}
+              onClick={(e) => {
+                e.preventDefault();
+                handleSubmit(e as any);
+              }}
             >
               {loading ? (
                 <>
@@ -339,7 +376,7 @@ export function JobApplicationForm({ jobId, jobTitle, company, isOpen, onClose }
               )}
             </Button>
           </div>
-        </form>
+        </div>
       </DialogContent>
     </Dialog>
   )

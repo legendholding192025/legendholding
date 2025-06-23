@@ -196,7 +196,7 @@ const menuItems: MenuItem[] = [
   },
 ]
 
-export function Header() {
+export function Header({ hideHeader = false }: { hideHeader?: boolean }) {
   const [activeMenu, setActiveMenu] = useState<string | null>(null)
   const [activeNestedMenu, setActiveNestedMenu] = useState<string | null>(null)
   const [isScrolled, setIsScrolled] = useState(false)
@@ -600,395 +600,399 @@ export function Header() {
 
   return (
     <>
-      <header
-        ref={headerRef}
-        className={cn(
-          "fixed top-0 left-0 w-full z-[9999]",
-          "transition-all duration-300 transform",
-          "touch-pan-y",
-          isScrolled ? "bg-white shadow-md py-2" : "bg-white py-3 md:py-4",
-          mobileMenuOpen && "bg-white py-2"
-        )}
-        role="banner"
-      >
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between relative h-12 md:h-16 lg:h-20">
-            {/* Logo */}
-            <Link 
-              href="/" 
-              className="relative z-[9999] lg:absolute lg:left-4"
-            >
-              <Image
-                src={logoUrl || "/placeholder.svg"}
-                alt="Legend Holding Group"
-                width={280}
-                height={100}
-                className="h-12 md:h-16 lg:h-20 w-auto"
-                priority
-              />
-            </Link>
+      {!hideHeader && (
+        <>
+          <header
+            ref={headerRef}
+            className={cn(
+              "fixed top-0 left-0 w-full z-[9999]",
+              "transition-all duration-300 transform",
+              "touch-pan-y",
+              isScrolled ? "bg-white shadow-md py-2" : "bg-white py-3 md:py-4",
+              mobileMenuOpen && "bg-white py-2"
+            )}
+            role="banner"
+          >
+            <div className="container mx-auto px-4">
+              <div className="flex items-center justify-between relative h-12 md:h-16 lg:h-20">
+                {/* Logo */}
+                <Link 
+                  href="/" 
+                  className="relative z-[9999] lg:absolute lg:left-4"
+                >
+                  <Image
+                    src={logoUrl || "/placeholder.svg"}
+                    alt="Legend Holding Group"
+                    width={280}
+                    height={100}
+                    className="h-12 md:h-16 lg:h-20 w-auto"
+                    priority
+                  />
+                </Link>
 
-            {/* Mobile Menu Button */}
-            <button
-              className={cn(
-                "lg:hidden text-primary focus:outline-none relative z-[9999]",
-                "w-10 h-10 flex items-center justify-center",
-                "rounded-lg hover:bg-gray-100 active:bg-gray-200",
-                "transition-colors duration-200"
-              )}
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
-              aria-expanded={mobileMenuOpen}
-              aria-controls="mobile-menu"
-            >
-              <div className="relative w-6 h-6">
-                <span
+                {/* Mobile Menu Button */}
+                <button
                   className={cn(
-                    "absolute left-0 block h-0.5 rounded-full bg-current transition-all duration-300",
-                    mobileMenuOpen ? "top-2.5 w-6 -rotate-45" : "top-2 w-6"
+                    "lg:hidden text-primary focus:outline-none relative z-[9999]",
+                    "w-10 h-10 flex items-center justify-center",
+                    "rounded-lg hover:bg-gray-100 active:bg-gray-200",
+                    "transition-colors duration-200"
                   )}
-                />
-                <span
-                  className={cn(
-                    "absolute left-0 block h-0.5 rounded-full bg-current transition-all duration-300",
-                    mobileMenuOpen ? "top-2.5 w-6 rotate-45" : "top-4 w-4"
-                  )}
-                />
-              </div>
-            </button>
-
-            {/* Desktop Navigation Menu */}
-            <nav className="hidden lg:flex items-center justify-center flex-1 pl-20">
-              <div className="flex items-center space-x-8 xl:space-x-12">
-                {menuItems.map((item) => (
-                  <div
-                    key={item.title}
-                    ref={(el) => {
-                      menuItemRefs.current[item.title] = el;
-                    }}
-                    className="relative"
-                    onMouseEnter={() => item.hasSubmenu && handleMenuHover(item.title)}
-                    onMouseLeave={handleMenuLeave}
-                  >
-                    <Link
-                      href={item.url}
+                  onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                  aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+                  aria-expanded={mobileMenuOpen}
+                  aria-controls="mobile-menu"
+                >
+                  <div className="relative w-6 h-6">
+                    <span
                       className={cn(
-                        "text-gray-800 font-medium text-base hover:text-primary transition-colors duration-200 flex items-center py-2 px-1 relative group",
-                        (activeMenu === item.title || hoveredItem === item.title) && "text-primary",
+                        "absolute left-0 block h-0.5 rounded-full bg-current transition-all duration-300",
+                        mobileMenuOpen ? "top-2.5 w-6 -rotate-45" : "top-2 w-6"
                       )}
-                      onClick={(e) => {
-                        if (item.hasSubmenu) {
-                          e.preventDefault();
-                          // Toggle the dropdown on click
-                          setActiveMenu(activeMenu === item.title ? null : item.title);
-                        }
-                      }}
-                    >
-                      <span className="relative">
-                        {item.title}
-                        <span
-                          className={cn(
-                            "absolute -bottom-1 left-0 w-0 h-0.5 bg-secondary transition-all duration-300 group-hover:w-full",
-                            (activeMenu === item.title || hoveredItem === item.title) && "w-full",
-                          )}
-                        ></span>
-                      </span>
-                      {item.hasSubmenu && (
-                        <ChevronDown
-                          className={cn(
-                            "ml-1 h-4 w-4 transition-transform duration-200",
-                            activeMenu === item.title && "rotate-180",
-                          )}
-                        />
+                    />
+                    <span
+                      className={cn(
+                        "absolute left-0 block h-0.5 rounded-full bg-current transition-all duration-300",
+                        mobileMenuOpen ? "top-2.5 w-6 rotate-45" : "top-4 w-4"
                       )}
-                    </Link>
+                    />
+                  </div>
+                </button>
 
-                    {/* About Us Submenu with Images */}
-                    {item.hasSubmenu && item.submenu && activeMenu === item.title && (
+                {/* Desktop Navigation Menu */}
+                <nav className="hidden lg:flex items-center justify-center flex-1 pl-20">
+                  <div className="flex items-center space-x-8 xl:space-x-12">
+                    {menuItems.map((item) => (
                       <div
-                        className={cn(
-                          "absolute top-full bg-white shadow-lg z-[9998] animate-submenu-slide-down",
-                          item.title === "Who We Are" ? "w-48" : "w-screen"
-                        )}
-                        onMouseEnter={cancelMenuClose}
+                        key={item.title}
+                        ref={(el) => {
+                          menuItemRefs.current[item.title] = el;
+                        }}
+                        className="relative"
+                        onMouseEnter={() => item.hasSubmenu && handleMenuHover(item.title)}
                         onMouseLeave={handleMenuLeave}
-                        style={getDropdownPosition(item.title)}
                       >
-                        {item.title === "Who We Are" ? (
-                          <div className="w-full bg-white rounded-lg">
-                            <div className="space-y-1 p-2">
-                              {item.submenu.map((subItem) => (
-                                <Link
-                                  key={subItem.title}
-                                  href={subItem.url}
-                                  className="block px-5 py-3 text-sm text-gray-700 hover:text-primary rounded-md transition-colors group"
-                                >
-                                  <span className="relative">
-                                    {subItem.title}
-                                    <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-secondary transition-all duration-300 group-hover:w-full"></span>
-                                  </span>
-                                </Link>
-                              ))}
-                            </div>
-                          </div>
-                        ) : (
-                          <div className="container mx-auto py-8 px-4">
-                            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
-                              {item.submenu.map((subItem) => (
-                                <Link
-                                  key={subItem.title}
-                                  href={subItem.url}
-                                  className="group overflow-hidden rounded-lg border border-gray-100 hover:border-gray-200 hover:shadow-md transition-all duration-300 bg-white"
-                                >
-                                  <div className="relative h-40 overflow-hidden">
-                                    <Image
-                                      src={subItem.image}
-                                      alt={subItem.title}
-                                      width={320}
-                                      height={160}
-                                      className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
-                                    />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
-                                    <div className="absolute bottom-0 left-0 p-4">
-                                      <h3 className="text-base font-semibold text-white">{subItem.title}</h3>
-                                    </div>
-                                  </div>
-                                  <div className="p-4">
-                                    <p className="text-gray-600 text-sm">{subItem.description}</p>
-                                  </div>
-                                </Link>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    )}
+                        <Link
+                          href={item.url}
+                          className={cn(
+                            "text-gray-800 font-medium text-base hover:text-primary transition-colors duration-200 flex items-center py-2 px-1 relative group",
+                            (activeMenu === item.title || hoveredItem === item.title) && "text-primary",
+                          )}
+                          onClick={(e) => {
+                            if (item.hasSubmenu) {
+                              e.preventDefault();
+                              // Toggle the dropdown on click
+                              setActiveMenu(activeMenu === item.title ? null : item.title);
+                            }
+                          }}
+                        >
+                          <span className="relative">
+                            {item.title}
+                            <span
+                              className={cn(
+                                "absolute -bottom-1 left-0 w-0 h-0.5 bg-secondary transition-all duration-300 group-hover:w-full",
+                                (activeMenu === item.title || hoveredItem === item.title) && "w-full",
+                              )}
+                            ></span>
+                          </span>
+                          {item.hasSubmenu && (
+                            <ChevronDown
+                              className={cn(
+                                "ml-1 h-4 w-4 transition-transform duration-200",
+                                activeMenu === item.title && "rotate-180",
+                              )}
+                            />
+                          )}
+                        </Link>
 
-                    {/* Our Business Submenu with Nested Legend Motors */}
-                    {item.hasSubmenu && item.businessCategories && activeMenu === item.title && (
-                      <div
-                        className={cn(
-                          "absolute top-full bg-white shadow-lg z-[9998] animate-submenu-slide-down",
-                          "w-52"
-                        )}
-                        onMouseEnter={cancelMenuClose}
-                        onMouseLeave={handleMenuLeave}
-                        style={getDropdownPosition(item.title)}
-                      >
-                        <div className="w-full">
-                          <div className="space-y-1 p-2">
-                            {item.businessCategories[0].items.map((business) => (
-                              <div key={business.title} className="relative">
-                                {business.hasNestedSubmenu ? (
-                                  <div
-                                    ref={business.title === "Legend Motors" ? legendMotorsRef : null}
-                                    className="relative"
-                                    onMouseEnter={() => handleNestedMenuHover(business.title)}
-                                    onMouseLeave={handleNestedMenuLeave}
-                                  >
-                                    <div className="flex items-center justify-between px-4 py-3 text-sm text-gray-700 hover:text-primary rounded-md transition-colors group cursor-pointer">
+                        {/* About Us Submenu with Images */}
+                        {item.hasSubmenu && item.submenu && activeMenu === item.title && (
+                          <div
+                            className={cn(
+                              "absolute top-full bg-white shadow-lg z-[9998] animate-submenu-slide-down",
+                              item.title === "Who We Are" ? "w-48" : "w-screen"
+                            )}
+                            onMouseEnter={cancelMenuClose}
+                            onMouseLeave={handleMenuLeave}
+                            style={getDropdownPosition(item.title)}
+                          >
+                            {item.title === "Who We Are" ? (
+                              <div className="w-full bg-white rounded-lg">
+                                <div className="space-y-1 p-2">
+                                  {item.submenu.map((subItem) => (
+                                    <Link
+                                      key={subItem.title}
+                                      href={subItem.url}
+                                      className="block px-5 py-3 text-sm text-gray-700 hover:text-primary rounded-md transition-colors group"
+                                    >
                                       <span className="relative">
-                                        {business.title}
+                                        {subItem.title}
                                         <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-secondary transition-all duration-300 group-hover:w-full"></span>
                                       </span>
-                                      <ChevronRight className={cn(
-                                        "h-4 w-4 transition-transform duration-200",
-                                        activeNestedMenu === business.title && "rotate-90"
-                                      )} />
-                                    </div>
+                                    </Link>
+                                  ))}
+                                </div>
+                              </div>
+                            ) : (
+                              <div className="container mx-auto py-8 px-4">
+                                <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                                  {item.submenu.map((subItem) => (
+                                    <Link
+                                      key={subItem.title}
+                                      href={subItem.url}
+                                      className="group overflow-hidden rounded-lg border border-gray-100 hover:border-gray-200 hover:shadow-md transition-all duration-300 bg-white"
+                                    >
+                                      <div className="relative h-40 overflow-hidden">
+                                        <Image
+                                          src={subItem.image}
+                                          alt={subItem.title}
+                                          width={320}
+                                          height={160}
+                                          className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
+                                        />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                                        <div className="absolute bottom-0 left-0 p-4">
+                                          <h3 className="text-base font-semibold text-white">{subItem.title}</h3>
+                                        </div>
+                                      </div>
+                                      <div className="p-4">
+                                        <p className="text-gray-600 text-sm">{subItem.description}</p>
+                                      </div>
+                                    </Link>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        )}
+
+                        {/* Our Business Submenu with Nested Legend Motors */}
+                        {item.hasSubmenu && item.businessCategories && activeMenu === item.title && (
+                          <div
+                            className={cn(
+                              "absolute top-full bg-white shadow-lg z-[9998] animate-submenu-slide-down",
+                              "w-52"
+                            )}
+                            onMouseEnter={cancelMenuClose}
+                            onMouseLeave={handleMenuLeave}
+                            style={getDropdownPosition(item.title)}
+                          >
+                            <div className="w-full">
+                              <div className="space-y-1 p-2">
+                                {item.businessCategories[0].items.map((business) => (
+                                  <div key={business.title} className="relative">
+                                    {business.hasNestedSubmenu ? (
+                                      <div
+                                        ref={business.title === "Legend Motors" ? legendMotorsRef : null}
+                                        className="relative"
+                                        onMouseEnter={() => handleNestedMenuHover(business.title)}
+                                        onMouseLeave={handleNestedMenuLeave}
+                                      >
+                                        <div className="flex items-center justify-between px-4 py-3 text-sm text-gray-700 hover:text-primary rounded-md transition-colors group cursor-pointer">
+                                          <span className="relative">
+                                            {business.title}
+                                            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-secondary transition-all duration-300 group-hover:w-full"></span>
+                                          </span>
+                                          <ChevronRight className={cn(
+                                            "h-4 w-4 transition-transform duration-200",
+                                            activeNestedMenu === business.title && "rotate-90"
+                                          )} />
+                                        </div>
+                                      </div>
+                                    ) : (
+                                      <Link
+                                        href={business.url}
+                                        className="block px-4 py-3 text-sm text-gray-700 hover:text-primary rounded-md transition-colors group"
+                                      >
+                                        <span className="relative">
+                                          {business.title}
+                                          <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-secondary transition-all duration-300 group-hover:w-full"></span>
+                                        </span>
+                                      </Link>
+                                    )}
                                   </div>
-                                ) : (
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Separate Nested submenu for Legend Motors - positioned independently */}
+                        {activeNestedMenu === "Legend Motors" && (
+                          <div
+                            className="fixed bg-white shadow-lg z-[10000] w-52 animate-submenu-slide-down"
+                            onMouseEnter={cancelNestedMenuClose}
+                            onMouseLeave={handleNestedMenuLeave}
+                            style={getNestedDropdownPosition()}
+                          >
+                            <div className="w-full bg-white rounded-lg">
+                              <div className="space-y-1 p-2">
+                                {menuItems
+                                  .find(item => item.title === "Our Businesses")
+                                  ?.businessCategories?.[0]
+                                  .items.find(business => business.title === "Legend Motors")
+                                  ?.nestedSubmenu?.map((nestedItem) => (
                                   <Link
-                                    href={business.url}
+                                    key={nestedItem.title}
+                                    href={nestedItem.url}
                                     className="block px-4 py-3 text-sm text-gray-700 hover:text-primary rounded-md transition-colors group"
                                   >
                                     <span className="relative">
-                                      {business.title}
+                                      {nestedItem.title}
                                       <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-secondary transition-all duration-300 group-hover:w-full"></span>
                                     </span>
                                   </Link>
-                                )}
+                                ))}
                               </div>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Separate Nested submenu for Legend Motors - positioned independently */}
-                    {activeNestedMenu === "Legend Motors" && (
-                      <div
-                        className="fixed bg-white shadow-lg z-[10000] w-52 animate-submenu-slide-down"
-                        onMouseEnter={cancelNestedMenuClose}
-                        onMouseLeave={handleNestedMenuLeave}
-                        style={getNestedDropdownPosition()}
-                      >
-                        <div className="w-full bg-white rounded-lg">
-                          <div className="space-y-1 p-2">
-                            {menuItems
-                              .find(item => item.title === "Our Businesses")
-                              ?.businessCategories?.[0]
-                              .items.find(business => business.title === "Legend Motors")
-                              ?.nestedSubmenu?.map((nestedItem) => (
-                              <Link
-                                key={nestedItem.title}
-                                href={nestedItem.url}
-                                className="block px-4 py-3 text-sm text-gray-700 hover:text-primary rounded-md transition-colors group"
-                              >
-                                <span className="relative">
-                                  {nestedItem.title}
-                                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-secondary transition-all duration-300 group-hover:w-full"></span>
-                                </span>
-                              </Link>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </nav>
-          </div>
-        </div>
-
-        {/* Mobile Navigation Menu - Slides in from top */}
-        <div
-          id="mobile-menu"
-          role="navigation"
-          aria-label="Mobile navigation menu"
-          className={cn(
-            "fixed inset-0 bg-white z-[9998] lg:hidden",
-            "transition-transform duration-300 ease-in-out",
-            mobileMenuOpen ? "translate-y-0" : "-translate-y-full",
-          )}
-          style={{
-            top: '60px', // Height of the header
-            height: 'calc(100vh - 60px)',
-            WebkitOverflowScrolling: 'touch',
-            touchAction: 'pan-y pinch-zoom'
-          }}
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
-        >
-          <div className="h-full flex flex-col">
-            {/* Regular Menu */}
-            <div 
-              className={cn(
-                "flex-1 overflow-y-auto px-4 py-2",
-                "transition-opacity duration-300 delay-150",
-                mobileMenuOpen ? "opacity-100" : "opacity-0"
-              )}
-            >
-              <nav className="flex flex-col space-y-1">
-                {menuItems.map((item) => (
-                  <div 
-                    key={item.title} 
-                    className="border-b border-gray-100"
-                  >
-                    {item.hasSubmenu ? (
-                      <details 
-                        className="group" 
-                        open={activeMenu === item.title}
-                      >
-                        <summary 
-                          className="flex justify-between items-center p-4 cursor-pointer"
-                        >
-                          <span className="text-lg font-medium text-gray-800">{item.title}</span>
-                          <ChevronDown className="h-5 w-5 text-primary" />
-                        </summary>
-
-                        <div className="bg-gray-50 p-4">
-                          {item.submenu && (
-                            <div className="space-y-2">
-                              {item.submenu.map((subItem) => (
-                                <Link
-                                  key={subItem.title}
-                                  href={subItem.url}
-                                  className="block p-3 rounded-lg hover:bg-gray-100"
-                                  onClick={() => setMobileMenuOpen(false)}
-                                >
-                                  <h3 className="text-base font-medium text-gray-800">{subItem.title}</h3>
-                                </Link>
-                              ))}
                             </div>
-                          )}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </nav>
+              </div>
+            </div>
+          </header>
 
-                          {item.businessCategories && (
-                            <div className="space-y-4">
-                              {item.businessCategories[0].items.map((business) => (
-                                <div key={business.title}>
-                                  {business.hasNestedSubmenu ? (
-                                    <div className="group">
-                                      <button
-                                        onClick={() => setMobileNestedMenuOpen(
-                                          mobileNestedMenuOpen === business.title ? null : business.title
+          {/* Mobile Navigation Menu - Slides in from top */}
+          <div
+            id="mobile-menu"
+            role="navigation"
+            aria-label="Mobile navigation menu"
+            className={cn(
+              "fixed inset-0 bg-white z-[9998] lg:hidden",
+              "transition-transform duration-300 ease-in-out",
+              mobileMenuOpen ? "translate-y-0" : "-translate-y-full",
+            )}
+            style={{
+              top: '60px', // Height of the header
+              height: 'calc(100vh - 60px)',
+              WebkitOverflowScrolling: 'touch',
+              touchAction: 'pan-y pinch-zoom'
+            }}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+          >
+            <div className="h-full flex flex-col">
+              {/* Regular Menu */}
+              <div 
+                className={cn(
+                  "flex-1 overflow-y-auto px-4 py-2",
+                  "transition-opacity duration-300 delay-150",
+                  mobileMenuOpen ? "opacity-100" : "opacity-0"
+                )}
+              >
+                <nav className="flex flex-col space-y-1">
+                  {menuItems.map((item) => (
+                    <div 
+                      key={item.title} 
+                      className="border-b border-gray-100"
+                    >
+                      {item.hasSubmenu ? (
+                        <details 
+                          className="group" 
+                          open={activeMenu === item.title}
+                        >
+                          <summary 
+                            className="flex justify-between items-center p-4 cursor-pointer"
+                          >
+                            <span className="text-lg font-medium text-gray-800">{item.title}</span>
+                            <ChevronDown className="h-5 w-5 text-primary" />
+                          </summary>
+
+                          <div className="bg-gray-50 p-4">
+                            {item.submenu && (
+                              <div className="space-y-2">
+                                {item.submenu.map((subItem) => (
+                                  <Link
+                                    key={subItem.title}
+                                    href={subItem.url}
+                                    className="block p-3 rounded-lg hover:bg-gray-100"
+                                    onClick={() => setMobileMenuOpen(false)}
+                                  >
+                                    <h3 className="text-base font-medium text-gray-800">{subItem.title}</h3>
+                                  </Link>
+                                ))}
+                              </div>
+                            )}
+
+                            {item.businessCategories && (
+                              <div className="space-y-4">
+                                {item.businessCategories[0].items.map((business) => (
+                                  <div key={business.title}>
+                                    {business.hasNestedSubmenu ? (
+                                      <div className="group">
+                                        <button
+                                          onClick={() => setMobileNestedMenuOpen(
+                                            mobileNestedMenuOpen === business.title ? null : business.title
+                                          )}
+                                          className="w-full flex justify-between items-center p-3 rounded-lg hover:bg-gray-100 cursor-pointer"
+                                        >
+                                          <h3 className="text-base font-medium text-gray-800">{business.title}</h3>
+                                          <ChevronRight className={cn(
+                                            "h-4 w-4 text-primary transition-transform duration-200",
+                                            mobileNestedMenuOpen === business.title && "rotate-90"
+                                          )} />
+                                        </button>
+                                        {mobileNestedMenuOpen === business.title && (
+                                          <div className="mt-2 ml-4 pl-4 border-l-2 border-primary/20 space-y-2">
+                                            {business.nestedSubmenu?.map((nestedItem) => (
+                                              <Link
+                                                key={nestedItem.title}
+                                                href={nestedItem.url}
+                                                className="block p-2 text-sm text-gray-600 hover:text-primary hover:bg-gray-50 rounded-lg transition-colors"
+                                                onClick={() => setMobileMenuOpen(false)}
+                                              >
+                                                <div className="font-medium">{nestedItem.title}</div>
+                                              </Link>
+                                            ))}
+                                          </div>
                                         )}
-                                        className="w-full flex justify-between items-center p-3 rounded-lg hover:bg-gray-100 cursor-pointer"
+                                      </div>
+                                    ) : (
+                                      <Link
+                                        href={business.url}
+                                        className="block p-3 rounded-lg hover:bg-gray-100"
+                                        onClick={() => setMobileMenuOpen(false)}
                                       >
                                         <h3 className="text-base font-medium text-gray-800">{business.title}</h3>
-                                        <ChevronRight className={cn(
-                                          "h-4 w-4 text-primary transition-transform duration-200",
-                                          mobileNestedMenuOpen === business.title && "rotate-90"
-                                        )} />
-                                      </button>
-                                      {mobileNestedMenuOpen === business.title && (
-                                        <div className="mt-2 ml-4 pl-4 border-l-2 border-primary/20 space-y-2">
-                                          {business.nestedSubmenu?.map((nestedItem) => (
-                                            <Link
-                                              key={nestedItem.title}
-                                              href={nestedItem.url}
-                                              className="block p-2 text-sm text-gray-600 hover:text-primary hover:bg-gray-50 rounded-lg transition-colors"
-                                              onClick={() => setMobileMenuOpen(false)}
-                                            >
-                                              <div className="font-medium">{nestedItem.title}</div>
-                                            </Link>
-                                          ))}
-                                        </div>
-                                      )}
-                                    </div>
-                                  ) : (
-                                    <Link
-                                      href={business.url}
-                                      className="block p-3 rounded-lg hover:bg-gray-100"
-                                      onClick={() => setMobileMenuOpen(false)}
-                                    >
-                                      <h3 className="text-base font-medium text-gray-800">{business.title}</h3>
-                                    </Link>
-                                  )}
-                                </div>
-                              ))}
-                            </div>
-                          )}
-                        </div>
-                      </details>
-                    ) : (
-                      <Link
-                        href={item.url}
-                        className="block p-4 text-lg font-medium text-gray-800 hover:bg-gray-50"
-                        onClick={() => setMobileMenuOpen(false)}
-                      >
-                        {item.title}
-                      </Link>
-                    )}
-                  </div>
-                ))}
-              </nav>
+                                      </Link>
+                                    )}
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        </details>
+                      ) : (
+                        <Link
+                          href={item.url}
+                          className="block p-4 text-lg font-medium text-gray-800 hover:bg-gray-50"
+                          onClick={() => setMobileMenuOpen(false)}
+                        >
+                          {item.title}
+                        </Link>
+                      )}
+                    </div>
+                  ))}
+                </nav>
+              </div>
             </div>
           </div>
-        </div>
-      </header>
 
-      {/* Remove the overlay click handler */}
-      <div
-        className={cn(
-          "fixed inset-0 bg-black/20 backdrop-blur-sm z-[9997] lg:hidden",
-          "transition-opacity duration-300",
-          mobileMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
-        )}
-        aria-hidden="true"
-      />
+          {/* Remove the overlay click handler */}
+          <div
+            className={cn(
+              "fixed inset-0 bg-black/20 backdrop-blur-sm z-[9997] lg:hidden",
+              "transition-opacity duration-300",
+              mobileMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+            )}
+            aria-hidden="true"
+          />
+        </>
+      )}
     </>
   )
 }

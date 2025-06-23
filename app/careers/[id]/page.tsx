@@ -239,7 +239,7 @@ const JobDetails = () => {
   if (loading) {
     return (
       <>
-        <Header />
+        <Header hideHeader={isApplyDialogOpen} />
         <div className="flex items-center justify-center min-h-screen">
           <div className="flex flex-col items-center gap-2">
             <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
@@ -254,7 +254,7 @@ const JobDetails = () => {
   if (!job) {
     return (
       <>
-        <Header />
+        <Header hideHeader={isApplyDialogOpen} />
         <div className="flex items-center justify-center min-h-screen">
           <div className="text-center">
             <h1 className="text-2xl font-semibold text-gray-900">Job Not Found</h1>
@@ -274,7 +274,7 @@ const JobDetails = () => {
 
   return (
     <>
-      <Header />
+      <Header hideHeader={isApplyDialogOpen} />
       <main className="pt-20">
         {/* Hero Banner */}
         <div className="relative bg-[#5E366D] text-white min-h-[400px] overflow-hidden">
