@@ -31,7 +31,7 @@ export default function PageTracker({ pageName }: PageTrackerProps) {
         'privacy-policy': PAGE_NAMES.PRIVACY_POLICY,
         'cookie-policy': PAGE_NAMES.COOKIE_POLICY,
         'who-we-are': PAGE_NAMES.WHO_WE_ARE,
-        'who-we-are/vision-mission': PAGE_NAMES.VISION_MISSION,
+        'who-we-are/our-foundation': PAGE_NAMES.OUR_FOUNDATION,
         'who-we-are/brand-story': PAGE_NAMES.BRAND_STORY,
         'who-we-are/journey': PAGE_NAMES.JOURNEY,
         'who-we-are/the-team': PAGE_NAMES.THE_TEAM,

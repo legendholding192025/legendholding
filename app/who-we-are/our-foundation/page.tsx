@@ -75,7 +75,7 @@ function AnimatedCounter({ target, suffix = "", prefix = "", duration = 2000, st
   )
 }
  
-export default function VisionMissionValuesPage() {
+export default function OurFoundationPage() {
   const [scrollY, setScrollY] = useState(0)
  
   // Animated counters
@@ -131,7 +131,7 @@ export default function VisionMissionValuesPage() {
           <div className="absolute inset-0">
             <Image
               src="https://cdn.legendholding.com/images/cloudinary/cloudinary_683ea90f29b708.04231409_20250603_074935.jpg"
-              alt="Vision Mission"
+              alt="Our Foundation"
               fill
               className="object-cover object-[center_20%]"
               priority

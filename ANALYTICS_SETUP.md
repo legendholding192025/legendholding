@@ -105,7 +105,7 @@ The following page names are automatically tracked for better analytics clarity:
 
 ### Who We Are Section
 - **Who We Are** - `/who-we-are`
-- **Vision & Mission** - `/who-we-are/vision-mission`
+- **Our Foundation** - `/who-we-are/our-foundation`
 - **Brand Story** - `/who-we-are/brand-story`
 - **Our Journey** - `/who-we-are/journey`
 - **The Team** - `/who-we-are/the-team`
