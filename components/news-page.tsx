@@ -115,7 +115,7 @@ export function NewsPage() {
     const maxIndex = Math.max(0, allArticles.length - articlesPerPage)
     if (currentCarouselIndex < maxIndex) {
       setIsTransitioning(true)
-      setCurrentCarouselIndex(prev => prev + 1)
+      setCurrentCarouselIndex(prev => prev + articlesPerPage)
     }
   }
 
@@ -123,7 +123,7 @@ export function NewsPage() {
     if (isTransitioning) return
     if (currentCarouselIndex > 0) {
       setIsTransitioning(true)
-      setCurrentCarouselIndex(prev => prev - 1)
+      setCurrentCarouselIndex(prev => Math.max(0, prev - articlesPerPage))
     }
   }
 
@@ -146,6 +146,12 @@ export function NewsPage() {
 
   // Get articles for mobile view
   const mobileArticles = showAllMobile ? allArticles : allArticles.slice(0, 3)
+
+  // Calculate the actual number of carousel pages (considering 3 cards per page)
+  const actualCarouselPages = Math.ceil(allArticles.length / articlesPerPage)
+  
+  // Calculate the current page index for pagination dots
+  const currentPageIndex = Math.floor(currentCarouselIndex / articlesPerPage)
 
   if (loading) {
     return (
@@ -468,12 +474,12 @@ export function NewsPage() {
                   {/* Bottom Pagination - Desktop Only */}
                   <div className="hidden md:flex justify-center mt-8 gap-2">
                     <div className="flex items-center gap-1.5 px-3">
-                      {Array.from({ length: totalPages }).map((_, index) => {
-                        const isCurrentPage = currentCarouselIndex === index;
+                      {Array.from({ length: actualCarouselPages }).map((_, index) => {
+                        const isCurrentPage = currentPageIndex === index;
                         return (
                           <button
                             key={index}
-                            onClick={() => handlePageChange(index)}
+                            onClick={() => handlePageChange(index * articlesPerPage)}
                             className={cn(
                               "w-2 h-2 rounded-full transition-all duration-300",
                               isCurrentPage
