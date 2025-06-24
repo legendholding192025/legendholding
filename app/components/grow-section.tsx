@@ -1,7 +1,7 @@
 "use client"
 
 import Image from "next/image"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 
 const slides = [
@@ -33,13 +33,43 @@ const slides = [
 
 export default function GrowSection() {
   const [currentSlide, setCurrentSlide] = useState(0)
+  const [imagesLoaded, setImagesLoaded] = useState<Set<number>>(new Set())
+  const [isTransitioning, setIsTransitioning] = useState(false)
+
+  // Preload all images on component mount
+  useEffect(() => {
+    const preloadImages = () => {
+      slides.forEach((slide, index) => {
+        const img = new window.Image()
+        img.onload = () => {
+          setImagesLoaded(prev => new Set(prev).add(index))
+        }
+        img.src = slide.image
+      })
+    }
+    
+    preloadImages()
+  }, [])
 
   const nextSlide = () => {
+    if (isTransitioning) return
+    setIsTransitioning(true)
     setCurrentSlide((prev) => (prev + 1) % slides.length)
+    setTimeout(() => setIsTransitioning(false), 300)
   }
 
   const prevSlide = () => {
+    if (isTransitioning) return
+    setIsTransitioning(true)
     setCurrentSlide((prev) => (prev === 0 ? slides.length - 1 : prev - 1))
+    setTimeout(() => setIsTransitioning(false), 300)
+  }
+
+  const goToSlide = (index: number) => {
+    if (isTransitioning || index === currentSlide) return
+    setIsTransitioning(true)
+    setCurrentSlide(index)
+    setTimeout(() => setIsTransitioning(false), 300)
   }
 
   const currentSlideData = slides[currentSlide]
@@ -65,13 +95,17 @@ export default function GrowSection() {
           <div className="order-2 lg:order-1 h-full">
             <div className="bg-white p-4 sm:p-6 lg:p-8 rounded-2xl lg:rounded-r-none lg:rounded-l-2xl h-full flex flex-col justify-between">
               <div className="max-w-[90%] lg:max-w-[85%]">
-                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#EE8900] mb-2 sm:mb-3">{currentSlideData.title}</h2>
-                <p className="text-sm sm:text-base lg:text-lg text-[#5E366D] leading-relaxed max-w-[90%] lg:max-w-[85%]">{currentSlideData.description}</p>
+                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#EE8900] mb-2 sm:mb-3 transition-all duration-300 ease-in-out">
+                  {currentSlideData.title}
+                </h2>
+                <p className="text-sm sm:text-base lg:text-lg text-[#5E366D] leading-relaxed max-w-[90%] lg:max-w-[85%] transition-all duration-300 ease-in-out">
+                  {currentSlideData.description}
+                </p>
               </div>
               {/* Navigation */}
               <div className="flex items-center justify-between pt-3 sm:pt-4 mt-3 sm:mt-4">
                 <div className="flex items-center space-x-4">
-                  <span className="text-gray-400 text-sm sm:text-base">
+                  <span className="text-gray-400 text-sm sm:text-base transition-all duration-300">
                     {currentSlide + 1} / {slides.length}
                   </span>
                 </div>
@@ -79,14 +113,20 @@ export default function GrowSection() {
                 <div className="flex items-center space-x-3 sm:space-x-4">
                   <button
                     onClick={prevSlide}
-                    className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border border-[#EE8900]/30 flex items-center justify-center text-[#EE8900] hover:text-white hover:border-[#EE8900] hover:bg-[#EE8900] transition-all duration-300 group"
+                    disabled={isTransitioning}
+                    className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full border border-[#EE8900]/30 flex items-center justify-center text-[#EE8900] hover:text-white hover:border-[#EE8900] hover:bg-[#EE8900] transition-all duration-300 group ${
+                      isTransitioning ? 'opacity-50 cursor-not-allowed' : ''
+                    }`}
                     aria-label="Previous slide"
                   >
                     <ChevronLeft className="w-4 h-4 sm:w-4 sm:h-4 group-hover:scale-110 transition-transform" />
                   </button>
                   <button
                     onClick={nextSlide}
-                    className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border border-[#EE8900]/30 flex items-center justify-center text-[#EE8900] hover:text-white hover:border-[#EE8900] hover:bg-[#EE8900] transition-all duration-300 group"
+                    disabled={isTransitioning}
+                    className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full border border-[#EE8900]/30 flex items-center justify-center text-[#EE8900] hover:text-white hover:border-[#EE8900] hover:bg-[#EE8900] transition-all duration-300 group ${
+                      isTransitioning ? 'opacity-50 cursor-not-allowed' : ''
+                    }`}
                     aria-label="Next slide"
                   >
                     <ChevronRight className="w-4 h-4 sm:w-4 sm:h-4 group-hover:scale-110 transition-transform" />
@@ -99,13 +139,24 @@ export default function GrowSection() {
           {/* Right Image */}
           <div className="order-1 lg:order-2 relative h-[200px] xs:h-[250px] sm:h-[300px] md:h-[350px] lg:h-full">
             <div className="overflow-hidden rounded-2xl lg:rounded-l-none lg:rounded-r-2xl h-full w-full">
+              {/* Loading placeholder */}
+              {!imagesLoaded.has(currentSlide) && (
+                <div className="absolute inset-0 bg-gradient-to-br from-gray-200 to-gray-300 animate-pulse z-10" />
+              )}
+              
               <Image
                 src={currentSlideData.image}
                 alt={`${currentSlideData.title} - Legend Holdings team collaboration`}
                 width={800}
                 height={600}
-                className="w-full h-full object-cover transition-all duration-700 ease-in-out"
-                priority
+                className={`w-full h-full object-cover transition-all duration-300 ease-in-out ${
+                  imagesLoaded.has(currentSlide) ? 'opacity-100' : 'opacity-0'
+                }`}
+                priority={currentSlide === 0}
+                quality={90}
+                placeholder="blur"
+                blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
+                onLoad={() => setImagesLoaded(prev => new Set(prev).add(currentSlide))}
               />
             </div>
           </div>
@@ -116,7 +167,7 @@ export default function GrowSection() {
           {slides.map((_, index) => (
             <button
               key={index}
-              onClick={() => setCurrentSlide(index)}
+              onClick={() => goToSlide(index)}
               className={`w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full transition-all duration-300 ${
                 index === currentSlide ? "bg-[#EE8900] scale-110" : "bg-gray-600 hover:bg-[#EE8900]/40"
               }`}
