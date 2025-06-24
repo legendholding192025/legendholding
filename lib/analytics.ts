@@ -9,22 +9,22 @@ export const ANALYTICS_CONFIG = {
   GA4_ID: process.env.NEXT_PUBLIC_GA4_ID || 'G-TFC4L94QL6',
   
   // Google Ads
-  GOOGLE_ADS_ID: process.env.NEXT_PUBLIC_GOOGLE_ADS_ID || 'AW-XXXXXXXXXX',
+  GOOGLE_ADS_ID: process.env.NEXT_PUBLIC_GOOGLE_ADS_ID || 'AW-5088079446',
   
   // Meta (Facebook) Pixel
-  META_PIXEL_ID: process.env.NEXT_PUBLIC_META_PIXEL_ID || 'XXXXXXXXXX',
+  META_PIXEL_ID: process.env.NEXT_PUBLIC_META_PIXEL_ID || '2991355601025019',
   
   // X.com (Twitter) Pixel
   X_PIXEL_ID: process.env.NEXT_PUBLIC_X_PIXEL_ID || 'XXXXXXXXXX',
   
   // Snapchat Pixel
-  SNAPCHAT_PIXEL_ID: process.env.NEXT_PUBLIC_SNAPCHAT_PIXEL_ID || 'XXXXXXXXXX',
+  SNAPCHAT_PIXEL_ID: process.env.NEXT_PUBLIC_SNAPCHAT_PIXEL_ID || '89a8f015-e28b-4075-83fe-ec5f12b27738',
   
   // TikTok Pixel
-  TIKTOK_PIXEL_ID: process.env.NEXT_PUBLIC_TIKTOK_PIXEL_ID || 'XXXXXXXXXX',
+  TIKTOK_PIXEL_ID: process.env.NEXT_PUBLIC_TIKTOK_PIXEL_ID || 'D1D6VNBC77U8DLILDANG',
   
   // Google YouTube
-  YOUTUBE_CHANNEL_ID: process.env.NEXT_PUBLIC_YOUTUBE_CHANNEL_ID || 'UCXXXXXXXXXX',
+  YOUTUBE_CHANNEL_ID: process.env.NEXT_PUBLIC_YOUTUBE_CHANNEL_ID || 'UCY4V3u7xBMkBiXR5u_deryA',
 } as const;
 
 // Page names for analytics clarity
