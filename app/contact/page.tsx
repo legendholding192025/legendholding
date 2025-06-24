@@ -144,9 +144,9 @@ export default function ContactPage() {
               </p>
             </div>
 
-            <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-stretch">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-stretch w-full">
               {/* Left Side - Map and Contact Info */}
-              <div className="bg-white rounded-2xl p-4 sm:p-6 shadow-sm flex flex-col">
+              <div className="bg-white rounded-2xl p-4 sm:p-6 shadow-sm flex flex-col order-2 lg:order-1 w-full">
                 <div className="mb-4">
                   <span className="text-[#2B1C48] font-semibold text-lg inline-block mb-2">Our Location</span>
                   <h3 className="text-2xl font-bold text-[#5D376E] mb-2">Visit Our Office</h3>
@@ -198,7 +198,7 @@ export default function ContactPage() {
               </div>
 
               {/* Right Side - Contact Form */}
-              <div className="bg-white rounded-2xl p-4 sm:p-6 shadow-sm flex flex-col">
+              <div className="bg-white rounded-2xl p-4 sm:p-6 shadow-sm flex flex-col order-1 lg:order-2 w-full">
                 <div className="mb-4">
                   <span className="text-[#2B1C48] font-semibold text-lg inline-block mb-2">Contact Us</span>
                   <h3 className="text-2xl font-bold text-[#5D376E] mb-2">Fill the Form</h3>

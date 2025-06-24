@@ -29,12 +29,205 @@ export function OurJourney() {
   const [showTimeline, setShowTimeline] = useState(false)
   const [lastScrollY, setLastScrollY] = useState(0)
   const [isScrollingUp, setIsScrollingUp] = useState(false)
+  const [imagesLoaded, setImagesLoaded] = useState<Set<number>>(new Set())
   const timelineRef = useRef<HTMLDivElement>(null)
   const sectionsRef = useRef<Array<HTMLDivElement | null>>([])
   const scrollTimeoutRef = useRef<NodeJS.Timeout | undefined>(undefined)
 
   const setSectionRef = useCallback((el: HTMLDivElement | null, index: number) => {
     sectionsRef.current[index] = el
+  }, [])
+
+  const milestones: MilestoneType[] = [
+    {
+      year: 2008,
+      title: "Oriental Wiseman General Trading",
+      description:
+        "Our journey began with the establishment of our first trading company, focusing on bringing quality products to the market with a vision for excellence.",
+      image: "https://cdn.legendholding.com/images/cdn_685677c0f3ead9.36789309_20250621_091336.jpeg",
+      icon: <Building className="w-6 h-6" />,
+      color: "#7c3aed",
+      achievements: ["Company Foundation", "First Trading Operations", "Market Entry"],
+    },
+    {
+      year: 2013,
+      title: "Legend Motors - Trading",
+      description:
+        "Established our first automotive company in the free zone, marking our entry into the automotive industry with our first showroom.",
+      image: "https://cdn.legendholding.com/images/cdn_6854fb071811c6.44383277_20250620_060911.webp",
+      icon: <Car className="w-6 h-6" />,
+      color: "#6d28d9",
+      achievements: ["Legend Motors FZCO", "Legend Motors Br-1 (268)", "Automotive Industry Entry"],
+    },
+    {
+      year: 2014,
+      title: "Legend Motors Expansion",
+      description:
+        "Expanded our automotive portfolio with multiple brands and opened our second showroom, offering customers a wider range of choices.",
+      image: "https://cdn.legendholding.com/images/cdn_68469ed48dcd56.80212229_20250609_084404.jpg",
+      icon: <Car className="w-6 h-6" />,
+      color: "#5b21b6",
+      achievements: ["Legend Multi Motors", "Legend Motors Br-2 (116)", "Brand Portfolio Expansion"],
+    },
+    {
+      year: 2016,
+      title: "Regional Operations",
+      description:
+        "Established new regional operations at Jabal Al Barakha to better serve our growing customer base across different territories.",
+      image: "https://cdn.legendholding.com/images/cdn_685a582fed2086.93844645_20250624_074759.png",
+      icon: <MapPin className="w-6 h-6" />,
+      color: "#4c1d95",
+      achievements: ["Jabal Al Barakha Operations", "Regional Expansion", "Territory Coverage"],
+    },
+    {
+      year: 2017,
+      title: "Premium Automotive Division",
+      description:
+        "Launched our premium automotive divisions, catering to luxury vehicle enthusiasts and automatic transmission specialists.",
+      image: "https://cdn.legendholding.com/images/cdn_685a584abd43c0.45778242_20250624_074826.png",
+      icon: <Car className="w-6 h-6" />,
+      color: "#7c3aed",
+      achievements: ["Highline Motors Trading", "Automatic Motors", "Premium Market Entry"],
+    },
+    {
+      year: 2018,
+      title: "Energy Sector Venture",
+      description:
+        "Ventured into the energy sector with Zul Energy, bringing innovative solutions and diversifying our business portfolio beyond automotive.",
+      image: "https://cdn.legendholding.com/images/cdn_6846a246859468.98501177_20250609_085846.jpg",
+      icon: <Zap className="w-6 h-6" />,
+      color: "#6d28d9",
+      achievements: ["Zul Energy Launch", "Energy Sector Entry", "Business Diversification"],
+    },
+    {
+      year: 2019,
+      title: "Global Investment & Tourism",
+      description:
+        "Established our global investment division and expanded into tourism, exploring new opportunities and markets worldwide.",
+      image: "https://cdn.legendholding.com/images/cdn_685a585a7222f7.74278267_20250624_074842.png",
+      icon: <Globe className="w-6 h-6" />,
+      color: "#5b21b6",
+      achievements: ["Legend World Investment", "Legend Travel & Tourism", "Global Market Expansion"],
+    },
+    {
+      year: 2020,
+      title: "Continued Growth",
+      description:
+        "Opened our third showroom despite global challenges, demonstrating our resilience and commitment to growth.",
+      image: "https://cdn.legendholding.com/images/cdn_685a581a34d806.40648321_20250624_074738.png",
+      icon: <Building className="w-6 h-6" />,
+      color: "#4c1d95",
+      achievements: ["Legend Motors Br-3 (26)", "Pandemic Resilience", "Continued Expansion"],
+    },
+    {
+      year: 2021,
+      title: "New Industry Entrance",
+      description:
+        "Expanded with our fourth showroom and comprehensive automotive services, including rental and maintenance solutions.",
+      image: "https://cdn.legendholding.com/images/cdn_6846a290084766.80604483_20250609_090000.jpg",
+      icon: <Car className="w-6 h-6" />,
+      color: "#7c3aed",
+      achievements: ["Legend Motors Br-4 (46)", "Rent A Car Services", "Automobile Services"],
+    },
+    {
+      year: 2022,
+      title: "Legend Motors - Dealerships",
+      description:
+        "Secured multiple prestigious dealerships including Skywell, Kaiyi, Lifan, and Li Auto, embracing the future of sustainable transportation.",
+      image: "https://cdn.legendholding.com/images/cdn_6854fcb990fac6.50629202_20250620_061625.webp",
+      icon: <Award className="w-6 h-6" />,
+      color: "#6d28d9",
+      achievements: ["Skywell Dealership", "Kaiyi & 212 Dealership", "Lifan Dealership"],
+    },
+    {
+      year: 2023,
+      title: "Sustainability and Logistics",
+      description:
+        "Opened our fifth showroom in Jebel Ali and launched green energy solutions alongside comprehensive logistics services.",
+      image: "https://cdn.legendholding.com/images/cdn_6846a1c8f3d8c5.57982348_20250609_085640.jpg",
+      icon: <Zap className="w-6 h-6" />,
+      color: "#5b21b6",
+      achievements: ["Legend Motors Br-5 Jebel Ali", "Green Energy Solutions", "Legend Logistics"],
+    },
+    {
+      year: 2025,
+      title: "Global Headquarters",
+      description:
+        "Our future landmark headquarters spanning over 450,000 SQFT in JAFZA will serve as the nerve center for our global operations.",
+      image: "https://cdn.legendholding.com/images/cloudinary/cloudinary_683ea90f29b708.04231409_20250603_074935.jpg",
+      icon: <Building className="w-6 h-6" />,
+      color: "#4c1d95",
+      achievements: ["Global HQ Opening", "450,000 SQFT Facility", "JAFZA Operations Center"],
+    },
+  ]
+
+  // Preload critical images
+  useEffect(() => {
+    const preloadImages = () => {
+      const criticalImages = milestones.slice(0, 3).map(milestone => milestone.image)
+      criticalImages.forEach((src, index) => {
+        const img = new window.Image()
+        img.onload = () => {
+          setImagesLoaded(prev => new Set(prev).add(index))
+        }
+        img.src = src
+      })
+    }
+    
+    // Add preload links for critical images
+    const addPreloadLinks = () => {
+      const criticalImages = milestones.slice(0, 3).map(milestone => milestone.image)
+      criticalImages.forEach((src) => {
+        const link = document.createElement('link')
+        link.rel = 'preload'
+        link.as = 'image'
+        link.href = src
+        document.head.appendChild(link)
+      })
+    }
+    
+    preloadImages()
+    addPreloadLinks()
+  }, [])
+
+  // Intersection Observer for lazy loading
+  useEffect(() => {
+    const observerOptions = {
+      root: null,
+      rootMargin: '50px',
+      threshold: 0.1
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const index = parseInt(entry.target.getAttribute('data-index') || '0')
+          if (!imagesLoaded.has(index)) {
+            // Trigger image load for visible sections
+            const img = new window.Image()
+            img.onload = () => {
+              setImagesLoaded(prev => new Set(prev).add(index))
+            }
+            img.src = milestones[index].image
+          }
+        }
+      })
+    }, observerOptions)
+
+    // Observe all sections
+    sectionsRef.current.forEach((section, index) => {
+      if (section && index >= 3) { // Only observe non-critical images
+        section.setAttribute('data-index', index.toString())
+        observer.observe(section)
+      }
+    })
+
+    return () => observer.disconnect()
+  }, [imagesLoaded, milestones])
+
+  // Handle image load
+  const handleImageLoad = useCallback((index: number) => {
+    setImagesLoaded(prev => new Set(prev).add(index))
   }, [])
 
   // Override header scroll behavior for this page
@@ -81,129 +274,6 @@ export function OurJourney() {
       }
     };
   }, []);
-
-  const milestones: MilestoneType[] = [
-    {
-      year: 2008,
-      title: "Oriental Wiseman General Trading",
-      description:
-        "Our journey began with the establishment of our first trading company, focusing on bringing quality products to the market with a vision for excellence.",
-      image: "https://cdn.legendholding.com/images/cdn_685677c0f3ead9.36789309_20250621_091336.jpeg",
-      icon: <Building className="w-6 h-6" />,
-      color: "#7c3aed",
-      achievements: ["Company Foundation", "First Trading Operations", "Market Entry"],
-    },
-    {
-      year: 2013,
-      title: "Legend Motors - Trading",
-      description:
-        "Established our first automotive company in the free zone, marking our entry into the automotive industry with our first showroom.",
-      image: "https://cdn.legendholding.com/images/cdn_6854fb071811c6.44383277_20250620_060911.webp",
-      icon: <Car className="w-6 h-6" />,
-      color: "#6d28d9",
-      achievements: ["Legend Motors FZCO", "Legend Motors Br-1 (268)", "Automotive Industry Entry"],
-    },
-    {
-      year: 2014,
-      title: "Legend Motors Expansion",
-      description:
-        "Expanded our automotive portfolio with multiple brands and opened our second showroom, offering customers a wider range of choices.",
-      image: "https://cdn.legendholding.com/images/cdn_68469ed48dcd56.80212229_20250609_084404.jpg",
-      icon: <Car className="w-6 h-6" />,
-      color: "#5b21b6",
-      achievements: ["Legend Multi Motors", "Legend Motors Br-2 (116)", "Brand Portfolio Expansion"],
-    },
-    {
-      year: 2016,
-      title: "Regional Operations",
-      description:
-        "Established new regional operations at Jabal Al Barakha to better serve our growing customer base across different territories.",
-      image: "https://cdn.legendholding.com/images/cdn_6846a269d5cec6.37265819_20250609_085921.jpg",
-      icon: <MapPin className="w-6 h-6" />,
-      color: "#4c1d95",
-      achievements: ["Jabal Al Barakha Operations", "Regional Expansion", "Territory Coverage"],
-    },
-    {
-      year: 2017,
-      title: "Premium Automotive Division",
-      description:
-        "Launched our premium automotive divisions, catering to luxury vehicle enthusiasts and automatic transmission specialists.",
-      image: "https://cdn.legendholding.com/images/cdn_6846a2581107e1.59462759_20250609_085904.jpg",
-      icon: <Car className="w-6 h-6" />,
-      color: "#7c3aed",
-      achievements: ["Highline Motors Trading", "Automatic Motors", "Premium Market Entry"],
-    },
-    {
-      year: 2018,
-      title: "Energy Sector Venture",
-      description:
-        "Ventured into the energy sector with Zul Energy, bringing innovative solutions and diversifying our business portfolio beyond automotive.",
-      image: "https://cdn.legendholding.com/images/cdn_6846a246859468.98501177_20250609_085846.jpg",
-      icon: <Zap className="w-6 h-6" />,
-      color: "#6d28d9",
-      achievements: ["Zul Energy Launch", "Energy Sector Entry", "Business Diversification"],
-    },
-    {
-      year: 2019,
-      title: "Global Investment & Tourism",
-      description:
-        "Established our global investment division and expanded into tourism, exploring new opportunities and markets worldwide.",
-      image: "https://cdn.legendholding.com/images/cdn_6846a212a62422.28276208_20250609_085754.jpg",
-      icon: <Globe className="w-6 h-6" />,
-      color: "#5b21b6",
-      achievements: ["Legend World Investment", "Legend Travel & Tourism", "Global Market Expansion"],
-    },
-    {
-      year: 2020,
-      title: "Continued Growth",
-      description:
-        "Opened our third showroom despite global challenges, demonstrating our resilience and commitment to growth.",
-      image: "https://cdn.legendholding.com/images/cdn_6846a2044f5c45.64466640_20250609_085740.jpg",
-      icon: <Building className="w-6 h-6" />,
-      color: "#4c1d95",
-      achievements: ["Legend Motors Br-3 (26)", "Pandemic Resilience", "Continued Expansion"],
-    },
-    {
-      year: 2021,
-      title: "New Industry Entrance",
-      description:
-        "Expanded with our fourth showroom and comprehensive automotive services, including rental and maintenance solutions.",
-      image: "https://cdn.legendholding.com/images/cdn_6846a290084766.80604483_20250609_090000.jpg",
-      icon: <Car className="w-6 h-6" />,
-      color: "#7c3aed",
-      achievements: ["Legend Motors Br-4 (46)", "Rent A Car Services", "Automobile Services"],
-    },
-    {
-      year: 2022,
-      title: "Legend Motors - Dealerships",
-      description:
-        "Secured multiple prestigious dealerships including Skywell, Kaiyi, Lifan, and Li Auto, embracing the future of sustainable transportation.",
-      image: "https://cdn.legendholding.com/images/cdn_6854fcb990fac6.50629202_20250620_061625.webp",
-      icon: <Award className="w-6 h-6" />,
-      color: "#6d28d9",
-      achievements: ["Skywell Dealership", "Kaiyi & 212 Dealership", "Lifan Dealership"],
-    },
-    {
-      year: 2023,
-      title: "Sustainability and Logistics",
-      description:
-        "Opened our fifth showroom in Jebel Ali and launched green energy solutions alongside comprehensive logistics services.",
-      image: "https://cdn.legendholding.com/images/cdn_6846a1c8f3d8c5.57982348_20250609_085640.jpg",
-      icon: <Zap className="w-6 h-6" />,
-      color: "#5b21b6",
-      achievements: ["Legend Motors Br-5 Jebel Ali", "Green Energy Solutions", "Legend Logistics"],
-    },
-    {
-      year: 2025,
-      title: "Global Headquarters",
-      description:
-        "Our future landmark headquarters spanning over 450,000 SQFT in JAFZA will serve as the nerve center for our global operations.",
-      image: "https://cdn.legendholding.com/images/cloudinary/cloudinary_683ea90f29b708.04231409_20250603_074935.jpg",
-      icon: <Building className="w-6 h-6" />,
-      color: "#4c1d95",
-      achievements: ["Global HQ Opening", "450,000 SQFT Facility", "JAFZA Operations Center"],
-    },
-  ]
 
   // Optimized timeline scroll with debouncing
   const scrollToActiveYear = useCallback(
@@ -391,16 +461,27 @@ export function OurJourney() {
                   src={milestone.image || "/placeholder.svg"}
                   alt={`${milestone.title} - ${milestone.year}`}
                   fill
-                  className="object-cover"
+                  className={cn(
+                    "object-cover transition-opacity duration-500",
+                    imagesLoaded.has(index) ? "opacity-100" : "opacity-0"
+                  )}
                   style={{
                     transform: milestone.title === "Oriental Wiseman General Trading" ? "scale(1.1)" : "scale(1)",
                   }}
                   sizes="100vw"
                   priority={index < 3}
-                  quality={85}
+                  quality={90}
                   placeholder="blur"
                   blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
+                  onLoad={() => handleImageLoad(index)}
+                  loading={index < 3 ? "eager" : "lazy"}
                 />
+                
+                {/* Loading placeholder */}
+                {!imagesLoaded.has(index) && (
+                  <div className="absolute inset-0 bg-gradient-to-br from-gray-200 to-gray-300 animate-pulse" />
+                )}
+                
                 <div className="absolute inset-0 bg-gradient-to-t from-[#2B1C48]/85 via-[#2B1C48]/50 to-[#2B1C48]/20" />
 
                 {/* Enhanced Content */}
@@ -422,13 +503,13 @@ export function OurJourney() {
                       >
                         <div className="flex items-start justify-start gap-4 md:gap-6">
                           <motion.div
-                            className="bg-[#F08900] p-3 md:p-4 rounded-2xl shadow-2xl mt-0.5"
+                            className="bg-[#F08900] p-3 md:p-4 rounded-2xl shadow-2xl flex-shrink-0 -mt-0.5 md:mt-0"
                             whileHover={{ scale: 1.1, rotate: 5 }}
                             transition={{ duration: 0.3 }}
                           >
                             {milestone.icon}
                           </motion.div>
-                          <div className="text-left">
+                          <div className="text-left flex-1">
                             <motion.h1
                               className="text-2xl md:text-5xl lg:text-6xl font-bold leading-tight font-[var(--heading-font)]"
                             >

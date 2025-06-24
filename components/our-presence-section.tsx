@@ -98,7 +98,7 @@ export function OurPresenceSection() {
             />
           </motion.div>
           {/* Right side - Country list */}
-          <div className="lg:col-span-5 flex flex-col items-center lg:items-start ml-0 md:ml-10 lg:ml-32">
+          <div className="lg:col-span-5 flex flex-col items-center lg:items-start ml-0 md:ml-10 lg:ml-32 pl-4 md:pl-0">
             <motion.div 
               className="space-y-5 md:space-y-6 mt-2 md:mt-8 w-full"
               variants={containerVariants}

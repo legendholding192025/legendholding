@@ -210,6 +210,7 @@ export function Header({ hideHeader = false }: { hideHeader?: boolean }) {
       items: SubMenuItem[];
     }[];
   } | null>(null)
+  const [isHeaderHidden, setIsHeaderHidden] = useState(false)
   const isMobile = useMediaQuery("(max-width: 1023px)")
   const isTablet = useMediaQuery("(min-width: 768px) and (max-width: 1023px)")
   const headerRef = useRef<HTMLElement>(null)
@@ -233,8 +234,10 @@ export function Header({ hideHeader = false }: { hideHeader?: boolean }) {
       if ((!mobileMenuOpen && !activeMenu) || activeMenu === "Who We Are") {
         if (st > lastScrollTop && st > 100) {
           headerRef.current?.classList.add('-translate-y-full');
+          setIsHeaderHidden(true);
         } else {
           headerRef.current?.classList.remove('-translate-y-full');
+          setIsHeaderHidden(false);
         }
       }
       setLastScrollTop(st);
@@ -267,6 +270,26 @@ export function Header({ hideHeader = false }: { hideHeader?: boolean }) {
       document.body.style.top = '';
     };
   }, [mobileMenuOpen, activeMenu]);
+
+  // Close mobile menu when header is hidden
+  useEffect(() => {
+    if (mobileMenuOpen && isHeaderHidden) {
+      setMobileMenuOpen(false);
+    }
+  }, [mobileMenuOpen, isHeaderHidden]);
+
+  // Manage body classes for mobile menu
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.classList.add('mobile-menu-open');
+    } else {
+      document.body.classList.remove('mobile-menu-open');
+    }
+    
+    return () => {
+      document.body.classList.remove('mobile-menu-open');
+    };
+  }, [mobileMenuOpen]);
 
   // Remove click outside handler for mobile menu
   useEffect(() => {
@@ -861,13 +884,13 @@ export function Header({ hideHeader = false }: { hideHeader?: boolean }) {
             role="navigation"
             aria-label="Mobile navigation menu"
             className={cn(
-              "fixed inset-0 bg-white z-[9998] lg:hidden",
+              "fixed bg-white z-[9998] lg:hidden",
               "transition-transform duration-300 ease-in-out",
               mobileMenuOpen ? "translate-y-0" : "-translate-y-full",
+              // Always cover full viewport
+              "top-0 left-0 right-0 bottom-0 h-screen w-full"
             )}
             style={{
-              top: '60px', // Height of the header
-              height: 'calc(100vh - 60px)',
               WebkitOverflowScrolling: 'touch',
               touchAction: 'pan-y pinch-zoom'
             }}
@@ -875,14 +898,23 @@ export function Header({ hideHeader = false }: { hideHeader?: boolean }) {
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
           >
-            <div className="h-full flex flex-col">
+            <div className="h-full w-full flex flex-col">
+              {/* Header spacer when header is visible */}
+              {!isHeaderHidden && (
+                <div className="h-[60px] flex-shrink-0" />
+              )}
+              
               {/* Regular Menu */}
               <div 
                 className={cn(
-                  "flex-1 overflow-y-auto px-4 py-2",
+                  "flex-1 w-full overflow-y-auto px-4 py-2",
                   "transition-opacity duration-300 delay-150",
                   mobileMenuOpen ? "opacity-100" : "opacity-0"
                 )}
+                style={{
+                  minHeight: 0,
+                  flex: 1
+                }}
               >
                 <nav className="flex flex-col space-y-1">
                   {menuItems.map((item) => (
@@ -982,14 +1014,23 @@ export function Header({ hideHeader = false }: { hideHeader?: boolean }) {
             </div>
           </div>
 
-          {/* Remove the overlay click handler */}
+          {/* Mobile menu backdrop */}
           <div
             className={cn(
-              "fixed inset-0 bg-black/20 backdrop-blur-sm z-[9997] lg:hidden",
+              "fixed inset-0 bg-black/20 backdrop-blur-sm z-[9997] lg:hidden mobile-menu-backdrop",
               "transition-opacity duration-300",
               mobileMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
             )}
+            style={{
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              width: '100vw',
+              height: '100vh'
+            }}
             aria-hidden="true"
+            onClick={() => setMobileMenuOpen(false)}
           />
         </>
       )}
