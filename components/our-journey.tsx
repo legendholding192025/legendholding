@@ -247,8 +247,14 @@ export function OurJourney() {
           header.style.transform = 'translateY(0) !important';
           header.style.visibility = 'visible';
           header.style.opacity = '1';
+        } else if (isScrollingUp) {
+          // Show header when scrolling up
+          header.classList.remove('-translate-y-full');
+          header.style.transform = 'translateY(0) !important';
+          header.style.visibility = 'visible';
+          header.style.opacity = '1';
         } else {
-          // Hide header when scrolling (both up and down)
+          // Hide header when scrolling down
           header.classList.add('-translate-y-full');
           header.style.transform = 'translateY(-100%) !important';
           header.style.visibility = 'hidden';
@@ -322,13 +328,16 @@ export function OurJourney() {
         requestAnimationFrame(() => {
           const scrollY = window.scrollY
           const isUp = scrollY < lastScrollY
+          const isAtTop = scrollY <= 100
           
           // Update scroll direction
           setIsScrollingUp(isUp)
           setLastScrollY(scrollY)
           
-          // Show timeline when past 100px (both scrolling up and down), hide only at top
-          if (scrollY > 100) {
+          // Show timeline when scrolling up or when past 100px, hide when at top
+          if (isAtTop) {
+            setShowTimeline(false)
+          } else if (isUp || scrollY > 100) {
             setShowTimeline(true)
           } else {
             setShowTimeline(false)
@@ -362,7 +371,7 @@ export function OurJourney() {
         clearTimeout(scrollTimeoutRef.current)
       }
     }
-  }, [activeYearIndex, isScrolling, lastScrollY])
+  }, [activeYearIndex, isScrolling, lastScrollY, isScrollingUp])
 
   // Update timeline scroll position when active year changes
   useEffect(() => {
@@ -389,19 +398,22 @@ export function OurJourney() {
       <div className="relative w-full overflow-x-hidden">
         {/* Enhanced Timeline Header - Only show when scrolling */}
         <motion.div
-          className="fixed top-0 left-0 right-0 z-50 shadow-lg backdrop-blur-sm"
+          className={`fixed shadow-lg backdrop-blur-sm z-50 left-0 right-0 timeline-bar ${
+            showTimeline ? (isScrollingUp ? 'timeline-below-header' : 'timeline-at-top') : 'timeline-hidden'
+          }`}
           style={{ 
             height: `${TIMELINE_HEIGHT}px`,
-            backgroundColor: '#5E366D'
+            backgroundColor: '#5E366D',
+            top: showTimeline ? (isScrollingUp ? '60px' : '0px') : '-70px'
           }}
           initial={{ y: -TIMELINE_HEIGHT }}
           animate={{ y: showTimeline ? 0 : -TIMELINE_HEIGHT }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
         >
-          <div className="h-full flex items-center">
+          <div className="h-full flex items-center timeline-content">
             <div
               ref={timelineRef}
-              className="flex items-center overflow-x-auto scrollbar-hide w-full px-4"
+              className="flex items-center overflow-x-auto scrollbar-hide w-full"
               style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
             >
               <div className="flex items-center space-x-4 md:space-x-6 mx-auto">
