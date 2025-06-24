@@ -225,6 +225,7 @@ export function Header({ hideHeader = false }: { hideHeader?: boolean }) {
   const menuItemRefs = useRef<Record<string, HTMLDivElement | null>>({})
   const legendMotorsRef = useRef<HTMLDivElement | null>(null)
   const [mobileNestedMenuOpen, setMobileNestedMenuOpen] = useState<string | null>(null);
+  const [mobileDropdownOpen, setMobileDropdownOpen] = useState<string | null>(null);
 
   // Handle scroll direction for header visibility
   useEffect(() => {
@@ -277,6 +278,14 @@ export function Header({ hideHeader = false }: { hideHeader?: boolean }) {
       setMobileMenuOpen(false);
     }
   }, [mobileMenuOpen, isHeaderHidden]);
+
+  // Close mobile dropdowns when mobile menu is closed
+  useEffect(() => {
+    if (!mobileMenuOpen) {
+      setMobileDropdownOpen(null);
+      setMobileNestedMenuOpen(null);
+    }
+  }, [mobileMenuOpen]);
 
   // Manage body classes for mobile menu
   useEffect(() => {
@@ -923,81 +932,84 @@ export function Header({ hideHeader = false }: { hideHeader?: boolean }) {
                       className="border-b border-gray-100"
                     >
                       {item.hasSubmenu ? (
-                        <details 
-                          className="group" 
-                          open={activeMenu === item.title}
-                        >
-                          <summary 
-                            className="flex justify-between items-center p-4 cursor-pointer"
+                        <div className="group">
+                          <button
+                            onClick={() => setMobileDropdownOpen(mobileDropdownOpen === item.title ? null : item.title)}
+                            className="w-full flex justify-between items-center p-4 cursor-pointer"
                           >
                             <span className="text-lg font-medium text-gray-800">{item.title}</span>
-                            <ChevronDown className="h-5 w-5 text-primary" />
-                          </summary>
+                            <ChevronDown className={cn(
+                              "h-5 w-5 text-primary transition-transform duration-200",
+                              mobileDropdownOpen === item.title && "rotate-180"
+                            )} />
+                          </button>
 
-                          <div className="bg-gray-50 p-4">
-                            {item.submenu && (
-                              <div className="space-y-2">
-                                {item.submenu.map((subItem) => (
-                                  <Link
-                                    key={subItem.title}
-                                    href={subItem.url}
-                                    className="block p-3 rounded-lg hover:bg-gray-100"
-                                    onClick={() => setMobileMenuOpen(false)}
-                                  >
-                                    <h3 className="text-base font-medium text-gray-800">{subItem.title}</h3>
-                                  </Link>
-                                ))}
-                              </div>
-                            )}
+                          {mobileDropdownOpen === item.title && (
+                            <div className="bg-gray-50 p-4">
+                              {item.submenu && (
+                                <div className="space-y-2">
+                                  {item.submenu.map((subItem) => (
+                                    <Link
+                                      key={subItem.title}
+                                      href={subItem.url}
+                                      className="block p-3 rounded-lg hover:bg-gray-100"
+                                      onClick={() => setMobileMenuOpen(false)}
+                                    >
+                                      <h3 className="text-base font-medium text-gray-800">{subItem.title}</h3>
+                                    </Link>
+                                  ))}
+                                </div>
+                              )}
 
-                            {item.businessCategories && (
-                              <div className="space-y-4">
-                                {item.businessCategories[0].items.map((business) => (
-                                  <div key={business.title}>
-                                    {business.hasNestedSubmenu ? (
-                                      <div className="group">
-                                        <button
-                                          onClick={() => setMobileNestedMenuOpen(
-                                            mobileNestedMenuOpen === business.title ? null : business.title
+                              {item.businessCategories && (
+                                <div className="space-y-4">
+                                  {item.businessCategories[0].items.map((business) => (
+                                    <div key={business.title}>
+                                      {business.hasNestedSubmenu ? (
+                                        <div className="group">
+                                          <button
+                                            onClick={() => setMobileNestedMenuOpen(
+                                              mobileNestedMenuOpen === business.title ? null : business.title
+                                            )}
+                                            className="w-full flex justify-between items-center p-3 rounded-lg hover:bg-gray-100 cursor-pointer"
+                                          >
+                                            <h3 className="text-base font-medium text-gray-800">{business.title}</h3>
+                                            <ChevronRight className={cn(
+                                              "h-4 w-4 text-primary transition-transform duration-200",
+                                              mobileNestedMenuOpen === business.title && "rotate-90"
+                                            )} />
+                                          </button>
+                                          {mobileNestedMenuOpen === business.title && (
+                                            <div className="mt-2 ml-4 pl-4 border-l-2 border-primary/20 space-y-2">
+                                              {business.nestedSubmenu?.map((nestedItem) => (
+                                                <Link
+                                                  key={nestedItem.title}
+                                                  href={nestedItem.url}
+                                                  className="block p-2 text-sm text-gray-600 hover:text-primary hover:bg-gray-50 rounded-lg transition-colors"
+                                                  onClick={() => setMobileMenuOpen(false)}
+                                                >
+                                                  <div className="font-medium">{nestedItem.title}</div>
+                                                </Link>
+                                              ))}
+                                            </div>
                                           )}
-                                          className="w-full flex justify-between items-center p-3 rounded-lg hover:bg-gray-100 cursor-pointer"
+                                        </div>
+                                      ) : (
+                                        <Link
+                                          href={business.url}
+                                          className="block p-3 rounded-lg hover:bg-gray-100"
+                                          onClick={() => setMobileMenuOpen(false)}
                                         >
                                           <h3 className="text-base font-medium text-gray-800">{business.title}</h3>
-                                          <ChevronRight className={cn(
-                                            "h-4 w-4 text-primary transition-transform duration-200",
-                                            mobileNestedMenuOpen === business.title && "rotate-90"
-                                          )} />
-                                        </button>
-                                        {mobileNestedMenuOpen === business.title && (
-                                          <div className="mt-2 ml-4 pl-4 border-l-2 border-primary/20 space-y-2">
-                                            {business.nestedSubmenu?.map((nestedItem) => (
-                                              <Link
-                                                key={nestedItem.title}
-                                                href={nestedItem.url}
-                                                className="block p-2 text-sm text-gray-600 hover:text-primary hover:bg-gray-50 rounded-lg transition-colors"
-                                                onClick={() => setMobileMenuOpen(false)}
-                                              >
-                                                <div className="font-medium">{nestedItem.title}</div>
-                                              </Link>
-                                            ))}
-                                          </div>
-                                        )}
-                                      </div>
-                                    ) : (
-                                      <Link
-                                        href={business.url}
-                                        className="block p-3 rounded-lg hover:bg-gray-100"
-                                        onClick={() => setMobileMenuOpen(false)}
-                                      >
-                                        <h3 className="text-base font-medium text-gray-800">{business.title}</h3>
-                                      </Link>
-                                    )}
-                                  </div>
-                                ))}
-                              </div>
-                            )}
-                          </div>
-                        </details>
+                                        </Link>
+                                      )}
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+                          )}
+                        </div>
                       ) : (
                         <Link
                           href={item.url}

@@ -44,7 +44,7 @@ export function OurJourney() {
       title: "Oriental Wiseman General Trading",
       description:
         "Our journey began with the establishment of our first trading company, focusing on bringing quality products to the market with a vision for excellence.",
-      image: "https://cdn.legendholding.com/images/cdn_685677c0f3ead9.36789309_20250621_091336.jpeg",
+      image: "https://cdn.legendholding.com/images/cdn_685aacbc54a7d9.24632090_20250624_134844.jpg",
       icon: <Building className="w-6 h-6" />,
       color: "#7c3aed",
       achievements: ["Company Foundation", "First Trading Operations", "Market Entry"],
@@ -164,7 +164,10 @@ export function OurJourney() {
   // Preload critical images
   useEffect(() => {
     const preloadImages = () => {
-      const criticalImages = milestones.slice(0, 3).map(milestone => milestone.image)
+      // Prioritize the first image for immediate loading
+      const firstImage = milestones[0].image
+      const criticalImages = [firstImage, ...milestones.slice(1, 3).map(milestone => milestone.image)]
+      
       criticalImages.forEach((src, index) => {
         const img = new window.Image()
         img.onload = () => {
@@ -174,14 +177,20 @@ export function OurJourney() {
       })
     }
     
-    // Add preload links for critical images
+    // Add preload links for critical images with highest priority for first image
     const addPreloadLinks = () => {
-      const criticalImages = milestones.slice(0, 3).map(milestone => milestone.image)
-      criticalImages.forEach((src) => {
+      const firstImage = milestones[0].image
+      const criticalImages = [firstImage, ...milestones.slice(1, 3).map(milestone => milestone.image)]
+      
+      criticalImages.forEach((src, index) => {
         const link = document.createElement('link')
         link.rel = 'preload'
         link.as = 'image'
         link.href = src
+        // Give highest priority to first image
+        if (index === 0) {
+          link.setAttribute('importance', 'high')
+        }
         document.head.appendChild(link)
       })
     }
@@ -481,17 +490,30 @@ export function OurJourney() {
                     transform: milestone.title === "Oriental Wiseman General Trading" ? "scale(1.1)" : "scale(1)",
                   }}
                   sizes="100vw"
-                  priority={index < 3}
-                  quality={90}
+                  priority={index === 0}
+                  quality={index === 0 ? 95 : 90}
                   placeholder="blur"
                   blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
                   onLoad={() => handleImageLoad(index)}
-                  loading={index < 3 ? "eager" : "lazy"}
+                  loading={index === 0 ? "eager" : index < 3 ? "eager" : "lazy"}
+                  fetchPriority={index === 0 ? "high" : "auto"}
                 />
                 
                 {/* Loading placeholder */}
                 {!imagesLoaded.has(index) && (
-                  <div className="absolute inset-0 bg-gradient-to-br from-gray-200 to-gray-300 animate-pulse" />
+                  <div className={cn(
+                    "absolute inset-0 bg-gradient-to-br from-gray-200 to-gray-300 animate-pulse",
+                    index === 0 && "bg-gradient-to-br from-[#5E366D]/20 to-[#F08900]/20"
+                  )}>
+                    {index === 0 && (
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="text-center">
+                          <div className="w-8 h-8 border-2 border-[#F08900] border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
+                          <p className="text-[#5E366D] font-medium">Loading...</p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 )}
                 
                 <div className="absolute inset-0 bg-gradient-to-t from-[#2B1C48]/85 via-[#2B1C48]/50 to-[#2B1C48]/20" />
