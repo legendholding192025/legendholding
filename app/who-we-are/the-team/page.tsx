@@ -155,6 +155,12 @@ export default function LeadershipTeam() {
                   role: "Brand Manager",
                   company: "Legend Holding Group",
                   image: "https://cdn.legendholding.com/images/cdn_685bac3b05ebd8.00933704_20250625_075851.jpg"
+                },
+                {
+                  name: "Jade Li",
+                  role: "Managing Director",
+                  company: "Zul Energy",
+                  image: "https://cdn.legendholding.com/images/cdn_685bffe12e81d9.21593413_20250625_135545.jpg"
                 }
               
               ].map((leader, index) => (
