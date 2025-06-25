@@ -1,6 +1,6 @@
 export default function HeroSection() {
   return (
-    <section className="relative w-full h-[75vh] md:h-[90vh] flex items-center justify-center text-center overflow-hidden">
+    <section className="relative w-full h-[85vh] md:h-[100vh] flex items-center justify-center text-center overflow-hidden">
       {/* Background Video */}
       <video
         autoPlay
@@ -22,7 +22,7 @@ export default function HeroSection() {
         </h1>
         <p
           className="text-base sm:text-lg md:text-xl lg:text-2xl font-medium tracking-wider"
-          style={{ color: '#5D376E' }}
+          style={{ color: '#FFFFFF' }}
         >
           Together We Grow
         </p>

@@ -64,7 +64,7 @@ export function OurJourney() {
       title: "Legend Motors Expansion",
       description:
         "Expanded our automotive portfolio with multiple brands and opened our second showroom, offering customers a wider range of choices.",
-      image: "https://cdn.legendholding.com/images/cdn_68469ed48dcd56.80212229_20250609_084404.jpg",
+      image: "https://cdn.legendholding.com/images/cdn_685bb478d9dfb1.61228518_20250625_083400.png",
       icon: <Car className="w-6 h-6" />,
       color: "#5b21b6",
       achievements: ["Legend Multi Motors", "Legend Motors Br-2 (116)", "Brand Portfolio Expansion"],
