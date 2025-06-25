@@ -41,7 +41,7 @@ export const PAGE_NAMES = {
   
   // Who We Are section
   WHO_WE_ARE: 'Who We Are',
-  OUR_FOUNDATION: 'Our Foundation',
+  OUR_FOUNDATION: 'About Us',
   BRAND_STORY: 'Brand Story',
   JOURNEY: 'Our Journey',
   THE_TEAM: 'The Team',

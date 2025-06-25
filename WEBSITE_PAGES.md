@@ -20,7 +20,7 @@ This document provides a comprehensive list of all pages on the Legend Holding G
 | Page Name | URL Path | Analytics Name | Description |
 |-----------|----------|----------------|-------------|
 | Who We Are | `/who-we-are` | Who We Are | Company introduction |
-| Our Foundation | `/who-we-are/our-foundation` | Our Foundation | Company vision and mission |
+| About Us | `/who-we-are/about-us` | About Us | Company vision and mission |
 | Brand Story | `/who-we-are/brand-story` | Brand Story | Company history and story |
 | Our Journey | `/who-we-are/journey` | Our Journey | Company timeline and milestones |
 | The Team | `/who-we-are/the-team` | The Team | Team members and leadership |
@@ -84,7 +84,7 @@ This document provides a comprehensive list of all pages on the Legend Holding G
 ### Information Pages (Engagement Focus)
 - About Us
 - Who We Are
-- Our Foundation
+- About Us
 - Brand Story
 - Our Journey
 - The Team

@@ -73,8 +73,8 @@ const menuItems: MenuItem[] = [
     hasSubmenu: true,
     submenu: [
       {
-        title: "Our Foundation",
-        url: "/who-we-are/our-foundation",
+        title: "About Us",
+        url: "/who-we-are/about-us",
         image: "https://cdn.legendholding.com/images/cdn_683e9dd2a74833.63027495_20250603_070138.jpg",
         description: "Discover our vision, mission, and the values that drive us forward."
       },

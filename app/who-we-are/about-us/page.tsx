@@ -75,7 +75,7 @@ function AnimatedCounter({ target, suffix = "", prefix = "", duration = 2000, st
   )
 }
  
-export default function OurFoundationPage() {
+export default function AboutUsPage() {
   const [scrollY, setScrollY] = useState(0)
  
   // Animated counters
@@ -131,7 +131,7 @@ export default function OurFoundationPage() {
           <div className="absolute inset-0">
             <Image
               src="https://cdn.legendholding.com/images/cloudinary/cloudinary_683ea90f29b708.04231409_20250603_074935.jpg"
-              alt="Our Foundation"
+              alt="About Us"
               fill
               className="object-cover object-[center_20%]"
               priority
@@ -147,7 +147,7 @@ export default function OurFoundationPage() {
           <div className="relative container mx-auto px-4 py-24 md:py-32">
             <div className="max-w-4xl mx-auto text-center">
               <h1 className="text-4xl md:text-5xl font-bold text-white mb-6 font-richmond">
-                Our Foundation
+                About Us
               </h1>
             </div>
           </div>
@@ -392,4 +392,4 @@ export default function OurFoundationPage() {
       <Footer />
     </>
   )
-}
+} 

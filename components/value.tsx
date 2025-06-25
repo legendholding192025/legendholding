@@ -33,7 +33,7 @@ export default function ValueSection() {
         {/* Header */}
         <div className="text-center mt-16 sm:mt-20 md:mt-24 mb-10 sm:mb-12 md:mb-14">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#F08900] mb-2 sm:mb-3 animate-fade-in">
-            Our Foundation
+            About Us
           </h2>
           <div className="w-24 sm:w-28 md:w-32 h-1 bg-[#2B1C48] mx-auto animate-slide-in" style={{ marginTop: '4px' }}></div>
         </div>

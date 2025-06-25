@@ -18,7 +18,7 @@ export default function CareersPage() {
         <div className="w-full max-w-full">
           <PageBanner 
             title="Careers"
-            imageUrl="https://cdn.legendholding.com/images/cloudinary/cloudinary_683ea90f29b708.04231409_20250603_074935.jpg"
+            imageUrl="https://cdn.legendholding.com/images/cdn_685aae9f8a74d0.60885969_20250624_135647.png"
           />
           <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 md:py-20 bg-white">
             {/* Header Section */}
