@@ -15,6 +15,7 @@ type MilestoneType = {
   title: string
   description: string
   image: string
+  mobileImage?: string
   icon: React.ReactNode
   color: string
   achievements: string[]
@@ -30,6 +31,7 @@ export function OurJourney() {
   const [lastScrollY, setLastScrollY] = useState(0)
   const [isScrollingUp, setIsScrollingUp] = useState(false)
   const [imagesLoaded, setImagesLoaded] = useState<Set<number>>(new Set())
+  const [isMobile, setIsMobile] = useState(false)
   const timelineRef = useRef<HTMLDivElement>(null)
   const sectionsRef = useRef<Array<HTMLDivElement | null>>([])
   const scrollTimeoutRef = useRef<NodeJS.Timeout | undefined>(undefined)
@@ -45,6 +47,7 @@ export function OurJourney() {
       description:
         "Our journey began with the establishment of our first trading company, focusing on bringing quality products to the market with a vision for excellence.",
       image: "https://cdn.legendholding.com/images/cdn_685aacbc54a7d9.24632090_20250624_134844.jpg",
+      mobileImage: "https://cdn.legendholding.com/images/cdn_685aacbc54a7d9.24632090_20250624_134844.jpg",
       icon: <Building className="w-6 h-6" />,
       color: "#7c3aed",
       achievements: ["Company Foundation", "First Trading Operations", "Market Entry"],
@@ -55,6 +58,7 @@ export function OurJourney() {
       description:
         "Established our first automotive company in the free zone, marking our entry into the automotive industry with our first showroom.",
       image: "https://cdn.legendholding.com/images/cdn_685b8e2ac73e64.52341855_20250625_055034.jpg",
+      mobileImage: "https://cdn.legendholding.com/images/cdn_685bd09a601877.95559645_20250625_103402.png",     
       icon: <Car className="w-6 h-6" />,
       color: "#6d28d9",
       achievements: ["Legend Motors FZCO", "Legend Motors Br-1 (268)", "Automotive Industry Entry"],
@@ -65,6 +69,7 @@ export function OurJourney() {
       description:
         "Expanded our automotive portfolio with multiple brands and opened our second showroom, offering customers a wider range of choices.",
       image: "https://cdn.legendholding.com/images/cdn_685bb478d9dfb1.61228518_20250625_083400.png",
+      mobileImage: "https://cdn.legendholding.com/images/cdn_685bd07d88a3f2.38711314_20250625_103333.png",
       icon: <Car className="w-6 h-6" />,
       color: "#5b21b6",
       achievements: ["Legend Multi Motors", "Legend Motors Br-2 (116)", "Brand Portfolio Expansion"],
@@ -75,6 +80,7 @@ export function OurJourney() {
       description:
         "Established new regional operations at Jabal Al Barakha to better serve our growing customer base across different territories.",
       image: "https://cdn.legendholding.com/images/cdn_685a582fed2086.93844645_20250624_074759.png",
+      mobileImage: "https://cdn.legendholding.com/images/cdn_685bd041800149.16042458_20250625_103233.png",
       icon: <MapPin className="w-6 h-6" />,
       color: "#4c1d95",
       achievements: ["Jabal Al Barakha Operations", "Regional Expansion", "Territory Coverage"],
@@ -85,6 +91,7 @@ export function OurJourney() {
       description:
         "Launched our premium automotive divisions, catering to luxury vehicle enthusiasts and automatic transmission specialists.",
       image: "https://cdn.legendholding.com/images/cdn_685a584abd43c0.45778242_20250624_074826.png",
+      mobileImage: "https://cdn.legendholding.com/images/cdn_685bdd7b0f68d7.83166278_20250625_112859.png",
       icon: <Car className="w-6 h-6" />,
       color: "#7c3aed",
       achievements: ["Highline Motors Trading", "Automatic Motors", "Premium Market Entry"],
@@ -94,7 +101,8 @@ export function OurJourney() {
       title: "Energy Sector Venture",
       description:
         "Ventured into the energy sector with Zul Energy, bringing innovative solutions and diversifying our business portfolio beyond automotive.",
-      image: "https://cdn.legendholding.com/images/cdn_6846a246859468.98501177_20250609_085846.jpg",
+      image: "https://cdn.legendholding.com/images/cdn_685bdf3fef4343.48662704_20250625_113631.jpg",
+      mobileImage: "https://cdn.legendholding.com/images/cdn_685bddf0ecd919.71490952_20250625_113056.png",
       icon: <Zap className="w-6 h-6" />,
       color: "#6d28d9",
       achievements: ["Zul Energy Launch", "Energy Sector Entry", "Business Diversification"],
@@ -105,6 +113,7 @@ export function OurJourney() {
       description:
         "Established our global investment division and expanded into tourism, exploring new opportunities and markets worldwide.",
       image: "https://cdn.legendholding.com/images/cdn_685a585a7222f7.74278267_20250624_074842.png",
+      mobileImage: "https://cdn.legendholding.com/images/cdn_685bd0ac44fe97.91187563_20250625_103420.png",
       icon: <Globe className="w-6 h-6" />,
       color: "#5b21b6",
       achievements: ["Legend World Investment", "Legend Travel & Tourism", "Global Market Expansion"],
@@ -115,6 +124,7 @@ export function OurJourney() {
       description:
         "Opened our third showroom despite global challenges, demonstrating our resilience and commitment to growth.",
       image: "https://cdn.legendholding.com/images/cdn_685a581a34d806.40648321_20250624_074738.png",
+      mobileImage: "https://cdn.legendholding.com/images/cdn_685bd05523e603.37366964_20250625_103253.png",
       icon: <Building className="w-6 h-6" />,
       color: "#4c1d95",
       achievements: ["Legend Motors Br-3 (26)", "Pandemic Resilience", "Continued Expansion"],
@@ -124,7 +134,8 @@ export function OurJourney() {
       title: "New Industry Entrance",
       description:
         "Expanded with our fourth showroom and comprehensive automotive services, including rental and maintenance solutions.",
-      image: "https://cdn.legendholding.com/images/cdn_6846a290084766.80604483_20250609_090000.jpg",
+      image: "https://cdn.legendholding.com/images/cdn_685be224c2d3f5.36384524_20250625_114852.jpg",
+      mobileImage: "https://cdn.legendholding.com/images/cdn_685bde30a274a6.62469051_20250625_113200.png",
       icon: <Car className="w-6 h-6" />,
       color: "#7c3aed",
       achievements: ["Legend Motors Br-4 (46)", "Rent A Car Services", "Automobile Services"],
@@ -134,7 +145,8 @@ export function OurJourney() {
       title: "Legend Motors - Dealerships",
       description:
         "Secured multiple prestigious dealerships including Skywell, Kaiyi, Lifan, and Li Auto, embracing the future of sustainable transportation.",
-      image: "https://cdn.legendholding.com/images/cdn_6854fcb990fac6.50629202_20250620_061625.webp",
+      image: "https://cdn.legendholding.com/images/cdn_685bdefcc4bd53.51860830_20250625_113524.png",
+      mobileImage: "https://cdn.legendholding.com/images/cdn_685be1575c6cb7.08209278_20250625_114527.png",
       icon: <Award className="w-6 h-6" />,
       color: "#6d28d9",
       achievements: ["Skywell Dealership", "Kaiyi & 212 Dealership", "Lifan Dealership"],
@@ -145,6 +157,7 @@ export function OurJourney() {
       description:
         "Opened our fifth showroom in Jebel Ali and launched green energy solutions alongside comprehensive logistics services.",
       image: "https://cdn.legendholding.com/images/cdn_6846a1c8f3d8c5.57982348_20250609_085640.jpg",
+      mobileImage: "https://cdn.legendholding.com/images/cdn_6846a1c8f3d8c5.57982348_20250609_085640.jpg",
       icon: <Zap className="w-6 h-6" />,
       color: "#5b21b6",
       achievements: ["Legend Motors Br-5 Jebel Ali", "Green Energy Solutions", "Legend Logistics"],
@@ -155,6 +168,7 @@ export function OurJourney() {
       description:
         "Our future landmark headquarters spanning over 450,000 SQFT in JAFZA will serve as the nerve center for our global operations.",
       image: "https://cdn.legendholding.com/images/cloudinary/cloudinary_683ea90f29b708.04231409_20250603_074935.jpg",
+      mobileImage: "https://cdn.legendholding.com/images/cdn_685bd01b410f75.10777679_20250625_103155.png",
       icon: <Building className="w-6 h-6" />,
       color: "#4c1d95",
       achievements: ["Global HQ Opening", "450,000 SQFT Facility", "JAFZA Operations Center"],
@@ -163,6 +177,14 @@ export function OurJourney() {
 
   // Preload critical images
   useEffect(() => {
+    // Mobile detection
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768)
+    }
+    
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    
     const preloadImages = () => {
       // Prioritize the first image for immediate loading
       const firstImage = milestones[0].image
@@ -197,6 +219,10 @@ export function OurJourney() {
     
     preloadImages()
     addPreloadLinks()
+    
+    return () => {
+      window.removeEventListener('resize', checkMobile)
+    }
   }, [])
 
   // Intersection Observer for lazy loading
@@ -479,7 +505,7 @@ export function OurJourney() {
             >
               <div className="relative w-full h-full">
                 <Image
-                  src={milestone.image || "/placeholder.svg"}
+                  src={isMobile && milestone.mobileImage ? milestone.mobileImage : milestone.image}
                   alt={`${milestone.title} - ${milestone.year}`}
                   fill
                   className={cn(
