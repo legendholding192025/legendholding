@@ -1,8 +1,21 @@
+"use client"
+
+import { useRef, useEffect } from "react"
+
 export default function HeroSection() {
+  const videoRef = useRef<HTMLVideoElement>(null)
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.playbackRate = 1.5 // Increase speed by 50%
+    }
+  }, [])
+
   return (
     <section className="relative w-full h-[85vh] md:h-[100vh] flex items-center justify-center text-center overflow-hidden">
       {/* Background Video */}
       <video
+        ref={videoRef}
         autoPlay
         muted
         playsInline
@@ -21,7 +34,7 @@ export default function HeroSection() {
           <span className="text-white">Legend Holding Group</span>
         </h1>
         <p
-          className="text-base sm:text-lg md:text-xl lg:text-2xl font-medium tracking-wider"
+          className="text-base sm:text-lg md:text-xl lg:text-2xl font-medium tracking-wider -mt-5"
           style={{ color: '#FFFFFF' }}
         >
           Together We Grow
