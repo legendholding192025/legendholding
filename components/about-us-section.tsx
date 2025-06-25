@@ -6,7 +6,7 @@ import React from "react"
 
 export function AboutUsSection() {
   return (
-    <section className="relative w-full h-[80vh]" style={{ backgroundColor: "#fff" }}>
+    <section className="relative w-full h-[85vh]" style={{ backgroundColor: "#fff" }}>
       {/* Background Image */}
       <div className="absolute inset-0 w-full h-full z-0">
         <Image

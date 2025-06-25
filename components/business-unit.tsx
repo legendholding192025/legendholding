@@ -68,7 +68,7 @@ export default function BusinessUnit() {
     },
     {
       name: "Legend Global Media",
-      image: "https://cdn.legendholding.com/images/cdn_6856760046ba73.90510735_20250621_090608.png",
+      image: "https://cdn.legendholding.com/images/cdn_685bf4da72fab8.92359256_20250625_130842.jpg",
       url: "/our-brands/legend-global-media",
       bgColor: "bg-[#5D376E]",
     },
@@ -86,7 +86,7 @@ export default function BusinessUnit() {
     },
     {
       name: "Legend Commercial Vehicles",
-      image: "https://cdn.legendholding.com/images/cdn_685659607e1e62.29050672_20250621_070400.png",
+      image: "https://cdn.legendholding.com/images/cdn_685bf75e7a3112.05639876_20250625_131926.jpg",
       url: "/our-brands/legend-commercial-vehicles",
       bgColor: "bg-[#EE8900]/80",
     },

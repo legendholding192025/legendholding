@@ -18,7 +18,7 @@ export default function GroupIndustries() {
     },
     {
       name: "Oil & Gas",
-      image: "https://cdn.legendholding.com/images/cdn_68567c2ec9a918.06068596_20250621_093230.jpg",
+      image: "https://cdn.legendholding.com/images/cdn_685bf69ae66996.42021615_20250625_131610.jpg",
       bgColor: "bg-[#5D376E]",
     },
     {
@@ -40,7 +40,7 @@ export default function GroupIndustries() {
     },
     {
       name: "Media",
-      image: "https://cdn.legendholding.com/images/cdn_6856760046ba73.90510735_20250621_090608.png",
+      image: "https://cdn.legendholding.com/images/cdn_685bf4da72fab8.92359256_20250625_130842.jpg",
       bgColor: "bg-[#5D376E]",
     },
   ]
