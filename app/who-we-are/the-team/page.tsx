@@ -124,7 +124,7 @@ export default function LeadershipTeam() {
                   name: "Xiaolong Ma",
                   role: "Branch Manager - KSA",
                   company: "Legend Motors",
-                  image: "https://cdn.legendholding.com/images/cdn_6853c859c9f781.77795783_20250619_082041.webp"
+                  image: "https://cdn.legendholding.com/images/cdn_685bac1ecfb121.78265918_20250625_075822.png"
                 },
                 {
                   name: "Liu Xiaochen",
@@ -136,7 +136,7 @@ export default function LeadershipTeam() {
                   name: "Waseem Khalayleh",
                   role: "Brand Manager",
                   company: "Legend Holding Group",
-                  image: "https://cdn.legendholding.com/images/cdn_68513f59936779.13006930_20250617_101137.jpeg"
+                  image: "https://cdn.legendholding.com/images/cdn_685bac3b05ebd8.00933704_20250625_075851.jpg"
                 },
                 {
                   name: "Mubasher Farooq",
@@ -166,7 +166,8 @@ export default function LeadershipTeam() {
                     height={400}
                     className={`mb-4 mx-auto rounded-xl w-full h-[400px] object-cover ${
                       leader.name === "Liu Xiaochen" ? "object-[center_20%]" : 
-                      leader.name === "Waseem Khalayleh" ? "object-[center_60%]" : ""
+                      leader.name === "Waseem Khalayleh" ? "object-[center_40%]" : 
+                      leader.name === "Xiaolong Ma" ? "object-[center_35%]" : ""
                     }`}
                     loading="lazy"
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"

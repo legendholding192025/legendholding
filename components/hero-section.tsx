@@ -1,15 +1,20 @@
 export default function HeroSection() {
   return (
-    <section
-      className="relative w-full h-[75vh] md:h-[90vh] flex items-center justify-center text-center"
-      style={{
-        backgroundImage: "url('https://cdn.legendholding.com/images/cdn_683e899a213a61.44155039_20250603_053522.jpg')",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-        backgroundAttachment: "fixed",
-      }}
-    >
+    <section className="relative w-full h-[75vh] md:h-[90vh] flex items-center justify-center text-center overflow-hidden">
+      {/* Background Video */}
+      <video
+        autoPlay
+        muted
+        playsInline
+        className="absolute inset-0 w-full h-full object-cover"
+        style={{ zIndex: 0 }}
+      >
+        <source src="https://cdn.legendholding.com/videos/video_cdn_685bb23504db43.66336453_20250625_082421.mp4" type="video/mp4" />
+      </video>
+      
+      {/* Overlay for better text readability */}
+      <div className="absolute inset-0 bg-black bg-opacity-30" style={{ zIndex: 1 }}></div>
+      
       <div className="relative z-10 max-w-4xl mx-auto flex flex-col items-center justify-center">
         <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold mb-4 md:mb-6">
           <span className="text-orange-400 block mb-2 text-2xl sm:text-3xl md:text-4xl lg:text-5xl">Welcome to</span>
