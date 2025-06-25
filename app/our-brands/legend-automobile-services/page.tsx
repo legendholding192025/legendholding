@@ -130,7 +130,7 @@ export default function AutomobileServicesPage() {
               isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
             }`}
           >
-            {/* Page Header */}
+            {/* Page Header (title and decorative lines outside) */}
             <section className="w-full mb-16 animate-fade-in-up">
               <h2 className="text-2xl md:text-3xl font-semibold text-[#2b1c48] mb-6 font-richmond">
                 Legend Automobile Services
@@ -139,14 +139,7 @@ export default function AutomobileServicesPage() {
                 <div className="h-1 w-16 bg-[#2b1c48] rounded-full animate-expand-width"></div>
                 <div className="h-1 w-8 bg-[#ee8900] rounded-full animate-expand-width animation-delay-200"></div>
               </div>
-
-              <p className="mt-8 text-lg text-gray-700 font-effra leading-relaxed">
-                Legend Motors proudly operates Legend World Automobile Services, a premier provider of high-end automotive care, 
-                offering a full spectrum of repair, maintenance, and detailing solutions for all types of luxury vehicles, 
-                including electric models.
-              </p>
             </section>
-
             {/* Main Content Section */}
             <section className="w-full mb-16">
               <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden">
@@ -169,15 +162,19 @@ export default function AutomobileServicesPage() {
                       <div className="absolute inset-0 bg-gradient-to-t from-[#2b1c48]/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                     </div>
                   </div>
-
                   {/* Content Section */}
                   <div className="flex-1 p-8 flex flex-col justify-center">
+                    {/* Description moved inside card */}
+                    <p className="text-lg text-gray-700 font-effra leading-relaxed mb-6">
+                      Legend Motors proudly operates Legend World Automobile Services, a premier provider of high-end automotive care, 
+                      offering a full spectrum of repair, maintenance, and detailing solutions for all types of luxury vehicles, 
+                      including electric models.
+                    </p>
                     <div className="space-y-4">
                       <p className="text-lg text-gray-700 font-effra leading-relaxed">
                         Certified with the prestigious MOIAT (ESMA) 5-star rating, the facility reflects our unwavering commitment 
                         to quality, safety, and service excellence.
                       </p>
-
                       <p className="text-lg text-gray-700 font-effra leading-relaxed">
                         Housed in a state-of-the-art workshop, the center is equipped with the latest diagnostic and repair 
                         technologies, and staffed by highly trained professionals who deliver personalized care and precision 
@@ -185,7 +182,6 @@ export default function AutomobileServicesPage() {
                         maintenance.
                       </p>
                     </div>
-
                     {/* Learn More Button */}
                     <div className="mt-6">
                       <button

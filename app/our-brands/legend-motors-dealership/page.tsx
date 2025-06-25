@@ -13,6 +13,12 @@ const dealerships = [
     logo: "https://res.cloudinary.com/dosxengut/image/upload/v1746788882/logo_sisnn9.png",
     description:
       "Legend Motors is the exclusive distributor of Skywell vehicles in Dubai, offering comprehensive retail and fleet solutions across the emirate.",
+    detailedContent: [
+      "Legend Motors is the exclusive distributor of Skywell vehicles in UAE, offering comprehensive retail and fleet solutions across the emirate.",
+      "Since launching the brand in the local market, Skywell UAE has successfully served over 500 customers nationwide.",
+      "With a strong focus on expansion, the company is actively growing its presence through the launch of multiple new showrooms in Abu Dhabi and other key locations across the country."
+    ],
+    imagePosition: "70% center",
     needsBackground: false,
     bgColor: "bg-transparent",
     website: "https://skywell-uae.com/",
@@ -23,6 +29,13 @@ const dealerships = [
     logo: "https://res.cloudinary.com/dosxengut/image/upload/v1746788951/download_wmkc6s.png",
     description:
       "Legend Motors is the exclusive distributor of Kaiyi Automobiles in the UAE, proudly introducing this innovative Chinese SUV brand to the local market.",
+    detailedContent: [
+      "KAIYI Dealership is the exclusive dealership of Kaiyi in the UAE.",
+      "Offering various models, the dealership has seen consistent growth, achieving a %54 increase in sales across both retail and fleet segments.",
+      "Our first flagship showroom in Dubai, along with an upcoming location in Abu Dhabi, is featured within the Legend brand space, offering customers exceptional sales and aftersales service experiences.",
+      "With over 1,500 units have been sold, earning the title of Top Performing Dealer from the OEM for outstanding performance and impact in the market."
+    ],
+    imagePosition: "50% center",
     needsBackground: false,
     bgColor: "bg-transparent",
     website: "https://kaiyi.ae/",
@@ -33,6 +46,11 @@ const dealerships = [
     logo: "https://res.cloudinary.com/dosxengut/image/upload/v1746788883/logo-text-black-en.e6782a94_chlojl.svg",
     description:
       "Legend Motors serves as the official sales partner and authorized provider of after-sales service and maintenance for Li Auto vehicles across the UAE.",
+    detailedContent: [
+      "Legend Motors is the official sales partner and authorized provider of after-sales service and maintenance for Li Auto vehicles across the UAE.",
+      "Launching the first showroom in Dubai in July, there is an increasing surge in customer interest and engagement."
+    ],
+    imagePosition: "50% center",
     needsBackground: false,
     bgColor: "bg-transparent",
     website: "https://www.liautouae.com/",
@@ -43,6 +61,11 @@ const dealerships = [
     logo: "https://res.cloudinary.com/dosxengut/image/upload/v1746788882/logo212b_qk5xsj.png",
     description:
       "Legend Motors is the exclusive distributor for 212 vehicles in the UAE, managing both sales and after-sales service with a commitment to excellence.",
+    detailedContent: [
+      "Legend Motors is expanding its automotive partnerships, recently adding 212 Brand in the Dealerships, serving as the exclusive importer and managing both sales and after-sales services with a strong commitment to excellence.",
+      "With an upcoming first showroom, this model is projected to achieve rapid growth in its first year, targeting adventure-seekers looking for a vehicle built to go anywhere."
+    ],
+    imagePosition: "35% center",
     needsBackground: false,
     bgColor: "bg-transparent",
     website: "https://212uae.com/",
@@ -96,12 +119,13 @@ export default function LegendMotorsDealershipPage() {
                   <div className="flex flex-col md:flex-row">
                     {/* Image/Logo */}
                     <div className="md:w-2/5 relative group overflow-hidden">
-                      <div className="aspect-[4/3] w-full bg-[#2b1c48]/5 relative overflow-hidden">
+                      <div className="h-[300px] md:h-full w-full relative overflow-hidden">
                         <Image
                           src={dealership.image || "/placeholder.svg"}
                           alt={`${dealership.name} vehicle`}
                           fill
-                          className="object-cover transition-transform duration-700 group-hover:scale-105"
+                          className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
+                          style={{ objectPosition: dealership.imagePosition }}
                           priority={idx < 2}
                           loading={idx >= 2 ? "lazy" : undefined}
                           sizes="(max-width: 768px) 100vw, 40vw"
@@ -128,7 +152,7 @@ export default function LegendMotorsDealershipPage() {
                           alt={`${dealership.name} logo`}
                           width={120}
                           height={40}
-                          className="max-h-10 max-w-full object-contain"
+                          className="max-h-10 max-w-full object-contain object-center"
                           quality={85}
                           placeholder="blur"
                           blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
@@ -141,7 +165,19 @@ export default function LegendMotorsDealershipPage() {
                       <h3 className="text-3xl font-richmond font-bold text-[#2b1c48] mb-4 group-hover:text-[#5d376e] transition-colors duration-300">
                         {dealership.name}
                       </h3>
-                      <p className="text-lg font-effra text-gray-700 mb-6 leading-relaxed">{dealership.description}</p>
+                      
+                      {/* Render detailed content for all dealerships */}
+                      {dealership.detailedContent ? (
+                        <div className="space-y-4 mb-6">
+                          {dealership.detailedContent.map((paragraph, index) => (
+                            <p key={index} className="text-lg font-effra text-gray-700 leading-relaxed">
+                              {paragraph}
+                            </p>
+                          ))}
+                        </div>
+                      ) : (
+                        <p className="text-lg font-effra text-gray-700 mb-6 leading-relaxed">{dealership.description}</p>
+                      )}
  
                       {/* CTA Button */}
                       <div className="mt-6 w-full">

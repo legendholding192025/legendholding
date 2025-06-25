@@ -92,11 +92,9 @@ export default function ZulEnergyPage() {
       id: "zul-energy-overview",
       title: "Chemical Additives Excellence & Global Standards",
       image: "https://cdn.legendholding.com/images/cloudinary/cloudinary_683da403178ef3.07284478_20250602_131547.jpg",
-      description: `ZUL Energy is a manufacturer of premium quality chemical additives for every stage of Oil & Gas field applications. Our commitment to provide quality products, outstanding service, and zero compromises has established us as a trusted partner in the energy sector.
+      description: `ZUL Energy is a manufacturer of premium-quality chemical additives for every stage of oil and gas field applications. Our state-of-the-art facility in Ras Al Khaimah spanning over 700,000 SQFT, is equipped to deliver high-quality products, exceptional service, and zero compromises. Guided by strong business values, we have rapidly grown to become a preferred vendor for both national and international oil companies, as well as global service providers.
 
-Our commitment to quality chemical production and following environment regulations have been well acknowledged by the ISO 9001-2015, ISO 14001-2015 and ISO 45001-2018 certifications. These certifications demonstrate our unwavering dedication to quality management, environmental stewardship, and occupational health and safety standards.
-
-ZUL Energy continues to expand its footprint in the energy sector while maintaining the highest standards of quality, environmental responsibility, and customer satisfaction. Our ISO certifications and years of experience make us a trusted partner for all your chemical additive needs.`
+With over 200 employees, we proudly serve more than 50 international corporations across the region, delivering with consistency, efficiency, and utmost client satisfaction. Our commitment to quality chemical production and following environment regulations have been well acknowledged by the ISO 2015-9001, ISO 2015-14001 and ISO 2018-45001 certifications. Currently, ZUL Energy is also expanding its footprint to new O&G specialities.`
     }
   ]
 
@@ -114,7 +112,7 @@ ZUL Energy continues to expand its footprint in the energy sector while maintain
               isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
             }`}
           >
-            {/* Page Header */}
+            {/* Page Header (title and decorative lines outside) */}
             <section className="w-full max-w-6xl mx-auto mb-12 px-4 md:px-8 animate-fade-in-up">
               <h2 className="text-2xl md:text-3xl font-semibold text-[#2b1c48] mb-4 font-richmond">
                 Zul Energy
@@ -123,12 +121,7 @@ ZUL Energy continues to expand its footprint in the energy sector while maintain
                 <div className="h-1 w-16 bg-[#2b1c48] rounded-full animate-expand-width"></div>
                 <div className="h-1 w-8 bg-[#ee8900] rounded-full animate-expand-width animation-delay-200"></div>
               </div>
-
-              <p className="mt-6 text-gray-700 text-lg font-effra">
-                ZUL Energy is a manufacturer of premium quality chemical additives for every stage of Oil & Gas field applications. Our commitment to provide quality products, outstanding service, and zero compromises, as complemented by our business values, has seen us growing rapidly to become the preferred vendor for National and International Oil Companies and other international services providers.
-              </p>
             </section>
-
             {/* Single Combined Section */}
             <section className="w-full max-w-6xl mx-auto mb-12 px-4 md:px-8">
               {energySections.map((section, idx) => (
@@ -151,17 +144,18 @@ ZUL Energy continues to expand its footprint in the energy sector while maintain
                         <div className="absolute inset-0 bg-gradient-to-t from-[#2b1c48]/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                       </div>
                     </div>
-
                     {/* Content Section */}
                     <div className="flex-1 p-8 flex flex-col justify-center relative">
+                      {/* Description moved inside card */}
+                      <p className="text-gray-700 text-lg font-effra mb-6">
+                        ZUL Energy is a manufacturer of premium-quality chemical additives for every stage of oil and gas field applications. Our state-of-the-art facility in Ras Al Khaimah spanning over 700,000 SQFT, is equipped to deliver high-quality products, exceptional service, and zero compromises. Guided by strong business values, we have rapidly grown to become a preferred vendor for both national and international oil companies, as well as global service providers.
+                      </p>
                       <h3 className="text-2xl font-richmond font-bold text-[#2b1c48] mb-4 group-hover:text-[#5d376e] transition-colors duration-300">
                         {section.title}
                       </h3>
-
                       <p className="text-lg font-effra text-gray-700 mb-6 leading-relaxed">
-                        Our commitment to quality chemical production and following environment regulations have been well acknowledged by the ISO 9001-2015, ISO 14001-2015 and ISO 45001-2018 certifications. Currently, ZUL Energy is also expanding its footprint to new Energy sectors.
+                        With over 200 employees, we proudly serve more than 50 international corporations across the region, delivering with consistency, efficiency, and utmost client satisfaction. Our commitment to quality chemical production and following environment regulations have been well acknowledged by the ISO 2015-9001, ISO 2015-14001 and ISO 2018-45001 certifications. Currently, ZUL Energy is also expanding its footprint to new O&G specialities.
                       </p>
-
                       {/* CTA Button */}
                       <div className="mt-6">
                         <button

@@ -32,10 +32,6 @@ export default function PreOwnedVehiclesPage() {
                 <div className="h-1 w-16 bg-[#2b1c48] rounded-full animate-expand-width"></div>
                 <div className="h-1 w-8 bg-[#ee8900] rounded-full animate-expand-width animation-delay-200"></div>
               </div>
-
-              <p className="mt-8 text-gray-700 text-lg font-effra">
-                Bringing together multiple Legend brands under one roof, offering customers a wide selection of high-quality certified pre-owned vehicles with comprehensive warranties and professional support services.
-              </p>
             </section>
 
             {/* Main Content Section */}
@@ -60,7 +56,7 @@ export default function PreOwnedVehiclesPage() {
                       Certified Pre-owned Vehicles
                     </h3>
                     <p className="text-lg font-effra text-gray-700 mb-6 leading-relaxed">
-                      Every vehicle in our certified pre-owned collection undergoes rigorous inspection and quality assurance processes, ensuring you receive only the finest automobiles with complete peace of mind. From luxury sedans to premium SUVs, our diverse inventory represents the best of automotive excellence.
+                    Bringing together multiple brands under a single roof, offering customers a wide selection of highquality vehicles. This initiative reflects our commitment to delivering exceptional service and satisfaction across every stage of the ownership journey
                     </p>
 
                     {/* CTA Button */}

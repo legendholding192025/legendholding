@@ -146,11 +146,8 @@ export default function MotorsTradingPage() {
               </div>
 
               <p className="mt-8 text-lg text-gray-700 font-effra leading-relaxed">
-                Legend Motors is a key trading division of Legend Holding Group, serving customers across the globe, 
-                supplying international and Chinese brands, embracing cutting-edge advancements and pushing the boundaries 
-                of innovation to unlock new possibilities from UAE to the world. With a strong commitment to sustainability, 
-                the company integrates environmentally conscious practices across its operations, driving toward a greener, 
-                more responsible future.
+              Legend Motors embraces cutting-edge advancements and consistently push boundaries, unleashing the power of possibility in every endeavor.
+              Their commitment to sustainability drives them to adopt environmentally conscious practices, ensuring a greener future for generations to come.
               </p>
             </section>
 
@@ -181,19 +178,21 @@ export default function MotorsTradingPage() {
                   <div className="flex-1 p-8 flex flex-col justify-center">
                     <div className="space-y-4">
                       <p className="text-lg text-gray-700 font-effra leading-relaxed">
-                        Since its founding in <span className="font-semibold text-[#2b1c48]">2013</span>, Legend Motors
-                        has delivered exceptional performance, achieving annual sales of up to{" "}
+                        Since Their inception in <span className="font-semibold text-[#2b1c48]">2013</span>, Legend Motors has achieved remarkable sales figures, reaching an impressive{" "}
                         <span className="font-bold text-[#ee8900]">
                           <AnimatedCounter target={55} suffix="M USD" duration={2000} startDelay={800} />
                         </span>{" "}
-                        across more than 10 countries and more than 70 thousand customers a year.
+                        in a year.
                       </p>
 
                       <p className="text-lg text-gray-700 font-effra leading-relaxed">
-                        Year after year, Legend Motors remains dedicated to excellence and continues to explore new frontiers 
-                        in modern mobility, redefining what's possible in the world of automobiles. These achievements reflect 
-                        not only Legend Motors standing as a market leader but also the enduring trust and loyalty of its 
-                        customers throughout the region.
+                        Building relationships on a global scale, we export cars to our customers across three continents, with more than 7,000 vehicles exported
+                        yearly to satisfied clients.
+                      </p>
+
+                      <p className="text-lg text-gray-700 font-effra leading-relaxed">
+                        Each passing year, Legend Motors' commitment to excellence and unwavering pursuit of innovation drives them to push boundaries and explore
+                        new frontiers in the world of automobiles.
                       </p>
                     </div>
 

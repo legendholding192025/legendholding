@@ -25,7 +25,7 @@ export default function LegendGreenEnergyPage() {
               isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
             }`}
           >
-            {/* Page Header */}
+            {/* Page Header (title and decorative lines outside) */}
             <section className="w-full mb-16 animate-fade-in-up">
               <h2 className="text-2xl md:text-3xl font-semibold text-[#2b1c48] mb-6 font-richmond animation-delay-200">
                 Legend Green Energy Solutions
@@ -34,13 +34,7 @@ export default function LegendGreenEnergyPage() {
                 <div className="h-1 w-16 bg-[#2b1c48] rounded-full animate-expand-width"></div>
                 <div className="h-1 w-8 bg-[#ee8900] rounded-full animate-expand-width animation-delay-200"></div>
               </div>
- 
-              <p className="mt-8 text-gray-700 text-lg font-effra">
-                Legend Green Energy Solutions, a trusted provider of sustainable and innovative energy services across the UAE. 
-                Specializing in EV chargers (AC & DC), solar power systems, security solutions, and electrical maintenance.
-              </p>
             </section>
- 
             {/* Main Content Section */}
             <section className="w-full mb-16">
               <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden">
@@ -49,11 +43,12 @@ export default function LegendGreenEnergyPage() {
                   <div className="md:w-2/5 relative group overflow-hidden h-[300px] md:h-auto">
                     <div className="h-full w-full relative overflow-hidden">
                       <Image
-                        src="https://cdn.legendholding.com/images/cdn_6856599ed32869.86610075_20250621_070502.png"
+                        src="https://cdn.legendholding.com/images/cdn_685b96321fa8a1.51688586_20250625_062450.png"
                         width={800}
                         height={600}
                         alt="Legend Green Energy Solutions - Sustainable Energy Services"
                         className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        style={{ objectPosition: "center 95%" }}
                         priority
                         sizes="(max-width: 768px) 100vw, 40vw"
                         quality={85}
@@ -63,9 +58,13 @@ export default function LegendGreenEnergyPage() {
                       <div className="absolute inset-0 bg-gradient-to-t from-[#2b1c48]/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                     </div>
                   </div>
-
                   {/* Content Section */}
                   <div className="flex-1 p-8 flex flex-col justify-center">
+                    {/* Description moved inside card */}
+                    <p className="text-gray-700 text-lg font-effra mb-6">
+                      Legend Green Energy Solutions, a trusted provider of sustainable and innovative energy services across the UAE. 
+                      Specializing in EV chargers (AC & DC), solar power systems, security solutions, and electrical maintenance.
+                    </p>
                     <div className="space-y-4">
                       <p className="text-lg text-gray-700 font-effra leading-relaxed">
                         Since their inception in <span className="font-semibold text-[#2b1c48]">2013</span>, Legend Green Energy
@@ -75,13 +74,11 @@ export default function LegendGreenEnergyPage() {
                         </span>{" "}
                         in a year.
                       </p>
-
                       <p className="text-lg text-gray-700 font-effra leading-relaxed">
                         These numbers not only validate Legend Green Energy's position as a market leader but also affirm the trust
                         and confidence of their valued customers across the region.
                       </p>
                     </div>
-
                     {/* Learn More Button */}
                     <div className="mt-6">
                       <button
