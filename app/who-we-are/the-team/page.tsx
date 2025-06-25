@@ -166,7 +166,7 @@ export default function LeadershipTeam() {
                     height={400}
                     className={`mb-4 mx-auto rounded-xl w-full h-[400px] object-cover ${
                       leader.name === "Liu Xiaochen" ? "object-[center_20%]" : 
-                      leader.name === "Waseem Khalayleh" ? "object-[center_40%]" : 
+                      leader.name === "Waseem Khalayleh" ? "object-[center_60%]" : 
                       leader.name === "Xiaolong Ma" ? "object-[center_35%]" : ""
                     }`}
                     loading="lazy"

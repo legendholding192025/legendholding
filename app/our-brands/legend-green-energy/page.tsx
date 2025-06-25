@@ -62,21 +62,20 @@ export default function LegendGreenEnergyPage() {
                   <div className="flex-1 p-8 flex flex-col justify-center">
                     {/* Description moved inside card */}
                     <p className="text-gray-700 text-lg font-effra mb-6">
-                      Legend Green Energy Solutions, a trusted provider of sustainable and innovative energy services across the UAE. 
-                      Specializing in EV chargers (AC & DC), solar power systems, security solutions, and electrical maintenance.
+                      Legend Green Energy Solutions, a trusted provider of sustainable and innovative
+                      energy services across the UAE. Specializing in EV chargers (AC & DC), solar power
+                      systems, security solutions (including CCTV, access control, and gate barriers),
+                      and electrical maintenance, the company is committed to enabling a cleaner,
+                      smarter future.
                     </p>
                     <div className="space-y-4">
                       <p className="text-lg text-gray-700 font-effra leading-relaxed">
-                        Since their inception in <span className="font-semibold text-[#2b1c48]">2013</span>, Legend Green Energy
-                        has achieved remarkable sales figures, reaching an impressive{" "}
-                        <span className="font-bold text-[#ee8900]">
-                          <AnimatedCounter target={55} suffix="M USD" duration={2000} startDelay={800} />
-                        </span>{" "}
-                        in a year.
-                      </p>
-                      <p className="text-lg text-gray-700 font-effra leading-relaxed">
-                        These numbers not only validate Legend Green Energy's position as a market leader but also affirm the trust
-                        and confidence of their valued customers across the region.
+                        Driven by a team of seasoned professionals, Legend Green Energy Solutions
+                        supports businesses and communities in their transition to renewable energy by
+                        offering tailored solutions that reduce carbon footprints and meet distinct energy
+                        needs. From promoting clean transportation through EV charger installations to
+                        enhancing property safety and ensuring operational continuity, the team delivers
+                        with precision and a focus on exceptional customer satisfaction.
                       </p>
                     </div>
                     {/* Learn More Button */}

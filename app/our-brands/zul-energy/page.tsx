@@ -150,9 +150,6 @@ With over 200 employees, we proudly serve more than 50 international corporation
                       <p className="text-gray-700 text-lg font-effra mb-6">
                         ZUL Energy is a manufacturer of premium-quality chemical additives for every stage of oil and gas field applications. Our state-of-the-art facility in Ras Al Khaimah spanning over 700,000 SQFT, is equipped to deliver high-quality products, exceptional service, and zero compromises. Guided by strong business values, we have rapidly grown to become a preferred vendor for both national and international oil companies, as well as global service providers.
                       </p>
-                      <h3 className="text-2xl font-richmond font-bold text-[#2b1c48] mb-4 group-hover:text-[#5d376e] transition-colors duration-300">
-                        {section.title}
-                      </h3>
                       <p className="text-lg font-effra text-gray-700 mb-6 leading-relaxed">
                         With over 200 employees, we proudly serve more than 50 international corporations across the region, delivering with consistency, efficiency, and utmost client satisfaction. Our commitment to quality chemical production and following environment regulations have been well acknowledged by the ISO 2015-9001, ISO 2015-14001 and ISO 2018-45001 certifications. Currently, ZUL Energy is also expanding its footprint to new O&G specialities.
                       </p>

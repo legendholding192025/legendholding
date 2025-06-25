@@ -52,9 +52,6 @@ export default function PreOwnedVehiclesPage() {
 
                   {/* Text Content */}
                   <div className="flex-1 p-8 flex flex-col justify-center relative">
-                    <h3 className="text-3xl font-richmond font-bold text-[#2b1c48] mb-4">
-                      Certified Pre-owned Vehicles
-                    </h3>
                     <p className="text-lg font-effra text-gray-700 mb-6 leading-relaxed">
                     Bringing together multiple brands under a single roof, offering customers a wide selection of highquality vehicles. This initiative reflects our commitment to delivering exceptional service and satisfaction across every stage of the ownership journey
                     </p>
