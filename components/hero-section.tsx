@@ -34,7 +34,7 @@ export default function HeroSection() {
           <span className="text-white">Legend Holding Group</span>
         </h1>
         <p
-          className="text-base sm:text-lg md:text-xl lg:text-2xl font-medium tracking-wider -mt-1"
+          className="text-base sm:text-lg md:text-xl lg:text-2xl font-medium tracking-wider -mt-2"
           style={{ color: '#FFFFFF' }}
         >
           Together We Grow
