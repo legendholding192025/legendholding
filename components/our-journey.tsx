@@ -496,10 +496,9 @@ export function OurJourney() {
             <section
               key={milestone.year}
               ref={(el) => setSectionRef(el as HTMLDivElement | null, index)}
-              className="relative w-full"
+              className="relative w-full h-[80vh] md:h-screen"
               style={{ 
-                height: `100vh`,
-                minHeight: '100vh'
+                minHeight: '80vh'
               }}
               aria-label={`${milestone.year} - ${milestone.title}`}
             >

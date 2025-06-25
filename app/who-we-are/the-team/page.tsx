@@ -133,10 +133,10 @@ export default function LeadershipTeam() {
                   image: "https://cdn.legendholding.com/images/cdn_68512fb352e378.07080550_20250617_090451.jpeg"
                 },
                 {
-                  name: "Waseem Khalayleh",
-                  role: "Brand Manager",
-                  company: "Legend Holding Group",
-                  image: "https://cdn.legendholding.com/images/cdn_685bac3b05ebd8.00933704_20250625_075851.jpg"
+                  name: "Saif El-Akkary",
+                  role: "General Manager | Premium Brands",
+                  company: "Legend Motors - Dealerships",
+                  image: "https://cdn.legendholding.com/images/cdn_684a919ece14d0.18569119_20250612_083646.jpg"
                 },
                 {
                   name: "Mubasher Farooq",
@@ -151,10 +151,10 @@ export default function LeadershipTeam() {
                   image: "https://cdn.legendholding.com/images/cdn_684a912f82b802.68059638_20250612_083455.jpg"
                 },
                 {
-                  name: "Saif El-Akkary",
-                  role: "General Manager | Premium Brands",
-                  company: "Legend Motors - Dealerships",
-                  image: "https://cdn.legendholding.com/images/cdn_684a919ece14d0.18569119_20250612_083646.jpg"
+                  name: "Waseem Khalayleh",
+                  role: "Brand Manager",
+                  company: "Legend Holding Group",
+                  image: "https://cdn.legendholding.com/images/cdn_685bac3b05ebd8.00933704_20250625_075851.jpg"
                 }
               
               ].map((leader, index) => (
@@ -164,10 +164,10 @@ export default function LeadershipTeam() {
                     alt={leader.name}
                     width={250}
                     height={400}
-                    className={`mb-4 mx-auto rounded-xl w-full h-[400px] object-cover ${
-                      leader.name === "Liu Xiaochen" ? "object-[center_20%]" : 
-                      leader.name === "Waseem Khalayleh" ? "object-[center_60%]" : 
-                      leader.name === "Xiaolong Ma" ? "object-[center_35%]" : ""
+                    className={`mb-4 mx-auto rounded-xl w-full h-[400px] ${
+                      leader.name === "Liu Xiaochen" ? "object-cover object-[center_20%]" : 
+                      leader.name === "Waseem Khalayleh" ? "object-cover object-[center_60%]" : 
+                      leader.name === "Xiaolong Ma" ? "object-cover object-[top_left]" : "object-cover"
                     }`}
                     loading="lazy"
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
