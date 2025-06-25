@@ -240,42 +240,6 @@ export default function BusinessUnit() {
                           style={business.name === "212" ? { objectPosition: "38% center" } : business.name === "Skywell" ? { objectPosition: "60% center" } : undefined}
                           loading="lazy"
                         />
-                        {business.name === "Skywell" && (
-                          <div className="absolute bottom-0 right-4 w-12 h-12 sm:w-20 sm:h-20 md:w-24 md:h-24 -mb-2 sm:-mb-4">
-                            <img
-                              src="https://res.cloudinary.com/dosxengut/image/upload/v1746788882/logo_sisnn9.png"
-                              alt="Skywell Logo"
-                              className="w-full h-full object-contain"
-                            />
-                          </div>
-                        )}
-                        {business.name === "Kaiyi" && (
-                          <div className="absolute bottom-0 right-4 w-12 h-12 sm:w-20 sm:h-20 md:w-24 md:h-24 -mb-2 sm:-mb-4">
-                            <img
-                              src="https://res.cloudinary.com/dosxengut/image/upload/v1746788951/download_wmkc6s.png"
-                              alt="Kaiyi Logo"
-                              className="w-full h-full object-contain"
-                            />
-                          </div>
-                        )}
-                        {business.name === "Li Auto" && (
-                          <div className="absolute bottom-0 right-4 w-12 h-12 sm:w-20 sm:h-20 md:w-24 md:h-24 -mb-2 sm:-mb-4">
-                            <img
-                              src="https://res.cloudinary.com/dosxengut/image/upload/v1746788883/logo-text-black-en.e6782a94_chlojl.svg"
-                              alt="Li Auto Logo"
-                              className="w-full h-full object-contain"
-                            />
-                          </div>
-                        )}
-                        {business.name === "212" && (
-                          <div className="absolute bottom-0 right-4 w-12 h-12 sm:w-20 sm:h-20 md:w-24 md:h-24 -mb-2 sm:-mb-4">
-                            <img
-                              src="https://res.cloudinary.com/dosxengut/image/upload/v1746788882/logo212b_qk5xsj.png"
-                              alt="212 Logo"
-                              className="w-full h-full object-contain"
-                            />
-                          </div>
-                        )}
                       </div>
 
                       {/* Content Section */}
