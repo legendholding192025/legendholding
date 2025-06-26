@@ -99,7 +99,7 @@ export function CSRSection() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
           {/* Right side - Image showcase - Now First on Mobile */}
-          <div className="relative h-[450px] rounded-xl overflow-hidden shadow-xl order-1 lg:order-2">
+          <div className="relative h-[300px] sm:h-[350px] md:h-[400px] lg:h-[450px] rounded-xl overflow-hidden shadow-xl order-1 lg:order-2">
             {csrInitiatives.map((initiative) => (
               <div
                 key={initiative.id}
