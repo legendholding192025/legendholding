@@ -28,13 +28,13 @@ export default function HeroSection() {
       {/* Overlay for better text readability */}
       <div className="absolute inset-0 bg-black bg-opacity-30" style={{ zIndex: 1 }}></div>
       
-      <div className="relative z-10 max-w-4xl mx-auto flex flex-col items-center justify-center">
-        <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold mb-4 md:mb-6">
-          <span className="text-orange-400 block mb-12 text-2xl sm:text-3xl md:text-4xl lg:text-5xl">Welcome to</span>
+      <div className="relative z-10 max-w-4xl mx-auto px-4 flex flex-col items-center justify-center space-y-4 sm:space-y-6 md:space-y-8 lg:space-y-10">
+        <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold">
+          <span className="text-orange-400 block text-2xl sm:text-3xl md:text-4xl lg:text-5xl mb-6 sm:mb-8 md:mb-10 lg:mb-14">Welcome to</span>
           <span className="text-white">Legend Holding Group</span>
         </h1>
         <p
-          className="text-base sm:text-lg md:text-xl lg:text-2xl font-medium tracking-wider mt-2"
+          className="text-base sm:text-lg md:text-xl lg:text-2xl font-medium tracking-wider"
           style={{ color: '#FFFFFF' }}
         >
           Together We Grow
