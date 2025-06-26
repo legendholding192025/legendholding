@@ -166,7 +166,7 @@ export default function AutomobileServicesPage() {
                   <div className="flex-1 p-8 flex flex-col justify-center">
                     {/* Description moved inside card */}
                     <p className="text-lg text-gray-700 font-effra leading-relaxed mb-6">
-                      Legend Motors proudly operates Legend World Automobile Services, a premier provider of high-end automotive care, 
+                      Legend World Automobile Services, a premier provider of high-end automotive care, 
                       offering a full spectrum of repair, maintenance, and detailing solutions for all types of luxury vehicles, 
                       including electric models.
                     </p>

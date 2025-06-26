@@ -101,6 +101,12 @@ export default function LeadershipTeam() {
                   image: "https://cdn.legendholding.com/images/cdn_685170f8cda310.20304631_20250617_134320.jpeg"
                 },
                 {
+                  name: "Jade Li",
+                  role: "Managing Director",
+                  company: "Zul Energy",
+                  image: "https://cdn.legendholding.com/images/cdn_685bffe12e81d9.21593413_20250625_135545.jpg"
+                },
+                {
                   name: "Bo Feng",
                   role: "Media Operations Manager",
                   company: "Legend Media",
@@ -122,7 +128,7 @@ export default function LeadershipTeam() {
                   name: "Xiaolong Ma",
                   role: "Branch Manager - KSA",
                   company: "Legend Motors",
-                  image: "https://cdn.legendholding.com/images/cdn_685bac1ecfb121.78265918_20250625_075822.png"
+                  image: "https://cdn.legendholding.com/images/cdn_685d58c3823fb8.82222303_20250626_142715.png"
                 },
                 {
                   name: "Liu Xiaochen",
@@ -154,12 +160,6 @@ export default function LeadershipTeam() {
                   company: "Legend Holding Group",
                   image: "https://cdn.legendholding.com/images/cdn_685bac3b05ebd8.00933704_20250625_075851.jpg"
                 },
-                {
-                  name: "Jade Li",
-                  role: "Managing Director",
-                  company: "Zul Energy",
-                  image: "https://cdn.legendholding.com/images/cdn_685bffe12e81d9.21593413_20250625_135545.jpg"
-                }
               
               ].map((leader, index) => (
                 <div key={index} className="bg-white rounded-2xl shadow-lg p-6 transform transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
