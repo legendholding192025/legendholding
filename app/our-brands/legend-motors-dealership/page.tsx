@@ -15,7 +15,6 @@ const dealerships = [
       "Legend Motors is the exclusive distributor of Skywell vehicles in Dubai, offering comprehensive retail and fleet solutions across the emirate.",
     detailedContent: [
       "Legend Motors is the exclusive distributor of Skywell vehicles in UAE, offering comprehensive retail and fleet solutions across the emirate.",
-      "Since launching the brand in the local market, Skywell UAE has successfully served over 500 customers nationwide.",
       "With a strong focus on expansion, the company is actively growing its presence through the launch of multiple new showrooms in Abu Dhabi and other key locations across the country."
     ],
     imagePosition: "70% center",
@@ -33,7 +32,6 @@ const dealerships = [
       "KAIYI Dealership is the exclusive dealership of Kaiyi in the UAE.",
       "Offering various models, the dealership has seen consistent growth, achieving a %54 increase in sales across both retail and fleet segments.",
       "Our first flagship showroom in Dubai, along with an upcoming location in Abu Dhabi, is featured within the Legend brand space, offering customers exceptional sales and aftersales service experiences.",
-      "With over 1,500 units have been sold, earning the title of Top Performing Dealer from the OEM for outstanding performance and impact in the market."
     ],
     imagePosition: "50% center",
     needsBackground: false,
