@@ -6,7 +6,7 @@ import React from "react"
 
 export function AboutUsSection() {
   return (
-    <section className="relative w-full h-[85vh]" style={{ backgroundColor: "#fff" }}>
+    <section className="relative w-full py-16 md:py-20 lg:py-24" style={{ backgroundColor: "#fff" }}>
       {/* Background Image */}
       <div className="absolute inset-0 w-full h-full z-0">
         <Image
@@ -18,22 +18,24 @@ export function AboutUsSection() {
         />
       </div>
       {/* Content */}
-      <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20">
-        <div className="flex flex-col items-center justify-center">
-          {/* Heading */}
-          <h2
-            className="font-richmond text-3xl md:text-4xl font-bold text-[#EE8900] text-center mb-4"
-            style={{ letterSpacing: "0.01em" }}
-          >
-            About Us
-          </h2>
-          {/* Animated Underline */}
-          <div className="mx-auto mb-8">
-            <span className="block h-1 w-16 bg-[#EE8900] rounded-full animate-pulse" />
+      <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col items-center justify-center text-center space-y-6 md:space-y-10">
+          {/* Heading and Underline Group */}
+          <div className="space-y-1 md:space-y-2">
+            <h2
+              className="font-richmond text-3xl md:text-4xl lg:text-5xl font-bold text-[#EE8900]"
+              style={{ letterSpacing: "0.01em" }}
+            >
+              About Us
+            </h2>
+            {/* Animated Underline */}
+            <div>
+              <span className="block h-1 w-16 bg-[#EE8900] rounded-full animate-pulse mx-auto" />
+            </div>
           </div>
           {/* Summary Sentence */}
-          <div className="font-effra text-white text-center max-w-6xl mb-12">
-            <p className="leading-relaxed text-[24px]">
+          <div className="font-effra text-white max-w-4xl lg:max-w-6xl">
+            <p className="leading-relaxed text-lg md:text-xl lg:text-2xl">
               Legend Holding Group is a diversified enterprise headquartered in Dubai, operating across the Middle east and African region. With a strong focus on sustainability and innovation, the group manages a growing portfolio of companies in automotive, trading, energy, Travel and Tourism and mobility services.
               <Link 
                 href="/about"
@@ -45,7 +47,7 @@ export function AboutUsSection() {
           </div>
           {/* Illustration */}
           <div className="w-full max-w-2xl">
-            <div className="relative w-full h-48 md:h-56 lg:h-64">
+            <div className="relative w-full h-48 md:h-56 lg:h-64 xl:h-72">
               <Image
                 src="https://cdn.legendholding.com/images/cdn_683e937dd5c436.17836257_20250603_061733.png"
                 alt="About Us Illustration"
