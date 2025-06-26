@@ -9,6 +9,12 @@ export default function GroupIndustries() {
   const [isPaused, setIsPaused] = useState(false)
   const [isTransitioning, setIsTransitioning] = useState(false)
   const carouselRef = useRef<HTMLDivElement>(null)
+  const [touchStart, setTouchStart] = useState<number | null>(null)
+  const [touchEnd, setTouchEnd] = useState<number | null>(null)
+  const [isMobile, setIsMobile] = useState(false)
+
+  // Minimum swipe distance (in px)
+  const minSwipeDistance = 50
 
   const industries = [
     {
@@ -49,12 +55,16 @@ export default function GroupIndustries() {
     const handleResize = () => {
       if (window.innerWidth < 640) {
         setItemsPerView(2)
+        setIsMobile(true)
       } else if (window.innerWidth < 1024) {
         setItemsPerView(2)
+        setIsMobile(false)
       } else if (window.innerWidth < 1280) {
         setItemsPerView(3)
+        setIsMobile(false)
       } else {
         setItemsPerView(4)
+        setIsMobile(false)
       }
     }
 
@@ -67,6 +77,31 @@ export default function GroupIndustries() {
     // Cleanup
     return () => window.removeEventListener('resize', handleResize)
   }, [])
+
+  // Touch event handlers for swipe gestures
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null)
+    setTouchStart(e.targetTouches[0].clientX)
+  }
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX)
+  }
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return
+    
+    const distance = touchStart - touchEnd
+    const isLeftSwipe = distance > minSwipeDistance
+    const isRightSwipe = distance < -minSwipeDistance
+
+    if (isLeftSwipe) {
+      nextSlide()
+    }
+    if (isRightSwipe) {
+      prevSlide()
+    }
+  }
 
   const totalItems = industries.length
 
@@ -160,7 +195,7 @@ export default function GroupIndustries() {
           <button
             onClick={prevSlide}
             disabled={isTransitioning}
-            className="absolute -left-2 sm:left-0 top-1/2 transform -translate-y-1/2 z-10 bg-white rounded-full p-2 sm:p-3 shadow-lg hover:shadow-xl transition-all duration-100 hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed"
+            className={`absolute -left-2 sm:left-0 top-1/2 transform -translate-y-1/2 z-10 bg-white rounded-full p-2 sm:p-3 shadow-lg hover:shadow-xl transition-all duration-100 hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed ${isMobile ? 'hidden' : ''}`}
             aria-label="Previous slide"
           >
             <ChevronLeft className="w-4 h-4 sm:w-6 sm:h-6 text-gray-600" />
@@ -169,7 +204,7 @@ export default function GroupIndustries() {
           <button
             onClick={nextSlide}
             disabled={isTransitioning}
-            className="absolute -right-2 sm:right-0 top-1/2 transform -translate-y-1/2 z-10 bg-white rounded-full p-2 sm:p-3 shadow-lg hover:shadow-xl transition-all duration-100 hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed"
+            className={`absolute -right-2 sm:right-0 top-1/2 transform -translate-y-1/2 z-10 bg-white rounded-full p-2 sm:p-3 shadow-lg hover:shadow-xl transition-all duration-100 hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed ${isMobile ? 'hidden' : ''}`}
             aria-label="Next slide"
           >
             <ChevronRight className="w-4 h-4 sm:w-6 sm:h-6 text-gray-600" />
@@ -184,6 +219,9 @@ export default function GroupIndustries() {
                 transform: `translateX(${translateX}%)`,
               }}
               onTransitionEnd={handleTransitionEnd}
+              onTouchStart={onTouchStart}
+              onTouchMove={onTouchMove}
+              onTouchEnd={onTouchEnd}
             >
               {extendedIndustries.map((industry, index) => (
                 <div
@@ -192,7 +230,7 @@ export default function GroupIndustries() {
                   style={{ width: `${100 / itemsPerView}%` }}
                 >
                   {/* Industry Card */}
-                  <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-100 hover:scale-105 group h-[14rem] sm:h-[20rem] md:h-[24rem] lg:h-[28rem] flex flex-col">
+                  <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-100 hover:scale-105 group h-[14rem] sm:h-[18rem] md:h-[20rem] lg:h-[22rem] xl:h-[24rem] flex flex-col">
                     {/* Image Section */}
                     <div className="flex-1 overflow-hidden">
                       <img
