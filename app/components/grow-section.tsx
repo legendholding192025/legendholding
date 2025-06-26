@@ -39,17 +39,27 @@ export default function GrowSection() {
   // Preload all images on component mount
   useEffect(() => {
     const preloadImages = () => {
-      slides.forEach((slide, index) => {
-        const img = new window.Image()
-        img.onload = () => {
-          setImagesLoaded(prev => new Set(prev).add(index))
-        }
-        img.src = slide.image
-      })
+      // Only preload the first image initially for faster page load
+      const img = new window.Image()
+      img.onload = () => {
+        setImagesLoaded(prev => new Set(prev).add(0))
+      }
+      img.src = slides[0].image
     }
     
     preloadImages()
   }, [])
+
+  // Preload other images when they become active
+  useEffect(() => {
+    if (currentSlide > 0 && !imagesLoaded.has(currentSlide)) {
+      const img = new window.Image()
+      img.onload = () => {
+        setImagesLoaded(prev => new Set(prev).add(currentSlide))
+      }
+      img.src = slides[currentSlide].image
+    }
+  }, [currentSlide, imagesLoaded])
 
   const nextSlide = () => {
     if (isTransitioning) return
@@ -154,8 +164,7 @@ export default function GrowSection() {
                 }`}
                 priority={currentSlide === 0}
                 quality={90}
-                placeholder="blur"
-                blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 onLoad={() => setImagesLoaded(prev => new Set(prev).add(currentSlide))}
               />
             </div>

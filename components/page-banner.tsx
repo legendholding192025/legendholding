@@ -16,6 +16,8 @@ export function PageBanner({ title, imageUrl }: PageBannerProps) {
           fill
           className="object-cover object-[center_20%]"
           priority
+          sizes="100vw"
+          quality={85}
         />
         <div className="absolute inset-0 bg-[#5E366D]/80 mix-blend-multiply" />
       </div>
