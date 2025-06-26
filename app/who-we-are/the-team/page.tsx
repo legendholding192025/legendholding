@@ -104,7 +104,7 @@ export default function LeadershipTeam() {
                   name: "Jade Li",
                   role: "Managing Director",
                   company: "Zul Energy",
-                  image: "https://cdn.legendholding.com/images/cdn_685bffe12e81d9.21593413_20250625_135545.jpg"
+                  image: "https://cdn.legendholding.com/images/cdn_685d5a2ca99729.20750755_20250626_143316.jpg"
                 },
                 {
                   name: "Bo Feng",
