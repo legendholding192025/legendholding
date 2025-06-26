@@ -144,11 +144,6 @@ export default function MotorsTradingPage() {
                 <div className="h-1 w-16 bg-[#2b1c48] rounded-full animate-expand-width"></div>
                 <div className="h-1 w-8 bg-[#ee8900] rounded-full animate-expand-width animation-delay-200"></div>
               </div>
-
-              <p className="mt-8 text-lg text-gray-700 font-effra leading-relaxed">
-              Legend Motors embraces cutting-edge advancements and consistently push boundaries, unleashing the power of possibility in every endeavor.
-              Their commitment to sustainability drives them to adopt environmentally conscious practices, ensuring a greener future for generations to come.
-              </p>
             </section>
 
             {/* Main Content Section */}
@@ -156,7 +151,7 @@ export default function MotorsTradingPage() {
               <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden">
                 <div className="flex flex-col md:flex-row">
                   {/* Image Section */}
-                  <div className="md:w-2/5 relative group overflow-hidden h-[300px] md:h-auto">
+                  <div className="md:w-1/2 relative group overflow-hidden h-[300px] md:h-auto">
                     <div className="h-full w-full relative overflow-hidden">
                       <Image
                         src="https://cdn.legendholding.com/images/cloudinary/cloudinary_683da1fac83f95.14534616_20250602_130706.png"
@@ -177,6 +172,11 @@ export default function MotorsTradingPage() {
                   {/* Content Section */}
                   <div className="flex-1 p-8 flex flex-col justify-center">
                     <div className="space-y-4">
+                      <p className="text-lg text-gray-700 font-effra leading-relaxed">
+                        Legend Motors embraces cutting-edge advancements and consistently push boundaries, unleashing the power of possibility in every endeavor.
+                        Their commitment to sustainability drives them to adopt environmentally conscious practices, ensuring a greener future for generations to come.
+                      </p>
+
                       <p className="text-lg text-gray-700 font-effra leading-relaxed">
                         Since Their inception in <span className="font-semibold text-[#2b1c48]">2013</span>, Legend Motors has achieved remarkable sales figures, reaching an impressive{" "}
                         <span className="font-bold text-[#ee8900]">

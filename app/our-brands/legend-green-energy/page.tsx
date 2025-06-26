@@ -40,7 +40,7 @@ export default function LegendGreenEnergyPage() {
               <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden">
                 <div className="flex flex-col md:flex-row">
                   {/* Image Section */}
-                  <div className="md:w-2/5 relative group overflow-hidden h-[300px] md:h-auto">
+                  <div className="md:w-1/2 relative group overflow-hidden h-[300px] md:h-auto">
                     <div className="h-full w-full relative overflow-hidden">
                       <Image
                         src="https://cdn.legendholding.com/images/cdn_6856599ed32869.86610075_20250621_070502.png"
@@ -59,7 +59,7 @@ export default function LegendGreenEnergyPage() {
                     </div>
                   </div>
                   {/* Content Section */}
-                  <div className="flex-1 p-8 flex flex-col justify-center">
+                  <div className="flex-1 p-6 flex flex-col justify-center">
                     {/* Description moved inside card */}
                     <p className="text-gray-700 text-lg font-effra mb-6">
                       Legend Green Energy Solutions, a trusted provider of sustainable and innovative

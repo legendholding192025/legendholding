@@ -134,18 +134,19 @@ With over 200 employees, we proudly serve more than 50 international corporation
                 >
                   <div className="flex flex-col md:flex-row">
                     {/* Image Section */}
-                    <div className="md:w-2/5 relative group overflow-hidden h-[300px] md:h-auto">
+                    <div className="md:w-1/2 relative group overflow-hidden h-[300px] md:h-auto">
                       <div className="h-full w-full relative overflow-hidden">
                         <img
                           src={section.image}
                           alt={section.title}
                           className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                          style={{ objectPosition: "90% center" }}
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-[#2b1c48]/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                       </div>
                     </div>
                     {/* Content Section */}
-                    <div className="flex-1 p-8 flex flex-col justify-center relative">
+                    <div className="flex-1 p-4 flex flex-col justify-center relative">
                       {/* Description moved inside card */}
                       <p className="text-gray-700 text-lg font-effra mb-6">
                         ZUL Energy is a manufacturer of premium-quality chemical additives for every stage of oil and gas field applications. Our state-of-the-art facility in Ras Al Khaimah spanning over 700,000 SQFT, is equipped to deliver high-quality products, exceptional service, and zero compromises. Guided by strong business values, we have rapidly grown to become a preferred vendor for both national and international oil companies, as well as global service providers.

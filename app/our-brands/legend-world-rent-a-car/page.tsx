@@ -146,8 +146,8 @@ export default function LegendRentACarPage() {
               <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden">
                 <div className="flex flex-col md:flex-row">
                   {/* Image Section */}
-                  <div className="w-full md:w-2/5 relative group overflow-hidden">
-                    <div className="aspect-[4/3] md:aspect-auto relative w-full h-[300px] md:h-full">
+                  <div className="w-full md:w-1/2 relative group overflow-hidden">
+                    <div className="aspect-[4/3] md:aspect-auto relative w-full h-[250px] md:h-full">
                       <Image
                         src="https://cdn.legendholding.com/images/cloudinary/cloudinary_683da3d88d3185.41319420_20250602_131504.png"
                         alt="Legend Rent a Car - Premium Car Rental Services"
@@ -160,7 +160,7 @@ export default function LegendRentACarPage() {
                     </div>
                   </div>
                   {/* Content Section */}
-                  <div className="flex-1 p-6 md:p-8 flex flex-col justify-center">
+                  <div className="flex-1 p-4 md:p-6 flex flex-col justify-center">
                     {/* Description moved inside card */}
                     <p className="text-lg text-gray-700 font-effra leading-relaxed mb-6">
                       Legend Rent-A-Car is a proud subsidiary of Legend World Investment Group, recognized as one of the fastest-growing 

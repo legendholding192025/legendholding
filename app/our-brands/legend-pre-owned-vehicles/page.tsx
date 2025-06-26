@@ -39,7 +39,7 @@ export default function PreOwnedVehiclesPage() {
               <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden transition-all duration-500 hover:shadow-3xl animate-fade-in-up">
                 <div className="flex flex-col md:flex-row">
                   {/* Image */}
-                  <div className="md:w-2/5 relative group overflow-hidden">
+                  <div className="md:w-1/2 relative group overflow-hidden">
                     <div className="h-full w-full relative overflow-hidden">
                       <img
                         src="https://cdn.legendholding.com/images/cloudinary/cloudinary_683da26519e1d9.85792572_20250602_130853.jpg"

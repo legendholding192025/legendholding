@@ -95,11 +95,6 @@ export default function MotorcyclesPage() {
                 <div className="h-1 w-16 bg-[#2b1c48] rounded-full animate-expand-width"></div>
                 <div className="h-1 w-8 bg-[#ee8900] rounded-full animate-expand-width animation-delay-200"></div>
               </div>
-
-              <p className="mt-8 text-lg text-gray-700 font-effra leading-relaxed">
-                Legend Motorcycles is the official and sole distributor of Lifan motorcycles in the Gulf region, launched in 2024. 
-                The company assembles both gasoline and electric (EV) motorcycles locally in the UAE, offering a wide range of products.
-              </p>
             </section>
 
             {/* Main Content Section */}
@@ -124,6 +119,11 @@ export default function MotorcyclesPage() {
                   {/* Content Section */}
                   <div className="flex-1 p-8 flex flex-col justify-center">
                     <div className="space-y-4">
+                      <p className="text-lg text-gray-700 font-effra leading-relaxed">
+                        Legend Motorcycles is the official and sole distributor of Lifan motorcycles in the Gulf region, launched in 2024. 
+                        The company assembles both gasoline and electric (EV) motorcycles locally in the UAE, offering a wide range of products.
+                      </p>
+
                       <p className="text-lg text-gray-700 font-effra leading-relaxed">
                         In its first year, Legend Motorcycles sold over{" "}
                         <span className="font-bold text-[#ee8900]">

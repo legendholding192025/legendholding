@@ -249,7 +249,7 @@ export default function BusinessUnit() {
           </button>
 
           {/* Carousel Track */}
-          <div className="overflow-hidden mx-4 sm:mx-8 md:mx-12">
+          <div className="overflow-hidden mx-1 sm:mx-4 md:mx-8 lg:mx-12">
             <div
               ref={carouselRef}
               className="flex transition-transform duration-100 ease-out"
@@ -264,7 +264,7 @@ export default function BusinessUnit() {
               {extendedBusinesses.map((business, index) => (
                 <div
                   key={`${business.name}-${index}`}
-                  className="flex-shrink-0 px-2"
+                  className="flex-shrink-0 px-0.5 sm:px-1 md:px-2"
                   style={{ width: `${100 / itemsPerView}%` }}
                 >
                   <Link href={business.url} className="block h-full">

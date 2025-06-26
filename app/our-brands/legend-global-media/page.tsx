@@ -139,10 +139,6 @@ export default function GlobalMediaPage() {
                 <div className="h-1 w-16 bg-[#2b1c48] rounded-full animate-expand-width"></div>
                 <div className="h-1 w-8 bg-[#ee8900] rounded-full animate-expand-width animation-delay-200"></div>
               </div>
-
-              <p className="mt-6 text-lg text-gray-700 font-effra leading-relaxed">
-                Legend Media is a creative production company that specializes in filming and media development. With deep expertise in 2D and 3D animation, as well as event filming, Legend Media brings ideas to life with engaging, high-quality visuals.
-              </p>
             </section>
 
             {/* Main Content Section */}
@@ -171,6 +167,10 @@ export default function GlobalMediaPage() {
                   {/* Content Section */}
                   <div className="flex-1 p-8 flex flex-col justify-center">
                     <div className="space-y-4">
+                      <p className="text-lg text-gray-700 font-effra leading-relaxed">
+                        Legend Media is a creative production company that specializes in filming and media development. With deep expertise in 2D and 3D animation, as well as event filming, Legend Media brings ideas to life with engaging, high-quality visuals.
+                      </p>
+
                       <p className="text-lg text-gray-700 font-effra leading-relaxed">
                         Known for delivering strong results, Legend Media has achieved an impressive engagement rate of over 20% across its clients' social media pages, proof that the content it creates truly connects with audiences.
                       </p>
