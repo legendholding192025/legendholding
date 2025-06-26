@@ -149,7 +149,7 @@ export default function LegendRentACarPage() {
                   <div className="w-full md:w-1/2 relative group overflow-hidden">
                     <div className="aspect-[4/3] md:aspect-auto relative w-full h-[250px] md:h-full">
                       <Image
-                        src="https://cdn.legendholding.com/images/cloudinary/cloudinary_683da3d88d3185.41319420_20250602_131504.png"
+                        src="https://cdn.legendholding.com/images/cdn_685d54567419c6.09382890_20250626_140822.png"
                         alt="Legend Rent a Car - Premium Car Rental Services"
                         fill
                         sizes="(max-width: 768px) 100vw, 40vw"

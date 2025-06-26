@@ -42,7 +42,7 @@ export default function PreOwnedVehiclesPage() {
                   <div className="md:w-1/2 relative group overflow-hidden">
                     <div className="h-full w-full relative overflow-hidden">
                       <img
-                        src="https://cdn.legendholding.com/images/cloudinary/cloudinary_683da26519e1d9.85792572_20250602_130853.jpg"
+                        src="https://cdn.legendholding.com/images/cdn_685d52e26e48d1.08951618_20250626_140210.png"
                         alt="Legend Pre-owned Vehicles"
                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                       />
