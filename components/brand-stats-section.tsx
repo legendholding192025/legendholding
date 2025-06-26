@@ -68,7 +68,7 @@ export function BrandStatsSection() {
       value: 1,
       suffix: "B USD",
       label: "Sales Turnover",
-      color: "bg-[#EE8900]",
+      color: "bg-[#EE8900]/80",
     },
   ]
 

@@ -154,6 +154,79 @@ export default function AboutUsPage() {
         </div>
 
         <div className="min-h-screen bg-white flex flex-col items-center py-12 px-4 relative overflow-hidden">
+          {/* Our Story Section */}
+          <section className="py-12 md:py-20 px-4 md:px-6 lg:px-8">
+            <div className="max-w-7xl mx-auto">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+                {/* Our Story Image */}
+                <div>
+                  <div className="relative">
+                    <div className="aspect-[4/3] relative overflow-hidden">
+                      <Image
+                        src="https://cdn.legendholding.com/images/cloudinary/cloudinary_683ea90f29b708.04231409_20250603_074935.jpg"
+                        width={800}
+                        height={600}
+                        alt="Our Story"
+                        className="w-full h-full object-cover"
+                        loading="lazy"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        quality={85}
+                        placeholder="blur"
+                        blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+                    </div>
+
+                    {/* Floating Stats */}
+                    <div className="absolute -bottom-4 -right-4 sm:-bottom-6 sm:-right-6 bg-white rounded-lg shadow-lg p-3 sm:p-6 border border-gray-100 max-w-[calc(100%-1rem)] sm:max-w-[calc(100%-2rem)]">
+                      <div className="text-xl sm:text-2xl font-bold text-[#5E366D] font-richmond">
+                        <AnimatedCounter target={2008} prefix="" duration={1500} startDelay={100} />
+                      </div>
+                      <div className="text-xs sm:text-sm text-gray-600 font-effra">Founded</div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Our Story Content */}
+                <div>
+                  <div className="mb-8">
+                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-light text-gray-900 mb-8 font-richmond leading-tight">
+                      Our Story
+                    </h2>
+                  </div>
+
+                  <div className="space-y-6">
+                    <p className="text-lg md:text-xl text-gray-700 font-effra leading-relaxed">
+                    Legend Holding Group is a diversified enterprise headquartered in Dubai, operating across the Middle east and African region. With a strong focus on sustainability and innovation, the group manages a growing portfolio of companies in automotive, trading, energy, Travel and Tourism and mobility services.
+                    </p>
+                    <p className="text-lg md:text-xl text-gray-700 font-effra leading-relaxed">
+                    Rooted in Loyalty, Excellence, and Progress, we lead with innovation and technology to seamlessly connect the physical and digital worlds.
+                    </p>
+                    <p className="text-lg md:text-xl text-gray-700 font-effra leading-relaxed">
+                    Our goal is to become a leader in intelligent, data-driven solutions because Together We Grow.
+                    </p>
+                  </div>
+
+                  {/* Story Pillars */}
+                  <div className="grid grid-cols-3 gap-6 mt-6">
+                    {[
+                      { title: "Innovation", desc: "Technology-driven" },
+                      { title: "Growth", desc: "Expanding horizons" },
+                      { title: "Excellence", desc: "Quality focus" },
+                    ].map((pillar, index) => (
+                      <div key={index} className="text-center">
+                        <div className="w-2 h-2 bg-[#5E366D] rounded-full mx-auto mb-3" />
+                        <h4 className="text-sm font-semibold text-gray-900 font-richmond">{pillar.title}</h4>
+                        <div className="text-xs text-gray-500 font-effra my-1">&</div>
+                        <p className="text-xs text-gray-600 font-effra">{pillar.desc}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
           {/* Vision Section */}
           <section className="py-12 md:py-20 px-4 md:px-6 lg:px-8 bg-[#F5F1EB]">
             <div className="max-w-7xl mx-auto">
