@@ -18,6 +18,7 @@ export function PageBanner({ title, imageUrl }: PageBannerProps) {
           priority
           sizes="100vw"
           quality={85}
+          fetchPriority="high"
         />
         <div className="absolute inset-0 bg-[#5E366D]/80 mix-blend-multiply" />
       </div>

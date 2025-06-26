@@ -36,6 +36,7 @@ export default function LeadershipTeam() {
                   priority
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   quality={85}
+                  fetchPriority="high"
                 />
                 <h2 className="text-2xl font-bold text-[#2b1c48] mb-2">Mr. Kai Zheng</h2>
                 <div className="flex gap-2 mb-3">
@@ -56,6 +57,7 @@ export default function LeadershipTeam() {
                   priority
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   quality={85}
+                  fetchPriority="high"
                 />
                 <h2 className="text-2xl font-bold text-[#2b1c48] mb-2">Mrs. Mira Wu</h2>
                 <div className="flex gap-2 mb-3">
@@ -173,7 +175,7 @@ export default function LeadershipTeam() {
                     }`}
                     loading="lazy"
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    quality={85}
+                    quality={75}
                   />
                   <h3 className="text-xl font-bold text-[#2b1c48] mb-2">{leader.name}</h3>
                   <div className="flex gap-2 mb-3">
