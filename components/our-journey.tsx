@@ -47,7 +47,7 @@ export function OurJourney() {
       description:
         "Our journey began with the establishment of our first trading company, focusing on bringing quality products to the market with a vision for excellence.",
       image: "https://cdn.legendholding.com/images/cdn_685aacbc54a7d9.24632090_20250624_134844.jpg",
-      mobileImage: "https://cdn.legendholding.com/images/cdn_685aacbc54a7d9.24632090_20250624_134844.jpg",
+      mobileImage: "https://cdn.legendholding.com/images/cdn_685cdcedd20183.31278729_20250626_053853.png",
       icon: <Building className="w-6 h-6" />,
       color: "#7c3aed",
       achievements: ["Company Foundation", "First Trading Operations", "Market Entry"],
@@ -619,7 +619,7 @@ export function OurJourney() {
                 {/* Scroll Down Indicator - Only show on first section */}
                 {index === 0 && (
                   <motion.div 
-                    className="absolute left-0 right-0 mx-auto w-fit cursor-pointer top-20 md:top-10"
+                    className="absolute left-0 right-0 mx-auto w-fit cursor-pointer top-8 md:top-12"
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ 
                       opacity: 1, 
