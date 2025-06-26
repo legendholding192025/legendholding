@@ -79,8 +79,8 @@ export function OurJourney() {
       title: "Regional Operations",
       description:
         "Established new regional operations at Jabal Al Barakha to better serve our growing customer base across different territories.",
-      image: "https://cdn.legendholding.com/images/cdn_685a582fed2086.93844645_20250624_074759.png",
-      mobileImage: "https://cdn.legendholding.com/images/cdn_685bd041800149.16042458_20250625_103233.png",
+      image: "https://cdn.legendholding.com/images/cdn_685ce59ee7f854.86587859_20250626_061558.png",
+      mobileImage: "https://cdn.legendholding.com/images/cdn_685ce59ee7f854.86587859_20250626_061558.png",
       icon: <MapPin className="w-6 h-6" />,
       color: "#4c1d95",
       achievements: ["Jabal Al Barakha Operations", "Regional Expansion", "Territory Coverage"],
@@ -508,7 +508,8 @@ export function OurJourney() {
                   alt={`${milestone.title} - ${milestone.year}`}
                   fill
                   className={cn(
-                    "object-cover transition-opacity duration-500",
+                    "transition-opacity duration-500",
+                    milestone.title === "Regional Operations" ? "object-contain" : "object-cover",
                     imagesLoaded.has(index) ? "opacity-100" : "opacity-0"
                   )}
                   style={{
