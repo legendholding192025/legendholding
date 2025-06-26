@@ -177,7 +177,7 @@ export default function LegendRentACarPage() {
                         <span className="font-bold text-[#ee8900]">
                           <AnimatedCounter target={2000} suffix=" vehicles" duration={2000} startDelay={800} />
                         </span>{" "}
-                        and operates from more than 14 strategic meet-and-greet locations across Dubai.
+                        across UAE.
                       </p>
                     </div>
                     {/* Learn More Button */}
