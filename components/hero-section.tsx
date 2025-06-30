@@ -7,26 +7,45 @@ export default function HeroSection() {
 
   useEffect(() => {
     if (videoRef.current) {
-      videoRef.current.playbackRate = 0.5 // Slow motion (50% speed)
+      const video = videoRef.current
       
-      // Ensure video autoplays
-      const playVideo = async () => {
+      // Set playback rate for slow motion
+      video.playbackRate = 0.5
+      
+      // Simple autoplay function
+      const startVideo = async () => {
         try {
-          await videoRef.current?.play()
+          await video.play()
         } catch (error) {
-          console.log('Autoplay was prevented:', error)
-          // Fallback: try to play on user interaction
-          const handleUserInteraction = () => {
-            videoRef.current?.play()
-            document.removeEventListener('click', handleUserInteraction)
-            document.removeEventListener('touchstart', handleUserInteraction)
+          console.log('Autoplay failed, will play on user interaction:', error)
+          // Fallback: play on first user interaction
+          const playOnInteraction = () => {
+            video.play()
+            document.removeEventListener('click', playOnInteraction)
+            document.removeEventListener('touchstart', playOnInteraction)
           }
-          document.addEventListener('click', handleUserInteraction)
-          document.addEventListener('touchstart', handleUserInteraction)
+          document.addEventListener('click', playOnInteraction)
+          document.addEventListener('touchstart', playOnInteraction)
         }
       }
       
-      playVideo()
+      // Try to play immediately, then on load
+      startVideo()
+      
+      // Also try when video is loaded
+      video.addEventListener('loadedmetadata', startVideo, { once: true })
+      video.addEventListener('canplay', startVideo, { once: true })
+      
+      // Handle video errors
+      video.addEventListener('error', (e) => {
+        console.log('Video error:', e)
+      })
+      
+      // Cleanup
+      return () => {
+        video.removeEventListener('loadedmetadata', startVideo)
+        video.removeEventListener('canplay', startVideo)
+      }
     }
   }, [])
 
@@ -38,10 +57,10 @@ export default function HeroSection() {
         autoPlay
         muted
         playsInline
-        className="absolute inset-0 w-full h-full object-cover mt-6 md:mt-20"
+        className="absolute inset-0 w-full h-full object-cover mt-6 md:mt-28"
         style={{ zIndex: 0 }}
       >
-        <source src="https://cdn.legendholding.com/videos/video_cdn_68623e75d5b5a9.33213031_20250630_073621.mp4" type="video/mp4" />
+        <source src="https://cdn.legendholding.com/videos/video_cdn_6862467fd9e612.83077767_20250630_081039.mp4" type="video/mp4" />
       </video>
       
       {/* Overlay for better text readability */}
