@@ -10,7 +10,7 @@ const dealerships = [
   {
     name: "Skywell",
     image: "https://cdn.legendholding.com/images/cloudinary/cloudinary_683da0668d4af4.97651620_20250602_130022.jpg",
-    logo: "https://res.cloudinary.com/dosxengut/image/upload/v1746788882/logo_sisnn9.png",
+    logo: "https://cdn.legendholding.com/images/cdn_68624b1e8f5a30.76588960_20250630_083022.png",
     description:
       "Legend Motors is the exclusive distributor of Skywell vehicles in Dubai, offering comprehensive retail and fleet solutions across the emirate.",
     detailedContent: [
@@ -25,7 +25,7 @@ const dealerships = [
   {
     name: "Kaiyi",
     image: "https://cdn.legendholding.com/images/cloudinary/cloudinary_683da11c9c3534.33669103_20250602_130324.jpg",
-    logo: "https://res.cloudinary.com/dosxengut/image/upload/v1746788951/download_wmkc6s.png",
+    logo: "https://cdn.legendholding.com/images/cdn_68624b81b7f878.17468982_20250630_083201.png",
     description:
       "Legend Motors is the exclusive distributor of Kaiyi Automobiles in the UAE, proudly introducing this innovative Chinese SUV brand to the local market.",
     detailedContent: [
@@ -41,7 +41,7 @@ const dealerships = [
   {
     name: "Li Auto",
     image: "https://cdn.legendholding.com/images/cloudinary/cloudinary_683da13c415753.52591286_20250602_130356.jpg",
-    logo: "https://res.cloudinary.com/dosxengut/image/upload/v1746788883/logo-text-black-en.e6782a94_chlojl.svg",
+    logo: "https://cdn.legendholding.com/images/cloudinary_68624c253a47c8.16394139_20250630_083445.svg",
     description:
       "Legend Motors serves as the official sales partner and authorized provider of after-sales service and maintenance for Li Auto vehicles across the UAE.",
     detailedContent: [
@@ -56,7 +56,7 @@ const dealerships = [
   {
     name: "212",
     image: "https://cdn.legendholding.com/images/cloudinary/cloudinary_683da1530dd2f0.90644648_20250602_130419.jpg",
-    logo: "https://res.cloudinary.com/dosxengut/image/upload/v1746788882/logo212b_qk5xsj.png",
+    logo: "https://cdn.legendholding.com/images/cdn_68624d052a08a8.28527944_20250630_083829.png",
     description:
       "Legend Motors is the exclusive distributor for 212 vehicles in the UAE, managing both sales and after-sales service with a commitment to excellence.",
     detailedContent: [
