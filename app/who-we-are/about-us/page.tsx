@@ -224,7 +224,7 @@ export default function AboutUsPage() {
           </section>
 
           {/* Vision Section */}
-          <section className="py-12 md:py-20 px-4 md:px-6 lg:px-8 bg-[#EE8900]/80">
+          <section className="py-12 md:py-20 px-4 md:px-6 lg:px-8 bg-[#F5F1EB]">
             <div className="max-w-7xl mx-auto">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
                 {/* Vision Content */}
@@ -338,7 +338,7 @@ export default function AboutUsPage() {
                     {[
                       { title: "Happiness", desc: "Excellence" },
                       { title: "Value", desc: "Impact" },
-                      { title: "Future", desc: "Sustainability" },
+                      { title: "Future", desc: "Sustainable Future" },
                     ].map((pillar, index) => (
                       <div key={index} className="text-center">
                         <div className="w-2 h-2 bg-[#27AE60] rounded-full mx-auto mb-3" />
@@ -356,7 +356,7 @@ export default function AboutUsPage() {
           </section>
 
           {/* Values Section */}
-          <section className="py-12 md:py-20 px-4 md:px-6 lg:px-8 bg-[#2B1C48]">
+          <section className="py-12 md:py-20 px-4 md:px-6 lg:px-8 bg-[#F5F1EB]">
             <div className="max-w-7xl mx-auto">
               {/* Section Header */}
               <div className="text-center mb-12">
