@@ -7,6 +7,23 @@ import { useEffect, useState } from "react"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { PageBanner } from "@/components/page-banner"
+
+// Preload critical images
+const preloadImages = () => {
+  const imageUrls = [
+    'https://cdn.legendholding.com/images/cdn_6862a6e1eef048.35976175_20250630_150153.jpg',
+    'https://cdn.legendholding.com/images/cdn_6862aedc3ac7d3.80278555_20250630_153556.png',
+    'https://cdn.legendholding.com/images/cdn_686295fca18de1.20003521_20250630_134948.png'
+  ]
+  
+  imageUrls.forEach(url => {
+    const link = document.createElement('link')
+    link.rel = 'preload'
+    link.as = 'image'
+    link.href = url
+    document.head.appendChild(link)
+  })
+}
  
 // Counter Animation Component
 type AnimatedCounterProps = {
@@ -15,10 +32,13 @@ type AnimatedCounterProps = {
   prefix?: string;
   duration?: number;
   startDelay?: number;
+  formatNumber?: boolean;
+  id?: string;
 };
-function AnimatedCounter({ target, suffix = "", prefix = "", duration = 2000, startDelay = 0 }: AnimatedCounterProps) {
+function AnimatedCounter({ target, suffix = "", prefix = "", duration = 2000, startDelay = 0, formatNumber = false, id }: AnimatedCounterProps) {
   const [count, setCount] = useState(0)
   const [isVisible, setIsVisible] = useState(false)
+  const [uniqueId] = useState(() => id || `counter-${target}-${Date.now()}`)
  
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -51,32 +71,40 @@ function AnimatedCounter({ target, suffix = "", prefix = "", duration = 2000, st
           }, startDelay)
         }
       },
-      { threshold: 0.5 },
+      { threshold: 0.3 },
     )
  
-    const element = document.getElementById(`counter-${target}`)
+    const element = document.getElementById(uniqueId)
     if (element) observer.observe(element)
  
     return () => observer.disconnect()
-  }, [target, duration, startDelay, isVisible])
+  }, [target, duration, startDelay, isVisible, uniqueId])
+ 
+  const formatDisplayValue = (value: number) => {
+    if (formatNumber && value >= 1000) {
+      return (value / 1000).toFixed(1) + 'K'
+    }
+    return value.toString()
+  }
  
   return (
     <span
-      id={`counter-${target}`}
+      id={uniqueId}
       className="inline-block tabular-nums"
       style={{
         transform: isVisible ? "translateY(0)" : "translateY(10px)",
         opacity: isVisible ? 1 : 0,
-        transition: "all 0.5s ease-out",
+        transition: "all 0.6s ease-out",
       }}
     >
-      {prefix}{count}{suffix}
+      {prefix}{formatDisplayValue(count)}{suffix}
     </span>
   )
 }
  
 export default function AboutUsPage() {
   const [scrollY, setScrollY] = useState(0)
+  const [imagesLoaded, setImagesLoaded] = useState(false)
  
   // Animated counters
   const [yearsCount, setYearsCount] = useState(0)
@@ -118,7 +146,17 @@ export default function AboutUsPage() {
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY)
     window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
+    
+    // Preload critical images
+    preloadImages()
+    
+    // Set images as loaded after a short delay to allow for preloading
+    const timer = setTimeout(() => setImagesLoaded(true), 100)
+    
+    return () => {
+      window.removeEventListener("scroll", handleScroll)
+      clearTimeout(timer)
+    }
   }, [])
  
   return (
@@ -128,15 +166,34 @@ export default function AboutUsPage() {
         {/* About Us and Our Story Section */}
         <div className="min-h-screen flex flex-col items-center relative overflow-hidden bg-white">
           {/* Our Story Section */}
-          <section className="w-full py-8 md:py-14 px-0 relative" style={{ 
-            backgroundColor: '#5D376E',
-            backgroundImage: 'url(https://cdn.legendholding.com/images/cdn_6862a6e1eef048.35976175_20250630_150153.jpg)',
-            backgroundSize: '1600px',
-            backgroundPosition: 'right bottom',
-            backgroundRepeat: 'no-repeat'
-          }}>
+          <section className="w-full py-8 md:py-14 px-0 relative bg-[#5D376E] overflow-hidden">
+            {/* Background Image with Next.js Image component */}
+            <div className="absolute inset-0 z-0 flex justify-end items-end">
+              <Image
+                src="https://cdn.legendholding.com/images/cdn_6862a6e1eef048.35976175_20250630_150153.jpg"
+                alt="Legend Holding Group background"
+                width={1600}
+                height={1200}
+                priority
+                className={`transition-opacity duration-500 ${
+                  imagesLoaded ? 'opacity-100' : 'opacity-0'
+                }`}
+                style={{
+                  maxWidth: '1600px',
+                  width: 'auto',
+                  height: 'auto',
+                  objectFit: 'contain',
+                  objectPosition: 'right bottom'
+                }}
+                quality={85}
+                onLoad={() => setImagesLoaded(true)}
+              />
+              {!imagesLoaded && (
+                <div className="absolute inset-0 bg-[#5D376E] animate-pulse"></div>
+              )}
+            </div>
             {/* Overlay for better text readability */}
-            <div className="absolute inset-0 bg-[#5D376E]/40"></div>
+            <div className="absolute inset-0 bg-[#5D376E]/40 z-10"></div>
             
             <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 relative z-10">
               {/* About Us Heading - Centered across full width */}
@@ -190,7 +247,7 @@ export default function AboutUsPage() {
               
               {/* 2008 Founded Badge - Positioned in right corner */}
               <div className="absolute -bottom-6 md:-bottom-8 right-8 text-white font-richmond font-bold text-lg">
-                2008 Founded
+                <AnimatedCounter id="founded-counter" target={2008} prefix="" suffix=" Founded" duration={1500} startDelay={200} />
               </div>
             </div>
           </section>
@@ -233,13 +290,18 @@ export default function AboutUsPage() {
                 {/* Vision Card Image */}
                 <div className="order-2 lg:order-2">
                   <div className="relative">
-                    <img 
-                      src="https://cdn.legendholding.com/images/cdn_6862aedc3ac7d3.80278555_20250630_153556.png" 
-                      alt="" 
-                      className="w-full h-auto opacity-90" 
+                    <Image
+                      src="https://cdn.legendholding.com/images/cdn_6862aedc3ac7d3.80278555_20250630_153556.png"
+                      alt="Vision illustration"
+                      width={600}
+                      height={400}
+                      className="w-full h-auto opacity-90"
+                      priority
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 600px"
+                      quality={85}
                     />
                     <div className="absolute -bottom-8 md:-bottom-14 right-6 text-black font-richmond font-bold text-lg z-10">
-                      +18 Years of Excellence
+                      +<AnimatedCounter id="years-counter" target={18} prefix="" suffix=" Years of Excellence" duration={1200} startDelay={400} />
                     </div>
                   </div>
                 </div>
@@ -296,10 +358,13 @@ export default function AboutUsPage() {
                     width={200}
                     height={200}
                     className="object-contain drop-shadow-2xl bg-transparent"
+                    priority
+                    sizes="200px"
+                    quality={85}
                   />
                 </div>
                 <div className="absolute bottom-6 right-6 text-white font-richmond font-bold text-lg">
-                  +1M Global Clients
+                  +<AnimatedCounter id="clients-counter" target={1} prefix="" suffix="M Global Clients" duration={1000} startDelay={600} />
                 </div>
               </div>
             </div>
@@ -351,9 +416,9 @@ export default function AboutUsPage() {
                 ].map((value, index) => (
                   <div
                     key={value.title}
-                    className="bg-[#5D376E] rounded-xl p-6 flex flex-col items-center text-center min-h-40 max-w-lg mx-auto"
+                    className="group bg-[#5D376E] rounded-xl p-6 flex flex-col items-center text-center min-h-40 max-w-lg mx-auto transition-all duration-300 ease-in-out hover:-translate-y-2 hover:shadow-2xl hover:shadow-[#5D376E]/20 cursor-pointer transform hover:scale-[1.02]"
                   >
-                    <div className="text-white mb-2">{value.icon}</div>
+                    <div className="text-white mb-2 transition-transform duration-300 group-hover:scale-110">{value.icon}</div>
                     <h3 className="text-xl font-bold text-white font-richmond mb-2">{value.title}</h3>
                     <p className="text-white font-effra text-base leading-relaxed">
                       {value.desc}
