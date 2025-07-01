@@ -23,9 +23,13 @@ export default function LeadershipTeam() {
             <div className="absolute bottom-0 right-0 w-96 h-96 bg-secondary/5 rounded-full blur-3xl transform translate-x-1/2 translate-y-1/2" />
           </div>
 
-                    <div className="w-full max-w-7xl relative z-10">
-            {/* Main Leadership - Kai and Mira */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+          <div className="w-full max-w-7xl relative z-10">
+            {/* Leadership Team */}
+            <div className="mb-8">
+              <h2 className="text-3xl font-bold text-[#2b1c48] mb-6">Leadership Team</h2>
+            </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {[
                 {
                   name: "Mr. Kai Zheng",
@@ -38,39 +42,7 @@ export default function LeadershipTeam() {
                   role: "Co-Founder & Chief Operating Officer",
                   company: "Legend Holding Group",
                   image: "https://cdn.legendholding.com/images/cdn_684c0d8b445f38.04199956_20250613_113747.jpg"
-                }
-              ].map((leader, index) => (
-                <div key={index} className="bg-white rounded-2xl shadow-lg p-6 transform transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
-                  <Image
-                    src={leader.image}
-                    alt={leader.name}
-                    width={250}
-                    height={400}
-                    className={`mb-4 mx-auto rounded-xl w-full h-[400px] ${
-                      leader.name === "Mr. Kai Zheng" ? "object-cover object-[center_30%]" : "object-cover"
-                    }`}
-                    loading="lazy"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    quality={75}
-                  />
-                  <h3 className="text-xl font-bold text-[#2b1c48] mb-2">{leader.name}</h3>
-                  <div className="flex gap-2 mb-3">
-                    <div className="h-1 w-16 bg-[#5E366D] rounded-full animate-expand-width"></div>
-                    <div className="h-1 w-8 bg-[#EE8900] rounded-full animate-expand-width animation-delay-200"></div>
-                  </div>
-                  <p className="text-[#EE8900] font-semibold mb-2">{leader.role}</p>
-                  <p className="text-[#5E366D] font-medium text-xl">{leader.company}</p>
-                </div>
-              ))}
-            </div>
-
-            {/* Leadership Team */}
-            <div className="mb-8">
-              <h2 className="text-3xl font-bold text-[#2b1c48] mb-6">Leadership Team</h2>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {[
+                },
                 {
                   name: "Rejeesh Pillai",
                   role: "Group Finance Director",
@@ -164,6 +136,7 @@ export default function LeadershipTeam() {
                     width={250}
                     height={400}
                     className={`mb-4 mx-auto rounded-xl w-full h-[400px] ${
+                      leader.name === "Mr. Kai Zheng" ? "object-cover object-[center_30%]" :
                       leader.name === "Liu Xiaochen" ? "object-cover object-[center_20%]" : 
                       leader.name === "Waseem Khalayleh" ? "object-cover object-[center_60%]" : 
                       leader.name === "Xiaolong Ma" ? "object-cover object-[center_40%]" : "object-cover"
