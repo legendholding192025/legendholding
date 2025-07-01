@@ -136,7 +136,7 @@ export default function LeadershipTeam() {
                     width={250}
                     height={400}
                     className={`mb-4 mx-auto rounded-xl w-full h-[400px] ${
-                      leader.name === "Mr. Kai Zheng" ? "object-cover object-[center_30%]" :
+                      leader.name === "Mr. Kai Zheng" ? "object-cover object-[center_25%]" :
                       leader.name === "Liu Xiaochen" ? "object-cover object-[center_20%]" : 
                       leader.name === "Waseem Khalayleh" ? "object-cover object-[center_60%]" : 
                       leader.name === "Xiaolong Ma" ? "object-cover object-[center_40%]" : "object-cover"
