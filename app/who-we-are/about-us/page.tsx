@@ -317,24 +317,32 @@ export default function AboutUsPage() {
               background: '#E69736',
             }}
           >
-            {/* Purple diagonal overlay */}
+            {/* Purple diagonal overlay - Desktop */}
             <div
-              className="absolute inset-0 z-0"
+              className="absolute inset-0 z-0 hidden md:block"
               style={{
                 background: '#5D376E',
                 clipPath: 'polygon(100% 0px, 100% 100%, 50% 100%)',
               }}
             />
+            {/* Purple diagonal overlay - Mobile */}
+            <div
+              className="absolute inset-0 z-0 block md:hidden"
+              style={{
+                background: '#5D376E',
+                clipPath: 'polygon(100% 40%, 100% 100%, 0% 100%)',
+              }}
+            />
             <div className="relative max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 items-center min-h-[600px] px-4 md:px-6 lg:px-8 z-10">
               {/* Mission Content */}
               <div className="order-1 lg:order-1 py-16 lg:py-24 pr-0 lg:pr-12">
-                <h2 className="text-3xl md:text-4xl lg:text-5xl font-light text-white mb-6 font-richmond leading-tight text-center lg:text-left">
+                <h2 className="text-3xl md:text-4xl lg:text-5xl font-light text-white mb-6 font-richmond leading-tight text-left">
                   Our Mission
                 </h2>
-                <p className="text-base md:text-lg font-effra leading-relaxed mb-10 text-[#5D376E] text-center lg:text-left max-w-xl">
+                <p className="text-base md:text-lg font-effra leading-relaxed mb-10 text-[#5D376E] text-left max-w-xl">
                   We are dedicated to fostering happiness and delivering value, focusing on building a sustainable future.
                 </p>
-                <div className="grid grid-cols-3 gap-6 mt-6 max-w-md mx-auto lg:mx-0">
+                <div className="grid grid-cols-3 gap-6 mt-6 max-w-md mx-0">
                   {[
                     { title: "Happiness", desc: "Excellence" },
                     { title: "Value", desc: "Impact" },
@@ -351,7 +359,7 @@ export default function AboutUsPage() {
               </div>
               {/* Mascot Image and Stat */}
               <div className="order-2 lg:order-2 relative flex flex-col items-center justify-center h-full min-h-[500px]">
-                <div className="flex-1 flex items-center justify-center w-full lg:ml-16">
+                <div className="flex-1 flex items-center justify-center w-full lg:ml-16 -mt-12 md:mt-0">
                   <Image
                     src="https://cdn.legendholding.com/images/cdn_686295fca18de1.20003521_20250630_134948.png"
                     alt="Mascot"
@@ -419,7 +427,7 @@ export default function AboutUsPage() {
                     className="group bg-[#5D376E] rounded-xl p-6 flex flex-col items-center text-center min-h-40 max-w-lg mx-auto transition-all duration-300 ease-in-out hover:-translate-y-2 hover:shadow-2xl hover:shadow-[#5D376E]/20 cursor-pointer transform hover:scale-[1.02]"
                   >
                     <div className="text-white mb-2 transition-transform duration-300 group-hover:scale-110">{value.icon}</div>
-                    <h3 className="text-xl font-bold text-white font-richmond mb-2">{value.title}</h3>
+                    <h3 className="text-xl font-bold text-[#F3A13B] font-richmond mb-2">{value.title}</h3>
                     <p className="text-white font-effra text-base leading-relaxed">
                       {value.desc}
                     </p>
