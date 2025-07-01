@@ -125,112 +125,84 @@ export default function AboutUsPage() {
     <>
       <Header />
       <main className="pt-20">
-        {/* Hero Banner */}
-        <div className="relative bg-[#5E366D] overflow-hidden">
-          {/* Background Image */}
-          <div className="absolute inset-0">
-            <Image
-              src="https://cdn.legendholding.com/images/cloudinary/cloudinary_683ea90f29b708.04231409_20250603_074935.jpg"
-              alt="About Us"
-              fill
-              className="object-cover object-[center_20%]"
-              priority
-              sizes="100vw"
-              quality={85}
-            />
-            <div className="absolute inset-0 bg-[#5E366D]/80 mix-blend-multiply" />
-          </div>
-
-          {/* Hero Content */}
-          <div className="relative container mx-auto px-4 py-24 md:py-32">
-            <div className="max-w-4xl mx-auto text-center">
-              <h1 className="text-4xl md:text-5xl font-bold text-white mb-6 font-richmond">
-                About Us
-              </h1>
-            </div>
-          </div>
-        </div>
-
-        <div className="min-h-screen bg-white flex flex-col items-center py-12 px-4 relative overflow-hidden">
+        {/* About Us and Our Story Section */}
+        <div className="min-h-screen flex flex-col items-center relative overflow-hidden bg-white">
           {/* Our Story Section */}
-          <section className="py-12 md:py-20 px-4 md:px-6 lg:px-8">
-            <div className="max-w-7xl mx-auto">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
-                {/* Our Story Image */}
-                <div>
-                  <div className="relative">
-                    <div className="aspect-[4/3] relative overflow-hidden">
-                      <Image
-                        src="https://cdn.legendholding.com/images/cloudinary/cloudinary_683ea90f29b708.04231409_20250603_074935.jpg"
-                        width={800}
-                        height={600}
-                        alt="Our Story"
-                        className="w-full h-full object-cover"
-                        loading="lazy"
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                        quality={85}
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
-                    </div>
-
-                    {/* Floating Stats */}
-                    <div className="absolute -bottom-4 -right-4 sm:-bottom-6 sm:-right-6 bg-white rounded-lg shadow-lg p-3 sm:p-6 border border-gray-100 max-w-[calc(100%-1rem)] sm:max-w-[calc(100%-2rem)]">
-                      <div className="text-xl sm:text-2xl font-bold text-[#5E366D] font-richmond">
-                        <AnimatedCounter target={2008} prefix="" duration={1500} startDelay={100} />
-                      </div>
-                      <div className="text-xs sm:text-sm text-gray-600 font-effra">Founded</div>
-                    </div>
-                  </div>
-                </div>
-
+          <section className="w-full py-8 md:py-14 px-0 relative" style={{ 
+            backgroundColor: '#5D376E',
+            backgroundImage: 'url(https://cdn.legendholding.com/images/cdn_6862a6e1eef048.35976175_20250630_150153.jpg)',
+            backgroundSize: '1600px',
+            backgroundPosition: 'right bottom',
+            backgroundRepeat: 'no-repeat'
+          }}>
+            {/* Overlay for better text readability */}
+            <div className="absolute inset-0 bg-[#5D376E]/40"></div>
+            
+            <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 relative z-10">
+              {/* About Us Heading - Centered across full width */}
+              <div className="text-center mb-12">
+                <h1 className="text-4xl md:text-5xl font-bold text-white mb-8 font-richmond">
+                  About Us
+                </h1>
+              </div>
+              
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center relative">
                 {/* Our Story Content */}
-                <div>
+                <div className="order-1 lg:order-1 z-10 relative">
                   <div className="mb-8">
-                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-light text-gray-900 mb-8 font-richmond leading-tight">
+                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-light text-[#F3A13B] mb-8 font-richmond leading-tight">
                       Our Story
                     </h2>
                   </div>
 
                   <div className="space-y-6">
-                    <p className="text-lg md:text-xl text-gray-700 font-effra leading-relaxed">
-                    Legend Holding Group is a diversified enterprise headquartered in Dubai, operating across the Middle east and African region. With a strong focus on sustainability and innovation, the group manages a growing portfolio of companies in automotive, trading, energy, Travel and Tourism and mobility services.
+                    <p className="text-lg md:text-xl text-white font-effra leading-relaxed">
+                      Legend Holding Group is a diversified enterprise headquartered in Dubai, operating across the Middle east and African region. With a strong focus on sustainability and innovation, the group manages a growing portfolio of companies in automotive, trading, energy, Travel and Tourism and mobility services.
                     </p>
-                    <p className="text-lg md:text-xl text-gray-700 font-effra leading-relaxed">
-                    Rooted in Loyalty, Excellence, and Progress, we lead with innovation and technology to seamlessly connect the physical and digital worlds.
+                    <p className="text-lg md:text-xl text-white font-effra leading-relaxed">
+                      Rooted in Loyalty, Excellence, and Progress, we lead with innovation and technology to seamlessly connect the physical and digital worlds.
                     </p>
-                    <p className="text-lg md:text-xl text-gray-700 font-effra leading-relaxed">
-                    Our goal is to become a leader in intelligent, data-driven solutions because Together We Grow.
+                    <p className="text-lg md:text-xl text-white font-effra leading-relaxed">
+                      Our goal is to become a leader in intelligent, data-driven solutions because Together We Grow.
                     </p>
                   </div>
 
                   {/* Story Pillars */}
-                  <div className="grid grid-cols-3 gap-6 mt-6">
+                  <div className="grid grid-cols-3 gap-6 mt-8 max-w-md">
                     {[
                       { title: "Innovation", desc: "Technology-driven" },
                       { title: "Growth", desc: "Expanding horizons" },
                       { title: "Excellence", desc: "Quality focus" },
                     ].map((pillar, index) => (
                       <div key={index} className="text-center">
-                        <div className="w-2 h-2 bg-[#5E366D] rounded-full mx-auto mb-3" />
-                        <h4 className="text-sm font-semibold text-gray-900 font-richmond">{pillar.title}</h4>
-                        <div className="text-xs text-gray-500 font-effra my-1">&</div>
-                        <p className="text-xs text-gray-600 font-effra">{pillar.desc}</p>
+                        <div className="w-8 h-1 bg-[#F3A13B] mx-auto mb-2" />
+                        <h4 className="text-sm font-semibold text-white mb-2 font-richmond">{pillar.title}</h4>
+                        <div className="text-xs text-[#F3A13B] font-effra my-1">&</div>
+                        <p className="text-xs text-[#F3A13B] font-effra">{pillar.desc}</p>
                       </div>
                     ))}
                   </div>
                 </div>
+
+                {/* Empty div for grid layout balance */}
+                <div className="order-2 lg:order-2"></div>
+              </div>
+              
+              {/* 2008 Founded Badge - Positioned in right corner */}
+              <div className="absolute -bottom-6 md:-bottom-8 right-8 text-white font-richmond font-bold text-lg">
+                2008 Founded
               </div>
             </div>
           </section>
 
           {/* Vision Section */}
-          <section className="py-12 md:py-20 px-4 md:px-6 lg:px-8 bg-[#F5F1EB]">
-            <div className="max-w-7xl mx-auto">
+          <section className="w-full py-12 md:py-20 px-0 bg-white relative">
+            <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
                 {/* Vision Content */}
-                <div className="order-2 lg:order-1">
+                <div className="order-1 lg:order-1">
                   <div className="mb-8">
-                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-light text-gray-900 mb-8 font-richmond leading-tight">
+                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-light text-[#F08900] mb-8 font-richmond leading-tight">
                       Our Vision
                     </h2>
                   </div>
@@ -242,45 +214,32 @@ export default function AboutUsPage() {
                   </div>
 
                   {/* Vision Pillars */}
-                  <div className="grid grid-cols-3 gap-6 mt-6">
+                  <div className="grid grid-cols-3 gap-6 mt-6 max-w-md">
                     {[
                       { title: "Innovation", desc: "Cutting-edge technology" },
                       { title: "Global Impact", desc: "Worldwide transformation" },
                       { title: "Sustainability", desc: "Future-focused growth" },
                     ].map((pillar, index) => (
                       <div key={index} className="text-center">
-                        <div className="w-2 h-2 bg-[#E67E22] rounded-full mx-auto mb-3" />
+                        <div className="w-8 h-1 bg-[#E67E22] mx-auto mb-2" />
                         <h4 className="text-sm font-semibold text-gray-900 mb-2 font-richmond">{pillar.title}</h4>
-                        <div className="text-xs text-gray-500 font-effra my-1">&</div>
-                        <p className="text-xs text-gray-600 font-effra">{pillar.desc}</p>
+                        <div className="text-xs text-[#F3A13B] font-effra my-1">&</div>
+                        <p className="text-xs text-[#F3A13B] font-effra">{pillar.desc}</p>
                       </div>
                     ))}
                   </div>
                 </div>
 
-                {/* Vision Image */}
-                <div className="order-1 lg:order-2">
+                {/* Vision Card Image */}
+                <div className="order-2 lg:order-2">
                   <div className="relative">
-                    <div className="aspect-[4/3] relative overflow-hidden">
-                      <Image
-                        src="https://cdn.legendholding.com/images/cdn_684c28a05446b6.62039041_20250613_133320.jpg"
-                        width={800}
-                        height={600}
-                        alt="Vision"
-                        className="w-full h-full object-cover"
-                        priority
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                        quality={85}
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
-                    </div>
-
-                    {/* Floating Stats */}
-                    <div className="absolute -bottom-4 -left-4 sm:-bottom-6 sm:-left-6 bg-white rounded-lg shadow-lg p-3 sm:p-6 border border-gray-100 max-w-[calc(100%-1rem)] sm:max-w-[calc(100%-2rem)]">
-                      <div className="text-xl sm:text-2xl font-bold text-[#2b1c48] font-richmond">
-                        <AnimatedCounter target={yearsTarget} prefix="+" duration={1200} startDelay={200} />
-                      </div>
-                      <div className="text-xs sm:text-sm text-gray-600 font-effra">Years of Excellence</div>
+                    <img 
+                      src="https://cdn.legendholding.com/images/cdn_6862aedc3ac7d3.80278555_20250630_153556.png" 
+                      alt="" 
+                      className="w-full h-auto opacity-90" 
+                    />
+                    <div className="absolute -bottom-8 md:-bottom-14 right-6 text-black font-richmond font-bold text-lg z-10">
+                      +18 Years of Excellence
                     </div>
                   </div>
                 </div>
@@ -289,164 +248,116 @@ export default function AboutUsPage() {
           </section>
 
           {/* Mission Section */}
-          <section className="py-12 md:py-20 px-4 md:px-6 lg:px-8">
-            <div className="max-w-7xl mx-auto">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
-                {/* Mission Image */}
-                <div>
-                  <div className="relative">
-                    <div className="aspect-[4/3] relative overflow-hidden">
-                      <Image
-                        src="https://cdn.legendholding.com/images/cloudinary/cloudinary_683ea90f29b708.04231409_20250603_074935.jpg"
-                        width={800}
-                        height={600}
-                        alt="Mission"
-                        className="w-full h-full object-cover"
-                        loading="lazy"
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                        quality={85}
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+          <section
+            className="w-full relative overflow-hidden"
+            style={{
+              minHeight: '600px',
+              background: '#E69736',
+            }}
+          >
+            {/* Purple diagonal overlay */}
+            <div
+              className="absolute inset-0 z-0"
+              style={{
+                background: '#5D376E',
+                clipPath: 'polygon(100% 0px, 100% 100%, 50% 100%)',
+              }}
+            />
+            <div className="relative max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 items-center min-h-[600px] px-4 md:px-6 lg:px-8 z-10">
+              {/* Mission Content */}
+              <div className="order-1 lg:order-1 py-16 lg:py-24 pr-0 lg:pr-12">
+                <h2 className="text-3xl md:text-4xl lg:text-5xl font-light text-white mb-6 font-richmond leading-tight text-center lg:text-left">
+                  Our Mission
+                </h2>
+                <p className="text-base md:text-lg font-effra leading-relaxed mb-10 text-[#5D376E] text-center lg:text-left max-w-xl">
+                  We are dedicated to fostering happiness and delivering value, focusing on building a sustainable future.
+                </p>
+                <div className="grid grid-cols-3 gap-6 mt-6 max-w-md mx-auto lg:mx-0">
+                  {[
+                    { title: "Happiness", desc: "Excellence" },
+                    { title: "Value", desc: "Impact" },
+                    { title: "Future", desc: "Sustainable Future" },
+                  ].map((pillar, index) => (
+                    <div key={index} className="text-center">
+                      <div className="w-12 h-1 bg-white mx-auto mb-2" />
+                      <h4 className="text-base font-semibold text-[#5D376E] font-richmond">{pillar.title}</h4>
+                      <div className="text-xs text-white font-effra my-1">&</div>
+                      <p className="text-xs text-white font-effra">{pillar.desc}</p>
                     </div>
-
-                    {/* Floating Stats */}
-                    <div className="absolute -bottom-4 -right-4 sm:-bottom-6 sm:-right-6 bg-white rounded-lg shadow-lg p-3 sm:p-6 border border-gray-100 max-w-[calc(100%-1rem)] sm:max-w-[calc(100%-2rem)]">
-                      <div className="text-xl sm:text-2xl font-bold text-[#E67E22] font-richmond">
-                        <AnimatedCounter target={1} suffix="M" prefix="+" duration={1500} startDelay={100} />
-                      </div>
-                      <div className="text-xs sm:text-sm text-gray-600 font-effra">Global Clients</div>
-                    </div>
-                  </div>
+                  ))}
                 </div>
-
-                {/* Mission Content */}
-                <div>
-                  <div className="mb-8">
-                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-light text-gray-900 mb-8 font-richmond leading-tight">
-                      Our Mission
-                    </h2>
-                  </div>
-
-                  <div className="space-y-6">
-                    <p className="text-lg md:text-xl text-gray-700 font-effra leading-relaxed">
-                      We are dedicated to fostering happiness and delivering value, focusing on building a sustainable future.
-                    </p>
-                  </div>
-
-                  {/* Mission Pillars */}
-                  <div className="grid grid-cols-3 gap-6 mt-6">
-                    {[
-                      { title: "Happiness", desc: "Excellence" },
-                      { title: "Value", desc: "Impact" },
-                      { title: "Future", desc: "Sustainable Future" },
-                    ].map((pillar, index) => (
-                      <div key={index} className="text-center">
-                        <div className="w-2 h-2 bg-[#27AE60] rounded-full mx-auto mb-3" />
-                        <h4 className="text-sm font-semibold text-gray-900 font-richmond">{pillar.title}</h4>
-                        <div className="text-xs text-gray-500 font-effra my-1">&</div>
-                        <p className="text-xs text-gray-600 font-effra">{pillar.desc}</p>
-                      </div>
-                    ))}
-                  </div>
-
-
+              </div>
+              {/* Mascot Image and Stat */}
+              <div className="order-2 lg:order-2 relative flex flex-col items-center justify-center h-full min-h-[500px]">
+                <div className="flex-1 flex items-center justify-center w-full lg:ml-16">
+                  <Image
+                    src="https://cdn.legendholding.com/images/cdn_686295fca18de1.20003521_20250630_134948.png"
+                    alt="Mascot"
+                    width={200}
+                    height={200}
+                    className="object-contain drop-shadow-2xl bg-transparent"
+                  />
+                </div>
+                <div className="absolute bottom-6 right-6 text-white font-richmond font-bold text-lg">
+                  +1M Global Clients
                 </div>
               </div>
             </div>
           </section>
 
           {/* Values Section */}
-          <section className="py-12 md:py-20 px-4 md:px-6 lg:px-8 bg-[#F5F1EB]">
+          <section className="py-16">
             <div className="max-w-7xl mx-auto">
               {/* Section Header */}
-              <div className="text-center mb-12">
-
-                <h2 className="text-3xl md:text-4xl lg:text-5xl font-light text-gray-900 mb-8 font-richmond leading-tight">
-                  Our Core Values
-                </h2>
-
-                <p className="text-lg text-gray-600 font-effra leading-relaxed max-w-3xl mx-auto">
-                 Are the principles that guide every decision and action we take.
+              <div className="text-center mb-10">
+                <h2 className="text-4xl md:text-5xl font-richmond text-[#2C2341] mb-4">Our Core Values</h2>
+                <p className="text-lg text-[#2C2341] font-effra max-w-2xl mx-auto">
+                  Are the principles that guide every decision and action we take.
                 </p>
               </div>
-
               {/* Values Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-4">
                 {[
                   {
-                    icon: <Heart className="w-6 h-6" />,
+                    icon: <Heart className="w-10 h-10 mx-auto mb-2" />,
                     title: "Loyalty",
                     desc: "Commitment to our stakeholders and partners, building lasting relationships based on trust and mutual respect.",
-                    color: "text-[#C0392B]",
-                    bg: "bg-[#FADBD8]",
-                    border: "border-[#F1948A]",
                   },
                   {
-                    icon: <Award className="w-6 h-6" />,
+                    icon: <Award className="w-10 h-10 mx-auto mb-2" />,
                     title: "Excellence",
                     desc: "Striving for the highest standards in all we do, continuously improving and delivering exceptional results.",
-                    color: "text-[#E67E22]",
-                    bg: "bg-[#FDF2E9]",
-                    border: "border-[#F8C471]",
                   },
                   {
-                    icon: <TrendingUp className="w-6 h-6" />,
+                    icon: <TrendingUp className="w-10 h-10 mx-auto mb-2" />,
                     title: "Growth",
                     desc: "Continuous improvement and sustainable development, fostering innovation and embracing new opportunities.",
-                    color: "text-[#27AE60]",
-                    bg: "bg-[#D5F4E6]",
-                    border: "border-[#82E0AA]",
                   },
                   {
-                    icon: <Users className="w-6 h-6" />,
+                    icon: <Users className="w-10 h-10 mx-auto mb-2" />,
                     title: "Empathy",
                     desc: "Understanding and addressing the needs of others, creating solutions that truly make a difference.",
-                    color: "text-[#2b1c48]",
-                    bg: "bg-[#EBE7F0]",
-                    border: "border-[#D2B4DE]",
                   },
                   {
-                    icon: <Zap className="w-6 h-6" />,
+                    icon: <Zap className="w-10 h-10 mx-auto mb-2" />,
                     title: "Nimble",
                     desc: "Agility and adaptability in a changing world, responding quickly to new challenges and opportunities.",
-                    color: "text-[#8E44AD]",
-                    bg: "bg-[#F4ECF7]",
-                    border: "border-[#D7BDE2]",
                   },
                   {
-                    icon: <Globe className="w-6 h-6" />,
+                    icon: <Globe className="w-10 h-10 mx-auto mb-2" />,
                     title: "Diversity",
                     desc: "Embracing different perspectives and backgrounds, fostering an inclusive environment for innovation.",
-                    color: "text-[#16A085]",
-                    bg: "bg-[#D1F2EB]",
-                    border: "border-[#7FB3D3]",
                   },
                 ].map((value, index) => (
                   <div
                     key={value.title}
-                    className={`group relative bg-white rounded-xl p-6 shadow-sm hover:shadow-lg transition-all duration-300 border ${value.border} hover:-translate-y-1`}
+                    className="bg-[#5D376E] rounded-xl p-6 flex flex-col items-center text-center min-h-40 max-w-lg mx-auto"
                   >
-                    {/* Header with icon and letter */}
-                    <div className="flex items-start justify-between mb-4">
-                      <div
-                        className={`w-14 h-14 ${value.bg} rounded-xl flex items-center justify-center ${value.color} group-hover:scale-110 transition-transform duration-300`}
-                      >
-                        {value.icon}
-                      </div>
-                    </div>
-
-                    {/* Content */}
-                    <div className="space-y-3">
-                      <h3 className="text-xl font-semibold text-gray-900 font-richmond group-hover:text-gray-800 transition-colors">
-                        {value.title}
-                      </h3>
-                      <p className="text-gray-600 font-effra leading-relaxed text-sm">{value.desc}</p>
-                    </div>
-
-                    {/* Bottom accent line */}
-                    <div
-                      className={`absolute bottom-0 left-0 w-0 h-1 ${value.bg.replace("bg-", "bg-gradient-to-r from-")} group-hover:w-full transition-all duration-500 rounded-b-xl`}
-                    />
+                    <div className="text-white mb-2">{value.icon}</div>
+                    <h3 className="text-xl font-bold text-white font-richmond mb-2">{value.title}</h3>
+                    <p className="text-white font-effra text-base leading-relaxed">
+                      {value.desc}
+                    </p>
                   </div>
                 ))}
               </div>
@@ -457,4 +368,4 @@ export default function AboutUsPage() {
       <Footer />
     </>
   )
-} 
+}
