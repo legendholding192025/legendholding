@@ -1,7 +1,7 @@
 "use client"
  
 import Image from "next/image"
-import { Heart, Award, TrendingUp, Users, Zap, Globe, Eye, Target } from "lucide-react"
+import { Eye, Target } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { useEffect, useState } from "react"
 import { Header } from "@/components/header"
@@ -392,32 +392,32 @@ export default function AboutUsPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-4">
                 {[
                   {
-                    icon: <Heart className="w-10 h-10 mx-auto mb-2" />,
+                    icon: "/loyalty.svg",
                     title: "Loyalty",
                     desc: "Commitment to our stakeholders and partners, building lasting relationships based on trust and mutual respect.",
                   },
                   {
-                    icon: <Award className="w-10 h-10 mx-auto mb-2" />,
+                    icon: "/excellence.svg",
                     title: "Excellence",
                     desc: "Striving for the highest standards in all we do, continuously improving and delivering exceptional results.",
                   },
                   {
-                    icon: <TrendingUp className="w-10 h-10 mx-auto mb-2" />,
+                    icon: "/growth.svg",
                     title: "Growth",
                     desc: "Continuous improvement and sustainable development, fostering innovation and embracing new opportunities.",
                   },
                   {
-                    icon: <Users className="w-10 h-10 mx-auto mb-2" />,
+                    icon: "/empathy.svg",
                     title: "Empathy",
                     desc: "Understanding and addressing the needs of others, creating solutions that truly make a difference.",
                   },
                   {
-                    icon: <Zap className="w-10 h-10 mx-auto mb-2" />,
+                    icon: "/nimble.svg",
                     title: "Nimble",
                     desc: "Agility and adaptability in a changing world, responding quickly to new challenges and opportunities.",
                   },
                   {
-                    icon: <Globe className="w-10 h-10 mx-auto mb-2" />,
+                    icon: "/diversity.svg",
                     title: "Diversity",
                     desc: "Embracing different perspectives and backgrounds, fostering an inclusive environment for innovation.",
                   },
@@ -426,7 +426,15 @@ export default function AboutUsPage() {
                     key={value.title}
                     className="group bg-[#5D376E] rounded-xl p-6 flex flex-col items-center text-center min-h-40 max-w-lg mx-auto transition-all duration-300 ease-in-out hover:-translate-y-2 hover:shadow-2xl hover:shadow-[#5D376E]/20 cursor-pointer transform hover:scale-[1.02]"
                   >
-                    <div className="text-white mb-2 transition-transform duration-300 group-hover:scale-110">{value.icon}</div>
+                    <div className="text-white mb-2 transition-transform duration-300 group-hover:scale-110">
+                      <Image
+                        src={value.icon}
+                        alt={`${value.title} icon`}
+                        width={48}
+                        height={48}
+                        className="w-12 h-12 mx-auto"
+                      />
+                    </div>
                     <h3 className="text-xl font-bold text-[#F3A13B] font-richmond mb-2">{value.title}</h3>
                     <p className="text-white font-effra text-base leading-relaxed">
                       {value.desc}
