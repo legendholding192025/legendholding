@@ -19,7 +19,7 @@ type CSRInitiative = {
 const csrInitiatives: CSRInitiative[] = [
   {
     id: "csr-1",
-    title: "Humanitarian Relief",
+    title: "Humanitarian Support",
     description:
       "Providing immediate emergency response and long-term support during natural disasters, including earthquake relief efforts, ensuring essential aid reaches affected communities.",
     image: "https://cdn.legendholding.com/images/cloudinary/cloudinary_683ea24ace9db9.23851636_20250603_072042.jpg",
@@ -28,7 +28,7 @@ const csrInitiatives: CSRInitiative[] = [
   },
   {
     id: "csr-2",
-    title: "Community Development",
+    title: "Community Engagement",
     description:
       "Supporting communities through year-round initiatives, including special Ramadan programs providing food, essential supplies, and support to families in need.",
     image: "https://cdn.legendholding.com/images/cloudinary/cloudinary_683ea1e520f8a0.56379725_20250603_071901.jpg",
