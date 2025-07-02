@@ -60,7 +60,7 @@ export default function HeroSection() {
         className="absolute inset-0 w-full h-full object-cover mt-6 md:mt-28"
         style={{ zIndex: 0 }}
       >
-        <source src="https://cdn.legendholding.com/videos/video_cdn_6862467fd9e612.83077767_20250630_081039.mp4" type="video/mp4" />
+        <source src="https://cdn.legendholding.com/videos/video_cdn_6864e391983559.20054383_20250702_074521.mp4" type="video/mp4" />
       </video>
       
       {/* Overlay for better text readability */}

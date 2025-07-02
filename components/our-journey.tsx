@@ -24,6 +24,16 @@ type MilestoneType = {
 const TIMELINE_HEIGHT = 70
 const ITEM_WIDTH = 120
 
+// Image optimization helper
+const optimizeImageUrl = (url: string, width: number = 1200, quality: number = 80) => {
+  // If using a CDN that supports image optimization, add parameters
+  if (url.includes('cdn.legendholding.com')) {
+    const separator = url.includes('?') ? '&' : '?'
+    return `${url}${separator}w=${width}&q=${quality}&f=auto`
+  }
+  return url
+}
+
 export function OurJourney() {
   const [activeYearIndex, setActiveYearIndex] = useState(0)
   const [isScrolling, setIsScrolling] = useState(false)
@@ -32,13 +42,16 @@ export function OurJourney() {
   const [isScrollingUp, setIsScrollingUp] = useState(false)
   const [imagesLoaded, setImagesLoaded] = useState<Set<number>>(new Set())
   const [isMobile, setIsMobile] = useState(false)
+  const [connectionSpeed, setConnectionSpeed] = useState<'slow' | 'medium' | 'fast'>('medium')
+  const [loadingStats, setLoadingStats] = useState<{loaded: number, total: number, startTime: number}>({
+    loaded: 0,
+    total: 13,
+    startTime: Date.now()
+  })
   const timelineRef = useRef<HTMLDivElement>(null)
   const sectionsRef = useRef<Array<HTMLDivElement | null>>([])
   const scrollTimeoutRef = useRef<NodeJS.Timeout | undefined>(undefined)
-
-  const setSectionRef = useCallback((el: HTMLDivElement | null, index: number) => {
-    sectionsRef.current[index] = el
-  }, [])
+  const preloadQueueRef = useRef<Set<number>>(new Set())
 
   const milestones: MilestoneType[] = [
     {
@@ -175,7 +188,29 @@ export function OurJourney() {
     },
   ]
 
-  // Preload critical images
+  const setSectionRef = useCallback((el: HTMLDivElement | null, index: number) => {
+    sectionsRef.current[index] = el
+  }, [])
+
+  // Detect connection speed
+  useEffect(() => {
+    const detectConnectionSpeed = () => {
+      if ('connection' in navigator) {
+        const connection = (navigator as any).connection
+        if (connection.effectiveType === 'slow-2g' || connection.effectiveType === '2g') {
+          setConnectionSpeed('slow')
+        } else if (connection.effectiveType === '3g') {
+          setConnectionSpeed('medium')
+        } else {
+          setConnectionSpeed('fast')
+        }
+      }
+    }
+    
+    detectConnectionSpeed()
+  }, [])
+
+  // Optimized image preloading with connection-aware loading
   useEffect(() => {
     // Mobile detection
     const checkMobile = () => {
@@ -185,51 +220,69 @@ export function OurJourney() {
     checkMobile()
     window.addEventListener('resize', checkMobile)
     
-    const preloadImages = () => {
-      // Prioritize the first image for immediate loading
-      const firstImage = milestones[0].image
-      const criticalImages = [firstImage, ...milestones.slice(1, 3).map(milestone => milestone.image)]
+    // Optimized preloading strategy based on connection speed
+    const preloadCriticalImages = () => {
+      const isSlowConnection = connectionSpeed === 'slow'
+      const preloadCount = isSlowConnection ? 1 : connectionSpeed === 'medium' ? 2 : 3
       
-      criticalImages.forEach((src, index) => {
+      // Only preload the most critical images
+      const criticalImages = milestones.slice(0, preloadCount)
+      
+      criticalImages.forEach((milestone, index) => {
+        const imageUrl = isMobile && milestone.mobileImage ? milestone.mobileImage : milestone.image
+        const optimizedUrl = optimizeImageUrl(imageUrl, isMobile ? 800 : 1200, index === 0 ? 85 : 75)
+        
         const img = new window.Image()
         img.onload = () => {
           setImagesLoaded(prev => new Set(prev).add(index))
+          setLoadingStats(prev => ({ ...prev, loaded: prev.loaded + 1 }))
         }
-        img.src = src
+        img.onerror = () => {
+          // Fallback to original URL if optimization fails
+          const fallbackImg = new window.Image()
+          fallbackImg.onload = () => {
+            setImagesLoaded(prev => new Set(prev).add(index))
+            setLoadingStats(prev => ({ ...prev, loaded: prev.loaded + 1 }))
+          }
+          fallbackImg.src = imageUrl
+        }
+        img.src = optimizedUrl
       })
     }
     
-    // Add preload links for critical images with highest priority for first image
-    const addPreloadLinks = () => {
-      const firstImage = milestones[0].image
-      const criticalImages = [firstImage, ...milestones.slice(1, 3).map(milestone => milestone.image)]
+    // Add optimized preload links
+    const addOptimizedPreloadLinks = () => {
+      const isSlowConnection = connectionSpeed === 'slow'
+      const preloadCount = isSlowConnection ? 1 : connectionSpeed === 'medium' ? 2 : 3
       
-      criticalImages.forEach((src, index) => {
+      const criticalImages = milestones.slice(0, preloadCount)
+      
+      criticalImages.forEach((milestone, index) => {
+        const imageUrl = isMobile && milestone.mobileImage ? milestone.mobileImage : milestone.image
+        const optimizedUrl = optimizeImageUrl(imageUrl, isMobile ? 800 : 1200, index === 0 ? 85 : 75)
+        
         const link = document.createElement('link')
         link.rel = 'preload'
         link.as = 'image'
-        link.href = src
-        // Give highest priority to first image
-        if (index === 0) {
-          link.setAttribute('importance', 'high')
-        }
+        link.href = optimizedUrl
+        link.setAttribute('importance', index === 0 ? 'high' : 'low')
         document.head.appendChild(link)
       })
     }
     
-    preloadImages()
-    addPreloadLinks()
+    preloadCriticalImages()
+    addOptimizedPreloadLinks()
     
     return () => {
       window.removeEventListener('resize', checkMobile)
     }
-  }, [])
+  }, [connectionSpeed, isMobile])
 
-  // Intersection Observer for lazy loading
+  // Optimized intersection observer with better performance
   useEffect(() => {
     const observerOptions = {
       root: null,
-      rootMargin: '50px',
+      rootMargin: '100px', // Increased margin for earlier loading
       threshold: 0.1
     }
 
@@ -237,32 +290,53 @@ export function OurJourney() {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           const index = parseInt(entry.target.getAttribute('data-index') || '0')
-          if (!imagesLoaded.has(index)) {
-            // Trigger image load for visible sections
-            const img = new window.Image()
-            img.onload = () => {
-              setImagesLoaded(prev => new Set(prev).add(index))
-            }
-            img.src = milestones[index].image
+          if (!imagesLoaded.has(index) && !preloadQueueRef.current.has(index)) {
+            preloadQueueRef.current.add(index)
+            
+            // Queue the image loading to avoid overwhelming the network
+            setTimeout(() => {
+              const milestone = milestones[index]
+              const imageUrl = isMobile && milestone.mobileImage ? milestone.mobileImage : milestone.image
+              const optimizedUrl = optimizeImageUrl(imageUrl, isMobile ? 800 : 1200, 70)
+              
+              const img = new window.Image()
+              img.onload = () => {
+                setImagesLoaded(prev => new Set(prev).add(index))
+                setLoadingStats(prev => ({ ...prev, loaded: prev.loaded + 1 }))
+                preloadQueueRef.current.delete(index)
+              }
+              img.onerror = () => {
+                // Fallback to original URL
+                const fallbackImg = new window.Image()
+                fallbackImg.onload = () => {
+                  setImagesLoaded(prev => new Set(prev).add(index))
+                  setLoadingStats(prev => ({ ...prev, loaded: prev.loaded + 1 }))
+                  preloadQueueRef.current.delete(index)
+                }
+                fallbackImg.src = imageUrl
+              }
+              img.src = optimizedUrl
+            }, index * 200) // Stagger loading to avoid network congestion
           }
         }
       })
     }, observerOptions)
 
-    // Observe all sections
+    // Observe sections with better performance
     sectionsRef.current.forEach((section, index) => {
-      if (section && index >= 3) { // Only observe non-critical images
+      if (section && index >= (connectionSpeed === 'slow' ? 1 : connectionSpeed === 'medium' ? 2 : 3)) {
         section.setAttribute('data-index', index.toString())
         observer.observe(section)
       }
     })
 
     return () => observer.disconnect()
-  }, [imagesLoaded, milestones])
+  }, [imagesLoaded, milestones, connectionSpeed, isMobile])
 
   // Handle image load
   const handleImageLoad = useCallback((index: number) => {
     setImagesLoaded(prev => new Set(prev).add(index))
+    setLoadingStats(prev => ({ ...prev, loaded: prev.loaded + 1 }))
   }, [])
 
   // Override header scroll behavior for this page
@@ -504,7 +578,11 @@ export function OurJourney() {
             >
               <div className="relative w-full h-full">
                 <Image
-                  src={isMobile && milestone.mobileImage ? milestone.mobileImage : milestone.image}
+                  src={optimizeImageUrl(
+                    isMobile && milestone.mobileImage ? milestone.mobileImage : milestone.image,
+                    isMobile ? 800 : 1200,
+                    index === 0 ? 85 : connectionSpeed === 'slow' ? 60 : 70
+                  )}
                   alt={`${milestone.title} - ${milestone.year}`}
                   fill
                   className={cn(
@@ -517,28 +595,37 @@ export function OurJourney() {
                   }}
                   sizes="100vw"
                   priority={index === 0}
-                  quality={index === 0 ? 95 : 90}
+                  quality={index === 0 ? 85 : connectionSpeed === 'slow' ? 60 : 70}
                   placeholder="blur"
                   blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
                   onLoad={() => handleImageLoad(index)}
-                  loading={index === 0 ? "eager" : index < 3 ? "eager" : "lazy"}
-                  fetchPriority={index === 0 ? "high" : "auto"}
+                  onError={() => {
+                    // Fallback to original URL if optimized URL fails
+                    const fallbackImg = new window.Image()
+                    fallbackImg.onload = () => handleImageLoad(index)
+                    fallbackImg.src = isMobile && milestone.mobileImage ? milestone.mobileImage : milestone.image
+                  }}
+                  loading={index === 0 ? "eager" : index < (connectionSpeed === 'slow' ? 1 : connectionSpeed === 'medium' ? 2 : 3) ? "eager" : "lazy"}
+                  fetchPriority={index === 0 ? "high" : index < 3 ? "auto" : "low"}
                 />
                 
-                {/* Loading placeholder */}
+                {/* Enhanced Loading placeholder */}
                 {!imagesLoaded.has(index) && (
                   <div className={cn(
                     "absolute inset-0 bg-gradient-to-br from-gray-200 to-gray-300 animate-pulse",
                     index === 0 && "bg-gradient-to-br from-[#5E366D]/20 to-[#F08900]/20"
                   )}>
-                    {index === 0 && (
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="text-center">
-                          <div className="w-8 h-8 border-2 border-[#F08900] border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
-                          <p className="text-[#5E366D] font-medium">Loading...</p>
-                        </div>
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="text-center">
+                        <div className="w-8 h-8 border-2 border-[#F08900] border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
+                        <p className="text-[#5E366D] font-medium text-sm">
+                          {index === 0 ? "Loading..." : `Loading ${milestone.year}...`}
+                        </p>
+                        {connectionSpeed === 'slow' && (
+                          <p className="text-[#5E366D]/70 text-xs mt-1">Optimizing for slow connection...</p>
+                        )}
                       </div>
-                    )}
+                    </div>
                   </div>
                 )}
                 
@@ -647,4 +734,4 @@ export function OurJourney() {
       <Footer />
     </>
   )
-}
+} 
