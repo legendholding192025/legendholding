@@ -37,19 +37,19 @@ export default function PageTracker({ pageName }: PageTrackerProps) {
         'who-we-are/the-team': PAGE_NAMES.THE_TEAM,
         'who-we-are/partners': PAGE_NAMES.PARTNERS,
         'who-we-are/csr': PAGE_NAMES.CSR,
-        'our-brands': PAGE_NAMES.OUR_BRANDS,
-        'our-brands/legend-automobile-services': PAGE_NAMES.LEGEND_AUTOMOBILE_SERVICES,
-        'our-brands/legend-commercial-vehicles': PAGE_NAMES.LEGEND_COMMERCIAL_VEHICLES,
-        'our-brands/legend-global-media': PAGE_NAMES.LEGEND_GLOBAL_MEDIA,
-        'our-brands/legend-green-energy': PAGE_NAMES.LEGEND_GREEN_ENERGY,
-        'our-brands/legend-motorcycles': PAGE_NAMES.LEGEND_MOTORCYCLES,
-        'our-brands/legend-motors-dealership': PAGE_NAMES.LEGEND_MOTORS_DEALERSHIP,
-        'our-brands/legend-motors-trading': PAGE_NAMES.LEGEND_MOTORS_TRADING,
-        'our-brands/legend-pre-owned-vehicles': PAGE_NAMES.LEGEND_PRE_OWNED_VEHICLES,
-        'our-brands/legend-technical-services': PAGE_NAMES.LEGEND_TECHNICAL_SERVICES,
-        'our-brands/legend-travel': PAGE_NAMES.LEGEND_TRAVEL,
-        'our-brands/legend-world-rent-a-car': PAGE_NAMES.LEGEND_WORLD_RENT_A_CAR,
-        'our-brands/zul-energy': PAGE_NAMES.ZUL_ENERGY,
+        'our-businesses': PAGE_NAMES.OUR_BRANDS,
+        'our-businesses/legend-automobile-services': PAGE_NAMES.LEGEND_AUTOMOBILE_SERVICES,
+        'our-businesses/legend-commercial-vehicles': PAGE_NAMES.LEGEND_COMMERCIAL_VEHICLES,
+        'our-businesses/legend-global-media': PAGE_NAMES.LEGEND_GLOBAL_MEDIA,
+        'our-businesses/legend-green-energy': PAGE_NAMES.LEGEND_GREEN_ENERGY,
+        'our-businesses/legend-motorcycles': PAGE_NAMES.LEGEND_MOTORCYCLES,
+        'our-businesses/legend-motors-dealership': PAGE_NAMES.LEGEND_MOTORS_DEALERSHIP,
+        'our-businesses/legend-motors-trading': PAGE_NAMES.LEGEND_MOTORS_TRADING,
+        'our-businesses/legend-pre-owned-vehicles': PAGE_NAMES.LEGEND_PRE_OWNED_VEHICLES,
+        'our-businesses/legend-technical-services': PAGE_NAMES.LEGEND_TECHNICAL_SERVICES,
+        'our-businesses/legend-travel': PAGE_NAMES.LEGEND_TRAVEL,
+        'our-businesses/legend-world-rent-a-car': PAGE_NAMES.LEGEND_WORLD_RENT_A_CAR,
+        'our-businesses/zul-energy': PAGE_NAMES.ZUL_ENERGY,
         'admin': PAGE_NAMES.ADMIN_DASHBOARD,
         'admin/jobs': PAGE_NAMES.ADMIN_JOBS,
         'admin/news': PAGE_NAMES.ADMIN_NEWS,
@@ -91,7 +91,7 @@ export default function PageTracker({ pageName }: PageTrackerProps) {
     trackPageView(currentPageName, pathname);
 
     // Additional tracking for specific page types
-    if (pathname.includes('/our-brands/')) {
+    if (pathname.includes('/our-businesses/')) {
       const brandName = pathname.split('/').pop()?.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
       if (brandName) {
         // Track brand page visits specifically

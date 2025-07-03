@@ -25,7 +25,7 @@ export default function ThankYou() {
                 Back to Careers
               </Button>
             </Link>
-            <Link href="/">
+            <Link href="/home">
               <Button className="w-full bg-[#5E366D] hover:bg-[#5E366D]/90">
                 Return to Homepage
               </Button>

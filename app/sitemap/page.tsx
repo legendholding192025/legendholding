@@ -7,18 +7,18 @@ import { Footer } from "@/components/footer";
 import { motion } from "framer-motion";
 
 const brands = [
-  { name: "Legend Commercial Vehicles", path: "/our-brands/legend-commercial-vehicles" },
-  { name: "Legend World Rent A Car", path: "/our-brands/legend-world-rent-a-car" },
-  { name: "Zul Energy", path: "/our-brands/zul-energy" },
-  { name: "Legend Automobile Services", path: "/our-brands/legend-automobile-services" },
-  { name: "Legend Global Media", path: "/our-brands/legend-global-media" },
-  { name: "Legend Green Energy", path: "/our-brands/legend-green-energy" },
-  { name: "Legend Motorcycles", path: "/our-brands/legend-motorcycles" },
-  { name: "Legend Motors Dealership", path: "/our-brands/legend-motors-dealership" },
-  { name: "Legend Motors Trading", path: "/our-brands/legend-motors-trading" },
-  { name: "Legend Travel", path: "/our-brands/legend-travel" },
-  { name: "Legend Pre-Owned Vehicles", path: "/our-brands/legend-pre-owned-vehicles" },
-  { name: "Legend Technical Services", path: "/our-brands/legend-technical-services" },
+  { name: "Legend Commercial Vehicles", path: "/our-businesses/legend-commercial-vehicles" },
+  { name: "Legend World Rent A Car", path: "/our-businesses/legend-world-rent-a-car" },
+  { name: "Zul Energy", path: "/our-businesses/zul-energy" },
+  { name: "Legend Automobile Services", path: "/our-businesses/legend-automobile-services" },
+  { name: "Legend Global Media", path: "/our-businesses/legend-global-media" },
+  { name: "Legend Green Energy", path: "/our-businesses/legend-green-energy" },
+  { name: "Legend Motorcycles", path: "/our-businesses/legend-motorcycles" },
+  { name: "Legend Motors Dealership", path: "/our-businesses/legend-motors-dealership" },
+  { name: "Legend Motors Trading", path: "/our-businesses/legend-motors-trading" },
+  { name: "Legend Travel", path: "/our-businesses/legend-travel" },
+  { name: "Legend Pre-Owned Vehicles", path: "/our-businesses/legend-pre-owned-vehicles" },
+  { name: "Legend Technical Services", path: "/our-businesses/legend-technical-services" },
 ];
 
 const fadeInUp = {
@@ -66,7 +66,7 @@ export default function SitemapPage() {
             {/* Column 1: Main & Who We Are */}
             <motion.div variants={itemVariants}>
               <ul className="space-y-4">
-                <li><Link href="/" className="text-secondary font-semibold text-lg hover:underline">Home</Link></li>
+                <li><Link href="/home" className="text-secondary font-semibold text-lg hover:underline">Home</Link></li>
                 <li className="mt-8 mb-2 text-secondary font-semibold text-lg">Who We Are</li>
                 <li><Link href="/who-we-are/brand-story" className="text-gray-700 hover:text-secondary transition-colors">Brand Story</Link></li>
                 <li><Link href="/who-we-are/about-us" className="text-gray-700 hover:text-secondary transition-colors">About Us</Link></li>
@@ -76,9 +76,9 @@ export default function SitemapPage() {
                 <li><Link href="/who-we-are/csr" className="text-gray-700 hover:text-secondary transition-colors">CSR</Link></li>
               </ul>
             </motion.div>
-            {/* Column 2: Our Brands */}
+            {/* Column 2: Our Businesses */}
             <motion.div variants={itemVariants}>
-              <div className="text-secondary font-semibold text-lg mb-4">Our Brands</div>
+                              <div className="text-secondary font-semibold text-lg mb-4">Our Businesses</div>
               <ul className="space-y-4">
                 {brands.map((brand) => (
                   <li key={brand.path}>

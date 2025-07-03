@@ -13,7 +13,7 @@ export function ScrollToTop() {
 
   // Routes where we don't want the scroll-to-top button
   const excludedRoutes = [
-    '/our-brands',
+    '/our-businesses',
     '/contact',
     '/cookie-policy',
     '/privacy-policy',
