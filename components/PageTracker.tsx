@@ -45,7 +45,7 @@ export default function PageTracker({ pageName }: PageTrackerProps) {
         'our-businesses/legend-motorcycles': PAGE_NAMES.LEGEND_MOTORCYCLES,
         'our-businesses/legend-motors-dealership': PAGE_NAMES.LEGEND_MOTORS_DEALERSHIP,
         'our-businesses/legend-motors-trading': PAGE_NAMES.LEGEND_MOTORS_TRADING,
-        'our-businesses/legend-pre-owned-vehicles': PAGE_NAMES.LEGEND_PRE_OWNED_VEHICLES,
+        'our-businesses/legend-autohub': PAGE_NAMES.LEGEND_AUTOHUB,
         'our-businesses/legend-technical-services': PAGE_NAMES.LEGEND_TECHNICAL_SERVICES,
         'our-businesses/legend-travel': PAGE_NAMES.LEGEND_TRAVEL,
         'our-businesses/legend-world-rent-a-car': PAGE_NAMES.LEGEND_WORLD_RENT_A_CAR,

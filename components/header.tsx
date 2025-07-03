@@ -124,8 +124,8 @@ const menuItems: MenuItem[] = [
                 description: "Comprehensive commercial vehicle solutions for businesses."
               },
               {
-                title: "Legend Pre-Owned Vehicles",
-                url: "/our-businesses/legend-pre-owned-vehicles",
+                title: "Legend AutoHub",
+                url: "/our-businesses/legend-autohub",
                 description: "Offering customers a wide selection of high-quality vehicles."
               }
             ]

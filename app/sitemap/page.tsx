@@ -17,7 +17,7 @@ const brands = [
   { name: "Legend Motors Dealership", path: "/our-businesses/legend-motors-dealership" },
   { name: "Legend Motors Trading", path: "/our-businesses/legend-motors-trading" },
   { name: "Legend Travel", path: "/our-businesses/legend-travel" },
-  { name: "Legend Pre-Owned Vehicles", path: "/our-businesses/legend-pre-owned-vehicles" },
+  { name: "Legend AutoHub", path: "/our-businesses/legend-autohub" },
   { name: "Legend Technical Services", path: "/our-businesses/legend-technical-services" },
 ];
 

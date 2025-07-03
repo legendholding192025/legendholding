@@ -121,7 +121,7 @@ The following page names are automatically tracked for better analytics clarity:
 - **Legend Motorcycles** - `/our-brands/legend-motorcycles`
 - **Legend Motors Dealership** - `/our-brands/legend-motors-dealership`
 - **Legend Motors Trading** - `/our-brands/legend-motors-trading`
-- **Legend Pre-Owned Vehicles** - `/our-brands/legend-pre-owned-vehicles`
+- **Legend AutoHub** - `/our-brands/legend-autohub`
 - **Legend Technical Services** - `/our-brands/legend-technical-services`
 - **Legend Travel** - `/our-brands/legend-travel`
 - **Legend World Rent-A-Car** - `/our-brands/legend-world-rent-a-car`

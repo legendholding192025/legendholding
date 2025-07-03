@@ -57,7 +57,7 @@ export const PAGE_NAMES = {
   LEGEND_MOTORCYCLES: 'Legend Motorcycles',
   LEGEND_MOTORS_DEALERSHIP: 'Legend Motors Dealership',
   LEGEND_MOTORS_TRADING: 'Legend Motors Trading',
-  LEGEND_PRE_OWNED_VEHICLES: 'Legend Pre-Owned Vehicles',
+  LEGEND_AUTOHUB: 'Legend AutoHub',
   LEGEND_TECHNICAL_SERVICES: 'Legend Technical Services',
   LEGEND_TRAVEL: 'Legend Travel',
   LEGEND_WORLD_RENT_A_CAR: 'Legend World Rent-A-Car',

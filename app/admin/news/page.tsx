@@ -46,7 +46,8 @@ interface NewsArticle {
   seo_image_url?: string
 }
 
-type FormData = Omit<NewsArticle, 'id' | 'created_at'> & {
+type FormData = Omit<NewsArticle, 'id' | 'created_at' | 'read_time'> & {
+  read_time_minutes: number
   seo_title: string
   seo_description: string
   seo_keywords: string
@@ -116,7 +117,7 @@ export default function NewsManagement() {
     image_url: "",
     category: "",
     author: "",
-    read_time: "",
+    read_time_minutes: 5,
     is_featured: false,
     published: true,
     seo_title: "",
@@ -169,9 +170,18 @@ export default function NewsManagement() {
         if (uncheckError) throw uncheckError
       }
 
+      // Convert minutes to read_time format
+      const read_time = `${formData.read_time_minutes} ${formData.read_time_minutes === 1 ? 'Minute' : 'Minutes'}`
+      
+      const articleData = {
+        ...formData,
+        read_time
+      }
+      delete (articleData as any).read_time_minutes
+
       const { data, error } = await supabase
         .from("news_articles")
-        .insert([formData])
+        .insert([articleData])
         .select()
         .single()
 
@@ -191,7 +201,7 @@ export default function NewsManagement() {
         image_url: "",
         category: "",
         author: "",
-        read_time: "",
+        read_time_minutes: 5,
         is_featured: false,
         published: true,
         seo_title: "",
@@ -221,9 +231,18 @@ export default function NewsManagement() {
         if (uncheckError) throw uncheckError
       }
 
+      // Convert minutes to read_time format
+      const read_time = `${formData.read_time_minutes} ${formData.read_time_minutes === 1 ? 'Minute' : 'Minutes'}`
+      
+      const articleData = {
+        ...formData,
+        read_time
+      }
+      delete (articleData as any).read_time_minutes
+
       const { data, error } = await supabase
         .from("news_articles")
-        .update(formData)
+        .update(articleData)
         .eq("id", editingArticle.id)
         .select()
         .single()
@@ -303,8 +322,13 @@ export default function NewsManagement() {
                           variant="ghost"
                           size="icon"
                           onClick={() => {
+                            // Parse read_time to extract minutes
+                            const readTimeMatch = article.read_time.match(/(\d+)/)
+                            const readTimeMinutes = readTimeMatch ? parseInt(readTimeMatch[1]) : 5
+                            
                             setFormData({
                               ...article,
+                              read_time_minutes: readTimeMinutes,
                               seo_title: article.seo_title || "",
                               seo_description: article.seo_description || "",
                               seo_keywords: article.seo_keywords || "",
@@ -382,7 +406,7 @@ export default function NewsManagement() {
                 image_url: "",
                 category: "",
                 author: "",
-                read_time: "",
+                read_time_minutes: 5,
                 is_featured: false,
                 published: true,
                 seo_title: "",
@@ -446,16 +470,24 @@ export default function NewsManagement() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="read_time" className="font-semibold">
-                    Read Time
+                  <Label htmlFor="read_time_minutes" className="font-semibold">
+                    Read Time (Minutes)
                   </Label>
-                  <Input
-                    id="read_time"
-                    placeholder="e.g., 5 min read"
-                    className="border-gray-300 focus:border-[#5E366D] focus:ring-[#5E366D]"
-                    value={formData.read_time}
-                    onChange={(e) => setFormData({ ...formData, read_time: e.target.value })}
-                  />
+                  <div className="flex items-center gap-2">
+                    <Input
+                      id="read_time_minutes"
+                      type="number"
+                      min="1"
+                      max="60"
+                      placeholder="5"
+                      className="border-gray-300 focus:border-[#5E366D] focus:ring-[#5E366D]"
+                      value={formData.read_time_minutes}
+                      onChange={(e) => setFormData({ ...formData, read_time_minutes: parseInt(e.target.value) || 1 })}
+                    />
+                    <span className="text-sm text-gray-600 whitespace-nowrap">
+                      {formData.read_time_minutes} {formData.read_time_minutes === 1 ? 'Minute' : 'Minutes'}
+                    </span>
+                  </div>
                 </div>
               </div>
 

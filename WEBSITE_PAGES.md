@@ -39,7 +39,7 @@ This document provides a comprehensive list of all pages on the Legend Holding G
 | Legend Motorcycles | `/our-brands/legend-motorcycles` | Legend Motorcycles | Motorcycle brand |
 | Legend Motors Dealership | `/our-brands/legend-motors-dealership` | Legend Motors Dealership | Dealership operations |
 | Legend Motors Trading | `/our-brands/legend-motors-trading` | Legend Motors Trading | Vehicle trading operations |
-| Legend Pre-Owned Vehicles | `/our-brands/legend-pre-owned-vehicles` | Legend Pre-Owned Vehicles | Pre-owned vehicle sales |
+| Legend AutoHub | `/our-brands/legend-autohub` | Legend AutoHub | Multi-brand vehicle hub |
 | Legend Technical Services | `/our-brands/legend-technical-services` | Legend Technical Services | Technical and maintenance services |
 | Legend Travel | `/our-brands/legend-travel` | Legend Travel | Travel and tourism services |
 | Legend World Rent-A-Car | `/our-brands/legend-world-rent-a-car` | Legend World Rent-A-Car | Car rental services |
