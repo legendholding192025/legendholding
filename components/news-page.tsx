@@ -74,30 +74,31 @@ export function NewsPage() {
 
   const fetchArticles = async () => {
     try {
-      // First, fetch all featured articles
-      const { data: allFeaturedData, error: featuredError } = await supabase
-        .from("news_articles")
-        .select("*")
-        .eq("is_featured", true)
-        .eq("published", true)
-        .order("created_at", { ascending: false })
-
-      if (featuredError) throw featuredError
-
-      // Set the most recent featured article as the main featured article
-      setFeaturedArticle(allFeaturedData && allFeaturedData.length > 0 ? allFeaturedData[0] : null)
-
-      // Fetch all non-featured articles for carousel
+      // Fetch all published articles ordered by creation date (newest first)
       const { data: allArticlesData, error: articlesError } = await supabase
         .from("news_articles")
         .select("*")
         .eq("published", true)
-        .eq("is_featured", false)
         .order("created_at", { ascending: false })
 
       if (articlesError) throw articlesError
 
-      setAllArticles(allArticlesData || [])
+      const allArticles = allArticlesData || []
+
+      // Set the manually selected featured article, or the latest one if none is featured
+      const featuredArticles = allArticles.filter(article => article.is_featured)
+      const featuredArticle = featuredArticles.length > 0 
+        ? featuredArticles[0] 
+        : allArticles.length > 0 
+          ? allArticles[0] // Use the latest article if no featured article exists
+          : null
+      
+      setFeaturedArticle(featuredArticle)
+
+      // Set all articles for the carousel (excluding the current featured article to avoid duplication)
+      const currentFeaturedId = featuredArticle ? featuredArticle.id : null
+      const articlesForCarousel = allArticles.filter(article => article.id !== currentFeaturedId)
+      setAllArticles(articlesForCarousel)
     } catch (error) {
       console.error("Error fetching articles:", error)
       toast.error("Failed to load articles")

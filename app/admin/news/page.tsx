@@ -160,6 +160,15 @@ export default function NewsManagement() {
   // Add new article
   const handleAdd = async () => {
     try {
+      // If this article is being set as featured, uncheck all other articles first
+      if (formData.is_featured) {
+        const { error: uncheckError } = await supabase
+          .from("news_articles")
+          .update({ is_featured: false })
+
+        if (uncheckError) throw uncheckError
+      }
+
       const { data, error } = await supabase
         .from("news_articles")
         .insert([formData])
@@ -168,7 +177,12 @@ export default function NewsManagement() {
 
       if (error) throw error
 
-      setArticles([data, ...articles])
+      // Update local state to reflect the changes
+      const updatedArticles = formData.is_featured 
+        ? articles.map(article => ({ ...article, is_featured: false }))
+        : articles
+      
+      setArticles([data, ...updatedArticles])
       setIsAddDialogOpen(false)
       setFormData({
         title: "",
@@ -197,6 +211,16 @@ export default function NewsManagement() {
     if (!editingArticle) return
 
     try {
+      // If this article is being set as featured, uncheck all other articles first
+      if (formData.is_featured) {
+        const { error: uncheckError } = await supabase
+          .from("news_articles")
+          .update({ is_featured: false })
+          .neq("id", editingArticle.id)
+
+        if (uncheckError) throw uncheckError
+      }
+
       const { data, error } = await supabase
         .from("news_articles")
         .update(formData)
@@ -206,8 +230,9 @@ export default function NewsManagement() {
 
       if (error) throw error
 
+      // Update local state to reflect the changes
       setArticles(articles.map(article => 
-        article.id === editingArticle.id ? data : article
+        article.id === editingArticle.id ? data : { ...article, is_featured: false }
       ))
       setEditingArticle(null)
       toast.success("Article updated successfully")
