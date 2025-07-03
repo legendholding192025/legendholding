@@ -11,6 +11,7 @@ type NewsItem = {
   id: string
   title: string
   created_at: string
+  publication_date: string
   excerpt: string
   category: string
   image_url: string
@@ -34,7 +35,7 @@ export function Newsroom() {
         .from("news_articles")
         .select("*")
         .eq("published", true)
-        .order("created_at", { ascending: false })
+        .order("publication_date", { ascending: false })
         .limit(3) // Only fetch 3 latest news items
 
       if (error) throw error
@@ -112,7 +113,7 @@ export function Newsroom() {
               <div className="p-5 flex flex-col flex-grow relative">
                 <div className="flex items-center text-gray-500 text-sm mb-3">
                   <Calendar className="h-4 w-4 mr-1" />
-                  {new Date(news.created_at).toLocaleDateString()}
+                  {new Date(news.publication_date).toLocaleDateString()}
                 </div>
                 <h3 className="text-lg font-semibold mb-3 text-[rgb(43,28,72)] line-clamp-2">
                   {news.title}

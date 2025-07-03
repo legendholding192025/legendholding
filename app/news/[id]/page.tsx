@@ -21,6 +21,7 @@ import { toast } from "sonner"
 interface NewsArticle {
   id: string
   created_at: string
+  publication_date: string
   title: string
   excerpt: string
   content: string
@@ -226,7 +227,7 @@ export default function NewsArticlePage() {
                   </span>
                   <div className="flex items-center text-sm text-gray-500">
                     <CalendarIcon className="mr-1 h-4 w-4" />
-                    {new Date(article.created_at).toLocaleDateString()}
+                    {new Date(article.publication_date).toLocaleDateString()}
                   </div>
                   <div className="flex items-center text-sm text-gray-500">
                     <Clock className="mr-1 h-4 w-4" />
@@ -332,7 +333,7 @@ export default function NewsArticlePage() {
                           <div className="mb-2 flex items-center gap-3 text-sm text-gray-500">
                             <div className="flex items-center">
                               <CalendarIcon className="mr-1 h-4 w-4" />
-                              {new Date(relatedArticle.created_at).toLocaleDateString()}
+                              {new Date(relatedArticle.publication_date).toLocaleDateString()}
                             </div>
                             <div className="flex items-center">
                               <Clock className="mr-1 h-4 w-4" />

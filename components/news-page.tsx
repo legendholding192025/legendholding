@@ -45,6 +45,7 @@ import { toast } from "sonner"
 interface NewsArticle {
   id: string
   created_at: string
+  publication_date: string
   title: string
   excerpt: string
   content: string
@@ -74,12 +75,12 @@ export function NewsPage() {
 
   const fetchArticles = async () => {
     try {
-      // Fetch all published articles ordered by creation date (newest first)
+      // Fetch all published articles ordered by publication date (newest first)
       const { data: allArticlesData, error: articlesError } = await supabase
         .from("news_articles")
         .select("*")
         .eq("published", true)
-        .order("created_at", { ascending: false })
+        .order("publication_date", { ascending: false })
 
       if (articlesError) throw articlesError
 
@@ -207,7 +208,7 @@ export function NewsPage() {
                       <div className="mb-3 flex items-center gap-3">
                         <div className="flex items-center text-sm text-gray-500">
                           <CalendarIcon className="mr-1 h-4 w-4" />
-                          {new Date(featuredArticle.created_at).toLocaleDateString()}
+                          {new Date(featuredArticle.publication_date).toLocaleDateString()}
                         </div>
                         <div className="flex items-center text-sm text-gray-500">
                           <Clock className="mr-1 h-4 w-4" />
@@ -279,7 +280,7 @@ export function NewsPage() {
                                 </h4>
                               </Link>
                               <p className="text-xs text-gray-500 mb-2">
-                                {new Date(article.created_at).toLocaleDateString()} • {article.read_time}
+                                {new Date(article.publication_date).toLocaleDateString()} • {article.read_time}
                               </p>
                               <Link 
                                 href={`/news/${article.id}`}
@@ -346,7 +347,7 @@ export function NewsPage() {
                           <div className="p-5 flex flex-col flex-grow relative">
                             <div className="flex items-center text-gray-500 text-sm mb-3">
                               <CalendarIcon className="h-4 w-4 mr-1" />
-                              {new Date(article.created_at).toLocaleDateString()}
+                              {new Date(article.publication_date).toLocaleDateString()}
                               <Clock className="h-4 w-4 ml-3 mr-1" />
                               {article.read_time}
                             </div>
@@ -425,7 +426,7 @@ export function NewsPage() {
                               <div className="p-5 flex flex-col flex-grow relative">
                                 <div className="flex items-center text-gray-500 text-sm mb-3">
                                   <CalendarIcon className="h-4 w-4 mr-1" />
-                                  {new Date(article.created_at).toLocaleDateString()}
+                                  {new Date(article.publication_date).toLocaleDateString()}
                                   <Clock className="h-4 w-4 ml-3 mr-1" />
                                   {article.read_time}
                                 </div>

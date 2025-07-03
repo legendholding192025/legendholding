@@ -31,6 +31,7 @@ import { Editor } from '@tinymce/tinymce-react'
 interface NewsArticle {
   id: string
   created_at: string
+  publication_date: string
   title: string
   excerpt: string
   content: string
@@ -117,6 +118,7 @@ export default function NewsManagement() {
     image_url: "",
     category: "",
     author: "",
+    publication_date: new Date().toISOString().split('T')[0], // Today's date in YYYY-MM-DD format
     read_time_minutes: 5,
     is_featured: false,
     published: true,
@@ -201,6 +203,7 @@ export default function NewsManagement() {
         image_url: "",
         category: "",
         author: "",
+        publication_date: new Date().toISOString().split('T')[0],
         read_time_minutes: 5,
         is_featured: false,
         published: true,
@@ -406,6 +409,7 @@ export default function NewsManagement() {
                 image_url: "",
                 category: "",
                 author: "",
+                publication_date: new Date().toISOString().split('T')[0],
                 read_time_minutes: 5,
                 is_featured: false,
                 published: true,
@@ -489,6 +493,23 @@ export default function NewsManagement() {
                     </span>
                   </div>
                 </div>
+              </div>
+
+              {/* Publication Date */}
+              <div className="space-y-2">
+                <Label htmlFor="publication_date" className="font-semibold">
+                  Publication Date <span className="text-red-500">*</span>
+                </Label>
+                <Input
+                  id="publication_date"
+                  type="date"
+                  className="border-gray-300 focus:border-[#5E366D] focus:ring-[#5E366D]"
+                  value={formData.publication_date}
+                  onChange={(e) => setFormData({ ...formData, publication_date: e.target.value })}
+                />
+                <p className="text-sm text-gray-500">
+                  Set the date when this article should be published. Defaults to today's date.
+                </p>
               </div>
 
               {/* Image URL */}
