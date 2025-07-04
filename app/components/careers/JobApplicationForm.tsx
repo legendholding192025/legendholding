@@ -171,7 +171,6 @@ export function JobApplicationForm({ jobId, jobTitle, company, isOpen, onClose }
           }
         }
 
-        toast.success("Application submitted successfully!")
         onClose()
         router.push("/careers/thank-you")
       } catch (error) {

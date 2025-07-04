@@ -282,43 +282,49 @@ export default function JobDetails() {
             <div className="lg:col-span-2">
               <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6 md:p-8 space-y-6 sm:space-y-8">
                 {/* Job Description */}
-                <section>
-                  <h2 className="text-xl sm:text-2xl font-semibold text-gray-900 mb-3 sm:mb-4">Job Description</h2>
-                  <ul className="space-y-2 sm:space-y-3">
-                    {(Array.isArray(job.description) ? job.description : []).map((description, index) => (
-                      <li key={index} className="flex gap-2 sm:gap-3 text-gray-600 text-sm sm:text-base">
-                        <span className="flex-shrink-0 w-1.5 h-1.5 rounded-full bg-[#EE8900] mt-2"></span>
-                        <span className="break-words">{description}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </section>
+                {Array.isArray(job.description) && job.description.length > 0 && (
+                  <section>
+                    <h2 className="text-xl sm:text-2xl font-semibold text-gray-900 mb-3 sm:mb-4">Job Description</h2>
+                    <ul className="space-y-2 sm:space-y-3">
+                      {job.description.map((description, index) => (
+                        <li key={index} className="flex gap-2 sm:gap-3 text-gray-600 text-sm sm:text-base">
+                          <span className="flex-shrink-0 w-1.5 h-1.5 rounded-full bg-[#EE8900] mt-2"></span>
+                          <span className="break-words">{description}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </section>
+                )}
 
                 {/* Responsibilities */}
-                <section>
-                  <h2 className="text-xl sm:text-2xl font-semibold text-gray-900 mb-3 sm:mb-4">Responsibilities</h2>
-                  <ul className="space-y-2 sm:space-y-3">
-                    {job.responsibilities.map((responsibility, index) => (
-                      <li key={index} className="flex gap-2 sm:gap-3 text-gray-600 text-sm sm:text-base">
-                        <span className="flex-shrink-0 w-1.5 h-1.5 rounded-full bg-[#EE8900] mt-2"></span>
-                        <span className="break-words">{responsibility}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </section>
+                {Array.isArray(job.responsibilities) && job.responsibilities.length > 0 && (
+                  <section>
+                    <h2 className="text-xl sm:text-2xl font-semibold text-gray-900 mb-3 sm:mb-4">Responsibilities</h2>
+                    <ul className="space-y-2 sm:space-y-3">
+                      {job.responsibilities.map((responsibility, index) => (
+                        <li key={index} className="flex gap-2 sm:gap-3 text-gray-600 text-sm sm:text-base">
+                          <span className="flex-shrink-0 w-1.5 h-1.5 rounded-full bg-[#EE8900] mt-2"></span>
+                          <span className="break-words">{responsibility}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </section>
+                )}
 
                 {/* Requirements */}
-                <section>
-                  <h2 className="text-xl sm:text-2xl font-semibold text-gray-900 mb-3 sm:mb-4">Preferred Skills</h2>
-                  <ul className="space-y-2 sm:space-y-3">
-                    {job.requirements.map((requirement, index) => (
-                      <li key={index} className="flex gap-2 sm:gap-3 text-gray-600 text-sm sm:text-base">
-                        <span className="flex-shrink-0 w-1.5 h-1.5 rounded-full bg-[#EE8900] mt-2"></span>
-                        <span className="break-words">{requirement}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </section>
+                {Array.isArray(job.requirements) && job.requirements.length > 0 && (
+                  <section>
+                    <h2 className="text-xl sm:text-2xl font-semibold text-gray-900 mb-3 sm:mb-4">Preferred Skills</h2>
+                    <ul className="space-y-2 sm:space-y-3">
+                      {job.requirements.map((requirement, index) => (
+                        <li key={index} className="flex gap-2 sm:gap-3 text-gray-600 text-sm sm:text-base">
+                          <span className="flex-shrink-0 w-1.5 h-1.5 rounded-full bg-[#EE8900] mt-2"></span>
+                          <span className="break-words">{requirement}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </section>
+                )}
 
                 {/* Benefits */}
                 {job.benefits && job.benefits.length > 0 && (

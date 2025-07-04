@@ -104,18 +104,6 @@ export default function JobsManagement() {
       toast.error("Location is required")
       return false
     }
-    if (!descriptionText.trim()) {
-      toast.error("Description is required")
-      return false
-    }
-    if (!requirementsText.trim()) {
-      toast.error("At least one requirement is needed")
-      return false
-    }
-    if (!responsibilitiesText.trim()) {
-      toast.error("At least one responsibility is needed")
-      return false
-    }
     if (!newJob.company.trim()) {
       toast.error("Company name is required")
       return false
@@ -315,7 +303,7 @@ export default function JobsManagement() {
           <DialogHeader>
             <DialogTitle>Post New Job</DialogTitle>
             <DialogDescription>
-              Fill in the details for the new job posting. Enter each description point, requirement, and responsibility on a new line - each line will become a bullet point.
+              Fill in the required details for the new job posting. Description, responsibilities, and preferred skills are optional. If provided, enter each point on a new line - each line will become a bullet point.
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
@@ -380,36 +368,33 @@ export default function JobsManagement() {
               </div>
             </div>
             <div>
-              <Label htmlFor="description">Job Description * (each line will become a bullet point)</Label>
+              <Label htmlFor="description">Job Description (optional - each line will become a bullet point)</Label>
               <Textarea
                 id="description"
                 value={descriptionText}
                 onChange={(e) => setDescriptionText(e.target.value)}
                 placeholder="Enter each description point on a new line&#10;For example:&#10;• Lead development of new features&#10;• Collaborate with cross-functional teams&#10;• Maintain code quality and standards"
                 className="h-32"
-                required
               />
             </div>
             <div>
-              <Label htmlFor="responsibilities">Responsibilities * (one per line)</Label>
+              <Label htmlFor="responsibilities">Responsibilities (optional - one per line)</Label>
               <Textarea
                 id="responsibilities"
                 value={responsibilitiesText}
                 onChange={(e) => setResponsibilitiesText(e.target.value)}
                 placeholder="Enter each responsibility on a new line"
                 className="h-32"
-                required
               />
             </div>
             <div>
-              <Label htmlFor="requirements">Preferred Skills * (one per line)</Label>
+              <Label htmlFor="requirements">Preferred Skills (optional - one per line)</Label>
               <Textarea
                 id="requirements"
                 value={requirementsText}
                 onChange={(e) => setRequirementsText(e.target.value)}
                 placeholder="Enter each requirement on a new line"
                 className="h-32"
-                required
               />
             </div>
           </div>

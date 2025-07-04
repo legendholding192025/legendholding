@@ -102,7 +102,6 @@ const ApplicationForm = ({ isOpen, onClose, jobId, jobTitle }: ApplicationFormPr
 
       if (applicationError) throw applicationError
 
-      toast.success("Application submitted successfully!")
       handleClose()
     } catch (error) {
       console.error('Error submitting application:', error)
@@ -330,26 +329,38 @@ const JobDetails = () => {
             <div className="bg-white shadow-lg rounded-lg overflow-hidden">
               <div className="px-6 py-8">
                 <div className="prose max-w-none">
-                  <h2 className="text-xl font-semibold mb-4">Job Description</h2>
-                  <ul className="list-disc pl-5">
-                    {(Array.isArray(job.description) ? job.description : []).map((desc, index) => (
-                      <li key={index} className="break-words">{desc}</li>
-                    ))}
-                  </ul>
+                  {Array.isArray(job.description) && job.description.length > 0 && (
+                    <>
+                      <h2 className="text-xl font-semibold mb-4">Job Description</h2>
+                      <ul className="list-disc pl-5">
+                        {job.description.map((desc, index) => (
+                          <li key={index} className="break-words">{desc}</li>
+                        ))}
+                      </ul>
+                    </>
+                  )}
 
-                  <h2 className="text-xl font-semibold mt-8 mb-4">Preferred Skills</h2>
-                  <ul className="list-disc pl-5">
-                    {(Array.isArray(job.requirements) ? job.requirements : []).map((req, index) => (
-                      <li key={index} className="break-words">{req}</li>
-                    ))}
-                  </ul>
+                  {Array.isArray(job.requirements) && job.requirements.length > 0 && (
+                    <>
+                      <h2 className="text-xl font-semibold mt-8 mb-4">Preferred Skills</h2>
+                      <ul className="list-disc pl-5">
+                        {job.requirements.map((req, index) => (
+                          <li key={index} className="break-words">{req}</li>
+                        ))}
+                      </ul>
+                    </>
+                  )}
 
-                  <h2 className="text-xl font-semibold mt-8 mb-4">Responsibilities</h2>
-                  <ul className="list-disc pl-5">
-                    {(Array.isArray(job.responsibilities) ? job.responsibilities : []).map((resp, index) => (
-                      <li key={index} className="break-words">{resp}</li>
-                    ))}
-                  </ul>
+                  {Array.isArray(job.responsibilities) && job.responsibilities.length > 0 && (
+                    <>
+                      <h2 className="text-xl font-semibold mt-8 mb-4">Responsibilities</h2>
+                      <ul className="list-disc pl-5">
+                        {job.responsibilities.map((resp, index) => (
+                          <li key={index} className="break-words">{resp}</li>
+                        ))}
+                      </ul>
+                    </>
+                  )}
                 </div>
 
                 <div className="mt-8 pt-8 border-t border-gray-200">
