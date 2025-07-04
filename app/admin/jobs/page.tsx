@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useState, useEffect } from "react"
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
 import { useRouter } from "next/navigation"
 import { AdminDashboardLayout } from "@/components/admin/dashboard-layout"
@@ -19,6 +19,8 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import { UnauthorizedAccess } from "@/components/admin/unauthorized-access"
+import { useAdminPermissions } from "@/hooks/use-admin-permissions"
 
 interface Job {
   id: string
@@ -48,6 +50,7 @@ const convertBulletPointsToText = (bulletPoints: string[]): string => {
 export default function JobsManagement() {
   const router = useRouter()
   const supabase = createClientComponentClient()
+  const { userRole, isLoading: permissionsLoading, hasPermission } = useAdminPermissions()
   const [jobs, setJobs] = useState<Job[]>([])
   const [loading, setLoading] = useState(true)
   const [isAddingJob, setIsAddingJob] = useState(false)
@@ -65,7 +68,6 @@ export default function JobsManagement() {
   const [requirementsText, setRequirementsText] = useState("")
   const [responsibilitiesText, setResponsibilitiesText] = useState("")
   const [descriptionText, setDescriptionText] = useState("")
-
 
   useEffect(() => {
     fetchJobs()
@@ -232,9 +234,57 @@ export default function JobsManagement() {
   }
 
   const handleSignOut = async () => {
-    await supabase.auth.signOut()
-    router.refresh()
-    router.push("/admin/login")
+    try {
+      console.log('Signing out from jobs...')
+      const { error } = await supabase.auth.signOut()
+      if (error) {
+        console.error('Sign out error:', error)
+      }
+      
+      // Clear any local storage
+      localStorage.removeItem('supabase.auth.token')
+      
+      // Force redirect to login page
+      window.location.href = '/admin/login'
+    } catch (error) {
+      console.error("Error signing out:", error)
+      // Force redirect anyway
+      window.location.href = '/admin/login'
+    }
+  }
+
+  // Check if user has jobs permission
+  if (permissionsLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto"></div>
+          <p className="mt-2 text-sm text-gray-600">Loading permissions...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (!hasPermission('jobs')) {
+    return (
+      <UnauthorizedAccess 
+        requiredPermission="jobs"
+        currentUserRole={userRole?.role}
+      />
+    )
+  }
+
+  if (loading) {
+    return (
+      <AdminDashboardLayout onSignOut={handleSignOut}>
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="flex flex-col items-center gap-2">
+            <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#2B1C48] border-t-transparent"></div>
+            <p className="text-sm text-gray-600">Loading jobs...</p>
+          </div>
+        </div>
+      </AdminDashboardLayout>
+    )
   }
 
   return (

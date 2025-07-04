@@ -23,13 +23,13 @@ export async function middleware(req: NextRequest) {
       return res
     }
 
-    // If there's no session and the user is trying to access the dashboard
-    if (!session && req.nextUrl.pathname.startsWith('/admin/dashboard')) {
+    // If there's no session and the user is trying to access admin routes
+    if (!session && req.nextUrl.pathname.startsWith('/admin/')) {
       const redirectUrl = new URL('/admin/login', req.url)
       return NextResponse.redirect(redirectUrl)
     }
 
-    // If there's a session and the user is trying to access login
+    // If there's a session and the user is trying to access login, redirect to dashboard
     if (session && req.nextUrl.pathname.startsWith('/admin/login')) {
       const redirectUrl = new URL('/admin/dashboard', req.url)
       return NextResponse.redirect(redirectUrl)
@@ -39,7 +39,7 @@ export async function middleware(req: NextRequest) {
   } catch (error) {
     console.error('Middleware error:', error)
     // In case of any error, redirect to login if trying to access protected routes
-    if (req.nextUrl.pathname.startsWith('/admin/dashboard')) {
+    if (req.nextUrl.pathname.startsWith('/admin/')) {
       const redirectUrl = new URL('/admin/login', req.url)
       return NextResponse.redirect(redirectUrl)
     }
@@ -48,5 +48,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/admin/login', '/admin/dashboard'],
+  matcher: ['/admin/dashboard', '/admin/submissions', '/admin/news', '/admin/jobs', '/admin/applications', '/admin/newsletters', '/admin/settings'],
 } 

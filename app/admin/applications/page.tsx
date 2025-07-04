@@ -26,6 +26,8 @@ import {
 } from "@/components/ui/select"
 import { useRouter } from "next/navigation"
 import { AdminDashboardLayout } from "@/components/admin/dashboard-layout"
+import { UnauthorizedAccess } from "@/components/admin/unauthorized-access"
+import { useAdminPermissions } from "@/hooks/use-admin-permissions"
 
 interface Job {
   id: string
@@ -48,6 +50,7 @@ interface JobApplication {
 
 export default function ApplicationsPage() {
   const router = useRouter()
+  const { userRole, isLoading: permissionsLoading, hasPermission } = useAdminPermissions()
   const [applications, setApplications] = useState<JobApplication[]>([])
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState("")
@@ -169,9 +172,44 @@ export default function ApplicationsPage() {
   })
 
   const handleSignOut = async () => {
-    await supabase.auth.signOut()
-    router.refresh()
-    router.push("/admin/login")
+    try {
+      console.log('Signing out from applications...')
+      const { error } = await supabase.auth.signOut()
+      if (error) {
+        console.error('Sign out error:', error)
+      }
+      
+      // Clear any local storage
+      localStorage.removeItem('supabase.auth.token')
+      
+      // Force redirect to login page
+      window.location.href = '/admin/login'
+    } catch (error) {
+      console.error("Error signing out:", error)
+      // Force redirect anyway
+      window.location.href = '/admin/login'
+    }
+  }
+
+  // Check if user has applications permission
+  if (permissionsLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto"></div>
+          <p className="mt-2 text-sm text-gray-600">Loading permissions...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (!hasPermission('applications')) {
+    return (
+      <UnauthorizedAccess 
+        requiredPermission="applications"
+        currentUserRole={userRole?.role}
+      />
+    )
   }
 
   if (loading) {

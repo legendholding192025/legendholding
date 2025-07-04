@@ -16,11 +16,13 @@ import {
   Mail,
   PanelLeftClose,
   PanelLeftOpen,
-  ClipboardList
+  ClipboardList,
+  Shield
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { DashboardHeader } from "@/components/admin/dashboard-header"
+import { useAdminPermissions } from "@/hooks/use-admin-permissions"
 import {
   Sidebar,
   SidebarContent,
@@ -44,32 +46,44 @@ const menuItems = [
   {
     title: "Dashboard",
     icon: LayoutDashboard,
-    href: "/admin/dashboard"
+    href: "/admin/dashboard",
+    permission: "dashboard" as const,
+    superAdminOnly: false
   },
   {
     title: "Contact Management",
     icon: MessageSquare,
-    href: "/admin/submissions"
+    href: "/admin/submissions",
+    permission: "submissions" as const,
+    superAdminOnly: true
   },
   {
     title: "News & Media",
     icon: Newspaper,
-    href: "/admin/news"
+    href: "/admin/news",
+    permission: "news" as const,
+    superAdminOnly: true
   },
   {
     title: "Jobs Management",
     icon: FileText,
-    href: "/admin/jobs"
+    href: "/admin/jobs",
+    permission: "jobs" as const,
+    superAdminOnly: false
   },
   {
     title: "Job Applications",
     icon: ClipboardList,
-    href: "/admin/applications"
+    href: "/admin/applications",
+    permission: "applications" as const,
+    superAdminOnly: false
   },
   {
     title: "Newsletter",
     icon: Mail,
-    href: "/admin/newsletters"
+    href: "/admin/newsletters",
+    permission: "newsletters" as const,
+    superAdminOnly: true
   }
 ]
 
@@ -77,13 +91,16 @@ const systemMenuItems = [
   {
     title: "Settings",
     icon: Settings,
-    href: "/admin/settings"
+    href: "/admin/settings",
+    permission: "settings" as const,
+    superAdminOnly: true
   }
 ]
 
 export function AdminDashboardLayout({ children, onSignOut }: AdminDashboardLayoutProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const pathname = usePathname()
+  const { userRole, isLoading, isSuperAdmin, hasPermission } = useAdminPermissions()
 
   return (
     <SidebarProvider defaultOpen>
@@ -115,6 +132,12 @@ export function AdminDashboardLayout({ children, onSignOut }: AdminDashboardLayo
               </Link>
               <SidebarTrigger />
             </div>
+            {isSuperAdmin && (
+              <div className="mt-2 flex items-center gap-2 text-xs text-blue-600 bg-blue-50 px-2 py-1 rounded">
+                <Shield className="h-3 w-3" />
+                <span>Super Admin</span>
+              </div>
+            )}
           </SidebarHeader>
           
           <SidebarContent className="px-4 py-6">
@@ -127,6 +150,11 @@ export function AdminDashboardLayout({ children, onSignOut }: AdminDashboardLayo
                 <SidebarMenu>
                   {menuItems.map((item) => {
                     const isActive = pathname === item.href
+                    const hasAccess = hasPermission(item.permission)
+                    const isSuperAdminOnly = item.superAdminOnly && !isSuperAdmin
+                    
+                    if (!hasAccess || isSuperAdminOnly) return null
+                    
                     return (
                       <SidebarMenuItem key={item.href} className="mb-2">
                         <Link href={item.href} passHref legacyBehavior>
@@ -154,6 +182,11 @@ export function AdminDashboardLayout({ children, onSignOut }: AdminDashboardLayo
                 <SidebarMenu>
                   {systemMenuItems.map((item) => {
                     const isActive = pathname === item.href
+                    const hasAccess = hasPermission(item.permission)
+                    const isSuperAdminOnly = item.superAdminOnly && !isSuperAdmin
+                    
+                    if (!hasAccess || isSuperAdminOnly) return null
+                    
                     return (
                       <SidebarMenuItem key={item.href} className="mb-2">
                         <Link href={item.href} passHref legacyBehavior>
@@ -189,7 +222,7 @@ export function AdminDashboardLayout({ children, onSignOut }: AdminDashboardLayo
           {/* Persistent Sidebar Toggle */}
           <SidebarToggleButton />
           <div className="h-full">
-            <DashboardHeader />
+            <DashboardHeader onSignOut={onSignOut} />
             <div className="p-6">
               {children}
             </div>
