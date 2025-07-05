@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
+import { createClient } from '@supabase/supabase-js'
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
 import { Loader2 } from "lucide-react"
@@ -38,7 +38,29 @@ export function JobApplicationForm({ jobId, jobTitle, company, isOpen, onClose }
     coverLetter: "",
   })
   const [resumeFile, setResumeFile] = useState<File | null>(null)
-  const supabase = createClientComponentClient()
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      global: {
+        fetch: (url, options = {}) => {
+          if (options.headers && typeof options.headers === 'object' && !Array.isArray(options.headers)) {
+            // Convert Headers to plain object if needed
+            let headers = options.headers;
+            if (headers instanceof Headers) {
+              headers = Object.fromEntries(headers.entries());
+              options.headers = headers;
+            }
+            if ('Apikey' in headers) {
+              headers['apikey'] = headers['apikey'] || headers['Apikey'];
+              delete headers['Apikey'];
+            }
+          }
+          return fetch(url, options);
+        }
+      }
+    }
+  )
   const router = useRouter()
 
   // Debug: Log Supabase env variables in browser
