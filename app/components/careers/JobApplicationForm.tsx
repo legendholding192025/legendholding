@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -40,6 +40,12 @@ export function JobApplicationForm({ jobId, jobTitle, company, isOpen, onClose }
   const [resumeFile, setResumeFile] = useState<File | null>(null)
   const supabase = createClientComponentClient()
   const router = useRouter()
+
+  // Debug: Log Supabase env variables in browser
+  useEffect(() => {
+    console.log('Supabase URL:', process.env.NEXT_PUBLIC_SUPABASE_URL);
+    console.log('Supabase Key:', process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
+  }, []);
 
   const validateForm = () => {
     try {
