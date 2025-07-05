@@ -133,21 +133,45 @@ export default function ApplicationDetails() {
     if (!application) return
 
     try {
-      const response = await fetch(application.resume_url)
-      const blob = await response.blob()
-      const downloadUrl = window.URL.createObjectURL(blob)
-      const link = document.createElement('a')
-      link.href = downloadUrl
-      link.download = `${application.full_name.replace(/\s+/g, '_')}_resume.pdf`
-      document.body.appendChild(link)
-      link.click()
-      document.body.removeChild(link)
-      window.URL.revokeObjectURL(downloadUrl)
-      
-      toast.success('Resume download started')
+      let fileExt = 'pdf';
+      let fileName = application.full_name.replace(/\s+/g, '_') + '_resume';
+      let downloadUrl: string;
+      let blob: Blob;
+
+      if (application.resume_url.startsWith('data:')) {
+        // Base64 file
+        const match = application.resume_url.match(/^data:(.*?);/);
+        if (match) {
+          const mime = match[1];
+          if (mime === 'application/pdf') fileExt = 'pdf';
+          else if (mime === 'application/msword') fileExt = 'doc';
+          else if (mime === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') fileExt = 'docx';
+          else fileExt = 'bin';
+        }
+        downloadUrl = application.resume_url;
+      } else {
+        // Storage file
+        const path = application.resume_url;
+        const extMatch = path.match(/\.([a-zA-Z0-9]+)$/);
+        if (extMatch) fileExt = extMatch[1];
+        // Fetch the file as blob
+        const response = await fetch(application.resume_url);
+        blob = await response.blob();
+        downloadUrl = window.URL.createObjectURL(blob);
+      }
+      const link = document.createElement('a');
+      link.href = downloadUrl;
+      link.download = `${fileName}.${fileExt}`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      if (!application.resume_url.startsWith('data:')) {
+        window.URL.revokeObjectURL(downloadUrl);
+      }
+      toast.success('Resume download started');
     } catch (error) {
-      console.error('Error downloading resume:', error)
-      toast.error('Failed to download resume')
+      console.error('Error downloading resume:', error);
+      toast.error('Failed to download resume');
     }
   }
 

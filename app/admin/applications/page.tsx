@@ -124,23 +124,47 @@ export default function ApplicationsPage() {
     }
   }
 
-  const handleDownloadResume = async (url: string, fileName: string) => {
+  const handleDownloadResume = async (url: string, fullName: string) => {
     try {
-      const response = await fetch(url)
-      const blob = await response.blob()
-      const downloadUrl = window.URL.createObjectURL(blob)
-      const link = document.createElement('a')
-      link.href = downloadUrl
-      link.download = fileName
-      document.body.appendChild(link)
-      link.click()
-      document.body.removeChild(link)
-      window.URL.revokeObjectURL(downloadUrl)
-      
-      toast.success('Resume download started')
+      let fileExt = 'pdf';
+      let fileName = fullName.replace(/\s+/g, '_') + '_resume';
+      let downloadUrl: string;
+      let blob: Blob;
+
+      if (url.startsWith('data:')) {
+        // Base64 file
+        const match = url.match(/^data:(.*?);/);
+        if (match) {
+          const mime = match[1];
+          if (mime === 'application/pdf') fileExt = 'pdf';
+          else if (mime === 'application/msword') fileExt = 'doc';
+          else if (mime === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') fileExt = 'docx';
+          else fileExt = 'bin';
+        }
+        downloadUrl = url;
+      } else {
+        // Storage file
+        const path = url;
+        const extMatch = path.match(/\.([a-zA-Z0-9]+)$/);
+        if (extMatch) fileExt = extMatch[1];
+        // Fetch the file as blob
+        const response = await fetch(url);
+        blob = await response.blob();
+        downloadUrl = window.URL.createObjectURL(blob);
+      }
+      const link = document.createElement('a');
+      link.href = downloadUrl;
+      link.download = `${fileName}.${fileExt}`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      if (!url.startsWith('data:')) {
+        window.URL.revokeObjectURL(downloadUrl);
+      }
+      toast.success('Resume download started');
     } catch (error) {
-      console.error('Error downloading resume:', error)
-      toast.error('Failed to download resume')
+      console.error('Error downloading resume:', error);
+      toast.error('Failed to download resume');
     }
   }
 
@@ -296,10 +320,7 @@ export default function ApplicationsPage() {
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => handleDownloadResume(
-                        application.resume_url,
-                        `${application.full_name.replace(/\s+/g, '_')}_resume.pdf`
-                      )}
+                      onClick={() => handleDownloadResume(application.resume_url, application.full_name)}
                     >
                       <Download className="h-4 w-4 mr-1" />
                       Download
