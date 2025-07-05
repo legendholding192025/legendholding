@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Eye, Download, Calendar, User, Mail, Phone, FileText } from "lucide-react"
+import { Eye, Calendar, User, Mail, Phone, FileText } from "lucide-react"
 import { toast } from "sonner"
 import Link from "next/link"
 
@@ -37,6 +37,7 @@ export function JobApplicationsDashboard({ onSignOut, showHeader = true }: JobAp
   const supabase = createClientComponentClient()
   const [applications, setApplications] = useState<JobApplication[]>([])
   const [loading, setLoading] = useState(true)
+  const [refreshing, setRefreshing] = useState(false)
   const [stats, setStats] = useState({
     total: 0,
     pending: 0,
@@ -50,15 +51,34 @@ export function JobApplicationsDashboard({ onSignOut, showHeader = true }: JobAp
     fetchApplications()
   }, [])
 
+  // Auto-refresh data every 30 seconds to keep dashboard up to date
   useEffect(() => {
-    // Calculate stats
+    const interval = setInterval(() => {
+      fetchApplications()
+    }, 30000) // 30 seconds
+
+    return () => clearInterval(interval)
+  }, [])
+
+  // Refresh data when user returns to the tab
+  useEffect(() => {
+    const handleFocus = () => {
+      fetchApplications()
+    }
+
+    window.addEventListener('focus', handleFocus)
+    return () => window.removeEventListener('focus', handleFocus)
+  }, [])
+
+  useEffect(() => {
+    // Calculate stats with safe status handling
     const stats = {
       total: applications.length,
-      pending: applications.filter(app => app.status === 'pending').length,
-      reviewed: applications.filter(app => app.status === 'reviewed').length,
-      shortlisted: applications.filter(app => app.status === 'shortlisted').length,
-      rejected: applications.filter(app => app.status === 'rejected').length,
-      hired: applications.filter(app => app.status === 'hired').length
+      pending: applications.filter(app => (app.status || 'pending') === 'pending').length,
+      reviewed: applications.filter(app => (app.status || 'pending') === 'reviewed').length,
+      shortlisted: applications.filter(app => (app.status || 'pending') === 'shortlisted').length,
+      rejected: applications.filter(app => (app.status || 'pending') === 'rejected').length,
+      hired: applications.filter(app => (app.status || 'pending') === 'hired').length
     }
     setStats(stats)
   }, [applications])
@@ -75,10 +95,18 @@ export function JobApplicationsDashboard({ onSignOut, showHeader = true }: JobAp
         .order('created_at', { ascending: false })
 
       if (error) throw error
-      setApplications(data || [])
+      
+      // Ensure all applications have a valid status
+      const processedData = (data || []).map(app => ({
+        ...app,
+        status: app.status || 'pending' // Fallback to pending if status is null/undefined
+      }))
+      
+      setApplications(processedData)
     } catch (error) {
       console.error('Error fetching applications:', error)
       toast.error("Failed to fetch applications")
+      setApplications([]) // Set empty array on error
     } finally {
       setLoading(false)
     }
@@ -105,6 +133,13 @@ export function JobApplicationsDashboard({ onSignOut, showHeader = true }: JobAp
     }
   }
 
+  const handleRefresh = async () => {
+    setRefreshing(true)
+    await fetchApplications()
+    toast.success("Data refreshed")
+    setRefreshing(false)
+  }
+
   const getStatusBadge = (status: JobApplication['status']) => {
     const statusConfig = {
       pending: { color: 'bg-yellow-100 text-yellow-800', label: 'Pending' },
@@ -113,17 +148,83 @@ export function JobApplicationsDashboard({ onSignOut, showHeader = true }: JobAp
       rejected: { color: 'bg-red-100 text-red-800', label: 'Rejected' },
       hired: { color: 'bg-purple-100 text-purple-800', label: 'Hired' }
     }
+    
+    // Handle undefined, null, or invalid status values
+    if (!status || !statusConfig[status as keyof typeof statusConfig]) {
+      return <Badge className="bg-gray-100 text-gray-800">Unknown</Badge>
+    }
+    
     const config = statusConfig[status]
     return <Badge className={config.color}>{config.label}</Badge>
   }
 
   const downloadResume = async (resumeUrl: string, fileName: string) => {
     try {
+      console.log('Attempting to download resume:', resumeUrl)
+      
+      // Handle base64 files stored in database
+      if (resumeUrl.startsWith('data:')) {
+        console.log('Downloading base64 file')
+        const link = document.createElement('a')
+        link.href = resumeUrl
+        link.download = fileName
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+        toast.success("Resume downloaded successfully")
+        return
+      }
+      
+      // Handle different URL formats
+      let filePath = resumeUrl
+      
+      // If it's a full URL, extract the path
+      if (resumeUrl.startsWith('http')) {
+        const url = new URL(resumeUrl)
+        filePath = url.pathname.split('/').slice(-2).join('/') // Get last two parts of path
+      }
+      
+      // Remove leading slash if present
+      if (filePath.startsWith('/')) {
+        filePath = filePath.substring(1)
+      }
+      
+      console.log('Processed file path:', filePath)
+      
       const { data, error } = await supabase.storage
         .from('applications')
-        .download(resumeUrl)
+        .download(filePath)
 
-      if (error) throw error
+      if (error) {
+        console.error('Storage download error:', error)
+        
+        // Try alternative bucket name
+        if (error.message.includes('bucket') || error.message.includes('not found')) {
+          console.log('Trying alternative bucket: resumes')
+          const { data: altData, error: altError } = await supabase.storage
+            .from('resumes')
+            .download(filePath)
+          
+          if (altError) {
+            console.error('Alternative bucket also failed:', altError)
+            throw new Error(`File not found: ${fileName}`)
+          }
+          
+          // Use alternative data
+          const url = URL.createObjectURL(altData)
+          const link = document.createElement('a')
+          link.href = url
+          link.download = fileName
+          document.body.appendChild(link)
+          link.click()
+          document.body.removeChild(link)
+          URL.revokeObjectURL(url)
+          toast.success("Resume downloaded successfully")
+          return
+        }
+        
+        throw error
+      }
 
       const url = URL.createObjectURL(data)
       const link = document.createElement('a')
@@ -133,9 +234,20 @@ export function JobApplicationsDashboard({ onSignOut, showHeader = true }: JobAp
       link.click()
       document.body.removeChild(link)
       URL.revokeObjectURL(url)
+      toast.success("Resume downloaded successfully")
     } catch (error) {
       console.error('Error downloading resume:', error)
-      toast.error("Failed to download resume")
+      
+      // Provide more specific error messages
+      const errorMessage = error instanceof Error ? error.message : String(error)
+      
+      if (errorMessage.includes('not found') || errorMessage.includes('File not found')) {
+        toast.error("Resume file not found. It may have been deleted or moved.")
+      } else if (errorMessage.includes('permission') || errorMessage.includes('access')) {
+        toast.error("Permission denied. Please contact an administrator.")
+      } else {
+        toast.error("Failed to download resume. Please try again later.")
+      }
     }
   }
 
@@ -159,8 +271,8 @@ export function JobApplicationsDashboard({ onSignOut, showHeader = true }: JobAp
             <h1 className="text-2xl font-semibold">Job Applications Dashboard</h1>
             <p className="text-sm text-gray-500">Manage and review job applications</p>
           </div>
-          <Button onClick={() => window.location.reload()} variant="outline">
-            Refresh
+          <Button onClick={handleRefresh} variant="outline" disabled={refreshing}>
+            {refreshing ? 'Refreshing...' : 'Refresh'}
           </Button>
         </div>
       )}
@@ -173,7 +285,10 @@ export function JobApplicationsDashboard({ onSignOut, showHeader = true }: JobAp
             <FileText className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.total}</div>
+            <div className="text-2xl font-bold flex items-center gap-2">
+              {stats.total}
+              {refreshing && <div className="h-3 w-3 animate-spin rounded-full border-2 border-gray-300 border-t-gray-600"></div>}
+            </div>
           </CardContent>
         </Card>
         <Card>
@@ -258,7 +373,7 @@ export function JobApplicationsDashboard({ onSignOut, showHeader = true }: JobAp
                     </TableHeader>
                     <TableBody>
                       {applications
-                        .filter(app => status === 'all' || app.status === status)
+                        .filter(app => status === 'all' || (app.status || 'pending') === status)
                         .map((application) => (
                           <TableRow key={application.id}>
                             <TableCell>
@@ -295,14 +410,6 @@ export function JobApplicationsDashboard({ onSignOut, showHeader = true }: JobAp
                             </TableCell>
                             <TableCell>
                               <div className="flex space-x-2">
-                                <Button
-                                  variant="ghost"
-                                  size="sm"
-                                  onClick={() => downloadResume(application.resume_url, `${application.full_name}_resume.pdf`)}
-                                  title="Download Resume"
-                                >
-                                  <Download className="h-4 w-4" />
-                                </Button>
                                 <Link href={`/admin/applications/${application.id}`}>
                                   <Button variant="ghost" size="sm" title="View Details">
                                     <Eye className="h-4 w-4" />

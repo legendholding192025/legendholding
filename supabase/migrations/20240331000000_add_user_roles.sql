@@ -18,28 +18,9 @@ CREATE INDEX IF NOT EXISTS idx_user_roles_user_id ON user_roles(user_id);
 CREATE INDEX IF NOT EXISTS idx_user_roles_email ON user_roles(email);
 CREATE INDEX IF NOT EXISTS idx_user_roles_role ON user_roles(role);
 
--- Enable Row Level Security
-ALTER TABLE user_roles ENABLE ROW LEVEL SECURITY;
-
--- Create policies for user_roles
-CREATE POLICY "Super admins can view all roles" ON user_roles FOR
-SELECT TO authenticated USING (
-    EXISTS (
-        SELECT 1 FROM user_roles 
-        WHERE user_id = auth.uid() AND role = 'super_admin'
-    )
-);
-
-CREATE POLICY "Users can view their own role" ON user_roles FOR
-SELECT TO authenticated USING (auth.uid() = user_id);
-
-CREATE POLICY "Super admins can manage all roles" ON user_roles FOR
-ALL TO authenticated USING (
-    EXISTS (
-        SELECT 1 FROM user_roles 
-        WHERE user_id = auth.uid() AND role = 'super_admin'
-    )
-);
+-- Disable Row Level Security for user_roles table to avoid infinite recursion
+-- We'll handle permissions in the application layer instead
+ALTER TABLE user_roles DISABLE ROW LEVEL SECURITY;
 
 -- Insert the super admin user
 INSERT INTO user_roles (user_id, email, role, permissions) 

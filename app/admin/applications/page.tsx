@@ -148,12 +148,14 @@ export default function ApplicationsPage() {
     switch (status.toLowerCase()) {
       case 'pending':
         return 'outline'
-      case 'reviewing':
+      case 'reviewed':
         return 'secondary'
-      case 'accepted':
+      case 'shortlisted':
         return 'default'
       case 'rejected':
         return 'destructive'
+      case 'hired':
+        return 'default'
       default:
         return 'default'
     }
@@ -247,9 +249,10 @@ export default function ApplicationsPage() {
               <SelectContent>
                 <SelectItem value="all">All Status</SelectItem>
                 <SelectItem value="pending">Pending</SelectItem>
-                <SelectItem value="reviewing">Reviewing</SelectItem>
-                <SelectItem value="accepted">Accepted</SelectItem>
+                <SelectItem value="reviewed">Reviewed</SelectItem>
+                <SelectItem value="shortlisted">Shortlisted</SelectItem>
                 <SelectItem value="rejected">Rejected</SelectItem>
+                <SelectItem value="hired">Hired</SelectItem>
               </SelectContent>
             </Select>
           </div>

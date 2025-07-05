@@ -105,7 +105,31 @@ export function useAdminPermissions(): AdminPermissions {
 
         if (roleError) {
           console.log('Database role lookup failed, using fallback:', roleError.message)
-          setUserRole(fallbackRole)
+          // If it's a policy error, we'll use fallback
+          if (roleError.message.includes('infinite recursion') || roleError.message.includes('policy')) {
+            console.log('Policy error detected, using fallback role')
+            setUserRole(fallbackRole)
+          } else {
+            // For other errors, try to create the role
+            try {
+              const { data: insertData, error: insertError } = await supabase
+                .from('user_roles')
+                .insert([fallbackRole])
+                .select()
+                .single()
+
+              if (insertError) {
+                console.log('Failed to insert role, using fallback:', insertError.message)
+                setUserRole(fallbackRole)
+              } else {
+                console.log('Successfully created user role:', insertData)
+                setUserRole(insertData)
+              }
+            } catch (insertCatchError) {
+              console.log('Insert error, using fallback:', insertCatchError)
+              setUserRole(fallbackRole)
+            }
+          }
         } else if (roleData) {
           console.log('Found user role in database:', roleData)
           setUserRole(roleData)

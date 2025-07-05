@@ -14,7 +14,7 @@ export function DashboardCards({ submissions, jobApplications = [] }: DashboardC
       change: "+12.5%",
       trend: "up",
       icon: MessageSquare,
-      color: "primary",
+      color: "blue",
       description: "Total submissions this month"
     },
     {
@@ -23,7 +23,7 @@ export function DashboardCards({ submissions, jobApplications = [] }: DashboardC
       change: "+15.3%",
       trend: "up",
       icon: FileText,
-      color: "secondary",
+      color: "green",
       description: "Total applications received"
     },
     {
@@ -32,43 +32,76 @@ export function DashboardCards({ submissions, jobApplications = [] }: DashboardC
       change: "-2.4%",
       trend: "down",
       icon: Newspaper,
-      color: "primary",
+      color: "purple",
       description: "Published articles this month"
     }
   ]
 
+  const getColorClasses = (color: string) => {
+    switch (color) {
+      case 'blue':
+        return {
+          bg: 'bg-blue-100',
+          text: 'text-blue-600',
+          bgLight: 'bg-blue-50'
+        }
+      case 'green':
+        return {
+          bg: 'bg-green-100',
+          text: 'text-green-600',
+          bgLight: 'bg-green-50'
+        }
+      case 'purple':
+        return {
+          bg: 'bg-purple-100',
+          text: 'text-purple-600',
+          bgLight: 'bg-purple-50'
+        }
+      default:
+        return {
+          bg: 'bg-gray-100',
+          text: 'text-gray-600',
+          bgLight: 'bg-gray-50'
+        }
+    }
+  }
+
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 min-w-0">
-      {cards.map((card, index) => (
-        <Card key={index} className="relative overflow-hidden min-w-0">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div className={`p-2 rounded-lg bg-${card.color}/10`}>
-                <card.icon className={`h-5 w-5 text-${card.color}`} />
+      {cards.map((card, index) => {
+        const colorClasses = getColorClasses(card.color)
+        
+        return (
+          <Card key={index} className="relative overflow-hidden min-w-0">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div className={`p-2 rounded-lg ${colorClasses.bg}`}>
+                  <card.icon className={`h-5 w-5 ${colorClasses.text}`} />
+                </div>
+                <div className={`flex items-center gap-1 text-sm ${
+                  card.trend === 'up' ? 'text-green-600' : 'text-red-600'
+                }`}>
+                  {card.trend === 'up' ? (
+                    <TrendingUp className="h-4 w-4" />
+                  ) : (
+                    <TrendingDown className="h-4 w-4" />
+                  )}
+                  <span>{card.change}</span>
+                </div>
               </div>
-              <div className={`flex items-center gap-1 text-sm ${
-                card.trend === 'up' ? 'text-green-600' : 'text-red-600'
-              }`}>
-                {card.trend === 'up' ? (
-                  <TrendingUp className="h-4 w-4" />
-                ) : (
-                  <TrendingDown className="h-4 w-4" />
-                )}
-                <span>{card.change}</span>
+              
+              <div className="mt-4">
+                <div className="text-2xl font-bold">{card.value}</div>
+                <div className="text-sm font-medium text-gray-800 mt-1">{card.title}</div>
+                <div className="text-xs text-gray-500 mt-1">{card.description}</div>
               </div>
-            </div>
-            
-            <div className="mt-4">
-              <div className="text-2xl font-bold">{card.value}</div>
-              <div className="text-sm font-medium text-gray-800 mt-1">{card.title}</div>
-              <div className="text-xs text-gray-500 mt-1">{card.description}</div>
-            </div>
 
-            {/* Decorative Element */}
-            <div className={`absolute top-0 right-0 w-32 h-32 transform translate-x-16 -translate-y-16 rounded-full bg-${card.color}/5`} />
-          </CardContent>
-        </Card>
-      ))}
+              {/* Decorative Element */}
+              <div className={`absolute top-0 right-0 w-32 h-32 transform translate-x-16 -translate-y-16 rounded-full ${colorClasses.bgLight}`} />
+            </CardContent>
+          </Card>
+        )
+      })}
     </div>
   )
 }

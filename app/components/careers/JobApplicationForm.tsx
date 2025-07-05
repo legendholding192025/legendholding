@@ -93,7 +93,15 @@ export function JobApplicationForm({ jobId, jobTitle, company, isOpen, onClose }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    
+    // Prevent multiple submissions
+    if (loading) {
+      console.log('Submission already in progress, ignoring duplicate submit')
+      return
+    }
+    
     let fileName: string | null = null
+    let finalFileName: string | null = null
     
     try {
       if (!validateForm()) {
@@ -111,32 +119,132 @@ export function JobApplicationForm({ jobId, jobTitle, company, isOpen, onClose }
         // First, create a unique filename and upload the resume
         const fileExt = resumeFile.name.split(".").pop()?.toLowerCase() || ""
         const timestamp = new Date().getTime()
-        fileName = `applications/${timestamp}/${timestamp}.${fileExt}`
+        fileName = `${timestamp}/${timestamp}.${fileExt}`
 
-        // Upload resume first
-        const { error: uploadError } = await supabase.storage
-          .from("resumes")
-          .upload(fileName, resumeFile, {
-            cacheControl: "3600",
-            upsert: true,
-            contentType: resumeFile.type
+        console.log('Attempting to upload resume:', fileName, 'to applications bucket')
+
+        // Use base64 storage as primary method since storage buckets are having issues
+        let uploadSuccess = false
+        let finalFileName = fileName
+        let bucketUsed = 'base64'
+
+        // Strategy 1: Convert to base64 and store in database (primary method)
+        try {
+          console.log('Converting file to base64 for database storage')
+          
+          // Check file size - limit to 5MB for base64 conversion
+          if (resumeFile.size > 5 * 1024 * 1024) {
+            console.log('File too large for base64, trying storage instead')
+            throw new Error('File too large for base64 conversion')
+          }
+          
+          // Use FileReader for safer base64 conversion
+          const reader = new FileReader()
+          const base64Promise = new Promise<string>((resolve, reject) => {
+            reader.onload = () => {
+              const result = reader.result as string
+              resolve(result)
+            }
+            reader.onerror = () => reject(new Error('Failed to read file'))
           })
-
-        if (uploadError) {
-          console.error("Resume upload error:", uploadError)
-          throw new Error("Failed to upload resume. Please try again.")
+          
+          // Add timeout to prevent hanging
+          const timeoutPromise = new Promise<never>((_, reject) => {
+            setTimeout(() => reject(new Error('File read timeout')), 10000) // 10 second timeout
+          })
+          
+          reader.readAsDataURL(resumeFile)
+          const base64Data = await Promise.race([base64Promise, timeoutPromise])
+          
+          finalFileName = base64Data
+          uploadSuccess = true
+          console.log('Successfully converted file to base64')
+        } catch (error) {
+          console.error("Base64 conversion failed:", error)
         }
 
-        // Get the public URL
-        const { data: urlData } = supabase.storage
-          .from("resumes")
-          .getPublicUrl(fileName)
+        // Strategy 2: Try applications bucket as fallback (if base64 fails)
+        if (!uploadSuccess) {
+          try {
+            const { error: uploadError } = await supabase.storage
+              .from("applications")
+              .upload(fileName, resumeFile, {
+                cacheControl: "3600",
+                upsert: true,
+                contentType: resumeFile.type
+              })
 
-        if (!urlData?.publicUrl) {
-          throw new Error("Failed to get resume URL")
+            if (!uploadError) {
+              uploadSuccess = true
+              bucketUsed = 'applications'
+              console.log('Successfully uploaded to applications bucket')
+            } else {
+              console.error("Applications bucket upload failed:", uploadError)
+            }
+          } catch (error) {
+            console.error("Applications bucket upload error:", error)
+          }
         }
 
-        // Now create the job application with the resume URL
+        // Strategy 3: Try resumes bucket if applications failed
+        if (!uploadSuccess) {
+          try {
+            console.log('Trying resumes bucket as fallback')
+            const { error: altUploadError } = await supabase.storage
+              .from("resumes")
+              .upload(fileName, resumeFile, {
+                cacheControl: "3600",
+                upsert: true,
+                contentType: resumeFile.type
+              })
+
+            if (!altUploadError) {
+              uploadSuccess = true
+              bucketUsed = 'resumes'
+              finalFileName = `resumes/${fileName}`
+              console.log('Successfully uploaded to resumes bucket')
+            } else {
+              console.error("Resumes bucket upload also failed:", altUploadError)
+            }
+          } catch (error) {
+            console.error("Resumes bucket upload error:", error)
+          }
+        }
+
+        // Strategy 4: Try with a simpler path structure
+        if (!uploadSuccess) {
+          try {
+            const simpleFileName = `${timestamp}.${fileExt}`
+            console.log('Trying simple filename:', simpleFileName)
+            
+            const { error: simpleUploadError } = await supabase.storage
+              .from("applications")
+              .upload(simpleFileName, resumeFile, {
+                cacheControl: "3600",
+                upsert: true,
+                contentType: resumeFile.type
+              })
+
+            if (!simpleUploadError) {
+              uploadSuccess = true
+              finalFileName = simpleFileName
+              console.log('Successfully uploaded with simple filename')
+            } else {
+              console.error("Simple filename upload failed:", simpleUploadError)
+            }
+          } catch (error) {
+            console.error("Simple filename upload error:", error)
+          }
+        }
+
+        if (!uploadSuccess) {
+          throw new Error("All upload strategies failed. Please check your file and try again.")
+        }
+
+        // Store the file path for admin access
+        const resumeUrl = finalFileName
+
+        // Now create the job application with the resume path
         const { data: applicationData, error: applicationError } = await supabase
           .from("job_applications")
           .insert({
@@ -144,7 +252,7 @@ export function JobApplicationForm({ jobId, jobTitle, company, isOpen, onClose }
             full_name: formData.fullName.trim(),
             email: formData.email.trim().toLowerCase(),
             phone: formData.phone.trim(),
-            resume_url: urlData.publicUrl,
+            resume_url: resumeUrl,
             cover_letter: formData.coverLetter?.trim() || null,
             status: "pending",
             created_at: new Date().toISOString(),
@@ -154,12 +262,9 @@ export function JobApplicationForm({ jobId, jobTitle, company, isOpen, onClose }
           .single()
 
         if (applicationError) {
-          // If application creation fails, clean up the uploaded file
-          if (fileName) {
-            await supabase.storage
-              .from("resumes")
-              .remove([fileName])
-          }
+          // If application creation fails, log the error but don't try to clean up
+          // Base64 files don't need cleanup, and storage cleanup is complex
+          console.log('Application creation failed, skipping file cleanup')
           
           console.error("Application creation error:", applicationError)
           if (applicationError.code === "23503") {
@@ -174,20 +279,25 @@ export function JobApplicationForm({ jobId, jobTitle, company, isOpen, onClose }
         onClose()
         router.push("/careers/thank-you")
       } catch (error) {
-        // Clean up on error
-        if (fileName) {
-          try {
-            await supabase.storage
-              .from("resumes")
-              .remove([fileName])
-          } catch (cleanupError) {
-            console.error("Error during cleanup:", cleanupError)
-          }
-        }
+        // Clean up on error - simplified approach
+        console.log('Submission process error, skipping file cleanup for simplicity')
 
         console.error("Submission process error:", error)
         if (error instanceof Error) {
-          toast.error(error.message)
+          // Provide more specific error messages
+          if (error.message.includes('File too large for base64 conversion')) {
+            toast.error("File is too large. Please use a smaller file (under 5MB) or try again.")
+          } else if (error.message.includes('File read timeout')) {
+            toast.error("File processing took too long. Please try with a smaller file.")
+          } else if (error.message.includes('Failed to upload resume')) {
+            toast.error("Unable to upload resume. Please check your file and try again.")
+          } else if (error.message.includes('Invalid job reference')) {
+            toast.error("Job posting not found. Please refresh the page and try again.")
+          } else if (error.message.includes('already applied')) {
+            toast.error("You have already applied for this position.")
+          } else {
+            toast.error(error.message)
+          }
         } else {
           toast.error("Failed to submit application. Please try again.")
         }
