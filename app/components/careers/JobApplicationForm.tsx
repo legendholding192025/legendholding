@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
-import { createClient } from '@supabase/supabase-js'
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
 import { Loader2 } from "lucide-react"
@@ -38,29 +38,7 @@ export function JobApplicationForm({ jobId, jobTitle, company, isOpen, onClose }
     coverLetter: "",
   })
   const [resumeFile, setResumeFile] = useState<File | null>(null)
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      global: {
-        fetch: (url, options = {}) => {
-          if (options.headers && typeof options.headers === 'object' && !Array.isArray(options.headers)) {
-            // Convert Headers to plain object if needed
-            let headers = options.headers;
-            if (headers instanceof Headers) {
-              headers = Object.fromEntries(headers.entries());
-              options.headers = headers;
-            }
-            if ('Apikey' in headers) {
-              headers['apikey'] = headers['apikey'] || headers['Apikey'];
-              delete headers['Apikey'];
-            }
-          }
-          return fetch(url, options);
-        }
-      }
-    }
-  )
+  const supabase = createClientComponentClient()
   const router = useRouter()
 
   // Debug: Log Supabase env variables in browser
@@ -90,31 +68,31 @@ export function JobApplicationForm({ jobId, jobTitle, company, isOpen, onClose }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
+    setFormData(prev => ({ ...prev, [name]: value }))
+    // Clear error when user starts typing
+    if (formErrors[name]) {
+      setFormErrors(prev => ({ ...prev, [name]: "" }))
+    }
   }
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) {
-      // Validate file size (5MB max)
-      if (file.size > 5 * 1024 * 1024) {
-        toast.error("Resume file size must be less than 5MB")
-        e.target.value = ""
-        return
-      }
-
       // Validate file type
-      const allowedTypes = [
-        "application/pdf",
-        "application/msword",
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-      ]
+      const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document']
       if (!allowedTypes.includes(file.type)) {
-        toast.error("Resume must be in PDF, DOC, or DOCX format")
+        toast.error("Please upload a PDF, DOC, or DOCX file")
         e.target.value = ""
         return
       }
-
+      
+      // Validate file size (5MB limit)
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error("File size must be less than 5MB")
+        e.target.value = ""
+        return
+      }
+      
       setResumeFile(file)
     }
   }
@@ -272,22 +250,40 @@ export function JobApplicationForm({ jobId, jobTitle, company, isOpen, onClose }
         // Store the file path for admin access
         const resumeUrl = finalFileName
 
+        // Debug: Log all fields before insert
+        console.log('Submitting application with data:', {
+          job_id: jobId,
+          full_name: formData.fullName,
+          email: formData.email,
+          phone: formData.phone,
+          resume_url: resumeUrl,
+          status: "pending",
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        });
+
         // Now create the job application with the resume path
+        const insertData = {
+          job_id: jobId,
+          full_name: formData.fullName.trim(),
+          email: formData.email.trim().toLowerCase(),
+          phone: formData.phone.trim(),
+          resume_url: resumeUrl,
+          cover_letter: formData.coverLetter?.trim() || null,
+          status: "pending",
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        }
+
+        console.log('Attempting to insert application with data:', insertData)
+
         const { data: applicationData, error: applicationError } = await supabase
           .from("job_applications")
-          .insert({
-            job_id: jobId,
-            full_name: formData.fullName.trim(),
-            email: formData.email.trim().toLowerCase(),
-            phone: formData.phone.trim(),
-            resume_url: resumeUrl,
-            cover_letter: formData.coverLetter?.trim() || null,
-            status: "pending",
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
-          })
+          .insert(insertData)
           .select('id')
           .single()
+
+        console.log('Insert result - data:', applicationData, 'error:', applicationError)
 
         if (applicationError) {
           // If application creation fails, log the error but don't try to clean up
@@ -295,15 +291,28 @@ export function JobApplicationForm({ jobId, jobTitle, company, isOpen, onClose }
           console.log('Application creation failed, skipping file cleanup')
           
           console.error("Application creation error:", applicationError)
+          console.error("Error details:", {
+            code: applicationError.code,
+            message: applicationError.message,
+            details: applicationError.details,
+            hint: applicationError.hint
+          })
+          
+          // Improved error handling with more specific error messages
           if (applicationError.code === "23503") {
             throw new Error("Invalid job reference. Please try again.")
           } else if (applicationError.code === "23505") {
             throw new Error("You have already applied for this position.")
+          } else if (applicationError.code === "23514") {
+            throw new Error("Invalid status value. Please try again.")
+          } else if (applicationError.message) {
+            throw new Error(`Database error: ${applicationError.message}`)
           } else {
-            throw new Error(`Failed to submit application: ${applicationError.message}`)
+            throw new Error("Failed to submit application. Please try again.")
           }
         }
 
+        console.log('Application created successfully:', applicationData)
         onClose()
         router.push("/careers/thank-you")
       } catch (error) {
@@ -323,6 +332,8 @@ export function JobApplicationForm({ jobId, jobTitle, company, isOpen, onClose }
             toast.error("Job posting not found. Please refresh the page and try again.")
           } else if (error.message.includes('already applied')) {
             toast.error("You have already applied for this position.")
+          } else if (error.message.includes('Database error:')) {
+            toast.error(error.message)
           } else {
             toast.error(error.message)
           }
