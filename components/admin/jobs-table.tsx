@@ -30,6 +30,11 @@ interface Job {
   created_at: string
   status: 'active' | 'inactive'
   company: string
+  created_by?: string
+  created_by_user?: {
+    email: string
+    role: string
+  }
 }
 
 interface JobsTableProps {
@@ -116,6 +121,7 @@ export function JobsTable({ jobs = [], loading, onDelete, onUpdate }: JobsTableP
               <TableHead>Location</TableHead>
               <TableHead>Type</TableHead>
               <TableHead>Status</TableHead>
+              <TableHead>Created By</TableHead>
               <TableHead className="w-[120px]">Actions</TableHead>
             </TableRow>
           </TableHeader>
@@ -136,6 +142,20 @@ export function JobsTable({ jobs = [], loading, onDelete, onUpdate }: JobsTableP
                   }`}>
                     {job?.status === 'active' ? "Active" : "Inactive"}
                   </span>
+                </TableCell>
+                <TableCell>
+                  <div className="flex flex-col">
+                    <span className="text-sm font-medium">
+                      {job?.created_by_user?.email || 'Unknown User'}
+                    </span>
+                    <span className={`text-xs px-2 py-1 rounded-full inline-block w-fit ${
+                      job?.created_by_user?.role === 'super_admin'
+                        ? 'bg-purple-100 text-purple-700'
+                        : 'bg-blue-100 text-blue-700'
+                    }`}>
+                      {job?.created_by_user?.role === 'super_admin' ? 'Super Admin' : 'Admin'}
+                    </span>
+                  </div>
                 </TableCell>
                 <TableCell>
                   <div className="flex space-x-2">

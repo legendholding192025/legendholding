@@ -34,6 +34,11 @@ interface Job {
   created_at: string
   status: 'active' | 'inactive'
   company: string
+  created_by?: string
+  created_by_user?: {
+    email: string
+    role: string
+  }
 }
 
 // Helper function to convert description text to bullet points for display
@@ -76,16 +81,54 @@ export default function JobsManagement() {
   const fetchJobs = async () => {
     try {
       setLoading(true)
-      const { data, error } = await supabase
+      
+      // The RLS policies will automatically filter jobs based on user role
+      // Super admins will see all jobs, regular admins will see only their own
+      const { data: jobsData, error } = await supabase
         .from('jobs')
         .select('*')
         .order('created_at', { ascending: false })
 
       if (error) throw error
-      setJobs(data || [])
+      
+      // Fetch user information for each job
+      const jobsWithUsers = await Promise.all(
+        (jobsData || []).map(async (job) => {
+          if (job.created_by) {
+            try {
+              const { data: userRoleData } = await supabase
+                .from('user_roles')
+                .select('email, role')
+                .eq('user_id', job.created_by)
+                .single()
+              
+              return {
+                ...job,
+                created_by_user: userRoleData || {
+                  email: 'Unknown User',
+                  role: 'admin'
+                }
+              }
+            } catch (error) {
+              console.error('Error fetching user data for job:', job.id, error)
+              return {
+                ...job,
+                created_by_user: {
+                  email: 'Unknown User',
+                  role: 'admin'
+                }
+              }
+            }
+          }
+          return job
+        })
+      )
+      
+      setJobs(jobsWithUsers)
     } catch (error) {
       console.error('Error fetching jobs:', error)
-      toast.error("Failed to fetch jobs")
+      console.error('Error details:', JSON.stringify(error, null, 2))
+      toast.error(`Failed to fetch jobs: ${error instanceof Error ? error.message : 'Unknown error'}`)
     } finally {
       setLoading(false)
     }
@@ -115,6 +158,13 @@ export default function JobsManagement() {
     try {
       if (!validateJob()) return
 
+      // Get current user to set as created_by
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) {
+        toast.error("You must be logged in to create a job")
+        return
+      }
+
       const description = descriptionText
         .split("\n")
         .map((desc) => desc.trim())
@@ -140,7 +190,8 @@ export default function JobsManagement() {
         job_type: newJob.job_type ?? 'Full-time',
         requirements: requirements,
         responsibilities: responsibilities,
-        company: newJob.company ?? ''
+        company: newJob.company ?? '',
+        created_by: user.id
       }
 
       console.log('jobData to insert:', jobData)
@@ -281,7 +332,12 @@ export default function JobsManagement() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-semibold">Jobs Management</h1>
-            <p className="text-sm text-gray-500">Manage job postings and view applications</p>
+            <p className="text-sm text-gray-500">
+              {userRole?.role === 'super_admin' 
+                ? 'You can view and manage all job posts from all admins'
+                : 'You can only view and manage job posts you have created'
+              }
+            </p>
           </div>
           <Button onClick={() => setIsAddingJob(true)} className="bg-[#5E366D] hover:bg-[#5E366D]/90">
             <Plus className="w-4 h-4 mr-2" />

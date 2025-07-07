@@ -51,8 +51,8 @@ export default function AdminLogin() {
       console.log('Login successful:', data)
       
       if (data.user) {
-        // Set session in localStorage to persist it
-        localStorage.setItem('supabase.auth.token', JSON.stringify(data.session))
+        // Remove manual localStorage setting - let Supabase handle it
+        // localStorage.setItem('supabase.auth.token', JSON.stringify(data.session))
         
         console.log('Redirecting to dashboard...')
         router.refresh()

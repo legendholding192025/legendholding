@@ -69,6 +69,8 @@ export default function ApplicationsPage() {
 
   const fetchApplications = async () => {
     try {
+      // The RLS policies will automatically filter applications based on user role
+      // Super admins will see all applications, regular admins will see only applications for their jobs
       const { data: applicationsData, error: applicationsError } = await supabase
         .from('job_applications')
         .select(`
@@ -87,7 +89,8 @@ export default function ApplicationsPage() {
       setApplications(applicationsData)
     } catch (error) {
       console.error('Error fetching applications:', error)
-      toast.error('Failed to load applications')
+      console.error('Error details:', JSON.stringify(error, null, 2))
+      toast.error(`Failed to load applications: ${error instanceof Error ? error.message : 'Unknown error'}`)
     } finally {
       setLoading(false)
     }
@@ -95,6 +98,8 @@ export default function ApplicationsPage() {
 
   const fetchJobs = async () => {
     try {
+      // The RLS policies will automatically filter jobs based on user role
+      // Super admins will see all jobs, regular admins will see only their own
       const { data: jobsData, error: jobsError } = await supabase
         .from('jobs')
         .select('id, title, department')
@@ -108,6 +113,7 @@ export default function ApplicationsPage() {
       }
     } catch (error) {
       console.error('Error fetching jobs:', error)
+      console.error('Error details:', JSON.stringify(error, null, 2))
     }
   }
 
@@ -359,7 +365,15 @@ export default function ApplicationsPage() {
     <AdminDashboardLayout onSignOut={handleSignOut}>
       <div className="p-8">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold">Job Applications</h1>
+          <div>
+            <h1 className="text-2xl font-bold">Job Applications</h1>
+            <p className="text-sm text-gray-500">
+              {userRole?.role === 'super_admin' 
+                ? 'You can view applications for all job posts from all admins'
+                : 'You can only view applications for job posts you have created'
+              }
+            </p>
+          </div>
           <div className="flex items-center gap-4">
             <div className="relative">
               <Search className="absolute left-2 top-2.5 h-4 w-4 text-gray-500" />
