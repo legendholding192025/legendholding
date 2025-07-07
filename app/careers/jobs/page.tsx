@@ -42,20 +42,51 @@ export default function JobsPage() {
     try {
       setLoading(true)
       
-      let { data: jobsData, error: jobsError } = await supabase
+      // Try to use the new API endpoint first (bypasses RLS)
+      try {
+        const response = await fetch('/api/careers/jobs')
+        
+        if (response.ok) {
+          const jobsData = await response.json()
+          
+          if (jobsData && Array.isArray(jobsData)) {
+            const validJobs = jobsData.map(job => ({
+              ...job,
+              requirements: Array.isArray(job.requirements) ? job.requirements : [],
+              responsibilities: Array.isArray(job.responsibilities) ? job.responsibilities : [],
+              status: job.status || 'active',
+              company: job.company || ''
+            }))
+            
+            setJobs(validJobs)
+            return // Success, no need for fallback
+          }
+        }
+        
+        // If API fails, log the error and fall back to direct query
+        console.warn('API endpoint failed, falling back to direct database query')
+        
+      } catch (apiError) {
+        console.warn('API endpoint error, falling back to direct database query:', apiError)
+      }
+      
+      // Fallback: Direct database query (this might be limited by RLS policies)
+      console.log('Using fallback direct database query')
+      
+      const { data: jobsData, error: jobsError } = await supabase
         .from('jobs')
         .select('*')
         .eq('status', 'active')
         .order('created_at', { ascending: false })
 
       if (jobsError) {
-        console.error('Error fetching jobs:', jobsError)
-        toast.error(jobsError.message || "Failed to fetch jobs")
+        console.error('Error fetching jobs from database:', jobsError)
+        toast.error("Failed to fetch jobs")
         return
       }
 
       if (!jobsData) {
-        console.warn('No jobs data returned')
+        console.warn('No jobs data returned from database')
         setJobs([])
         return
       }
@@ -69,6 +100,7 @@ export default function JobsPage() {
       }))
 
       setJobs(validJobs)
+      
     } catch (error) {
       console.error('Error in fetchJobs:', error)
       toast.error("An unexpected error occurred while fetching jobs")
