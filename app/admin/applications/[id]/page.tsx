@@ -12,7 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { ChevronLeft, Download, Trash2, Eye } from "lucide-react"
+import { ChevronLeft, Download, Trash2 } from "lucide-react"
 import { toast } from "sonner"
 import Link from "next/link"
 import { format } from "date-fns"
@@ -175,11 +175,7 @@ export default function ApplicationDetails() {
     }
   }
 
-  const handleViewResume = () => {
-    if (application?.resume_url) {
-      window.open(application.resume_url, '_blank')
-    }
-  }
+
 
   const handleSignOut = async () => {
     await supabase.auth.signOut()
@@ -301,14 +297,6 @@ export default function ApplicationDetails() {
                 >
                   <Download className="h-4 w-4 mr-2" />
                   Download Resume
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={handleViewResume}
-                  className="inline-flex items-center"
-                >
-                  <Eye className="h-4 w-4 mr-2" />
-                  View Resume
                 </Button>
               </div>
             </div>

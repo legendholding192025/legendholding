@@ -176,9 +176,6 @@ export function AdminDashboardLayout({ children, onSignOut }: AdminDashboardLayo
 
               {/* System Menu */}
               <div>
-                <h2 className="mb-4 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                  System
-                </h2>
                 <SidebarMenu>
                   {systemMenuItems.map((item) => {
                     const isActive = pathname === item.href

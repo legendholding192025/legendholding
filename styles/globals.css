@@ -25,6 +25,37 @@ body {
   }
 }
 
+/* Custom animations for enhanced loading experience */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes expand-width {
+  0% {
+    width: 0;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 2s infinite;
+}
+
+.animate-expand-width {
+  animation: expand-width 1s ease-out forwards;
+}
+
+.animation-delay-200 {
+  animation-delay: 200ms;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
