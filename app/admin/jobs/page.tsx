@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation"
 import { AdminDashboardLayout } from "@/components/admin/dashboard-layout"
 import { JobsTable } from "@/components/admin/jobs-table"
 import { Button } from "@/components/ui/button"
-import { Plus } from "lucide-react"
+import { Plus, Loader2 } from "lucide-react"
 import { toast } from "sonner"
 import {
   Dialog,
@@ -59,6 +59,7 @@ export default function JobsManagement() {
   const [jobs, setJobs] = useState<Job[]>([])
   const [loading, setLoading] = useState(true)
   const [isAddingJob, setIsAddingJob] = useState(false)
+  const [isSubmittingJob, setIsSubmittingJob] = useState(false)
   const [newJob, setNewJob] = useState<Omit<Job, 'id' | 'created_at'>>({
     title: "",
     department: "",
@@ -188,10 +189,14 @@ export default function JobsManagement() {
     try {
       if (!validateJob()) return
 
+      // Prevent multiple submissions
+      setIsSubmittingJob(true)
+
       // Get current user to set as created_by
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) {
         toast.error("You must be logged in to create a job")
+        setIsSubmittingJob(false)
         return
       }
 
@@ -259,6 +264,8 @@ export default function JobsManagement() {
       console.error('Error adding job:', error)
       console.error('Supabase error details:', error)
       toast.error(`Failed to post job: ${error.message || 'An unknown error occurred'}`)
+    } finally {
+      setIsSubmittingJob(false)
     }
   }
 
@@ -384,7 +391,15 @@ export default function JobsManagement() {
       </div>
 
       {/* Add Job Dialog */}
-      <Dialog open={isAddingJob} onOpenChange={setIsAddingJob}>
+      <Dialog 
+        open={isAddingJob} 
+        onOpenChange={(open) => {
+          // Prevent closing dialog while submitting
+          if (!isSubmittingJob) {
+            setIsAddingJob(open)
+          }
+        }}
+      >
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Post New Job</DialogTitle>
@@ -485,11 +500,26 @@ export default function JobsManagement() {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsAddingJob(false)}>
+            <Button 
+              variant="outline" 
+              onClick={() => setIsAddingJob(false)}
+              disabled={isSubmittingJob}
+            >
               Cancel
             </Button>
-            <Button onClick={handleAddJob} className="bg-secondary hover:bg-secondary/90">
-              Post Job
+            <Button 
+              onClick={handleAddJob} 
+              className="bg-secondary hover:bg-secondary/90"
+              disabled={isSubmittingJob}
+            >
+              {isSubmittingJob ? (
+                <>
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  Posting Job...
+                </>
+              ) : (
+                'Post Job'
+              )}
             </Button>
           </DialogFooter>
         </DialogContent>

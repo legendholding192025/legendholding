@@ -14,6 +14,7 @@ export default function AdminLogin() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const [isRedirecting, setIsRedirecting] = useState(false)
 
   console.log('Login page loaded')
 
@@ -55,14 +56,20 @@ export default function AdminLogin() {
         // localStorage.setItem('supabase.auth.token', JSON.stringify(data.session))
         
         console.log('Redirecting to dashboard...')
-        router.refresh()
-        router.push('/admin/dashboard')
+        setIsRedirecting(true)
+        
+        // Add a brief delay to show success state
+        setTimeout(() => {
+          router.refresh()
+          router.push('/admin/dashboard')
+        }, 500)
       }
     } catch (error: any) {
       console.error('Login error details:', error)
       setError('An unexpected error occurred. Please try again.')
     } finally {
       setLoading(false)
+      setIsRedirecting(false)
     }
   }
 
@@ -71,7 +78,19 @@ export default function AdminLogin() {
       <div className="absolute top-0 left-0 w-full h-full bg-[url('/images/pattern.svg')] opacity-5" />
       
       <div className="relative w-full max-w-md">
-        <div className="bg-white rounded-2xl shadow-xl p-8 space-y-8">
+        <div className={`bg-white rounded-2xl shadow-xl p-8 space-y-8 relative ${loading ? 'pointer-events-none' : ''}`}>
+          {/* Loading Overlay */}
+          {loading && (
+            <div className="absolute inset-0 bg-white/80 backdrop-blur-sm rounded-2xl flex items-center justify-center z-10">
+              <div className="flex flex-col items-center gap-3">
+                <Loader2 className="h-8 w-8 animate-spin text-[#2B1C48]" />
+                <p className="text-sm text-gray-600 font-medium">
+                  {isRedirecting ? 'Redirecting to dashboard...' : 'Signing you in...'}
+                </p>
+              </div>
+            </div>
+          )}
+          
           {/* Logo and Title */}
           <div className="text-center">
             <div className="flex justify-center mb-4">
@@ -107,10 +126,14 @@ export default function AdminLogin() {
                   name="email"
                   type="email"
                   required
-                  className="block w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#2B1C48]/20 focus:border-[#2B1C48] transition-colors duration-200 text-sm"
+                  disabled={loading}
+                  className="block w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#2B1C48]/20 focus:border-[#2B1C48] transition-colors duration-200 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
                   placeholder="Enter your email"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => {
+                    setEmail(e.target.value)
+                    if (error) setError('') // Clear error when user starts typing
+                  }}
                 />
               </div>
             </div>
@@ -129,10 +152,14 @@ export default function AdminLogin() {
                   name="password"
                   type="password"
                   required
-                  className="block w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#2B1C48]/20 focus:border-[#2B1C48] transition-colors duration-200 text-sm"
+                  disabled={loading}
+                  className="block w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#2B1C48]/20 focus:border-[#2B1C48] transition-colors duration-200 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
                   placeholder="Enter your password"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => {
+                    setPassword(e.target.value)
+                    if (error) setError('') // Clear error when user starts typing
+                  }}
                 />
               </div>
             </div>
