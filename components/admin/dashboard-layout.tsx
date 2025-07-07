@@ -9,7 +9,6 @@ import {
   MessageSquare, 
   Newspaper, 
   FileText, 
-  Settings, 
   LogOut,
   Menu,
   Users,
@@ -87,14 +86,8 @@ const menuItems = [
   }
 ]
 
-const systemMenuItems = [
-  {
-    title: "Settings",
-    icon: Settings,
-    href: "/admin/settings",
-    permission: "settings" as const,
-    superAdminOnly: true
-  }
+const systemMenuItems: typeof menuItems = [
+  // Settings option removed as requested
 ]
 
 export function AdminDashboardLayout({ children, onSignOut }: AdminDashboardLayoutProps) {

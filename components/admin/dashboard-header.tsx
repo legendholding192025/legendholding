@@ -2,7 +2,7 @@
 
 import { NotificationCenter } from "./notification-center"
 import { Button } from "@/components/ui/button"
-import { CircleUserRound, Settings, LogOut } from "lucide-react"
+import { CircleUserRound, LogOut } from "lucide-react"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,13 +11,15 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import Link from "next/link"
+import { useAdminPermissions } from "@/hooks/use-admin-permissions"
 
 interface DashboardHeaderProps {
   onSignOut?: () => void
 }
 
 export function DashboardHeader({ onSignOut }: DashboardHeaderProps) {
+  const { userRole } = useAdminPermissions()
+
   return (
     <div className="sticky top-0 z-10 bg-white border-b border-gray-200 px-6 py-3">
       <div className="flex items-center justify-between">
@@ -33,12 +35,10 @@ export function DashboardHeader({ onSignOut }: DashboardHeaderProps) {
             <DropdownMenuContent align="end" className="w-56">
               <DropdownMenuLabel>My Account</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <Link href="/admin/settings">
-                <DropdownMenuItem className="cursor-pointer">
-                  <Settings className="mr-2 h-4 w-4" />
-                  <span>Settings</span>
-                </DropdownMenuItem>
-              </Link>
+              <div className="px-2 py-1.5 text-sm text-gray-600">
+                {userRole?.email || 'Loading...'}
+              </div>
+              <DropdownMenuSeparator />
               <DropdownMenuItem onClick={onSignOut} className="cursor-pointer text-red-600 focus:text-red-600">
                 <LogOut className="mr-2 h-4 w-4" />
                 <span>Sign Out</span>

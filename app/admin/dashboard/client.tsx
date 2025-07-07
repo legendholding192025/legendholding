@@ -4,7 +4,6 @@ import { useEffect, useState } from "react"
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
 import { useRouter } from "next/navigation"
 import { AdminDashboardLayout } from "@/components/admin/dashboard-layout"
-import { DashboardHeader } from "@/components/admin/dashboard-header"
 import { SubmissionsTable } from "@/components/admin/submission-table"
 import { DashboardCards } from "@/components/admin/dashboard-card"
 import { JobApplicationsDashboard } from "@/components/admin/job-applications-dashboard"
@@ -190,8 +189,6 @@ export function DashboardClient() {
     return (
       <AdminDashboardLayout onSignOut={handleSignOut}>
         <div className="p-8">
-          <DashboardHeader onSignOut={handleSignOut} />
-          
           {/* Contact Submissions Section */}
           <div className="mb-12">
             <h2 className="text-xl font-semibold mb-6">Contact Submissions</h2>
