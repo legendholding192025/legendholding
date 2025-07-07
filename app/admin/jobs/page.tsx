@@ -96,16 +96,46 @@ export default function JobsManagement() {
         (jobsData || []).map(async (job) => {
           if (job.created_by) {
             try {
+              // First try to get from user_roles table
               const { data: userRoleData } = await supabase
                 .from('user_roles')
                 .select('email, role')
                 .eq('user_id', job.created_by)
                 .single()
               
+              if (userRoleData) {
+                return {
+                  ...job,
+                  created_by_user: userRoleData
+                }
+              }
+              
+              // If not found in user_roles, call the function to add missing users
+              try {
+                await supabase.rpc('add_missing_user_roles')
+                
+                // Try again after adding missing users
+                const { data: retryUserData } = await supabase
+                  .from('user_roles')
+                  .select('email, role')
+                  .eq('user_id', job.created_by)
+                  .single()
+                
+                if (retryUserData) {
+                  return {
+                    ...job,
+                    created_by_user: retryUserData
+                  }
+                }
+              } catch (functionError) {
+                console.log('Could not auto-add missing user roles:', functionError)
+              }
+              
+              // Final fallback - show user ID if available
               return {
                 ...job,
-                created_by_user: userRoleData || {
-                  email: 'Unknown User',
+                created_by_user: {
+                  email: `User ${job.created_by.substring(0, 8)}...`,
                   role: 'admin'
                 }
               }
@@ -114,7 +144,7 @@ export default function JobsManagement() {
               return {
                 ...job,
                 created_by_user: {
-                  email: 'Unknown User',
+                  email: `User ${job.created_by.substring(0, 8)}...`,
                   role: 'admin'
                 }
               }

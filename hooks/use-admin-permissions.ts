@@ -104,13 +104,32 @@ export function useAdminPermissions(): AdminPermissions {
         console.log('Role query result:', { roleData, roleError })
 
         if (roleError) {
-          console.log('Database role lookup failed, using fallback:', roleError.message)
-          // If it's a policy error, we'll use fallback
-          if (roleError.message.includes('infinite recursion') || roleError.message.includes('policy')) {
-            console.log('Policy error detected, using fallback role')
-            setUserRole(fallbackRole)
-          } else {
-            // For other errors, try to create the role
+          console.log('Database role lookup failed, trying to add missing user:', roleError.message)
+          
+          // Try to call the function to add missing users
+          try {
+            console.log('Calling add_missing_user_roles function...')
+            const { data: functionResult } = await supabase.rpc('add_missing_user_roles')
+            console.log('add_missing_user_roles result:', functionResult)
+            
+            // Try to fetch the user role again
+            const { data: retryRoleData, error: retryError } = await supabase
+              .from('user_roles')
+              .select('*')
+              .eq('user_id', user.id)
+              .single()
+            
+            if (retryRoleData && !retryError) {
+              console.log('Successfully fetched user role after adding:', retryRoleData)
+              setUserRole(retryRoleData)
+            } else {
+              console.log('Still no role data after retry, using fallback')
+              setUserRole(fallbackRole)
+            }
+          } catch (functionError) {
+            console.log('Function call failed, trying manual insert:', functionError)
+            
+            // Fallback to manual insert
             try {
               const { data: insertData, error: insertError } = await supabase
                 .from('user_roles')
@@ -122,11 +141,11 @@ export function useAdminPermissions(): AdminPermissions {
                 console.log('Failed to insert role, using fallback:', insertError.message)
                 setUserRole(fallbackRole)
               } else {
-                console.log('Successfully created user role:', insertData)
+                console.log('Successfully created user role via manual insert:', insertData)
                 setUserRole(insertData)
               }
             } catch (insertCatchError) {
-              console.log('Insert error, using fallback:', insertCatchError)
+              console.log('Manual insert error, using fallback:', insertCatchError)
               setUserRole(fallbackRole)
             }
           }
