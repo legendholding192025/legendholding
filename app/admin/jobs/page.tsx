@@ -288,12 +288,38 @@ export default function JobsManagement() {
 
   const handleUpdateJob = async (id: string, data: Partial<Job>) => {
     try {
+      // Format the data properly for database update
+      const updateData: any = {
+        title: data.title,
+        department: data.department,
+        location: data.location,
+        status: data.status,
+        job_type: data.job_type,
+        company: data.company,
+        // Convert arrays to JSON strings for database storage
+        description: Array.isArray(data.description) ? data.description : [],
+        requirements: Array.isArray(data.requirements) ? data.requirements : [],
+        responsibilities: Array.isArray(data.responsibilities) ? data.responsibilities : [],
+      }
+
+      // Remove undefined/null values to avoid database errors
+      Object.keys(updateData).forEach(key => {
+        if (updateData[key] === undefined || updateData[key] === null) {
+          delete updateData[key]
+        }
+      })
+
+      console.log('Updating job with data:', updateData)
+
       const { error } = await supabase
         .from('jobs')
-        .update(data)
+        .update(updateData)
         .eq('id', id)
 
-      if (error) throw error
+      if (error) {
+        console.error('Supabase update error:', error)
+        throw error
+      }
 
       setJobs(prev =>
         prev.map(job =>
@@ -303,7 +329,8 @@ export default function JobsManagement() {
       toast.success("Job updated successfully")
     } catch (error) {
       console.error('Error updating job:', error)
-      toast.error("Failed to update job")
+      console.error('Error details:', JSON.stringify(error, null, 2))
+      toast.error(`Failed to update job: ${error instanceof Error ? error.message : 'Unknown error'}`)
       throw error
     }
   }

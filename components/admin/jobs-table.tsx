@@ -66,12 +66,29 @@ export function JobsTable({ jobs = [], loading, onDelete, onUpdate }: JobsTableP
   const handleUpdate = async () => {
     if (!editingJob) return
     try {
+      // Validate required fields
+      if (!editingJob.title?.trim()) {
+        toast.error("Job title is required")
+        return
+      }
+      if (!editingJob.department?.trim()) {
+        toast.error("Department is required")
+        return
+      }
+      if (!editingJob.location?.trim()) {
+        toast.error("Location is required")
+        return
+      }
+      if (!editingJob.company?.trim()) {
+        toast.error("Company is required")
+        return
+      }
+
       await onUpdate(editingJob.id, editingJob)
       setEditingJob(null)
-      toast.success("Job updated successfully")
     } catch (error) {
-      console.error('Error updating job:', error)
-      toast.error("Failed to update job")
+      // Don't log here since it's already logged in the parent function
+      // The parent function will handle the error message
     }
   }
 
@@ -269,17 +286,50 @@ export function JobsTable({ jobs = [], loading, onDelete, onUpdate }: JobsTableP
                   }
                 />
               </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="edit-company">Company</Label>
+                  <Input
+                    id="edit-company"
+                    value={editingJob.company}
+                    onChange={(e) =>
+                      setEditingJob((prev) =>
+                        prev ? { ...prev, company: e.target.value } : null
+                      )
+                    }
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="edit-job-type">Job Type</Label>
+                  <select
+                    id="edit-job-type"
+                    value={editingJob.job_type}
+                    onChange={(e) =>
+                      setEditingJob((prev) =>
+                        prev ? { ...prev, job_type: e.target.value } : null
+                      )
+                    }
+                    className="w-full px-3 py-2 border rounded-md"
+                  >
+                    <option value="Full-time">Full-time</option>
+                    <option value="Part-time">Part-time</option>
+                    <option value="Contract">Contract</option>
+                    <option value="Temporary">Temporary</option>
+                    <option value="Internship">Internship</option>
+                  </select>
+                </div>
+              </div>
               <div>
                 <Label htmlFor="edit-description">Job Description (each line will become a bullet point)</Label>
                 <Textarea
                   id="edit-description"
-                  value={editingJob.description.join('\n')}
+                  value={Array.isArray(editingJob.description) ? editingJob.description.join('\n') : ''}
                   onChange={(e) =>
                     setEditingJob((prev) =>
                       prev
                         ? {
                             ...prev,
-                            description: e.target.value.split('\n'),
+                            description: e.target.value.split('\n').map(desc => desc.trim()).filter(desc => desc !== ''),
                           }
                         : null
                     )

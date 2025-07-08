@@ -71,11 +71,22 @@ export default function ApplicationsPage() {
     try {
       // Get current user and role first
       const { data: { user } } = await supabase.auth.getUser()
+      
+      if (!user) {
+        toast.error('User not authenticated')
+        return
+      }
+
       const { data: roleData } = await supabase
         .from('user_roles')
         .select('role')
         .eq('user_id', user?.id)
         .single()
+
+      if (!roleData) {
+        toast.error('Unable to determine user role')
+        return
+      }
 
       // The RLS policies will automatically filter applications based on user role
       // Super admins will see all applications, regular admins will see only applications for their jobs
@@ -100,7 +111,9 @@ export default function ApplicationsPage() {
           query = query.in('job_id', userJobIds)
         } else {
           // If admin has no jobs, they should see no applications
-          query = query.eq('job_id', 'no-jobs')
+          // Return empty array instead of using invalid UUID
+          setApplications([])
+          return
         }
       }
       // Super admins see all applications (no additional filter needed)
@@ -541,7 +554,12 @@ export default function ApplicationsPage() {
                 {filteredApplications.length === 0 && (
                   <TableRow>
                     <TableCell colSpan={7} className="text-center py-8">
-                      <p className="text-gray-500">No applications found</p>
+                      <div className="text-gray-500">
+                        <p>No applications found</p>
+                        {userRole?.role === 'admin' && jobs.length === 0 && (
+                          <p className="text-sm mt-2">You haven't created any jobs yet. Create a job post to start receiving applications.</p>
+                        )}
+                      </div>
                     </TableCell>
                   </TableRow>
                 )}
@@ -624,7 +642,12 @@ export default function ApplicationsPage() {
             {Object.keys(groupedApplications).length === 0 && (
               <Card>
                 <CardContent className="text-center py-8">
-                  <p className="text-gray-500">No applications found</p>
+                  <div className="text-gray-500">
+                    <p>No applications found</p>
+                    {userRole?.role === 'admin' && jobs.length === 0 && (
+                      <p className="text-sm mt-2">You haven't created any jobs yet. Create a job post to start receiving applications.</p>
+                    )}
+                  </div>
                 </CardContent>
               </Card>
             )}
