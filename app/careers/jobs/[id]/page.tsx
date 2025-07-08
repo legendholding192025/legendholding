@@ -62,29 +62,18 @@ export default function JobDetails() {
         return
       }
 
-      // Check Supabase client
-      console.log('Supabase client:', supabase)
+      // Fetch job details using API endpoint
+      const response = await fetch(`/api/careers/jobs/${jobId}`)
       
-      // Fetch job details
-      const { data: jobData, error: jobError } = await supabase
-        .from('jobs')
-        .select('*')
-        .eq('id', jobId)
-        .single()
-
-      console.log('Supabase response - data:', jobData)
-      console.log('Supabase response - error:', jobError)
-
-      if (jobError) {
-        console.error('Supabase error details:', {
-          message: jobError.message,
-          code: jobError.code,
-          details: jobError.details,
-          hint: jobError.hint,
-          fullError: jobError
-        })
-        throw jobError
+      if (!response.ok) {
+        const errorData = await response.json()
+        console.error('API error response:', errorData)
+        throw new Error(errorData.error || 'Failed to fetch job details')
       }
+
+      const jobData = await response.json()
+      
+      console.log('API response - data:', jobData)
 
       if (!jobData) {
         console.warn('No job data returned for ID:', jobId)
@@ -108,34 +97,24 @@ export default function JobDetails() {
       console.log('Processed job data:', job)
       setJob(job)
 
-      // Fetch similar jobs
-      const { data: similarJobsData, error: similarError } = await supabase
-        .from('jobs')
-        .select('*')
-        .eq('department', job.department)
-        .neq('id', job.id)
-        .eq('status', 'active')
-        .limit(3)
-
-      if (similarError) {
-        console.error('Error fetching similar jobs:', similarError)
-      }
-
-      if (similarJobsData) {
+      // Fetch similar jobs using API endpoint
+      const similarResponse = await fetch('/api/careers/jobs')
+      
+      if (similarResponse.ok) {
+        const allJobs = await similarResponse.json()
+        const similarJobsData = allJobs
+          .filter((j: any) => j.department === job.department && j.id !== job.id)
+          .slice(0, 3)
+        
         setSimilarJobs(similarJobsData)
+      } else {
+        console.error('Error fetching similar jobs:', await similarResponse.text())
       }
 
     } catch (error) {
       console.error('Error in fetchJobDetails:', error)
       console.error('Error type:', typeof error)
       console.error('Error constructor:', error?.constructor?.name)
-      console.error('Error details:', {
-        message: (error as any)?.message,
-        code: (error as any)?.code,
-        details: (error as any)?.details,
-        hint: (error as any)?.hint,
-        stack: (error as any)?.stack
-      })
       
       // Try to get more specific error information
       if (error && typeof error === 'object') {

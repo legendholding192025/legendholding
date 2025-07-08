@@ -275,44 +275,44 @@ export function JobApplicationForm({ jobId, jobTitle, company, isOpen, onClose }
           updated_at: new Date().toISOString()
         }
 
-        console.log('Attempting to insert application with data:', insertData)
+        console.log('Attempting to submit application with data:', insertData)
 
-        const { data: applicationData, error: applicationError } = await supabase
-          .from("job_applications")
-          .insert(insertData)
-          .select('id')
-          .single()
+        // Submit application using API endpoint
+        const response = await fetch('/api/job-applications', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(insertData)
+        })
 
-        console.log('Insert result - data:', applicationData, 'error:', applicationError)
+        const result = await response.json()
 
-        if (applicationError) {
+        console.log('API response:', result)
+
+        if (!response.ok) {
           // If application creation fails, log the error but don't try to clean up
           // Base64 files don't need cleanup, and storage cleanup is complex
           console.log('Application creation failed, skipping file cleanup')
           
-          console.error("Application creation error:", applicationError)
-          console.error("Error details:", {
-            code: applicationError.code,
-            message: applicationError.message,
-            details: applicationError.details,
-            hint: applicationError.hint
-          })
+          console.error("Application creation error:", result)
+          console.error("Error details:", result.details)
           
           // Improved error handling with more specific error messages
-          if (applicationError.code === "23503") {
+          if (result.error?.includes('Invalid job reference')) {
             throw new Error("Invalid job reference. Please try again.")
-          } else if (applicationError.code === "23505") {
+          } else if (result.error?.includes('already applied')) {
             throw new Error("You have already applied for this position.")
-          } else if (applicationError.code === "23514") {
-            throw new Error("Invalid status value. Please try again.")
-          } else if (applicationError.message) {
-            throw new Error(`Database error: ${applicationError.message}`)
+          } else if (result.error?.includes('Missing required fields')) {
+            throw new Error("Please fill in all required fields.")
+          } else if (result.error) {
+            throw new Error(result.error)
           } else {
             throw new Error("Failed to submit application. Please try again.")
           }
         }
 
-        console.log('Application created successfully:', applicationData)
+        console.log('Application created successfully:', result)
         onClose()
         router.push("/careers/thank-you")
       } catch (error) {

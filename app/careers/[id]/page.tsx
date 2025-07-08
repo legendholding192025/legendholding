@@ -91,16 +91,28 @@ const ApplicationForm = ({ isOpen, onClose, jobId, jobTitle }: ApplicationFormPr
         .from('cvs')
         .getPublicUrl(cvFileName)
 
-      const { error: applicationError } = await supabase
-        .from('job_applications')
-        .insert([{
+      // Submit application using API endpoint
+      const response = await fetch('/api/job-applications', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
           job_id: jobId,
-          ...formState,
-          cv_url: publicUrl,
-          status: 'pending'
-        }])
+          full_name: formState.full_name,
+          email: formState.email,
+          phone: formState.phone,
+          resume_url: publicUrl,
+          cover_letter: formState.cover_letter,
+        })
+      })
 
-      if (applicationError) throw applicationError
+      const result = await response.json()
+
+      if (!response.ok) {
+        console.error('Application creation error:', result)
+        throw new Error(result.error || 'Failed to submit application')
+      }
 
       handleClose()
     } catch (error) {
@@ -211,13 +223,15 @@ const JobDetails = () => {
   const fetchJob = useCallback(async () => {
     if (!params?.id) return
     try {
-      const { data: job, error } = await supabase
-        .from('jobs')
-        .select('*')
-        .eq('id', params.id as string)
-        .single()
+      // Use API endpoint to fetch job details
+      const response = await fetch(`/api/careers/jobs/${params.id}`)
+      
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Failed to fetch job details')
+      }
 
-      if (error) throw error
+      const job = await response.json()
       setJob(job)
     } catch (error) {
       console.error('Error fetching job:', error)
@@ -225,7 +239,7 @@ const JobDetails = () => {
     } finally {
       setLoading(false)
     }
-  }, [params, supabase])
+  }, [params])
 
   useEffect(() => {
     if (!params || !params.id) {
