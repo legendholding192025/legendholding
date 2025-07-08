@@ -13,7 +13,6 @@ Disallow: /api/
 
 # Allow specific pages that Google should index
 Allow: /
-Allow: /about
 Allow: /contact
 Allow: /careers
 Allow: /careers/jobs

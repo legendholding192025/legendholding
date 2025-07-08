@@ -88,7 +88,7 @@ export default function StructuredData() {
       {
         "@type": "WebPage",
         "name": "About Us",
-        "url": "https://legendholding.com/about"
+        "url": "https://legendholding.com/who-we-are/about-us"
       },
       {
         "@type": "WebPage", 

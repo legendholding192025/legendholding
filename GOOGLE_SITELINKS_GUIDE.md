@@ -35,7 +35,7 @@ When users search for "Legend Holding Group" on Google, the search results show 
 2. Add your property: `https://legendholding.com`
 3. Submit your sitemap: `https://legendholding.com/sitemap.xml`
 4. Request indexing for key pages:
-   - `https://legendholding.com/about`
+   - `https://legendholding.com/who-we-are/about-us`
    - `https://legendholding.com/careers`
    - `https://legendholding.com/careers/jobs`
    - `https://legendholding.com/contact`
@@ -103,7 +103,7 @@ Use Google's Rich Results Test on your homepage.
 
 ### 4. Test Page Accessibility
 Ensure all pages mentioned in sitelinks are accessible:
-- ✅ `https://legendholding.com/about`
+- ✅ `https://legendholding.com/who-we-are/about-us`
 - ✅ `https://legendholding.com/careers`
 - ✅ `https://legendholding.com/careers/jobs`
 - ✅ `https://legendholding.com/contact`

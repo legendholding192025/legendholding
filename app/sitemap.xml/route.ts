@@ -6,7 +6,6 @@ export async function GET() {
   // Static pages
   const staticPages = [
     '',
-    '/about',
     '/contact',
     '/careers',
     '/careers/jobs',

@@ -68,8 +68,8 @@ export default function SitemapPage() {
               <ul className="space-y-4">
                 <li><Link href="/home" className="text-secondary font-semibold text-lg hover:underline">Home</Link></li>
                 <li className="mt-8 mb-2 text-secondary font-semibold text-lg">Who We Are</li>
-                <li><Link href="/who-we-are/brand-story" className="text-gray-700 hover:text-secondary transition-colors">Brand Story</Link></li>
                 <li><Link href="/who-we-are/about-us" className="text-gray-700 hover:text-secondary transition-colors">About Us</Link></li>
+                <li><Link href="/who-we-are/brand-story" className="text-gray-700 hover:text-secondary transition-colors">Brand Story</Link></li>
                 <li><Link href="/who-we-are/the-team" className="text-gray-700 hover:text-secondary transition-colors">The Team</Link></li>
                 <li><Link href="/who-we-are/journey" className="text-gray-700 hover:text-secondary transition-colors">Our Journey</Link></li>
                 <li><Link href="/who-we-are/partners" className="text-gray-700 hover:text-secondary transition-colors">Partners</Link></li>
