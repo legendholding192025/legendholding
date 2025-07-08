@@ -1,6 +1,5 @@
 "use client"
 
-import { NotificationCenter } from "./notification-center"
 import { Button } from "@/components/ui/button"
 import { CircleUserRound, LogOut } from "lucide-react"
 import {
@@ -12,41 +11,54 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { useAdminPermissions } from "@/hooks/use-admin-permissions"
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
+import { useRouter } from "next/navigation"
 
-interface DashboardHeaderProps {
-  onSignOut?: () => void
-}
-
-export function DashboardHeader({ onSignOut }: DashboardHeaderProps) {
+export function DashboardHeader() {
   const { userRole } = useAdminPermissions()
+  const supabase = createClientComponentClient()
+  const router = useRouter()
+
+  const handleSignOut = async () => {
+    try {
+      await supabase.auth.signOut()
+      router.push("/admin/login")
+      router.refresh()
+    } catch (error) {
+      console.error('Error signing out:', error)
+    }
+  }
 
   return (
-    <div className="sticky top-0 z-10 bg-white border-b border-gray-200 px-6 py-3">
-      <div className="flex items-center justify-between">
-        <h1 className="text-xl font-semibold text-gray-900">Admin Dashboard</h1>
-        <div className="flex items-center gap-4">
-          <NotificationCenter />
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="relative">
-                <CircleUserRound className="h-5 w-5 text-gray-700 hover:text-primary transition-colors" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56">
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <div className="px-2 py-1.5 text-sm text-gray-600">
-                {userRole?.email || 'Loading...'}
-              </div>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={onSignOut} className="cursor-pointer text-red-600 focus:text-red-600">
-                <LogOut className="mr-2 h-4 w-4" />
-                <span>Sign Out</span>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
+    <header className="flex items-center justify-between p-4 bg-white border-b">
+      <h1 className="text-2xl font-bold">Admin Dashboard</h1>
+      <div className="flex items-center gap-4">
+        <Button variant="outline" size="sm">
+          Settings
+        </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon" className="relative">
+              <CircleUserRound className="h-5 w-5 text-gray-700 hover:text-primary transition-colors" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-56">
+            <DropdownMenuLabel>My Account</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <div className="px-2 py-1.5 text-sm text-gray-600">
+              {userRole?.email || 'Loading...'}
+            </div>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem 
+              onClick={handleSignOut}
+              className="cursor-pointer text-red-600 focus:text-red-600"
+            >
+              <LogOut className="mr-2 h-4 w-4" />
+              <span>Sign Out</span>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
-    </div>
+    </header>
   )
 }

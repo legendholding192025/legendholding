@@ -278,6 +278,7 @@ export function JobApplicationForm({ jobId, jobTitle, company, isOpen, onClose }
         console.log('Attempting to submit application with data:', insertData)
 
         // Submit application using API endpoint
+        console.log('Sending POST request to /api/job-applications')
         const response = await fetch('/api/job-applications', {
           method: 'POST',
           headers: {
@@ -286,9 +287,20 @@ export function JobApplicationForm({ jobId, jobTitle, company, isOpen, onClose }
           body: JSON.stringify(insertData)
         })
 
-        const result = await response.json()
+        console.log('Response status:', response.status)
+        console.log('Response ok:', response.ok)
+        console.log('Response headers:', Object.fromEntries(response.headers.entries()))
 
-        console.log('API response:', result)
+        let result
+        try {
+          const responseText = await response.text()
+          console.log('Raw response text:', responseText)
+          result = JSON.parse(responseText)
+          console.log('API response parsed successfully:', result)
+        } catch (jsonError) {
+          console.error('Failed to parse response as JSON:', jsonError)
+          throw new Error('Invalid response format from server')
+        }
 
         if (!response.ok) {
           // If application creation fails, log the error but don't try to clean up

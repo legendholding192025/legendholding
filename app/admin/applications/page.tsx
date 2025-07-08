@@ -69,15 +69,43 @@ export default function ApplicationsPage() {
 
   const fetchApplications = async () => {
     try {
+      // Get current user and role first
+      const { data: { user } } = await supabase.auth.getUser()
+      const { data: roleData } = await supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', user?.id)
+        .single()
+
       // The RLS policies will automatically filter applications based on user role
       // Super admins will see all applications, regular admins will see only applications for their jobs
-      const { data: applicationsData, error: applicationsError } = await supabase
+      let query = supabase
         .from('job_applications')
         .select(`
           *,
           job:jobs(id, title, department)
         `)
         .order('created_at', { ascending: false })
+
+      // WORKAROUND: Explicitly filter applications based on user role since RLS is not working
+      if (roleData?.role === 'admin') {
+        // Regular admins can only see applications for jobs they created
+        const { data: userJobs } = await supabase
+          .from('jobs')
+          .select('id')
+          .eq('created_by', user?.id)
+        
+        const userJobIds = userJobs?.map(job => job.id) || []
+        if (userJobIds.length > 0) {
+          query = query.in('job_id', userJobIds)
+        } else {
+          // If admin has no jobs, they should see no applications
+          query = query.eq('job_id', 'no-jobs')
+        }
+      }
+      // Super admins see all applications (no additional filter needed)
+
+      const { data: applicationsData, error: applicationsError } = await query
 
       if (applicationsError) throw applicationsError
 
@@ -98,13 +126,30 @@ export default function ApplicationsPage() {
 
   const fetchJobs = async () => {
     try {
+      // Get current user and role first
+      const { data: { user } } = await supabase.auth.getUser()
+      const { data: roleData } = await supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', user?.id)
+        .single()
+
       // The RLS policies will automatically filter jobs based on user role
       // Super admins will see all jobs, regular admins will see only their own
-      const { data: jobsData, error: jobsError } = await supabase
+      let query = supabase
         .from('jobs')
         .select('id, title, department')
         .eq('status', 'active')
         .order('title', { ascending: true })
+
+      // WORKAROUND: Explicitly filter jobs based on user role since RLS is not working
+      if (roleData?.role === 'admin') {
+        // Regular admins can only see jobs they created
+        query = query.eq('created_by', user?.id)
+      }
+      // Super admins see all jobs (no additional filter needed)
+
+      const { data: jobsData, error: jobsError } = await query
 
       if (jobsError) throw jobsError
 

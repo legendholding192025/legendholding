@@ -2,6 +2,8 @@ import { createClient } from '@supabase/supabase-js'
 import { NextResponse } from 'next/server'
 
 export async function POST(request: Request) {
+  console.log('POST /api/job-applications - Request received')
+  
   try {
     // Check if service role key is available
     if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
@@ -14,8 +16,22 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Supabase URL not configured' }, { status: 500 })
     }
 
+    console.log('Environment variables check passed')
+
     // Parse the request body
-    const applicationData = await request.json()
+    let applicationData
+    try {
+      applicationData = await request.json()
+      console.log('Successfully parsed request body:', {
+        job_id: applicationData.job_id,
+        full_name: applicationData.full_name,
+        email: applicationData.email,
+        has_resume_url: !!applicationData.resume_url
+      })
+    } catch (parseError) {
+      console.error('Failed to parse request body:', parseError)
+      return NextResponse.json({ error: 'Invalid request body' }, { status: 400 })
+    }
     
     // Validate required fields
     if (!applicationData.job_id || !applicationData.full_name || !applicationData.email || !applicationData.phone || !applicationData.resume_url) {
@@ -94,17 +110,22 @@ export async function POST(request: Request) {
     }
 
     console.log(`Successfully created application: ${newApplication.id} for job: ${job.title}`)
-    return NextResponse.json({ 
+    const successResponse = { 
       success: true, 
       applicationId: newApplication.id,
       message: 'Application submitted successfully'
-    })
+    }
+    console.log('Returning success response:', successResponse)
+    return NextResponse.json(successResponse)
 
   } catch (error) {
     console.error('Error in job applications API:', error)
-    return NextResponse.json({ 
+    console.error('Error stack:', error instanceof Error ? error.stack : 'No stack trace')
+    const errorResponse = { 
       error: 'Internal server error', 
       details: error instanceof Error ? error.message : 'Unknown error'
-    }, { status: 500 })
+    }
+    console.log('Returning error response:', errorResponse)
+    return NextResponse.json(errorResponse, { status: 500 })
   }
 } 
