@@ -5,6 +5,7 @@ import CookieConsent from "@/components/cookie-consent"
 import { ScrollToTop } from "@/components/scroll-to-top"
 import GoogleTagManager from "@/components/GoogleTagManager"
 import PageTracker from "@/components/PageTracker"
+import StructuredData from "@/components/StructuredData"
 
 import './globals.css'
 import { brandFont } from './fonts'
@@ -33,6 +34,7 @@ export default function RootLayout({
         <GoogleTagManager />
         <Suspense fallback={null}>
           <PageTracker />
+          <StructuredData />
         </Suspense>
         {children}
         <Toaster position="top-right" />

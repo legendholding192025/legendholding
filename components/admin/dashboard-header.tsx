@@ -33,9 +33,6 @@ export function DashboardHeader() {
     <header className="flex items-center justify-between p-4 bg-white border-b">
       <h1 className="text-2xl font-bold">Admin Dashboard</h1>
       <div className="flex items-center gap-4">
-        <Button variant="outline" size="sm">
-          Settings
-        </Button>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" className="relative">
