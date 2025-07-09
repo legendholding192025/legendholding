@@ -207,7 +207,12 @@ export default function ContactPage() {
 
                 {formStep === 0 ? (
                   <form onSubmit={handleSubmit} className="space-y-3 flex-grow">
-                    <div>
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: 0 * 0.1, duration: 0.5 }}
+                    >
                       <input
                         type="text"
                         name="name"
@@ -217,9 +222,14 @@ export default function ContactPage() {
                         placeholder="Your full name"
                         className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#EE8900] focus:border-transparent transition-all duration-200"
                       />
-                    </div>
+                    </motion.div>
 
-                    <div>
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: 1 * 0.1, duration: 0.5 }}
+                    >
                       <div className="relative">
                         <Mail className="absolute left-3 top-2 w-4 h-4 text-gray-400" />
                         <input
@@ -232,9 +242,15 @@ export default function ContactPage() {
                           className="w-full pl-10 pr-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#EE8900] focus:border-transparent transition-all duration-200"
                         />
                       </div>
-                    </div>
+                    </motion.div>
 
-                    <div className="flex gap-2">
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: 2 * 0.1, duration: 0.5 }}
+                      className="flex gap-2"
+                    >
                       <select className="w-20 px-2 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#EE8900] focus:border-transparent">
                         <option value="+971">+971</option>
                         <option value="+1">+1</option>
@@ -249,9 +265,14 @@ export default function ContactPage() {
                         placeholder="Phone number"
                         className="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#EE8900] focus:border-transparent transition-all duration-200"
                       />
-                    </div>
+                    </motion.div>
 
-                    <div>
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: 3 * 0.1, duration: 0.5 }}
+                    >
                       <input
                         type="text"
                         name="subject"
@@ -261,9 +282,15 @@ export default function ContactPage() {
                         placeholder="Subject"
                         className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#EE8900] focus:border-transparent transition-all duration-200"
                       />
-                    </div>
+                    </motion.div>
 
-                    <div className="flex-grow">
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: 4 * 0.1, duration: 0.5 }}
+                      className="flex-grow"
+                    >
                       <textarea
                         name="message"
                         value={formData.message}
@@ -272,9 +299,15 @@ export default function ContactPage() {
                         placeholder="How can we help?"
                         className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#EE8900] focus:border-transparent transition-all duration-200 min-h-[195px] resize-none"
                       />
-                    </div>
+                    </motion.div>
 
-                    <div className="mt-auto">
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: 5 * 0.1, duration: 0.5 }}
+                      className="mt-auto"
+                    >
                       <button
                         type="submit"
                         disabled={isSubmitting}
@@ -293,7 +326,7 @@ export default function ContactPage() {
                           "Submit"
                         )}
                       </button>
-                    </div>
+                    </motion.div>
                   </form>
                 ) : (
                   <div className="text-center py-8 flex-grow flex flex-col">
