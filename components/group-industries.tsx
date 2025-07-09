@@ -230,13 +230,13 @@ export default function GroupIndustries() {
                   style={{ width: `${100 / itemsPerView}%` }}
                 >
                   {/* Industry Card */}
-                  <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-100 hover:scale-105 group h-[14rem] sm:h-[18rem] md:h-[20rem] lg:h-[22rem] xl:h-[24rem] flex flex-col pointer-events-none">
+                  <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg overflow-hidden md:hover:shadow-xl transition-all duration-100 md:hover:scale-105 group h-[14rem] sm:h-[18rem] md:h-[20rem] lg:h-[22rem] xl:h-[24rem] flex flex-col">
                     {/* Image Section */}
                     <div className="flex-1 overflow-hidden">
                       <img
                         src={industry.image || "/placeholder.svg"}
                         alt={industry.name}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-100"
+                        className="w-full h-full object-cover md:group-hover:scale-110 transition-transform duration-100"
                         style={{
                           transform: industry.name === "Media" || industry.name === "Automotive" ? "scale(1.15)" : "scale(1)",
                         }}
