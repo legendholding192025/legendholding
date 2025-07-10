@@ -79,8 +79,8 @@ export default function GoogleTagManager({ gtmId }: GoogleTagManagerProps) {
             `}
           </Script>
 
-          {/* Meta (Facebook) Pixel */}
-          <Script id="meta-pixel" strategy="afterInteractive">
+                {/* Meta (Facebook) Pixel - delayed to allow autoblocker to initialize */}
+      <Script id="meta-pixel" strategy="lazyOnload">
             {`
               !function(f,b,e,v,n,t,s)
               {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -106,9 +106,9 @@ export default function GoogleTagManager({ gtmId }: GoogleTagManagerProps) {
             />
           </noscript>
 
-          {/* X.com (Twitter) Pixel */}
-          {ANALYTICS_CONFIG.X_PIXEL_ID !== 'XXXXXXXXXX' && (
-            <Script id="x-pixel" strategy="afterInteractive">
+                {/* X.com (Twitter) Pixel - delayed to allow autoblocker to initialize */}
+      {ANALYTICS_CONFIG.X_PIXEL_ID !== 'XXXXXXXXXX' && (
+        <Script id="x-pixel" strategy="lazyOnload">
               {`
                 !function(e,t,n,s,u,a){e.twq||(s=e.twq=function(){s.exe?s.exe.apply(s,arguments):s.queue.push(arguments);
                 },s.version='1.1',s.queue=[],u=t.createElement(n),u.async=!0,u.src='https://static.ads-twitter.com/uwt.js',
@@ -118,9 +118,9 @@ export default function GoogleTagManager({ gtmId }: GoogleTagManagerProps) {
             </Script>
           )}
 
-          {/* Snapchat Pixel */}
-          {ANALYTICS_CONFIG.SNAPCHAT_PIXEL_ID !== 'XXXXXXXXXX' && (
-            <Script id="snapchat-pixel" strategy="afterInteractive">
+                {/* Snapchat Pixel - delayed to allow autoblocker to initialize */}
+      {ANALYTICS_CONFIG.SNAPCHAT_PIXEL_ID !== 'XXXXXXXXXX' && (
+        <Script id="snapchat-pixel" strategy="lazyOnload">
               {`
                 (function(e,t,n){if(e.snaptr)return;var a=e.snaptr=function() {
                 a.handleRequest?a.handleRequest.apply(a,arguments):a.queue.push(arguments)};
