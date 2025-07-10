@@ -1,7 +1,7 @@
 'use client';
 
 import Script from 'next/script';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { ANALYTICS_CONFIG } from '@/lib/analytics';
 
 interface GoogleTagManagerProps {
@@ -10,6 +10,7 @@ interface GoogleTagManagerProps {
 
 export default function GoogleTagManager({ gtmId }: GoogleTagManagerProps) {
   const gtmIdToUse = gtmId || ANALYTICS_CONFIG.GTM_ID;
+  const [canLoadScripts, setCanLoadScripts] = useState(false);
 
   useEffect(() => {
     // Initialize Google Tag Manager
@@ -20,7 +21,35 @@ export default function GoogleTagManager({ gtmId }: GoogleTagManagerProps) {
         event: 'gtm.js',
       });
     }
+
+    // In production, wait for autoblocker to be ready
+    if (process.env.NODE_ENV === 'production') {
+      const checkAutoblockerReady = () => {
+        // Check if autoblocker is loaded by looking for its presence
+        const autoblockerScript = document.querySelector('script[src*="autoblocker.js"]');
+        if (autoblockerScript) {
+          // Wait a bit more to ensure autoblocker is fully initialized
+          setTimeout(() => {
+            setCanLoadScripts(true);
+          }, 500);
+        } else {
+          // If autoblocker script is not found, wait and try again
+          setTimeout(checkAutoblockerReady, 100);
+        }
+      };
+
+      // Start checking after a small delay
+      setTimeout(checkAutoblockerReady, 100);
+    } else {
+      // In development, load scripts immediately
+      setCanLoadScripts(true);
+    }
   }, []);
+
+  // Don't render scripts until autoblocker is ready (in production)
+  if (process.env.NODE_ENV === 'production' && !canLoadScripts) {
+    return null;
+  }
 
   return (
     <>
@@ -222,8 +251,8 @@ export default function GoogleTagManager({ gtmId }: GoogleTagManagerProps) {
                   }
                 }
               });
-                    `}
-      </Script>
+            `}
+          </Script>
     </>
   );
 }
