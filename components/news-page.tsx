@@ -14,6 +14,8 @@ import {
   Twitter,
   ArrowRight,
   ChevronLeft,
+  Loader2,
+  CheckCircle,
 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
@@ -64,6 +66,13 @@ export function NewsPage() {
   const [loading, setLoading] = useState(true)
   const [isTransitioning, setIsTransitioning] = useState(false)
   const [showAllMobile, setShowAllMobile] = useState(false)
+  
+  // Newsletter subscription state
+  const [email, setEmail] = useState("")
+  const [isSubscribing, setIsSubscribing] = useState(false)
+  const [subscriptionSuccess, setSubscriptionSuccess] = useState(false)
+  const [subscriptionError, setSubscriptionError] = useState("")
+  
   const articlesPerPage = 3
   const carouselRef = useRef<HTMLDivElement>(null)
 
@@ -137,6 +146,35 @@ export function NewsPage() {
 
   const toggleMobileView = () => {
     setShowAllMobile(!showAllMobile)
+  }
+
+  const handleNewsletterSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsSubscribing(true)
+    setSubscriptionError("")
+    setSubscriptionSuccess(false)
+
+    try {
+      const response = await fetch("/api/admin/newsletters", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      })
+
+      if (!response.ok) {
+        const data = await response.json()
+        throw new Error(data.error || "Failed to subscribe")
+      }
+
+      setSubscriptionSuccess(true)
+      setEmail("")
+    } catch (err) {
+      setSubscriptionError(err instanceof Error ? err.message : "Failed to subscribe")
+    } finally {
+      setIsSubscribing(false)
+    }
   }
 
   // Get current set of articles for carousel
@@ -244,14 +282,39 @@ export function NewsPage() {
                     <p className="mb-4 text-sm opacity-90">
                       Subscribe to our newsletter to get the latest news delivered to your inbox.
                     </p>
-                    <div className="flex flex-col gap-3">
+                    <form onSubmit={handleNewsletterSubmit} className="flex flex-col gap-3">
                       <Input
                         type="email"
                         placeholder="Your email address"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                        disabled={isSubscribing || subscriptionSuccess}
                         className="border-0 bg-white/20 text-white placeholder:text-white/70"
                       />
-                      <Button className="bg-[#F08900] text-white hover:bg-[#d67a00]">Subscribe Now</Button>
-                    </div>
+                      <Button 
+                        type="submit"
+                        disabled={isSubscribing || subscriptionSuccess}
+                        className="bg-[#F08900] text-white hover:bg-[#d67a00] flex items-center justify-center"
+                      >
+                        {isSubscribing ? (
+                          <>
+                            <Loader2 size={16} className="animate-spin mr-2" />
+                            Subscribing...
+                          </>
+                        ) : subscriptionSuccess ? (
+                          <>
+                            <CheckCircle size={16} className="mr-2" />
+                            Subscribed!
+                          </>
+                        ) : (
+                          "Subscribe Now"
+                        )}
+                      </Button>
+                      {subscriptionError && (
+                        <p className="text-red-300 text-sm">{subscriptionError}</p>
+                      )}
+                    </form>
                   </div>
 
                   <div className="rounded-xl bg-white p-6 shadow-md">
