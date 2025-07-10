@@ -28,6 +28,17 @@ import { toast } from "sonner"
 import { Edit2, Trash2, Plus } from "lucide-react"
 import { Editor } from '@tinymce/tinymce-react'
 
+interface NewsArticleImage {
+  id: string
+  article_id: string
+  image_url: string
+  image_order: number
+  image_type: 'banner' | 'content'
+  alt_text?: string
+  caption?: string
+  created_at: string
+}
+
 interface NewsArticle {
   id: string
   created_at: string
@@ -35,7 +46,7 @@ interface NewsArticle {
   title: string
   excerpt: string
   content: string
-  image_url: string
+  image_url: string // Keep for backward compatibility
   category: string
   author: string
   read_time: string
@@ -45,14 +56,25 @@ interface NewsArticle {
   seo_description?: string
   seo_keywords?: string
   seo_image_url?: string
+  images?: NewsArticleImage[] // New field for multiple images
 }
 
-type FormData = Omit<NewsArticle, 'id' | 'created_at' | 'read_time'> & {
+type ImageFormData = {
+  id?: string
+  image_url: string
+  image_order: number
+  image_type: 'banner' | 'content'
+  alt_text: string
+  caption: string
+}
+
+type FormData = Omit<NewsArticle, 'id' | 'created_at' | 'read_time' | 'images'> & {
   read_time_minutes: number
   seo_title: string
   seo_description: string
   seo_keywords: string
   seo_image_url: string
+  images: ImageFormData[]
 }
 
 export default function NewsManagement() {
@@ -126,6 +148,13 @@ export default function NewsManagement() {
     seo_description: "",
     seo_keywords: "",
     seo_image_url: "",
+    images: [{
+      image_url: "",
+      image_order: 1,
+      image_type: 'banner',
+      alt_text: "",
+      caption: ""
+    }],
   })
 
   // Fetch articles on component mount
@@ -139,7 +168,8 @@ export default function NewsManagement() {
       // Calculate total pages
       setTotalPages(Math.ceil((count || 0) / articlesPerPage))
 
-      const { data, error } = await supabase
+      // Fetch articles with their images
+      const { data: articlesData, error } = await supabase
         .from("news_articles")
         .select("*")
         .order("created_at", { ascending: false })
@@ -147,7 +177,36 @@ export default function NewsManagement() {
 
       if (error) throw error
 
-      setArticles(data || [])
+      // Fetch images for each article
+      const articlesWithImages = await Promise.all(
+        (articlesData || []).map(async (article) => {
+          try {
+            const { data: imagesData, error: imagesError } = await supabase
+              .from("news_article_images")
+              .select("*")
+              .eq("article_id", article.id)
+              .order("image_order", { ascending: true })
+
+            if (imagesError) {
+              // Check if table doesn't exist (common error code: PGRST116)
+              if (imagesError.code === 'PGRST116' || imagesError.message?.includes('does not exist')) {
+                console.warn("news_article_images table not found. Please run the database migration.")
+                return { ...article, images: [] }
+              }
+              console.error("Error fetching images for article:", article.id, imagesError)
+              return { ...article, images: [] }
+            }
+
+            console.log(`Article ${article.id} (${article.title}) has ${imagesData?.length || 0} images:`, imagesData)
+            return { ...article, images: imagesData || [] }
+          } catch (error) {
+            console.warn("Failed to fetch images for article (table may not exist yet):", article.id)
+            return { ...article, images: [] }
+          }
+        })
+      )
+
+      setArticles(articlesWithImages)
     } catch (error) {
       console.error("Error fetching articles:", error)
       toast.error("Failed to load articles")
@@ -175,13 +234,26 @@ export default function NewsManagement() {
       // Convert minutes to read_time format
       const read_time = `${formData.read_time_minutes} ${formData.read_time_minutes === 1 ? 'Minute' : 'Minutes'}`
       
+      // Prepare article data (excluding images)
       const articleData = {
-        ...formData,
+        title: formData.title,
+        excerpt: formData.excerpt,
+        content: formData.content,
+        image_url: formData.images[0]?.image_url || "", // Keep first image for backward compatibility
+        category: formData.category,
+        author: formData.author,
+        publication_date: formData.publication_date,
+        is_featured: formData.is_featured,
+        published: formData.published,
+        seo_title: formData.seo_title,
+        seo_description: formData.seo_description,
+        seo_keywords: formData.seo_keywords,
+        seo_image_url: formData.seo_image_url,
         read_time
       }
-      delete (articleData as any).read_time_minutes
 
-      const { data, error } = await supabase
+      // Insert the article
+      const { data: newArticle, error } = await supabase
         .from("news_articles")
         .insert([articleData])
         .select()
@@ -189,12 +261,36 @@ export default function NewsManagement() {
 
       if (error) throw error
 
-      // Update local state to reflect the changes
-      const updatedArticles = formData.is_featured 
-        ? articles.map(article => ({ ...article, is_featured: false }))
-        : articles
-      
-      setArticles([data, ...updatedArticles])
+      // Insert images into news_article_images table
+      if (formData.images.length > 0) {
+        const imageData = formData.images
+          .filter(image => image.image_url.trim() !== "") // Only save images with URLs
+          .map((image, index) => ({
+            article_id: newArticle.id,
+            image_url: image.image_url,
+            image_order: index + 1,
+            image_type: image.image_type,
+            alt_text: image.alt_text || null,
+            caption: image.caption || null
+          }))
+
+        console.log("Saving images for new article:", imageData)
+        
+        if (imageData.length > 0) {
+          const { error: imageError } = await supabase
+            .from("news_article_images")
+            .insert(imageData)
+
+          if (imageError) {
+            console.error("Error saving images:", imageError)
+            throw imageError
+          }
+          console.log("Images saved successfully")
+        }
+      }
+
+      // Refresh the articles list to get the complete data with images
+      await fetchArticles()
       setIsAddDialogOpen(false)
       setFormData({
         title: "",
@@ -211,6 +307,13 @@ export default function NewsManagement() {
         seo_description: "",
         seo_keywords: "",
         seo_image_url: "",
+        images: [{
+          image_url: "",
+          image_order: 1,
+          image_type: 'banner',
+          alt_text: "",
+          caption: ""
+        }],
       })
       toast.success("Article added successfully")
     } catch (error) {
@@ -237,13 +340,26 @@ export default function NewsManagement() {
       // Convert minutes to read_time format
       const read_time = `${formData.read_time_minutes} ${formData.read_time_minutes === 1 ? 'Minute' : 'Minutes'}`
       
+      // Prepare article data (excluding images)
       const articleData = {
-        ...formData,
+        title: formData.title,
+        excerpt: formData.excerpt,
+        content: formData.content,
+        image_url: formData.images[0]?.image_url || "", // Keep first image for backward compatibility
+        category: formData.category,
+        author: formData.author,
+        publication_date: formData.publication_date,
+        is_featured: formData.is_featured,
+        published: formData.published,
+        seo_title: formData.seo_title,
+        seo_description: formData.seo_description,
+        seo_keywords: formData.seo_keywords,
+        seo_image_url: formData.seo_image_url,
         read_time
       }
-      delete (articleData as any).read_time_minutes
 
-      const { data, error } = await supabase
+      // Update the article
+      const { data: updatedArticle, error } = await supabase
         .from("news_articles")
         .update(articleData)
         .eq("id", editingArticle.id)
@@ -252,10 +368,44 @@ export default function NewsManagement() {
 
       if (error) throw error
 
-      // Update local state to reflect the changes
-      setArticles(articles.map(article => 
-        article.id === editingArticle.id ? data : { ...article, is_featured: false }
-      ))
+      // Delete existing images for this article
+      const { error: deleteError } = await supabase
+        .from("news_article_images")
+        .delete()
+        .eq("article_id", editingArticle.id)
+
+      if (deleteError) throw deleteError
+
+      // Insert updated images
+      if (formData.images.length > 0) {
+        const imageData = formData.images
+          .filter(image => image.image_url.trim() !== "") // Only save images with URLs
+          .map((image, index) => ({
+            article_id: editingArticle.id,
+            image_url: image.image_url,
+            image_order: index + 1,
+            image_type: image.image_type,
+            alt_text: image.alt_text || null,
+            caption: image.caption || null
+          }))
+
+        console.log("Saving updated images:", imageData)
+        
+        if (imageData.length > 0) {
+          const { error: imageError } = await supabase
+            .from("news_article_images")
+            .insert(imageData)
+
+          if (imageError) {
+            console.error("Error saving updated images:", imageError)
+            throw imageError
+          }
+          console.log("Updated images saved successfully")
+        }
+      }
+
+      // Refresh the articles list to get the complete data with images
+      await fetchArticles()
       setEditingArticle(null)
       toast.success("Article updated successfully")
     } catch (error) {
@@ -288,13 +438,22 @@ export default function NewsManagement() {
       <div className="space-y-6 p-4 md:p-6">
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-bold">News Articles</h1>
-          <Button
-            onClick={() => setIsAddDialogOpen(true)}
-            className="bg-[#5E366D] hover:bg-[#5E366D]/90"
-          >
-            <Plus className="mr-2 h-4 w-4" />
-            Add Article
-          </Button>
+          <div className="flex gap-2">
+            <Button
+              onClick={fetchArticles}
+              variant="outline"
+              className="border-[#5E366D] text-[#5E366D] hover:bg-[#5E366D] hover:text-white"
+            >
+              Refresh
+            </Button>
+            <Button
+              onClick={() => setIsAddDialogOpen(true)}
+              className="bg-[#5E366D] hover:bg-[#5E366D]/90"
+            >
+              <Plus className="mr-2 h-4 w-4" />
+              Add Article
+            </Button>
+          </div>
         </div>
 
         {/* Articles Table */}
@@ -329,6 +488,48 @@ export default function NewsManagement() {
                             const readTimeMatch = article.read_time.match(/(\d+)/)
                             const readTimeMinutes = readTimeMatch ? parseInt(readTimeMatch[1]) : 5
                             
+                            // Prepare images for editing
+                            let imagesToEdit = []
+                            
+                            console.log("Editing article:", article.title)
+                            console.log("Article.images:", article.images)
+                            console.log("Article.image_url:", article.image_url)
+                            
+                            if (article.images && article.images.length > 0) {
+                              // Use images from the new table
+                              console.log(`Loading ${article.images.length} images from new table`)
+                              imagesToEdit = article.images.map(img => ({
+                                id: img.id,
+                                image_url: img.image_url,
+                                image_order: img.image_order,
+                                image_type: img.image_type,
+                                alt_text: img.alt_text || "",
+                                caption: img.caption || ""
+                              }))
+                            } else if (article.image_url) {
+                              // Fallback to legacy image_url if no images in new table
+                              console.log("Loading legacy image_url")
+                              imagesToEdit = [{
+                                image_url: article.image_url,
+                                image_order: 1,
+                                image_type: 'banner' as 'banner' | 'content',
+                                alt_text: "",
+                                caption: ""
+                              }]
+                            } else {
+                              // No images at all, provide empty template
+                              console.log("No images found, using empty template")
+                              imagesToEdit = [{
+                                image_url: "",
+                                image_order: 1,
+                                image_type: 'banner' as 'banner' | 'content',
+                                alt_text: "",
+                                caption: ""
+                              }]
+                            }
+                            
+                            console.log("Final imagesToEdit:", imagesToEdit)
+
                             setFormData({
                               ...article,
                               read_time_minutes: readTimeMinutes,
@@ -336,6 +537,7 @@ export default function NewsManagement() {
                               seo_description: article.seo_description || "",
                               seo_keywords: article.seo_keywords || "",
                               seo_image_url: article.seo_image_url || "",
+                              images: imagesToEdit,
                             })
                             setEditingArticle(article)
                           }}
@@ -402,22 +604,29 @@ export default function NewsManagement() {
             if (!open) {
               setIsAddDialogOpen(false)
               setEditingArticle(null)
-              setFormData({
-                title: "",
-                excerpt: "",
-                content: "",
-                image_url: "",
-                category: "",
-                author: "",
-                publication_date: new Date().toISOString().split('T')[0],
-                read_time_minutes: 5,
-                is_featured: false,
-                published: true,
-                seo_title: "",
-                seo_description: "",
-                seo_keywords: "",
-                seo_image_url: "",
-              })
+                    setFormData({
+        title: "",
+        excerpt: "",
+        content: "",
+        image_url: "",
+        category: "",
+        author: "",
+        publication_date: new Date().toISOString().split('T')[0],
+        read_time_minutes: 5,
+        is_featured: false,
+        published: true,
+        seo_title: "",
+        seo_description: "",
+        seo_keywords: "",
+        seo_image_url: "",
+        images: [{
+          image_url: "",
+          image_order: 1,
+          image_type: 'banner',
+          alt_text: "",
+          caption: ""
+        }],
+      })
             }
           }}
         >
@@ -512,18 +721,127 @@ export default function NewsManagement() {
                 </p>
               </div>
 
-              {/* Image URL */}
-              <div className="space-y-2">
-                <Label htmlFor="image_url" className="font-semibold">
-                  Image URL <span className="text-red-500">*</span>
-                </Label>
-                <Input
-                  id="image_url"
-                  placeholder="Enter image URL"
-                  className="border-gray-300 focus:border-[#5E366D] focus:ring-[#5E366D]"
-                  value={formData.image_url}
-                  onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
-                />
+              {/* Images Section */}
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <Label className="font-semibold">
+                    Article Images <span className="text-red-500">*</span>
+                  </Label>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      setFormData({
+                        ...formData,
+                        images: [...formData.images, {
+                          image_url: "",
+                          image_order: formData.images.length + 1,
+                          image_type: 'content',
+                          alt_text: "",
+                          caption: ""
+                        }]
+                      })
+                    }}
+                    className="text-[#5E366D] border-[#5E366D] hover:bg-[#5E366D] hover:text-white"
+                  >
+                    + Add Image
+                  </Button>
+                </div>
+                
+                <div className="space-y-4">
+                  {formData.images.map((image, index) => (
+                    <div key={index} className="border rounded-lg p-4 space-y-3">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm font-medium text-gray-700">
+                            Image {index + 1}
+                          </span>
+                          <select
+                            value={image.image_type}
+                            onChange={(e) => {
+                              const newImages = [...formData.images]
+                              newImages[index].image_type = e.target.value as 'banner' | 'content'
+                              setFormData({ ...formData, images: newImages })
+                            }}
+                            className="text-xs px-2 py-1 border rounded"
+                          >
+                            <option value="banner">Banner</option>
+                            <option value="content">Content</option>
+                          </select>
+                          {image.image_type === 'banner' && (
+                            <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
+                              Main Image
+                            </span>
+                          )}
+                        </div>
+                        {formData.images.length > 1 && (
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => {
+                              const newImages = formData.images.filter((_, i) => i !== index)
+                              setFormData({ ...formData, images: newImages })
+                            }}
+                            className="text-red-500 hover:text-red-700"
+                          >
+                            Remove
+                          </Button>
+                        )}
+                      </div>
+                      
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div className="space-y-2">
+                          <Label className="text-sm font-medium">
+                            Image URL <span className="text-red-500">*</span>
+                          </Label>
+                          <Input
+                            placeholder="Enter image URL"
+                            className="border-gray-300 focus:border-[#5E366D] focus:ring-[#5E366D]"
+                            value={image.image_url}
+                            onChange={(e) => {
+                              const newImages = [...formData.images]
+                              newImages[index].image_url = e.target.value
+                              setFormData({ ...formData, images: newImages })
+                            }}
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label className="text-sm font-medium">Alt Text</Label>
+                          <Input
+                            placeholder="Alt text for accessibility"
+                            className="border-gray-300 focus:border-[#5E366D] focus:ring-[#5E366D]"
+                            value={image.alt_text}
+                            onChange={(e) => {
+                              const newImages = [...formData.images]
+                              newImages[index].alt_text = e.target.value
+                              setFormData({ ...formData, images: newImages })
+                            }}
+                          />
+                        </div>
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <Label className="text-sm font-medium">Caption</Label>
+                        <Input
+                          placeholder="Image caption (optional)"
+                          className="border-gray-300 focus:border-[#5E366D] focus:ring-[#5E366D]"
+                          value={image.caption}
+                          onChange={(e) => {
+                            const newImages = [...formData.images]
+                            newImages[index].caption = e.target.value
+                            setFormData({ ...formData, images: newImages })
+                          }}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                
+                <p className="text-sm text-gray-500">
+                  <strong>Banner images</strong> appear at the top of the article. <strong>Content images</strong> appear within the article content.
+                </p>
               </div>
 
               {/* Excerpt */}

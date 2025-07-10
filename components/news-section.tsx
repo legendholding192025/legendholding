@@ -7,6 +7,17 @@ import { ArrowRight, Calendar, ChevronLeft, ChevronRight } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
 
+interface NewsArticleImage {
+  id: string
+  article_id: string
+  image_url: string
+  image_order: number
+  image_type: 'banner' | 'content'
+  alt_text?: string
+  caption?: string
+  created_at: string
+}
+
 type NewsItem = {
   id: string
   title: string
@@ -17,6 +28,7 @@ type NewsItem = {
   image_url: string
   url: string
   read_time: string
+  images?: NewsArticleImage[]
 }
 
 export function Newsroom() {
@@ -24,6 +36,21 @@ export function Newsroom() {
   const [loading, setLoading] = useState(true)
 
   const supabase = createClientComponentClient()
+
+  // Helper function to get display image for a news item
+  const getDisplayImage = (newsItem: NewsItem) => {
+    if (newsItem.images && newsItem.images.length > 0) {
+      // Try to find a banner image first
+      const bannerImage = newsItem.images.find(img => img.image_type === 'banner')
+      if (bannerImage) {
+        return { src: bannerImage.image_url, alt: bannerImage.alt_text || newsItem.title }
+      }
+      // Otherwise use the first image
+      return { src: newsItem.images[0].image_url, alt: newsItem.images[0].alt_text || newsItem.title }
+    }
+    // Fallback to legacy image_url
+    return { src: newsItem.image_url || "/placeholder.svg", alt: newsItem.title }
+  }
 
   useEffect(() => {
     fetchNews()
@@ -40,7 +67,35 @@ export function Newsroom() {
 
       if (error) throw error
 
-      setNewsItems(data || [])
+      // Fetch images for each news item
+      const newsWithImages = await Promise.all(
+        (data || []).map(async (newsItem) => {
+          try {
+            const { data: imagesData, error: imagesError } = await supabase
+              .from("news_article_images")
+              .select("*")
+              .eq("article_id", newsItem.id)
+              .order("image_order", { ascending: true })
+
+            if (imagesError) {
+              // Check if table doesn't exist (common error code: PGRST116)
+              if (imagesError.code === 'PGRST116' || imagesError.message?.includes('does not exist')) {
+                console.warn("news_article_images table not found. Please run the database migration.")
+                return { ...newsItem, images: [] }
+              }
+              console.error("Error fetching images for news item:", newsItem.id, imagesError)
+              return { ...newsItem, images: [] }
+            }
+
+            return { ...newsItem, images: imagesData || [] }
+          } catch (error) {
+            console.warn("Failed to fetch images for news item (table may not exist yet):", newsItem.id)
+            return { ...newsItem, images: [] }
+          }
+        })
+      )
+
+      setNewsItems(newsWithImages)
     } catch (error) {
       console.error("Error fetching news:", error)
     } finally {
@@ -102,13 +157,18 @@ export function Newsroom() {
                 aria-hidden="true"
               />
               <div className="relative h-48 overflow-hidden m-2 rounded-xl">
-                <Image
-                  src={news.image_url || "/placeholder.svg"}
-                  alt={news.title}
-                  width={400}
-                  height={240}
-                  className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500 rounded-xl"
-                />
+                {(() => {
+                  const displayImage = getDisplayImage(news)
+                  return (
+                    <Image
+                      src={displayImage.src}
+                      alt={displayImage.alt}
+                      width={400}
+                      height={240}
+                      className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500 rounded-xl"
+                    />
+                  )
+                })()}
               </div>
               <div className="p-5 flex flex-col flex-grow relative">
                 <div className="flex items-center text-gray-500 text-sm mb-3">

@@ -18,6 +18,17 @@ import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { toast } from "sonner"
 
+interface NewsArticleImage {
+  id: string
+  article_id: string
+  image_url: string
+  image_order: number
+  image_type: 'banner' | 'content'
+  alt_text?: string
+  caption?: string
+  created_at: string
+}
+
 interface NewsArticle {
   id: string
   created_at: string
@@ -35,6 +46,7 @@ interface NewsArticle {
   seo_description?: string
   seo_keywords?: string
   seo_image_url?: string
+  images?: NewsArticleImage[]
 }
 
 const FacebookIcon = ({ size = 20, className = "" }) => (
@@ -87,18 +99,23 @@ export default function NewsArticlePage() {
   useEffect(() => {
     if (params?.id) {
       fetchArticle()
-      fetchLatestArticles()
     }
   }, [params?.id])
 
-  const fetchLatestArticles = async () => {
+  const fetchLatestArticles = async (excludeId?: string) => {
     try {
-      const { data, error } = await supabase
+      let query = supabase
         .from("news_articles")
         .select("*")
         .eq("published", true)
         .order("created_at", { ascending: false })
-        .limit(5)
+
+      // Exclude the current article if an ID is provided
+      if (excludeId) {
+        query = query.neq("id", excludeId)
+      }
+
+      const { data, error } = await query.limit(5)
 
       if (error) throw error
       setLatestArticles(data || [])
@@ -120,7 +137,30 @@ export default function NewsArticlePage() {
 
       if (articleError) throw articleError
 
-      setArticle(articleData)
+      // Fetch images for the article
+      let imagesData = []
+      try {
+        const { data: fetchedImages, error: imagesError } = await supabase
+          .from("news_article_images")
+          .select("*")
+          .eq("article_id", articleData.id)
+          .order("image_order", { ascending: true })
+
+        if (imagesError) {
+          // Check if table doesn't exist (common error code: PGRST116)
+          if (imagesError.code === 'PGRST116' || imagesError.message?.includes('does not exist')) {
+            console.warn("news_article_images table not found. Please run the database migration.")
+          } else {
+            console.error("Error fetching images:", imagesError)
+          }
+        } else {
+          imagesData = fetchedImages || []
+        }
+      } catch (error) {
+        console.warn("Failed to fetch images (table may not exist yet)")
+      }
+
+      setArticle({ ...articleData, images: imagesData })
 
       // Fetch related articles from the same category
       if (articleData) {
@@ -136,6 +176,9 @@ export default function NewsArticlePage() {
         if (relatedError) throw relatedError
         setRelatedArticles(relatedData || [])
       }
+
+      // Fetch latest articles excluding the current article
+      await fetchLatestArticles(articleData.id)
     } catch (error) {
       console.error("Error fetching article:", error)
       toast.error("Failed to load article")
@@ -240,22 +283,75 @@ export default function NewsArticlePage() {
                   {article.title}
                 </h1>
 
-                {/* Featured Image */}
-                <div className="relative mb-6 h-[300px] w-full overflow-hidden rounded-xl md:h-[500px]">
-                  <Image
-                    src={article.image_url || "/placeholder.svg"}
-                    alt={article.title}
-                    fill
-                    className="object-cover"
-                    priority
-                  />
-                </div>
+                {/* Banner Image */}
+                {(() => {
+                  const bannerImage = article.images?.find(img => img.image_type === 'banner') || 
+                                    (article.images && article.images.length > 0 ? article.images[0] : null)
+                  
+                  if (bannerImage) {
+                    return (
+                      <div className="relative mb-6 h-[300px] w-full overflow-hidden rounded-xl md:h-[500px]">
+                        <Image
+                          src={bannerImage.image_url}
+                          alt={bannerImage.alt_text || article.title}
+                          fill
+                          className="object-cover"
+                          priority
+                        />
+                        {bannerImage.caption && (
+                          <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white p-3 text-sm">
+                            {bannerImage.caption}
+                          </div>
+                        )}
+                      </div>
+                    )
+                  } else if (article.image_url) {
+                    // Fallback to legacy image_url
+                    return (
+                      <div className="relative mb-6 h-[300px] w-full overflow-hidden rounded-xl md:h-[500px]">
+                        <Image
+                          src={article.image_url}
+                          alt={article.title}
+                          fill
+                          className="object-cover"
+                          priority
+                        />
+                      </div>
+                    )
+                  }
+                  return null
+                })()}
 
                 {/* Content */}
                 <div 
                   className="prose prose-lg max-w-none prose-headings:text-[rgb(43,28,72)] prose-h2:text-2xl prose-h3:text-xl prose-h4:text-lg prose-p:text-[rgb(93,55,110)] prose-headings:font-semibold prose-headings:mb-4 prose-p:mb-4"
                   dangerouslySetInnerHTML={{ __html: article.content }}
                 />
+
+                {/* Content Images */}
+                {article.images && article.images.filter(img => img.image_type === 'content').length > 0 && (
+                  <div className="mt-8 space-y-6">
+                    {article.images
+                      .filter(img => img.image_type === 'content')
+                      .map((image, index) => (
+                        <div key={image.id || index} className="relative">
+                          <div className="relative h-[400px] w-full overflow-hidden rounded-xl">
+                            <Image
+                              src={image.image_url}
+                              alt={image.alt_text || `Content image ${index + 1}`}
+                              fill
+                              className="object-cover"
+                            />
+                          </div>
+                          {image.caption && (
+                            <p className="mt-2 text-sm text-gray-600 text-center italic">
+                              {image.caption}
+                            </p>
+                          )}
+                        </div>
+                      ))}
+                  </div>
+                )}
 
                 {/* Share Section */}
                 <div className="mt-8 border-t pt-6">

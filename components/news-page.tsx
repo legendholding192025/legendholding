@@ -44,6 +44,17 @@ import {
 } from "@/components/ui/sidebar"
 import { toast } from "sonner"
 
+interface NewsArticleImage {
+  id: string
+  article_id: string
+  image_url: string
+  image_order: number
+  image_type: 'banner' | 'content'
+  alt_text?: string
+  caption?: string
+  created_at: string
+}
+
 interface NewsArticle {
   id: string
   created_at: string
@@ -57,6 +68,7 @@ interface NewsArticle {
   read_time: string
   is_featured: boolean
   published: boolean
+  images?: NewsArticleImage[]
 }
 
 export function NewsPage() {
@@ -75,6 +87,21 @@ export function NewsPage() {
   
   const articlesPerPage = 3
   const carouselRef = useRef<HTMLDivElement>(null)
+
+  // Helper function to get display image for an article
+  const getDisplayImage = (article: NewsArticle) => {
+    if (article.images && article.images.length > 0) {
+      // Try to find a banner image first
+      const bannerImage = article.images.find(img => img.image_type === 'banner')
+      if (bannerImage) {
+        return { src: bannerImage.image_url, alt: bannerImage.alt_text || article.title }
+      }
+      // Otherwise use the first image
+      return { src: article.images[0].image_url, alt: article.images[0].alt_text || article.title }
+    }
+    // Fallback to legacy image_url
+    return { src: article.image_url || "/placeholder.svg", alt: article.title }
+  }
 
   const supabase = createClientComponentClient()
 
@@ -95,19 +122,47 @@ export function NewsPage() {
 
       const allArticles = allArticlesData || []
 
+      // Fetch images for all articles
+      const articlesWithImages = await Promise.all(
+        allArticles.map(async (article) => {
+          try {
+            const { data: imagesData, error: imagesError } = await supabase
+              .from("news_article_images")
+              .select("*")
+              .eq("article_id", article.id)
+              .order("image_order", { ascending: true })
+
+            if (imagesError) {
+              // Check if table doesn't exist (common error code: PGRST116)
+              if (imagesError.code === 'PGRST116' || imagesError.message?.includes('does not exist')) {
+                console.warn("news_article_images table not found. Please run the database migration.")
+                return { ...article, images: [] }
+              }
+              console.error("Error fetching images for article:", article.id, imagesError)
+              return { ...article, images: [] }
+            }
+
+            return { ...article, images: imagesData || [] }
+          } catch (error) {
+            console.warn("Failed to fetch images for article (table may not exist yet):", article.id)
+            return { ...article, images: [] }
+          }
+        })
+      )
+
       // Set the manually selected featured article, or the latest one if none is featured
-      const featuredArticles = allArticles.filter(article => article.is_featured)
+      const featuredArticles = articlesWithImages.filter(article => article.is_featured)
       const featuredArticle = featuredArticles.length > 0 
         ? featuredArticles[0] 
-        : allArticles.length > 0 
-          ? allArticles[0] // Use the latest article if no featured article exists
+        : articlesWithImages.length > 0 
+          ? articlesWithImages[0] // Use the latest article if no featured article exists
           : null
       
       setFeaturedArticle(featuredArticle)
 
       // Set all articles for the carousel (excluding the current featured article to avoid duplication)
       const currentFeaturedId = featuredArticle ? featuredArticle.id : null
-      const articlesForCarousel = allArticles.filter(article => article.id !== currentFeaturedId)
+      const articlesForCarousel = articlesWithImages.filter(article => article.id !== currentFeaturedId)
       setAllArticles(articlesForCarousel)
     } catch (error) {
       console.error("Error fetching articles:", error)
@@ -230,17 +285,22 @@ export function NewsPage() {
                     className="relative overflow-hidden rounded-xl bg-white shadow-md hover:shadow-xl transition-all duration-300 block group"
                   >
                     <div className="relative h-[300px] w-full md:h-[400px]">
-                      <Image
-                        src={featuredArticle.image_url || "/placeholder.svg"}
-                        alt={featuredArticle.title}
-                        fill
-                        className="object-cover group-hover:scale-105 transition-transform duration-500"
-                        priority
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 66vw, 50vw"
-                        quality={85}
-                        placeholder="blur"
-                        blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
-                      />
+                      {(() => {
+                        const displayImage = getDisplayImage(featuredArticle)
+                        return (
+                          <Image
+                            src={displayImage.src}
+                            alt={displayImage.alt}
+                            fill
+                            className="object-cover group-hover:scale-105 transition-transform duration-500"
+                            priority
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 66vw, 50vw"
+                            quality={85}
+                            placeholder="blur"
+                            blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
+                          />
+                        )
+                      })()}
                     </div>
                     <div className="p-6">
                       <div className="mb-3 flex items-center gap-3">
@@ -324,17 +384,22 @@ export function NewsPage() {
                         <div key={article.id} className="py-4 first:pt-0 last:pb-0">
                           <div className="flex gap-4">
                             <div className="relative w-24 h-24 flex-shrink-0 overflow-hidden rounded-lg">
-                              <Image 
-                                src={article.image_url || "/placeholder.svg"} 
-                                alt={article.title}
-                                fill
-                                className="object-cover"
-                                loading="lazy"
-                                sizes="96px"
-                                quality={85}
-                                placeholder="blur"
-                                blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
-                              />
+                              {(() => {
+                                const displayImage = getDisplayImage(article)
+                                return (
+                                  <Image 
+                                    src={displayImage.src} 
+                                    alt={displayImage.alt}
+                                    fill
+                                    className="object-cover"
+                                    loading="lazy"
+                                    sizes="96px"
+                                    quality={85}
+                                    placeholder="blur"
+                                    blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
+                                  />
+                                )
+                              })()}
                             </div>
                             <div className="flex-1 min-w-0">
                               <Link href={`/news/${article.id}`}>
@@ -395,17 +460,22 @@ export function NewsPage() {
                             aria-hidden="true"
                           />
                           <div className="relative h-48 overflow-hidden">
-                            <Image 
-                              src={article.image_url || "/placeholder.svg"} 
-                              alt={article.title} 
-                              fill 
-                              className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
-                              loading="lazy"
-                              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                              quality={85}
-                              placeholder="blur"
-                              blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
-                            />
+                            {(() => {
+                              const displayImage = getDisplayImage(article)
+                              return (
+                                <Image 
+                                  src={displayImage.src} 
+                                  alt={displayImage.alt} 
+                                  fill 
+                                  className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
+                                  loading="lazy"
+                                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                  quality={85}
+                                  placeholder="blur"
+                                  blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
+                                />
+                              )
+                            })()}
                           </div>
                           <div className="p-5 flex flex-col flex-grow relative">
                             <div className="flex items-center text-gray-500 text-sm mb-3">
@@ -474,17 +544,22 @@ export function NewsPage() {
                                 aria-hidden="true"
                               />
                               <div className="relative h-48 overflow-hidden">
-                                <Image 
-                                  src={article.image_url || "/placeholder.svg"} 
-                                  alt={article.title} 
-                                  fill 
-                                  className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
-                                  loading="lazy"
-                                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                  quality={85}
-                                  placeholder="blur"
-                                  blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
-                                />
+                                {(() => {
+                                  const displayImage = getDisplayImage(article)
+                                  return (
+                                    <Image 
+                                      src={displayImage.src} 
+                                      alt={displayImage.alt} 
+                                      fill 
+                                      className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
+                                      loading="lazy"
+                                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                      quality={85}
+                                      placeholder="blur"
+                                      blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
+                                    />
+                                  )
+                                })()}
                               </div>
                               <div className="p-5 flex flex-col flex-grow relative">
                                 <div className="flex items-center text-gray-500 text-sm mb-3">
