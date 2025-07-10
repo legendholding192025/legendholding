@@ -1,7 +1,7 @@
 'use client';
 
 import Script from 'next/script';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { ANALYTICS_CONFIG } from '@/lib/analytics';
 
 interface GoogleTagManagerProps {
@@ -10,28 +10,8 @@ interface GoogleTagManagerProps {
 
 export default function GoogleTagManager({ gtmId }: GoogleTagManagerProps) {
   const gtmIdToUse = gtmId || ANALYTICS_CONFIG.GTM_ID;
-  const [canLoadScripts, setCanLoadScripts] = useState(false);
 
   useEffect(() => {
-    // In development, load scripts immediately
-    if (process.env.NODE_ENV === 'development') {
-      setCanLoadScripts(true);
-      return;
-    }
-
-    // In production, wait for autoblocker to be ready
-    const checkAutoblocker = () => {
-      // Check if autoblocker is ready or if we're not using it
-      if (typeof window !== 'undefined') {
-        // Give autoblocker time to initialize (3 seconds max)
-        setTimeout(() => {
-          setCanLoadScripts(true);
-        }, 3000);
-      }
-    };
-
-    checkAutoblocker();
-
     // Initialize Google Tag Manager
     if (typeof window !== 'undefined' && window.dataLayer) {
       window.dataLayer = window.dataLayer || [];
@@ -54,10 +34,7 @@ export default function GoogleTagManager({ gtmId }: GoogleTagManagerProps) {
         />
       </noscript>
 
-      {/* Only load tracking scripts when safe to do so */}
-      {canLoadScripts && (
-        <>
-          {/* Google Tag Manager */}
+      {/* Google Tag Manager */}
           <Script
             id="gtm-script"
             strategy="afterInteractive"
@@ -245,10 +222,8 @@ export default function GoogleTagManager({ gtmId }: GoogleTagManagerProps) {
                   }
                 }
               });
-            `}
-          </Script>
-        </>
-      )}
+                    `}
+      </Script>
     </>
   );
 }
