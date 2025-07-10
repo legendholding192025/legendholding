@@ -28,7 +28,10 @@ export default function CookieConsent() {
 
     // Only initialize Usercentrics in production
     if (process.env.NODE_ENV === 'production') {
-      window.usercentrics?.init()
+      // Small delay to ensure CMP script is fully loaded
+      setTimeout(() => {
+        window.usercentrics?.init()
+      }, 100)
     }
   }, [])
 

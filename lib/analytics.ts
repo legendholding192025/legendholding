@@ -89,12 +89,7 @@ export const trackEvent = (eventName: string, parameters?: Record<string, any>) 
   }
   
   if (typeof window !== 'undefined' && window.fbq) {
-    // Use trackCustom for custom events like page_view
-    if (eventName === 'page_view') {
-      window.fbq('trackCustom', 'page_view', parameters);
-    } else {
-      window.fbq('track', eventName, parameters);
-    }
+    window.fbq('track', eventName, parameters);
   }
   
   if (typeof window !== 'undefined' && window.snaptr) {
@@ -110,11 +105,40 @@ export const trackEvent = (eventName: string, parameters?: Record<string, any>) 
 export const trackPageView = (pageName: string, pagePath?: string) => {
   const currentPath = pagePath || (typeof window !== 'undefined' ? window.location.pathname : '');
   
-  trackEvent('page_view', {
-    page_title: pageName,
-    page_location: typeof window !== 'undefined' ? window.location.href : '',
-    page_path: currentPath,
-  });
+  // Use standard PageView for Meta Pixel, custom event for others
+  if (typeof window !== 'undefined') {
+    // Google Analytics
+    if (window.gtag) {
+      window.gtag('event', 'page_view', {
+        page_title: pageName,
+        page_location: window.location.href,
+        page_path: currentPath,
+      });
+    }
+    
+    // Meta Pixel - use standard PageView event
+    if (window.fbq) {
+      window.fbq('track', 'PageView', {
+        page_title: pageName,
+        page_path: currentPath,
+      });
+    }
+    
+    // Other platforms
+    if (window.snaptr) {
+      window.snaptr('track', 'PAGE_VIEW', {
+        page_title: pageName,
+        page_path: currentPath,
+      });
+    }
+    
+    if (window.ttq) {
+      window.ttq.track('page_view', {
+        page_title: pageName,
+        page_path: currentPath,
+      });
+    }
+  }
 };
 
 // Conversion tracking
