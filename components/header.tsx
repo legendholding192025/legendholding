@@ -69,7 +69,7 @@ type MenuItem = {
 const menuItems: MenuItem[] = [
   {
     title: "Who We Are",
-    url: "/who-we-are",
+    url: "/who-we-are/about-us",
     hasSubmenu: true,
     submenu: [
       {
@@ -94,7 +94,7 @@ const menuItems: MenuItem[] = [
   },
   {
     title: "Our Businesses",
-    url: "/business",
+    url: "/our-businesses",
     hasSubmenu: true,
     businessCategories: [
       {
