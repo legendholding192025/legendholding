@@ -11,7 +11,6 @@ import { UnauthorizedAccess } from "@/components/admin/unauthorized-access"
 import { useAdminPermissions } from "@/hooks/use-admin-permissions"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Card } from "@/components/ui/card"
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 import { MessageSquare } from "lucide-react"
 import { toast } from "sonner"
 import Link from "next/link"
@@ -35,28 +34,13 @@ export function DashboardClient() {
   const [submissions, setSubmissions] = useState<ContactSubmission[]>([])
   const [jobApplications, setJobApplications] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
-  const [chartData, setChartData] = useState<any[]>([])
 
   useEffect(() => {
     fetchSubmissions()
     fetchJobApplications()
   }, [])
 
-  useEffect(() => {
-    // Process submissions for chart data
-    const monthlyData = submissions.reduce((acc: Record<string, number>, submission) => {
-      const month = new Date(submission.created_at).toLocaleString('default', { month: 'short' })
-      acc[month] = (acc[month] || 0) + 1
-      return acc
-    }, {})
 
-    const chartData = Object.entries(monthlyData).map(([name, submissions]) => ({
-      name,
-      submissions
-    }))
-
-    setChartData(chartData)
-  }, [submissions])
 
   const fetchSubmissions = async () => {
     try {
@@ -191,27 +175,12 @@ export function DashboardClient() {
         <div className="p-8">
           {/* Contact Submissions Section */}
           <div className="mb-12">
-            <h2 className="text-xl font-semibold mb-6">Contact Submissions</h2>
+            <h2 className="text-xl font-semibold mb-6">Submissions</h2>
             <div className="mt-8">
               <DashboardCards submissions={submissions} jobApplications={jobApplications} />
             </div>
 
-            <div className="mt-8">
-              <Card className="p-6">
-                <h3 className="text-lg font-semibold mb-4">Submissions Over Time</h3>
-                <div className="h-[300px]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={chartData}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="name" />
-                      <YAxis />
-                      <Tooltip />
-                      <Line type="monotone" dataKey="submissions" stroke="#5E366D" />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </div>
-              </Card>
-            </div>
+
 
             <div className="mt-8">
               <Card>

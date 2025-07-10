@@ -72,15 +72,15 @@ export function DashboardCards({ submissions, jobApplications = [] }: DashboardC
         const colorClasses = getColorClasses(card.color)
         
         return (
-          <Card key={index} className="relative overflow-hidden min-w-0">
-            <CardContent className="p-6">
+          <Card key={index} className="relative overflow-hidden min-w-0 hover:shadow-lg transition-shadow duration-200 cursor-pointer group">
+            <CardContent className="p-6 relative z-10">
               <div className="flex items-center justify-between">
-                <div className={`p-2 rounded-lg ${colorClasses.bg}`}>
+                <div className={`p-2 rounded-lg ${colorClasses.bg} group-hover:scale-105 transition-transform duration-200`}>
                   <card.icon className={`h-5 w-5 ${colorClasses.text}`} />
                 </div>
                 <div className={`flex items-center gap-1 text-sm ${
                   card.trend === 'up' ? 'text-green-600' : 'text-red-600'
-                }`}>
+                } group-hover:scale-105 transition-transform duration-200`}>
                   {card.trend === 'up' ? (
                     <TrendingUp className="h-4 w-4" />
                   ) : (
@@ -90,15 +90,15 @@ export function DashboardCards({ submissions, jobApplications = [] }: DashboardC
                 </div>
               </div>
               
-              <div className="mt-4">
-                <div className="text-2xl font-bold">{card.value}</div>
-                <div className="text-sm font-medium text-gray-800 mt-1">{card.title}</div>
-                <div className="text-xs text-gray-500 mt-1">{card.description}</div>
+              <div className="mt-4 relative z-20">
+                <div className="text-2xl font-bold text-gray-900 group-hover:text-gray-700 transition-colors duration-200">{card.value}</div>
+                <div className="text-sm font-medium text-gray-800 mt-1 group-hover:text-gray-600 transition-colors duration-200">{card.title}</div>
+                <div className="text-xs text-gray-500 mt-1 group-hover:text-gray-400 transition-colors duration-200">{card.description}</div>
               </div>
-
-              {/* Decorative Element */}
-              <div className={`absolute top-0 right-0 w-32 h-32 transform translate-x-16 -translate-y-16 rounded-full ${colorClasses.bgLight}`} />
             </CardContent>
+            
+            {/* Decorative Element - Fixed positioning and hover effects */}
+            <div className={`absolute top-0 right-0 w-24 h-24 transform translate-x-8 -translate-y-8 rounded-full ${colorClasses.bgLight} opacity-50 group-hover:opacity-70 transition-opacity duration-200 pointer-events-none`} />
           </Card>
         )
       })}
