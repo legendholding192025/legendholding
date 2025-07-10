@@ -283,43 +283,130 @@ export default function NewsArticlePage() {
                   {article.title}
                 </h1>
 
-                {/* Banner Image */}
+                {/* Images Gallery */}
                 {(() => {
-                  const bannerImage = article.images?.find(img => img.image_type === 'banner') || 
-                                    (article.images && article.images.length > 0 ? article.images[0] : null)
-                  
-                  if (bannerImage) {
+                  // Get all images (both banner and content)
+                  const allImages = article.images && article.images.length > 0 
+                    ? article.images 
+                    : article.image_url 
+                      ? [{ id: 'legacy', image_url: article.image_url, alt_text: article.title, caption: '' }] 
+                      : []
+
+                  if (allImages.length === 0) return null
+
+                  // Single image - full width
+                  if (allImages.length === 1) {
+                    const image = allImages[0]
                     return (
                       <div className="relative mb-6 h-[300px] w-full overflow-hidden rounded-xl md:h-[500px]">
                         <Image
-                          src={bannerImage.image_url}
-                          alt={bannerImage.alt_text || article.title}
+                          src={image.image_url}
+                          alt={image.alt_text || article.title}
                           fill
                           className="object-cover"
                           priority
                         />
-                        {bannerImage.caption && (
+                        {image.caption && (
                           <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white p-3 text-sm">
-                            {bannerImage.caption}
+                            {image.caption}
                           </div>
                         )}
                       </div>
                     )
-                  } else if (article.image_url) {
-                    // Fallback to legacy image_url
+                  }
+
+                  // Two images - one above, one below
+                  if (allImages.length === 2) {
                     return (
-                      <div className="relative mb-6 h-[300px] w-full overflow-hidden rounded-xl md:h-[500px]">
-                        <Image
-                          src={article.image_url}
-                          alt={article.title}
-                          fill
-                          className="object-cover"
-                          priority
-                        />
+                      <div className="relative mb-6 w-full overflow-hidden rounded-xl">
+                        <div className="grid grid-rows-2 gap-1 h-[350px] md:h-[600px]">
+                          {allImages.map((image, index) => (
+                            <div key={image.id || index} className="relative overflow-hidden">
+                              <Image
+                                src={image.image_url}
+                                alt={image.alt_text || `Image ${index + 1}`}
+                                fill
+                                className="object-cover"
+                                priority={index === 0}
+                              />
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     )
                   }
-                  return null
+
+                  // Three images - one on top, two below
+                  if (allImages.length === 3) {
+                    return (
+                      <div className="relative mb-6 w-full overflow-hidden rounded-xl">
+                        <div className="grid grid-rows-2 gap-1 h-[350px] md:h-[600px]">
+                          {/* First image - top full width */}
+                          <div className="relative overflow-hidden">
+                            <Image
+                              src={allImages[0].image_url}
+                              alt={allImages[0].alt_text || "Main image"}
+                              fill
+                              className="object-cover"
+                              priority
+                            />
+                          </div>
+                          {/* Two images - bottom row */}
+                          <div className="grid grid-cols-2 gap-1 h-full">
+                            {allImages.slice(1).map((image, index) => (
+                              <div key={image.id || index} className="relative overflow-hidden">
+                                <Image
+                                  src={image.image_url}
+                                  alt={image.alt_text || `Image ${index + 2}`}
+                                  fill
+                                  className="object-cover"
+                                />
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    )
+                  }
+
+                  // Four or more images - one on top, grid below
+                  return (
+                    <div className="relative mb-6 w-full overflow-hidden rounded-xl">
+                      <div className="grid grid-rows-2 gap-1 h-[350px] md:h-[600px]">
+                        {/* First image - top full width */}
+                        <div className="relative overflow-hidden">
+                          <Image
+                            src={allImages[0].image_url}
+                            alt={allImages[0].alt_text || "Main image"}
+                            fill
+                            className="object-cover"
+                            priority
+                          />
+                        </div>
+                        {/* Grid of images - bottom row */}
+                        <div className="grid grid-cols-3 gap-1 h-full">
+                          {allImages.slice(1, 4).map((image, index) => (
+                            <div key={image.id || index} className="relative overflow-hidden">
+                              <Image
+                                src={image.image_url}
+                                alt={image.alt_text || `Image ${index + 2}`}
+                                fill
+                                className="object-cover"
+                              />
+                              {/* Show +N indicator on last visible image if there are more */}
+                              {index === 2 && allImages.length > 4 && (
+                                <div className="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center">
+                                  <span className="text-white text-xl font-bold">
+                                    +{allImages.length - 4}
+                                  </span>
+                                </div>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  )
                 })()}
 
                 {/* Content */}
@@ -328,30 +415,7 @@ export default function NewsArticlePage() {
                   dangerouslySetInnerHTML={{ __html: article.content }}
                 />
 
-                {/* Content Images */}
-                {article.images && article.images.filter(img => img.image_type === 'content').length > 0 && (
-                  <div className="mt-8 space-y-6">
-                    {article.images
-                      .filter(img => img.image_type === 'content')
-                      .map((image, index) => (
-                        <div key={image.id || index} className="relative">
-                          <div className="relative h-[400px] w-full overflow-hidden rounded-xl">
-                            <Image
-                              src={image.image_url}
-                              alt={image.alt_text || `Content image ${index + 1}`}
-                              fill
-                              className="object-cover"
-                            />
-                          </div>
-                          {image.caption && (
-                            <p className="mt-2 text-sm text-gray-600 text-center italic">
-                              {image.caption}
-                            </p>
-                          )}
-                        </div>
-                      ))}
-                  </div>
-                )}
+
 
                 {/* Share Section */}
                 <div className="mt-8 border-t pt-6">
