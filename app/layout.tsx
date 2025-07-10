@@ -30,19 +30,17 @@ export default function RootLayout({
     <html lang="en" className={`${brandFont.variable}`}>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-        {/* Usercentrics Autoblocker - Must load first in production */}
+        {/* Usercentrics Autoblocker - Must load first, using regular script tags */}
         {process.env.NODE_ENV === 'production' && (
           <>
-            <Script
-              id="usercentrics-autoblocker"
+            <script
               src="https://web.cmp.usercentrics.eu/modules/autoblocker.js"
-              strategy="beforeInteractive"
+              // No async or defer - synchronous loading to ensure it loads first
             />
-            <Script
-              id="usercentrics-cmp"
+            <script
               src="https://web.cmp.usercentrics.eu/ui/loader.js"
               data-settings-id="iRDvHQKYcoYv2X"
-              strategy="beforeInteractive"
+              // No async or defer - synchronous loading
             />
           </>
         )}

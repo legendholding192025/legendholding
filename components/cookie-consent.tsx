@@ -30,28 +30,37 @@ export default function CookieConsent() {
 
     // Only initialize and activate Usercentrics in production
     if (process.env.NODE_ENV === 'production') {
-      // Wait for the CMP to be ready and then activate it
+      // Since we're now using synchronous script loading, the scripts should be available sooner
       const activateCMP = () => {
         if (window.usercentrics) {
           try {
+            console.log('Initializing Usercentrics CMP...')
+            
             // Initialize the CMP
             window.usercentrics.init()
             
-            // Check if CMP is ready and show the consent layer to make it active
+            // Wait a bit for initialization to complete, then activate
             setTimeout(() => {
               if (window.usercentrics?.isInitialized && window.usercentrics.isInitialized()) {
+                console.log('CMP initialized, showing consent layer...')
                 // This will make the CMP active by showing the consent layer
                 window.usercentrics.showFirstLayer()
+              } else {
+                console.warn('CMP not fully initialized yet')
               }
-            }, 200)
+            }, 100)
           } catch (error) {
             console.error('CMP initialization error:', error)
           }
+        } else {
+          console.warn('Usercentrics not available yet, retrying...')
+          // Retry after a short delay
+          setTimeout(activateCMP, 100)
         }
       }
 
-      // Wait for scripts to load and then activate
-      setTimeout(activateCMP, 300)
+      // Start activation process with a minimal delay
+      setTimeout(activateCMP, 50)
     }
   }, [])
 

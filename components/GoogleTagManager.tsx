@@ -25,21 +25,26 @@ export default function GoogleTagManager({ gtmId }: GoogleTagManagerProps) {
     // In production, wait for autoblocker to be ready
     if (process.env.NODE_ENV === 'production') {
       const checkAutoblockerReady = () => {
-        // Check if autoblocker is loaded by looking for its presence
+        // Check if autoblocker is loaded by looking for its presence in the DOM
         const autoblockerScript = document.querySelector('script[src*="autoblocker.js"]');
-        if (autoblockerScript) {
-          // Wait a bit more to ensure autoblocker is fully initialized
+        const cmpScript = document.querySelector('script[src*="loader.js"]');
+        
+        if (autoblockerScript && cmpScript) {
+          console.log('Autoblocker scripts detected, waiting for initialization...');
+          // Scripts are in DOM, wait a bit more for them to initialize
           setTimeout(() => {
+            console.log('Autoblocker should be ready, enabling tracking scripts...');
             setCanLoadScripts(true);
-          }, 500);
+          }, 200);
         } else {
-          // If autoblocker script is not found, wait and try again
-          setTimeout(checkAutoblockerReady, 100);
+          console.log('Autoblocker scripts not found yet, retrying...');
+          // If autoblocker scripts are not found, wait and try again
+          setTimeout(checkAutoblockerReady, 50);
         }
       };
 
-      // Start checking after a small delay
-      setTimeout(checkAutoblockerReady, 100);
+      // Start checking immediately since we're using synchronous loading
+      checkAutoblockerReady();
     } else {
       // In development, load scripts immediately
       setCanLoadScripts(true);
