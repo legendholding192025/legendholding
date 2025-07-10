@@ -8,6 +8,12 @@ declare global {
   interface Window {
     usercentrics?: {
       init: () => void;
+      show: () => void;
+      isInitialized: () => boolean;
+    };
+    UC_UI?: {
+      isInitialized: () => boolean;
+      showFirstLayer: () => void;
     };
   }
 }
@@ -28,7 +34,44 @@ export default function CookieConsent() {
 
     // Only initialize Usercentrics in production
     if (process.env.NODE_ENV === 'production') {
-      window.usercentrics?.init()
+      // Wait for the Usercentrics script to load and initialize
+      const initUsercentrics = () => {
+        if (window.usercentrics) {
+          try {
+            window.usercentrics.init()
+            console.log('Usercentrics CMP initialized successfully')
+          } catch (error) {
+            console.error('Error initializing Usercentrics CMP:', error)
+          }
+        } else if (window.UC_UI) {
+          try {
+            // Alternative initialization method
+            window.UC_UI.showFirstLayer()
+            console.log('Usercentrics UI initialized successfully')
+          } catch (error) {
+            console.error('Error initializing Usercentrics UI:', error)
+          }
+        }
+      }
+
+      // Try to initialize immediately if script is already loaded
+      if (window.usercentrics || window.UC_UI) {
+        initUsercentrics()
+      } else {
+        // Wait for script to load with retries
+        let retryCount = 0
+        const maxRetries = 10
+        const checkInterval = setInterval(() => {
+          retryCount++
+          if (window.usercentrics || window.UC_UI) {
+            clearInterval(checkInterval)
+            initUsercentrics()
+          } else if (retryCount >= maxRetries) {
+            clearInterval(checkInterval)
+            console.warn('Usercentrics CMP script did not load within expected time')
+          }
+        }, 500)
+      }
     }
   }, [])
 
@@ -46,6 +89,20 @@ export default function CookieConsent() {
           src="https://web.cmp.usercentrics.eu/ui/loader.js"
           data-settings-id="iRDvHQKYcoYv2X"
           strategy="beforeInteractive"
+          onLoad={() => {
+            // Script loaded, trigger initialization
+            if (window.usercentrics) {
+              try {
+                window.usercentrics.init()
+                console.log('Usercentrics CMP loaded and initialized')
+              } catch (error) {
+                console.error('Error initializing Usercentrics on load:', error)
+              }
+            }
+          }}
+          onError={(error) => {
+            console.error('Failed to load Usercentrics CMP script:', error)
+          }}
         />
       )}
       

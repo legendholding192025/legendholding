@@ -30,12 +30,10 @@ export default function RootLayout({
     <html lang="en" className={`${brandFont.variable}`}>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-        {/* Autoblocker script must be first - only in production */}
+        {/* Autoblocker script must be absolutely first - synchronous loading */}
         {process.env.NODE_ENV === 'production' && (
-          <Script
-            id="usercentrics-autoblocker"
+          <script 
             src="https://web.cmp.usercentrics.eu/modules/autoblocker.js"
-            strategy="beforeInteractive"
           />
         )}
       </head>
