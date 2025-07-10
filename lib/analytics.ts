@@ -89,7 +89,12 @@ export const trackEvent = (eventName: string, parameters?: Record<string, any>) 
   }
   
   if (typeof window !== 'undefined' && window.fbq) {
-    window.fbq('track', eventName, parameters);
+    // Use trackCustom for custom events like page_view
+    if (eventName === 'page_view') {
+      window.fbq('trackCustom', 'page_view', parameters);
+    } else {
+      window.fbq('track', eventName, parameters);
+    }
   }
   
   if (typeof window !== 'undefined' && window.snaptr) {
