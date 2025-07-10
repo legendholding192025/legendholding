@@ -253,8 +253,7 @@ export default function JobsManagement() {
         .insert([jobData])
         .select()
 
-      console.log('Supabase response data:', data);
-      console.log('Supabase response error:', error);
+
 
       if (error) {
         throw error
@@ -278,8 +277,6 @@ export default function JobsManagement() {
       setResponsibilitiesText("")
       fetchJobs()
     } catch (error: any) {
-      console.error('Error adding job:', error)
-      console.error('Supabase error details:', error)
       toast.error(`Failed to post job: ${error.message || 'An unknown error occurred'}`)
     } finally {
       setIsSubmittingJob(false)
@@ -309,15 +306,12 @@ export default function JobsManagement() {
         }
       })
 
-      console.log('Updating job with data:', updateData)
-
       const { error } = await supabase
         .from('jobs')
         .update(updateData)
         .eq('id', id)
 
       if (error) {
-        console.error('Supabase update error:', error)
         throw error
       }
 
@@ -328,8 +322,6 @@ export default function JobsManagement() {
       )
       toast.success("Job updated successfully")
     } catch (error) {
-      console.error('Error updating job:', error)
-      console.error('Error details:', JSON.stringify(error, null, 2))
       toast.error(`Failed to update job: ${error instanceof Error ? error.message : 'Unknown error'}`)
       throw error
     }
@@ -347,7 +339,6 @@ export default function JobsManagement() {
       setJobs(prev => prev.filter(job => job.id !== id))
       toast.success("Job deleted successfully")
     } catch (error) {
-      console.error('Error deleting job:', error)
       toast.error("Failed to delete job")
       throw error
     }
@@ -355,11 +346,7 @@ export default function JobsManagement() {
 
   const handleSignOut = async () => {
     try {
-      console.log('Signing out from jobs...')
       const { error } = await supabase.auth.signOut()
-      if (error) {
-        console.error('Sign out error:', error)
-      }
       
       // Clear any local storage
       localStorage.removeItem('supabase.auth.token')
@@ -367,7 +354,6 @@ export default function JobsManagement() {
       // Force redirect to login page
       window.location.href = '/admin/login'
     } catch (error) {
-      console.error("Error signing out:", error)
       // Force redirect anyway
       window.location.href = '/admin/login'
     }

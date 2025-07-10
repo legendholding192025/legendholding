@@ -188,7 +188,7 @@ export default function JobDetails() {
         {/* Hero Section */}
         <div className="bg-[#5E366D] text-white py-12 sm:py-16 relative overflow-hidden">
           {/* Background Pattern */}
-          <div className="absolute inset-0 bg-[url('/images/careers-pattern.svg')] opacity-10"></div>
+          
           
           <div className="container mx-auto px-4 relative z-10">
             <Link 

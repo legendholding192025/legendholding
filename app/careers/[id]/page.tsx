@@ -291,8 +291,7 @@ const JobDetails = () => {
       <main className="pt-20">
         {/* Hero Banner */}
         <div className="relative bg-[#5E366D] text-white min-h-[400px] overflow-hidden">
-          {/* Background Pattern */}
-          <div className="absolute inset-0 bg-[url('/images/careers-pattern.svg')] opacity-10 z-10"></div>
+
           
           {/* Background Logo */}
           <div 

@@ -41,11 +41,7 @@ export function JobApplicationForm({ jobId, jobTitle, company, isOpen, onClose }
   const supabase = createClientComponentClient()
   const router = useRouter()
 
-  // Debug: Log Supabase env variables in browser
-  useEffect(() => {
-    console.log('Supabase URL:', process.env.NEXT_PUBLIC_SUPABASE_URL);
-    console.log('Supabase Key:', process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
-  }, []);
+
 
   const validateForm = () => {
     try {
@@ -102,7 +98,6 @@ export function JobApplicationForm({ jobId, jobTitle, company, isOpen, onClose }
     
     // Prevent multiple submissions
     if (loading) {
-      console.log('Submission already in progress, ignoring duplicate submit')
       return
     }
     
@@ -127,8 +122,6 @@ export function JobApplicationForm({ jobId, jobTitle, company, isOpen, onClose }
         const timestamp = new Date().getTime()
         fileName = `${timestamp}/${timestamp}.${fileExt}`
 
-        console.log('Attempting to upload resume:', fileName, 'to applications bucket')
-
         // Use base64 storage as primary method since storage buckets are having issues
         let uploadSuccess = false
         let finalFileName = fileName
@@ -136,11 +129,8 @@ export function JobApplicationForm({ jobId, jobTitle, company, isOpen, onClose }
 
         // Strategy 1: Convert to base64 and store in database (primary method)
         try {
-          console.log('Converting file to base64 for database storage')
-          
           // Check file size - limit to 5MB for base64 conversion
           if (resumeFile.size > 5 * 1024 * 1024) {
-            console.log('File too large for base64, trying storage instead')
             throw new Error('File too large for base64 conversion')
           }
           
@@ -164,7 +154,6 @@ export function JobApplicationForm({ jobId, jobTitle, company, isOpen, onClose }
           
           finalFileName = base64Data
           uploadSuccess = true
-          console.log('Successfully converted file to base64')
         } catch (error) {
           console.error("Base64 conversion failed:", error)
         }
@@ -183,7 +172,6 @@ export function JobApplicationForm({ jobId, jobTitle, company, isOpen, onClose }
             if (!uploadError) {
               uploadSuccess = true
               bucketUsed = 'applications'
-              console.log('Successfully uploaded to applications bucket')
             } else {
               console.error("Applications bucket upload failed:", uploadError)
             }
@@ -195,7 +183,6 @@ export function JobApplicationForm({ jobId, jobTitle, company, isOpen, onClose }
         // Strategy 3: Try resumes bucket if applications failed
         if (!uploadSuccess) {
           try {
-            console.log('Trying resumes bucket as fallback')
             const { error: altUploadError } = await supabase.storage
               .from("resumes")
               .upload(fileName, resumeFile, {
@@ -208,7 +195,6 @@ export function JobApplicationForm({ jobId, jobTitle, company, isOpen, onClose }
               uploadSuccess = true
               bucketUsed = 'resumes'
               finalFileName = `resumes/${fileName}`
-              console.log('Successfully uploaded to resumes bucket')
             } else {
               console.error("Resumes bucket upload also failed:", altUploadError)
             }
@@ -221,7 +207,6 @@ export function JobApplicationForm({ jobId, jobTitle, company, isOpen, onClose }
         if (!uploadSuccess) {
           try {
             const simpleFileName = `${timestamp}.${fileExt}`
-            console.log('Trying simple filename:', simpleFileName)
             
             const { error: simpleUploadError } = await supabase.storage
               .from("applications")
@@ -234,7 +219,6 @@ export function JobApplicationForm({ jobId, jobTitle, company, isOpen, onClose }
             if (!simpleUploadError) {
               uploadSuccess = true
               finalFileName = simpleFileName
-              console.log('Successfully uploaded with simple filename')
             } else {
               console.error("Simple filename upload failed:", simpleUploadError)
             }
@@ -275,10 +259,7 @@ export function JobApplicationForm({ jobId, jobTitle, company, isOpen, onClose }
           updated_at: new Date().toISOString()
         }
 
-        console.log('Attempting to submit application with data:', insertData)
-
         // Submit application using API endpoint
-        console.log('Sending POST request to /api/job-applications')
         const response = await fetch('/api/job-applications', {
           method: 'POST',
           headers: {
@@ -287,16 +268,10 @@ export function JobApplicationForm({ jobId, jobTitle, company, isOpen, onClose }
           body: JSON.stringify(insertData)
         })
 
-        console.log('Response status:', response.status)
-        console.log('Response ok:', response.ok)
-        console.log('Response headers:', Object.fromEntries(response.headers.entries()))
-
         let result
         try {
           const responseText = await response.text()
-          console.log('Raw response text:', responseText)
           result = JSON.parse(responseText)
-          console.log('API response parsed successfully:', result)
         } catch (jsonError) {
           console.error('Failed to parse response as JSON:', jsonError)
           throw new Error('Invalid response format from server')
@@ -305,10 +280,6 @@ export function JobApplicationForm({ jobId, jobTitle, company, isOpen, onClose }
         if (!response.ok) {
           // If application creation fails, log the error but don't try to clean up
           // Base64 files don't need cleanup, and storage cleanup is complex
-          console.log('Application creation failed, skipping file cleanup')
-          
-          console.error("Application creation error:", result)
-          console.error("Error details:", result.details)
           
           // Improved error handling with more specific error messages
           if (result.error?.includes('Invalid job reference')) {
@@ -324,14 +295,10 @@ export function JobApplicationForm({ jobId, jobTitle, company, isOpen, onClose }
           }
         }
 
-        console.log('Application created successfully:', result)
         onClose()
         router.push("/careers/thank-you")
       } catch (error) {
         // Clean up on error - simplified approach
-        console.log('Submission process error, skipping file cleanup for simplicity')
-
-        console.error("Submission process error:", error)
         if (error instanceof Error) {
           // Provide more specific error messages
           if (error.message.includes('File too large for base64 conversion')) {
@@ -354,7 +321,6 @@ export function JobApplicationForm({ jobId, jobTitle, company, isOpen, onClose }
         }
       }
     } catch (error) {
-      console.error("Form submission error:", error)
       toast.error("An unexpected error occurred. Please try again.")
     } finally {
       setLoading(false)
