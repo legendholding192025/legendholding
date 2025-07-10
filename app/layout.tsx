@@ -30,20 +30,6 @@ export default function RootLayout({
     <html lang="en" className={`${brandFont.variable}`}>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-        {/* Usercentrics Autoblocker - Must load first, using regular script tags */}
-        {process.env.NODE_ENV === 'production' && (
-          <>
-            <script
-              src="https://web.cmp.usercentrics.eu/modules/autoblocker.js"
-              // No async or defer - synchronous loading to ensure it loads first
-            />
-            <script
-              src="https://web.cmp.usercentrics.eu/ui/loader.js"
-              data-settings-id="iRDvHQKYcoYv2X"
-              // No async or defer - synchronous loading
-            />
-          </>
-        )}
       </head>
       <body className="font-brand min-h-screen bg-background antialiased overflow-x-hidden">
         <GoogleTagManager />

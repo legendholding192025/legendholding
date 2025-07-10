@@ -1,7 +1,7 @@
 'use client';
 
 import Script from 'next/script';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { ANALYTICS_CONFIG } from '@/lib/analytics';
 
 interface GoogleTagManagerProps {
@@ -10,7 +10,6 @@ interface GoogleTagManagerProps {
 
 export default function GoogleTagManager({ gtmId }: GoogleTagManagerProps) {
   const gtmIdToUse = gtmId || ANALYTICS_CONFIG.GTM_ID;
-  const [canLoadScripts, setCanLoadScripts] = useState(false);
 
   useEffect(() => {
     // Initialize Google Tag Manager
@@ -21,40 +20,7 @@ export default function GoogleTagManager({ gtmId }: GoogleTagManagerProps) {
         event: 'gtm.js',
       });
     }
-
-    // In production, wait for autoblocker to be ready
-    if (process.env.NODE_ENV === 'production') {
-      const checkAutoblockerReady = () => {
-        // Check if autoblocker is loaded by looking for its presence in the DOM
-        const autoblockerScript = document.querySelector('script[src*="autoblocker.js"]');
-        const cmpScript = document.querySelector('script[src*="loader.js"]');
-        
-        if (autoblockerScript && cmpScript) {
-          console.log('Autoblocker scripts detected, waiting for initialization...');
-          // Scripts are in DOM, wait a bit more for them to initialize
-          setTimeout(() => {
-            console.log('Autoblocker should be ready, enabling tracking scripts...');
-            setCanLoadScripts(true);
-          }, 200);
-        } else {
-          console.log('Autoblocker scripts not found yet, retrying...');
-          // If autoblocker scripts are not found, wait and try again
-          setTimeout(checkAutoblockerReady, 50);
-        }
-      };
-
-      // Start checking immediately since we're using synchronous loading
-      checkAutoblockerReady();
-    } else {
-      // In development, load scripts immediately
-      setCanLoadScripts(true);
-    }
   }, []);
-
-  // Don't render scripts until autoblocker is ready (in production)
-  if (process.env.NODE_ENV === 'production' && !canLoadScripts) {
-    return null;
-  }
 
   return (
     <>

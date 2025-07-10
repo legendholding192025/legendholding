@@ -8,8 +8,6 @@ declare global {
   interface Window {
     usercentrics?: {
       init: () => void;
-      showFirstLayer: () => void;
-      isInitialized: () => boolean;
     };
   }
 }
@@ -28,39 +26,12 @@ export default function CookieConsent() {
     }
     setIsLoaded(true)
 
-    // Only initialize and activate Usercentrics in production
+    // Only initialize Usercentrics in production
     if (process.env.NODE_ENV === 'production') {
-      // Since we're now using synchronous script loading, the scripts should be available sooner
-      const activateCMP = () => {
-        if (window.usercentrics) {
-          try {
-            console.log('Initializing Usercentrics CMP...')
-            
-            // Initialize the CMP
-            window.usercentrics.init()
-            
-            // Wait a bit for initialization to complete, then activate
-            setTimeout(() => {
-              if (window.usercentrics?.isInitialized && window.usercentrics.isInitialized()) {
-                console.log('CMP initialized, showing consent layer...')
-                // This will make the CMP active by showing the consent layer
-                window.usercentrics.showFirstLayer()
-              } else {
-                console.warn('CMP not fully initialized yet')
-              }
-            }, 100)
-          } catch (error) {
-            console.error('CMP initialization error:', error)
-          }
-        } else {
-          console.warn('Usercentrics not available yet, retrying...')
-          // Retry after a short delay
-          setTimeout(activateCMP, 100)
-        }
-      }
-
-      // Start activation process with a minimal delay
-      setTimeout(activateCMP, 50)
+      // Small delay to ensure CMP script is fully loaded
+      setTimeout(() => {
+        window.usercentrics?.init()
+      }, 100)
     }
   }, [])
 
@@ -71,6 +42,23 @@ export default function CookieConsent() {
 
   return (
     <>
+      {/* Only load Usercentrics scripts in production */}
+      {process.env.NODE_ENV === 'production' && (
+        <>
+          <Script
+            id="usercentrics-autoblocker"
+            src="https://web.cmp.usercentrics.eu/modules/autoblocker.js"
+            strategy="beforeInteractive"
+          />
+          <Script
+            id="usercentrics-cmp"
+            src="https://web.cmp.usercentrics.eu/ui/loader.js"
+            data-settings-id="iRDvHQKYcoYv2X"
+            strategy="beforeInteractive"
+          />
+        </>
+      )}
+      
       {/* Privacy Policy Banner - works in all environments */}
       {isLoaded && !privacyAccepted && (
         <div className="fixed bottom-0 left-0 right-0 bg-white shadow-lg z-50 border-t border-gray-200">
