@@ -12,7 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { ChevronLeft, Download, Trash2 } from "lucide-react"
+import { ChevronLeft, Download, Trash2, Eye } from "lucide-react"
 import { toast } from "sonner"
 import Link from "next/link"
 import { format } from "date-fns"
@@ -175,6 +175,226 @@ export default function ApplicationDetails() {
     }
   }
 
+    const handlePreviewResume = async () => {
+    if (!application) return
+
+    try {
+      console.log('Original resume URL:', application.resume_url);
+      
+      // Handle base64 encoded files
+      if (application.resume_url.startsWith('data:')) {
+        console.log('Processing base64 file...');
+        try {
+          // Extract the base64 data and MIME type
+          const [mimepart, base64Data] = application.resume_url.split(',');
+          const mimeType = mimepart.split(':')[1].split(';')[0];
+          
+          console.log('Detected MIME type:', mimeType);
+          
+          // Convert base64 to binary
+          const binaryString = atob(base64Data);
+          const bytes = new Uint8Array(binaryString.length);
+          for (let i = 0; i < binaryString.length; i++) {
+            bytes[i] = binaryString.charCodeAt(i);
+          }
+          
+          // Handle different file types
+          if (mimeType === 'application/pdf') {
+            // PDF - can be previewed directly
+            const blob = new Blob([bytes], { type: 'application/pdf' });
+            const blobUrl = URL.createObjectURL(blob);
+            
+            console.log('Created blob URL for PDF');
+            
+            const newWindow = window.open(blobUrl, '_blank');
+            if (newWindow) {
+              toast.success('Resume opened in new tab');
+              setTimeout(() => {
+                URL.revokeObjectURL(blobUrl);
+              }, 30000);
+            } else {
+              toast.error('Pop-up blocked. Please allow pop-ups for this site.');
+              URL.revokeObjectURL(blobUrl);
+            }
+          } else if (mimeType.includes('word') || mimeType.includes('document') || mimeType.includes('officedocument')) {
+            // Word document - create HTML preview page
+            console.log('Word document detected - creating preview page');
+            
+            // Create the actual file blob
+            const fileBlob = new Blob([bytes], { type: mimeType });
+            const fileBlobUrl = URL.createObjectURL(fileBlob);
+            
+            // Determine file extension
+            const fileExt = mimeType.includes('wordprocessingml') ? 'docx' : 'doc';
+            const fileName = `${application.full_name.replace(/\s+/g, '_')}_resume.${fileExt}`;
+            
+            // Create HTML preview page
+            const htmlContent = `
+              <!DOCTYPE html>
+              <html>
+                <head>
+                  <title>Resume Preview - ${application.full_name}</title>
+                  <style>
+                    body {
+                      font-family: Arial, sans-serif;
+                      max-width: 800px;
+                      margin: 0 auto;
+                      padding: 20px;
+                      background-color: #f5f5f5;
+                    }
+                    .container {
+                      background: white;
+                      padding: 30px;
+                      border-radius: 8px;
+                      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                      text-align: center;
+                    }
+                    .document-icon {
+                      font-size: 64px;
+                      color: #2B579A;
+                      margin-bottom: 20px;
+                    }
+                    .document-info {
+                      margin-bottom: 30px;
+                    }
+                    .download-btn {
+                      background: #2B579A;
+                      color: white;
+                      padding: 12px 24px;
+                      border: none;
+                      border-radius: 5px;
+                      font-size: 16px;
+                      cursor: pointer;
+                      text-decoration: none;
+                      display: inline-block;
+                    }
+                    .download-btn:hover {
+                      background: #1e3f73;
+                    }
+                    .file-details {
+                      background: #f8f9fa;
+                      padding: 15px;
+                      border-radius: 5px;
+                      margin: 20px 0;
+                      text-align: left;
+                    }
+                  </style>
+                </head>
+                <body>
+                  <div class="container">
+                    <div class="document-icon">📄</div>
+                    <h1>Resume Preview</h1>
+                    <div class="document-info">
+                      <h2>${application.full_name}</h2>
+                      <p>Word Document (${fileExt.toUpperCase()})</p>
+                    </div>
+                                         <div class="file-details">
+                       <strong>Note:</strong> Browser can't read word files, Please download the resume.
+                     </div>
+                    <a href="${fileBlobUrl}" download="${fileName}" class="download-btn">
+                      📥 Download Resume
+                    </a>
+                    <script>
+                      // Auto cleanup after 5 minutes
+                      setTimeout(() => {
+                        document.body.innerHTML = '<div class="container"><h2>Session Expired</h2><p>This preview link has expired for security reasons.</p></div>';
+                      }, 300000);
+                    </script>
+                  </div>
+                </body>
+              </html>
+            `;
+            
+            // Create HTML blob and open it
+            const htmlBlob = new Blob([htmlContent], { type: 'text/html' });
+            const htmlBlobUrl = URL.createObjectURL(htmlBlob);
+            
+            const newWindow = window.open(htmlBlobUrl, '_blank');
+            if (newWindow) {
+              toast.success('Word document preview opened');
+              // Clean up after a longer delay since the page contains the download link
+              setTimeout(() => {
+                URL.revokeObjectURL(fileBlobUrl);
+                URL.revokeObjectURL(htmlBlobUrl);
+              }, 300000); // 5 minutes
+            } else {
+              toast.error('Pop-up blocked. Please allow pop-ups for this site.');
+              URL.revokeObjectURL(fileBlobUrl);
+              URL.revokeObjectURL(htmlBlobUrl);
+            }
+          } else {
+            // Other file types - try direct download approach
+            console.log('Unknown file type, attempting direct view');
+            const blob = new Blob([bytes], { type: mimeType });
+            const blobUrl = URL.createObjectURL(blob);
+            
+            const newWindow = window.open(blobUrl, '_blank');
+            if (newWindow) {
+              toast.success('Resume opened in new tab');
+              setTimeout(() => {
+                URL.revokeObjectURL(blobUrl);
+              }, 30000);
+            } else {
+              toast.error('Pop-up blocked. Please allow pop-ups for this site.');
+              URL.revokeObjectURL(blobUrl);
+            }
+          }
+          return;
+        } catch (error) {
+          console.error('Error processing base64 file:', error);
+          toast.error('Failed to process resume file');
+          return;
+        }
+      }
+      
+      if (application.resume_url.startsWith('http')) {
+        // Full URL - open directly
+        window.open(application.resume_url, '_blank');
+        toast.success('Resume opened in new tab');
+        return;
+      }
+      
+      // For storage paths, try public URL approach
+      let filePath = application.resume_url;
+      if (filePath.startsWith('/')) {
+        filePath = filePath.substring(1);
+      }
+      
+      console.log('Processed file path:', filePath);
+      
+      // Try getting public URL from resumes bucket
+      const { data: publicUrlData } = supabase.storage
+        .from('resumes')
+        .getPublicUrl(filePath);
+      
+      if (publicUrlData?.publicUrl) {
+        console.log('Public URL:', publicUrlData.publicUrl);
+        window.open(publicUrlData.publicUrl, '_blank');
+        toast.success('Resume opened in new tab');
+        return;
+      }
+      
+      // Try getting public URL from applications bucket
+      const { data: publicUrlData2 } = supabase.storage
+        .from('applications')
+        .getPublicUrl(filePath);
+      
+      if (publicUrlData2?.publicUrl) {
+        console.log('Public URL from applications:', publicUrlData2.publicUrl);
+        window.open(publicUrlData2.publicUrl, '_blank');
+        toast.success('Resume opened in new tab');
+        return;
+      }
+      
+      throw new Error('Unable to generate preview URL');
+      
+    } catch (error) {
+      console.error('Error previewing resume:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      toast.error(`Failed to preview resume: ${errorMessage}`);
+    }
+  }
+
 
 
   const handleSignOut = async () => {
@@ -290,6 +510,14 @@ export default function ApplicationDetails() {
             <div>
               <h2 className="text-sm font-medium text-gray-500 mb-2">Resume</h2>
               <div className="flex gap-2">
+                <Button
+                  variant="outline"
+                  onClick={handlePreviewResume}
+                  className="inline-flex items-center"
+                >
+                  <Eye className="h-4 w-4 mr-2" />
+                  Preview Resume
+                </Button>
                 <Button
                   variant="outline"
                   onClick={handleDownloadResume}
