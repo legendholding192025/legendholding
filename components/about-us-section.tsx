@@ -47,7 +47,7 @@ export function AboutUsSection() {
           </div>
           {/* Illustration */}
           <div className="w-full max-w-2xl">
-            <div className="relative w-full h-56 md:h-64 lg:h-72 xl:h-80">
+            <div className="relative w-full h-56 md:h-64 lg:h-72 xl:h-80 mt-6">
               <Image
                 src="/lumo.svg"
                 alt="About Us Illustration"
