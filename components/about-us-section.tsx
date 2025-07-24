@@ -48,12 +48,10 @@ export function AboutUsSection() {
           {/* Illustration */}
           <div className="w-full max-w-2xl">
             <div className="relative w-full h-56 md:h-64 lg:h-72 xl:h-80 mt-6">
-              <Image
+              <img
                 src="/lumo.svg"
                 alt="About Us Illustration"
-                fill
-                className="object-contain object-center select-none pointer-events-none"
-                priority
+                className="w-full h-full object-contain object-center select-none pointer-events-none"
               />
             </div>
           </div>
