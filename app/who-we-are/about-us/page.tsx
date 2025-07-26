@@ -361,10 +361,10 @@ export default function AboutUsPage() {
               <div className="order-2 lg:order-2 relative flex flex-col items-center justify-center h-full min-h-[500px]">
                 <div className="flex-1 flex items-center justify-center w-full lg:ml-16 -mt-12 md:mt-0">
                   <Image
-                    src="https://cdn.legendholding.com/images/cdn_686295fca18de1.20003521_20250630_134948.png"
+                    src="https://cdn.legendholding.com/images/cdn_68831dafb50c56.86321986_20250725_060119.png"
                     alt="Mascot"
-                    width={200}
-                    height={200}
+                    width={400}
+                    height={400}
                     className="object-contain drop-shadow-2xl bg-transparent"
                     priority
                     sizes="200px"
