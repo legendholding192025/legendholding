@@ -60,10 +60,10 @@ export default function LeadershipTeam() {
       image: "https://cdn.legendholding.com/images/cdn_684a91542cc7b6.90399351_20250612_083532.jpg"
     },
     {
-      name: "Mabel Niu",
+      name: "Sonam Lama",
       role: "Group HR Director",
       company: "Legend Holding Group",
-      image: "https://cdn.legendholding.com/images/cdn_684a90c70ffd66.48330071_20250612_083311.jpg"
+      image: "https://cdn.legendholding.com/images/cdn_68887dd0765134.66878794_20250729_075248.jpg"
     },
     {
       name: "Cannon Wang",
