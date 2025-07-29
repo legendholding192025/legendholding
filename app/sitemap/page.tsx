@@ -13,6 +13,7 @@ const brands = [
   { name: "Legend Automobile Services", path: "/our-businesses/legend-automobile-services" },
   { name: "Legend Global Media", path: "/our-businesses/legend-global-media" },
   { name: "Legend Green Energy", path: "/our-businesses/legend-green-energy" },
+  { name: "Legend X", path: "/our-businesses/legend-x" },
   { name: "Legend Motorcycles", path: "/our-businesses/legend-motorcycles" },
   { name: "Legend Motors Dealership", path: "/our-businesses/legend-motors-dealership" },
   { name: "Legend Motors Trading", path: "/our-businesses/legend-motors-trading" },

@@ -91,6 +91,12 @@ export default function BusinessUnit() {
       bgColor: "bg-[#2B1C48]",
     },
     {
+      name: "Legend X",
+      image: "https://cdn.legendholding.com/images/cdn_687a1f4c67df37.03007310_20250718_101748.png",
+      url: "/our-businesses/legend-x",
+      bgColor: "bg-[#5D376E]",
+    },
+    {
       name: "Legend Commercial Vehicles",
       image: "https://cdn.legendholding.com/images/cdn_685bf75e7a3112.05639876_20250625_131926.jpg",
       url: "/our-businesses/legend-commercial-vehicles",

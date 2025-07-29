@@ -78,6 +78,12 @@ const menuItems: MenuItem[] = [
         image: "https://cdn.legendholding.com/images/cdn_683e9dd2a74833.63027495_20250603_070138.jpg",
         description: "Discover our vision, mission, and the values that drive us forward."
       },
+      // {
+      //   title: "Company Profile",
+      //   url: "/who-we-are/company-profile",
+      //   image: "https://cdn.legendholding.com/images/cdn_683e9dd2a74833.63027495_20250603_070138.jpg",
+      //   description: "Learn about our company profile, structure, and business overview."
+      // },
       {
         title: "The Team",
         url: "/who-we-are/the-team",
@@ -165,6 +171,12 @@ const menuItems: MenuItem[] = [
             url: "/our-businesses/legend-green-energy",
             image: "https://cdn.legendholding.com/images/cloudinary/cloudinary_683d9fb5d95276.90087674_20250602_125725.png",
             description: "Sustainable energy solutions for a greener future."
+          },
+          { 
+            title: "Legend X",
+            url: "/our-businesses/legend-x",
+            image: "https://cdn.legendholding.com/images/cdn_687a1f4c67df37.03007310_20250718_101748.png",
+            description: "Robotics company specialized in cutting-edge technology and AI-driven innovations."
           },
           { 
             title: "Legend Technical Services",
