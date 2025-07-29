@@ -59,10 +59,6 @@ export default function LegendXPage() {
                     <p className="text-lg font-effra text-gray-700 mb-6 leading-relaxed">
                       By harnessing the power of artificial intelligence, our smart automation systems deliver efficiency, convenience, and a meaningful impact on society. From service and surveillance robots to inspection and personal assistants, our technologies are built to seamlessly integrate into real-world environments.
                     </p>
-                    
-                    <p className="text-lg font-effra text-gray-700 mb-6 leading-relaxed">
-                      As part of Legend Holding Group, a diversified enterprise headquartered in Dubai, Legend X benefits from a legacy of innovation spanning industries such as Technology, automotive, trading, energy, travel & tourism, and mobility services across the Middle East and Africa.
-                    </p>
 
                     {/* CTA Button */}
                     <div className="mt-6">
