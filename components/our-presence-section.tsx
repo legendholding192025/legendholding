@@ -89,7 +89,7 @@ export function OurPresenceSection() {
             variants={fadeInUp}
           >
             <Image
-              src="https://cdn.legendholding.com/images/cdn_683e930040dfb1.08078741_20250603_061528.png"
+              src="https://cdn.legendholding.com/images/cdn_6889e38756a091.57618167_20250730_091903.png"
               alt="Global Presence Map"
               fill
               className="object-contain"
