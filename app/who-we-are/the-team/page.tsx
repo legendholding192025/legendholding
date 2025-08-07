@@ -120,6 +120,12 @@ export default function LeadershipTeam() {
       image: "https://cdn.legendholding.com/images/cdn_684a919ece14d0.18569119_20250612_083646.jpg"
     },
     {
+      name: "Sun Bo",
+      role: "Business Development Manager",
+      company: "Legend Holding Group",
+      image: "https://cdn.legendholding.com/images/cdn_689490c744b774.39742102_20250807_114055.jpg"
+    },
+    {
       name: "Mubasher Farooq",
       role: "Head of Rent a Car Division",
       company: "Legend Rent a Car",
