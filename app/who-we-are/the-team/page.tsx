@@ -125,12 +125,12 @@ export default function LeadershipTeam() {
       company: "Legend Holding Group",
       image: "https://cdn.legendholding.com/images/cdn_689490c744b774.39742102_20250807_114055.jpg"
     },
-    {
-      name: "Mubasher Farooq",
-      role: "Head of Rent a Car Division",
-      company: "Legend Rent a Car",
-      image: "https://cdn.legendholding.com/images/cdn_684a9178c0b480.93010827_20250612_083608.jpg"
-    },
+    // {
+    //   name: "Mubasher Farooq",
+    //   role: "Head of Rent a Car Division",
+    //   company: "Legend Rent a Car",
+    //   image: "https://cdn.legendholding.com/images/cdn_684a9178c0b480.93010827_20250612_083608.jpg"
+    // },
     {
       name: "Tamer Khalil",
       role: "Head of After Sales",
