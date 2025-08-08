@@ -241,6 +241,7 @@ export default function LeadershipTeam() {
       case "Liu Xiaochen": return "object-[center_20%]";
       case "Waseem Khalayleh": return "object-[center_60%]";
       case "Xiaolong Ma": return "object-[center_40%]";
+      case "Sun Bo": return "object-center";
       default: return "object-center";
     }
   };
