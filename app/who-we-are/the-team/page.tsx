@@ -123,7 +123,7 @@ export default function LeadershipTeam() {
       name: "Sun Bo",
       role: "Business Development Manager",
       company: "Legend Holding Group",
-      image: "https://cdn.legendholding.com/images/cdn_689490c744b774.39742102_20250807_114055.jpg"
+      image: "https://cdn.legendholding.com/images/cdn_6895948bb69536.52704074_20250808_060915.png"
     },
     // {
     //   name: "Mubasher Farooq",
