@@ -62,7 +62,7 @@ export default function BusinessUnit() {
     },
     {
       name: "Legend Rent a Car",
-      image: "https://cdn.legendholding.com/images/cdn_689713ef9c55a6.27572218_20250809_092503.png",
+      image: "https://cdn.legendholding.com/images/cdn_68973ac1071c91.28595514_20250809_121041.png",
       url: "/our-businesses/legend-world-rent-a-car",
       bgColor: "bg-[#2B1C48]",
     },
@@ -276,7 +276,19 @@ export default function BusinessUnit() {
                   <Link href={business.url} className="block h-full">
                     <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-100 hover:scale-105 group h-[14rem] sm:h-[18rem] md:h-[20rem] lg:h-[22rem] xl:h-[24rem] flex flex-col">
                       {/* Image Section */}
-                      <div className="flex-1 overflow-hidden relative">
+                      <div 
+                        className="flex-1 overflow-hidden relative"
+                        style={
+                          business.name === "Legend X" 
+                            ? {
+                                backgroundImage: "url('https://cdn.legendholding.com/images/cdn_687f41ed958c55.63868180_20250722_074653.png')",
+                                backgroundSize: "cover",
+                                backgroundPosition: "center",
+                                backgroundRepeat: "no-repeat"
+                              }
+                            : undefined
+                        }
+                      >
                         <img
                           src={business.image || "/placeholder.svg"}
                           alt={business.name}

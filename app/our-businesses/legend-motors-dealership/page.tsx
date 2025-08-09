@@ -18,8 +18,6 @@ const dealerships = [
       "With a strong focus on expansion, the company is actively growing its presence through the launch of multiple new showrooms in Abu Dhabi and other key locations across the country."
     ],
     imagePosition: "70% center",
-    needsBackground: false,
-    bgColor: "bg-transparent",
     website: "https://skywell-uae.com/",
   },
   {
@@ -34,8 +32,6 @@ const dealerships = [
       "Our first flagship showroom in Dubai, along with an upcoming location in Abu Dhabi, is featured within the Legend brand space, offering customers exceptional sales and aftersales service experiences.",
     ],
     imagePosition: "50% center",
-    needsBackground: false,
-    bgColor: "bg-transparent",
     website: "https://kaiyi.ae/",
   },
   {
@@ -49,8 +45,6 @@ const dealerships = [
       "Launching the first showroom in Dubai in July, there is an increasing surge in customer interest and engagement."
     ],
     imagePosition: "50% center",
-    needsBackground: false,
-    bgColor: "bg-transparent",
     website: "https://www.liautouae.com/",
   },
   {
@@ -64,8 +58,6 @@ const dealerships = [
       "With an upcoming first showroom, this model is projected to achieve rapid growth in its first year, targeting adventure-seekers looking for a vehicle built to go anywhere."
     ],
     imagePosition: "35% center",
-    needsBackground: false,
-    bgColor: "bg-transparent",
     website: "https://212uae.com/",
   },
 ]
@@ -136,15 +128,13 @@ export default function LegendMotorsDealershipPage() {
  
                       {/* Logo overlay - standardized size with transparent background */}
                       <div
-                        className={`absolute bottom-4 right-4 p-3 rounded-xl transform transition-transform duration-300 group-hover:scale-110 ${dealership.bgColor}`}
+                        className="absolute bottom-4 right-4 p-3 transform transition-transform duration-300 group-hover:scale-110"
                         style={{
                           width: "140px",
                           height: "60px",
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",
-                          backgroundColor: "transparent",
-                          boxShadow: "none",
                         }}
                       >
                         <Image
@@ -154,8 +144,6 @@ export default function LegendMotorsDealershipPage() {
                           height={40}
                           className="max-h-10 max-w-full object-contain object-center"
                           quality={85}
-                          placeholder="blur"
-                          blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
                         />
                       </div>
                     </div>
