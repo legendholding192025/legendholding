@@ -136,13 +136,15 @@ export default function LegendMotorsDealershipPage() {
  
                       {/* Logo overlay - standardized size with transparent background */}
                       <div
-                        className={`absolute bottom-4 right-4 p-3 rounded-xl shadow-lg transform transition-transform duration-300 group-hover:scale-110 ${dealership.bgColor}`}
+                        className={`absolute bottom-4 right-4 p-3 rounded-xl transform transition-transform duration-300 group-hover:scale-110 ${dealership.bgColor}`}
                         style={{
                           width: "140px",
                           height: "60px",
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",
+                          backgroundColor: "transparent",
+                          boxShadow: "none",
                         }}
                       >
                         <Image
