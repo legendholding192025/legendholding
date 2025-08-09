@@ -42,19 +42,19 @@ export default function CookieConsent() {
 
   return (
     <>
-      {/* Only load Usercentrics scripts in production */}
+      {/* Only load Usercentrics scripts in production with optimized loading */}
       {process.env.NODE_ENV === 'production' && (
         <>
           <Script
             id="usercentrics-autoblocker"
             src="https://web.cmp.usercentrics.eu/modules/autoblocker.js"
-            strategy="beforeInteractive"
+            strategy="lazyOnload"
           />
           <Script
             id="usercentrics-cmp"
             src="https://web.cmp.usercentrics.eu/ui/loader.js"
             data-settings-id="iRDvHQKYcoYv2X"
-            strategy="beforeInteractive"
+            strategy="lazyOnload"
           />
         </>
       )}

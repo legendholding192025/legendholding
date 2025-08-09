@@ -82,6 +82,13 @@ export const PAGE_NAMES = {
   ADMIN_LOGIN: 'Admin Login',
 } as const;
 
+// Helper function to check if TikTok Pixel is ready
+const isTikTokPixelReady = (): boolean => {
+  return typeof window !== 'undefined' && 
+         window.ttq && 
+         typeof window.ttq.track === 'function';
+};
+
 // Event tracking functions
 export const trackEvent = (eventName: string, parameters?: Record<string, any>) => {
   if (typeof window !== 'undefined' && window.gtag) {
@@ -96,8 +103,12 @@ export const trackEvent = (eventName: string, parameters?: Record<string, any>) 
     window.snaptr('track', eventName, parameters);
   }
   
-  if (typeof window !== 'undefined' && window.ttq) {
-    window.ttq.track(eventName, parameters);
+  if (isTikTokPixelReady()) {
+    try {
+      window.ttq.track(eventName, parameters);
+    } catch (error) {
+      console.warn('TikTok Pixel tracking failed:', error);
+    }
   }
 };
 
@@ -132,11 +143,15 @@ export const trackPageView = (pageName: string, pagePath?: string) => {
       });
     }
     
-    if (window.ttq) {
-      window.ttq.track('page_view', {
-        page_title: pageName,
-        page_path: currentPath,
-      });
+    if (isTikTokPixelReady()) {
+      try {
+        window.ttq.track('page_view', {
+          page_title: pageName,
+          page_path: currentPath,
+        });
+      } catch (error) {
+        console.warn('TikTok Pixel page view tracking failed:', error);
+      }
     }
   }
 };

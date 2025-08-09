@@ -33,7 +33,7 @@ export default function CareersPage() {
                 <div className="relative h-[200px] md:h-[250px] rounded-lg overflow-hidden">
                   <Image
                     src="https://cdn.legendholding.com/images/cdn_684bcea2088a00.05884893_20250613_070922.jpeg"
-                    alt="Legend Holdings Careers"
+                    alt="Legend Holding Group Careers - Join our dynamic team in UAE"
                     fill
                     className="object-cover"
                     priority
