@@ -39,8 +39,7 @@ export default function RootLayout({
         <link rel="preload" href="/fonts/fonnts.com-Richmond-Text-Medium.otf" as="font" type="font/otf" crossOrigin="anonymous" />
         <link rel="preload" href="/fonts/Effra_Std_Rg.ttf" as="font" type="font/ttf" crossOrigin="anonymous" />
         
-        {/* Preload critical CSS */}
-        <link rel="preload" href="/globals.css" as="style" />
+
         
         {/* DNS prefetch for external domains */}
         <link rel="dns-prefetch" href="//cdn.legendholding.com" />
