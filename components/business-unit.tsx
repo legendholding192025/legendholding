@@ -62,7 +62,7 @@ export default function BusinessUnit() {
     },
     {
       name: "Legend Rent a Car",
-      image: "https://cdn.legendholding.com/images/cdn_685d4f795c2869.85524093_20250626_134737.png",
+      image: "https://cdn.legendholding.com/images/cdn_685d4f795c2869.85524093_20250626_134737.jpg",
       url: "/our-businesses/legend-world-rent-a-car",
       bgColor: "bg-[#2B1C48]",
     },
@@ -281,7 +281,17 @@ export default function BusinessUnit() {
                           src={business.image || "/placeholder.svg"}
                           alt={business.name}
                           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-100"
-                          style={business.name === "212" ? { objectPosition: "38% center" } : business.name === "Skywell" ? { objectPosition: "70% center" } : business.name === "Kaiyi" ? { transform: "scale(1.1)" } : undefined}
+                          style={
+                            business.name === "212" 
+                              ? { objectPosition: "38% center" } 
+                              : business.name === "Skywell" 
+                              ? { objectPosition: "70% center" } 
+                              : business.name === "Kaiyi" 
+                              ? { transform: "scale(1.1)" }
+                              : business.name === "Legend X"
+                              ? { transform: "scale(0.8)" }
+                              : undefined
+                          }
                           loading="lazy"
                         />
                       </div>
