@@ -12,8 +12,12 @@ import './globals.css'
 import { brandFont } from './fonts'
 
 export const metadata: Metadata = {
-  title: 'Legend Web',
-  description: 'Legend Web - Your trusted partner in digital solutions',
+  title: {
+    default: 'Legend Holding Group',
+    template: '%s | Legend Holding Group'
+  },
+  description: 'Legend Holding Group is a diversified UAE holding company leading innovation in automotive, energy, tourism, and smart mobility across the Middle East & Africa.',
+  keywords: 'Legend Holding Group, Automotive, Energy, Technology, Travel, Business, Innovation, Sustainability, UAE, Middle East',
   icons: {
     icon: '/images/url_logo.png',
     shortcut: '/images/url_logo.png',

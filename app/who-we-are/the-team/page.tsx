@@ -54,16 +54,10 @@ export default function LeadershipTeam() {
       image: "https://cdn.legendholding.com/images/cdn_684c0d8b445f38.04199956_20250613_113747.jpg"
     },
     {
-      name: "Rejeesh Pillai",
-      role: "Group Finance Director",
-      company: "Legend Holding Group",
-      image: "https://cdn.legendholding.com/images/cdn_684a91542cc7b6.90399351_20250612_083532.jpg"
-    },
-    {
-      name: "Sonam Lama",
-      role: "Group HR Director",
-      company: "Legend Holding Group",
-      image: "https://cdn.legendholding.com/images/cdn_68887dd0765134.66878794_20250729_075248.jpg"
+      name: "Nagaraj P.",
+      role: "General Manager",
+      company: "Legend Motors - Trading",
+      image: "https://cdn.legendholding.com/images/cdn_685170f8cda310.20304631_20250617_134320.jpeg"
     },
     {
       name: "Cannon Wang",
@@ -72,16 +66,22 @@ export default function LeadershipTeam() {
       image: "https://cdn.legendholding.com/images/cdn_684a91bab382b9.55226471_20250612_083714.jpg"
     },
     {
-      name: "Nagaraj P.",
-      role: "General Manager",
-      company: "Legend Motors - Trading",
-      image: "https://cdn.legendholding.com/images/cdn_685170f8cda310.20304631_20250617_134320.jpeg"
+      name: "Rejeesh Pillai",
+      role: "Group Finance Director",
+      company: "Legend Holding Group",
+      image: "https://cdn.legendholding.com/images/cdn_684a91542cc7b6.90399351_20250612_083532.jpg"
     },
     {
       name: "Jade Li",
       role: "Managing Director",
       company: "Zul Energy",
       image: "https://cdn.legendholding.com/images/cdn_685d5a2ca99729.20750755_20250626_143316.jpg"
+    },
+    {
+      name: "Sonam Lama",
+      role: "Group HR Director",
+      company: "Legend Holding Group",
+      image: "https://cdn.legendholding.com/images/cdn_68887dd0765134.66878794_20250729_075248.jpg"
     },
     {
       name: "Bo Feng",
