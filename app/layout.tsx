@@ -15,7 +15,7 @@ import { brandFont } from './fonts'
 
 export const metadata: Metadata = {
   title: {
-    default: 'Legend Holding Group | Global Diversified Holding Company | UAE',
+    default: 'Legend Holding Group | Investment Company UAE',
     template: '%s | Legend Holding Group'
   },
   description: 'Legend Holding Group is a diversified UAE holding company leading innovation in automotive, energy, tourism, and smart mobility across the Middle East & Africa. Discover our comprehensive business solutions.',
