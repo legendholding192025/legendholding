@@ -96,10 +96,14 @@ export default function PageTracker({ pageName }: PageTrackerProps) {
       if (brandName) {
         // Track brand page visits specifically
         if (typeof window !== 'undefined' && window.gtag) {
-          window.gtag('event', 'brand_page_visit', {
-            brand_name: brandName,
-            page_path: pathname,
-          });
+          try {
+            window.gtag('event', 'brand_page_visit', {
+              brand_name: brandName,
+              page_path: pathname,
+            });
+          } catch (error) {
+            console.debug('Brand page tracking failed:', error);
+          }
         }
       }
     }
@@ -107,18 +111,26 @@ export default function PageTracker({ pageName }: PageTrackerProps) {
     // Track job detail pages
     if (pathname.includes('/careers/') && !pathname.includes('/jobs') && !pathname.includes('/thank-you')) {
       if (typeof window !== 'undefined' && window.gtag) {
-        window.gtag('event', 'job_detail_view', {
-          page_path: pathname,
-        });
+        try {
+          window.gtag('event', 'job_detail_view', {
+            page_path: pathname,
+          });
+        } catch (error) {
+          console.debug('Job detail tracking failed:', error);
+        }
       }
     }
 
     // Track news article pages
     if (pathname.includes('/news/') && pathname.split('/').length > 2) {
       if (typeof window !== 'undefined' && window.gtag) {
-        window.gtag('event', 'news_article_view', {
-          page_path: pathname,
-        });
+        try {
+          window.gtag('event', 'news_article_view', {
+            page_path: pathname,
+          });
+        } catch (error) {
+          console.debug('News article tracking failed:', error);
+        }
       }
     }
 

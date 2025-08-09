@@ -106,6 +106,8 @@ export default function BusinessUnit() {
 
   useEffect(() => {
     const handleResize = () => {
+      if (typeof window === 'undefined') return
+      
       if (window.innerWidth < 640) {
         setItemsPerView(2)
         setIsMobile(true)
@@ -122,8 +124,10 @@ export default function BusinessUnit() {
     }
 
     handleResize()
-    window.addEventListener("resize", handleResize)
-    return () => window.removeEventListener("resize", handleResize)
+    if (typeof window !== 'undefined') {
+      window.addEventListener("resize", handleResize)
+      return () => window.removeEventListener("resize", handleResize)
+    }
   }, [])
 
   const totalItems = businesses.length

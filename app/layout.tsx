@@ -7,6 +7,8 @@ import { ScrollToTop } from "@/components/scroll-to-top"
 import GoogleTagManager from "@/components/GoogleTagManager"
 import PageTracker from "@/components/PageTracker"
 import StructuredData from "@/components/StructuredData"
+import ErrorBoundary from "@/components/error-boundary"
+import GlobalErrorHandler from "@/components/global-error-handler"
 
 import './globals.css'
 import { brandFont } from './fonts'
@@ -84,15 +86,28 @@ export default function RootLayout({
         }} />
       </head>
       <body className="font-brand min-h-screen bg-background antialiased overflow-x-hidden">
-        <GoogleTagManager />
+        <GlobalErrorHandler />
+        <ErrorBoundary>
+          <GoogleTagManager />
+        </ErrorBoundary>
         <Suspense fallback={null}>
-          <PageTracker />
-          <StructuredData />
+          <ErrorBoundary>
+            <PageTracker />
+          </ErrorBoundary>
+          <ErrorBoundary>
+            <StructuredData />
+          </ErrorBoundary>
         </Suspense>
         {children}
-        <Toaster position="top-right" />
-        <CookieConsent />
-        <ScrollToTop />
+        <ErrorBoundary>
+          <Toaster position="top-right" />
+        </ErrorBoundary>
+        <ErrorBoundary>
+          <CookieConsent />
+        </ErrorBoundary>
+        <ErrorBoundary>
+          <ScrollToTop />
+        </ErrorBoundary>
       </body>
     </html>
   )

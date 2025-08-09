@@ -91,23 +91,37 @@ const isTikTokPixelReady = (): boolean => {
 
 // Event tracking functions
 export const trackEvent = (eventName: string, parameters?: Record<string, any>) => {
-  if (typeof window !== 'undefined' && window.gtag) {
-    window.gtag('event', eventName, parameters);
-  }
-  
-  if (typeof window !== 'undefined' && window.fbq) {
-    window.fbq('track', eventName, parameters);
-  }
-  
-  if (typeof window !== 'undefined' && window.snaptr) {
-    window.snaptr('track', eventName, parameters);
-  }
-  
-  if (isTikTokPixelReady()) {
+  if (typeof window !== 'undefined') {
     try {
-      window.ttq.track(eventName, parameters);
+      if (window.gtag) {
+        window.gtag('event', eventName, parameters);
+      }
     } catch (error) {
-      console.warn('TikTok Pixel tracking failed:', error);
+      console.debug('Google Analytics tracking failed:', error);
+    }
+    
+    try {
+      if (window.fbq) {
+        window.fbq('track', eventName, parameters);
+      }
+    } catch (error) {
+      console.debug('Meta Pixel tracking failed:', error);
+    }
+    
+    try {
+      if (window.snaptr) {
+        window.snaptr('track', eventName, parameters);
+      }
+    } catch (error) {
+      console.debug('Snapchat Pixel tracking failed:', error);
+    }
+    
+    if (isTikTokPixelReady()) {
+      try {
+        window.ttq.track(eventName, parameters);
+      } catch (error) {
+        console.debug('TikTok Pixel tracking failed:', error);
+      }
     }
   }
 };
@@ -119,28 +133,40 @@ export const trackPageView = (pageName: string, pagePath?: string) => {
   // Use standard PageView for Meta Pixel, custom event for others
   if (typeof window !== 'undefined') {
     // Google Analytics
-    if (window.gtag) {
-      window.gtag('event', 'page_view', {
-        page_title: pageName,
-        page_location: window.location.href,
-        page_path: currentPath,
-      });
+    try {
+      if (window.gtag) {
+        window.gtag('event', 'page_view', {
+          page_title: pageName,
+          page_location: window.location.href,
+          page_path: currentPath,
+        });
+      }
+    } catch (error) {
+      console.debug('Google Analytics page view tracking failed:', error);
     }
     
     // Meta Pixel - use standard PageView event
-    if (window.fbq) {
-      window.fbq('track', 'PageView', {
-        page_title: pageName,
-        page_path: currentPath,
-      });
+    try {
+      if (window.fbq) {
+        window.fbq('track', 'PageView', {
+          page_title: pageName,
+          page_path: currentPath,
+        });
+      }
+    } catch (error) {
+      console.debug('Meta Pixel page view tracking failed:', error);
     }
     
     // Other platforms
-    if (window.snaptr) {
-      window.snaptr('track', 'PAGE_VIEW', {
-        page_title: pageName,
-        page_path: currentPath,
-      });
+    try {
+      if (window.snaptr) {
+        window.snaptr('track', 'PAGE_VIEW', {
+          page_title: pageName,
+          page_path: currentPath,
+        });
+      }
+    } catch (error) {
+      console.debug('Snapchat Pixel page view tracking failed:', error);
     }
     
     if (isTikTokPixelReady()) {
@@ -150,7 +176,7 @@ export const trackPageView = (pageName: string, pagePath?: string) => {
           page_path: currentPath,
         });
       } catch (error) {
-        console.warn('TikTok Pixel page view tracking failed:', error);
+        console.debug('TikTok Pixel page view tracking failed:', error);
       }
     }
   }

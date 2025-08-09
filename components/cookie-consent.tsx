@@ -18,10 +18,16 @@ export default function CookieConsent() {
 
   useEffect(() => {
     // Check if privacy policy was previously accepted
-    const privacyConsent = localStorage.getItem("privacyConsent")
-    if (privacyConsent === "accepted") {
-      setPrivacyAccepted(true)
-    } else {
+    try {
+      const privacyConsent = localStorage.getItem("privacyConsent")
+      if (privacyConsent === "accepted") {
+        setPrivacyAccepted(true)
+      } else {
+        setPrivacyAccepted(false)
+      }
+    } catch (error) {
+      // Handle localStorage access errors (e.g., in private browsing)
+      console.debug('localStorage access failed, defaulting to show consent')
       setPrivacyAccepted(false)
     }
     setIsLoaded(true)
@@ -30,14 +36,24 @@ export default function CookieConsent() {
     if (process.env.NODE_ENV === 'production') {
       // Small delay to ensure CMP script is fully loaded
       setTimeout(() => {
-        window.usercentrics?.init()
+        try {
+          window.usercentrics?.init()
+        } catch (error) {
+          console.debug('Usercentrics initialization failed:', error)
+        }
       }, 100)
     }
   }, [])
 
   const handlePrivacyAccept = () => {
-    localStorage.setItem("privacyConsent", "accepted")
-    setPrivacyAccepted(true)
+    try {
+      localStorage.setItem("privacyConsent", "accepted")
+      setPrivacyAccepted(true)
+    } catch (error) {
+      // Handle localStorage write errors
+      console.debug('Failed to save privacy consent to localStorage')
+      setPrivacyAccepted(true) // Still accept to prevent repeated prompts
+    }
   }
 
   return (

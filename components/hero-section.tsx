@@ -17,10 +17,14 @@ export default function HeroSection() {
         try {
           await video.play()
         } catch (error) {
-          console.log('Autoplay failed, will play on user interaction:', error)
+          // Silently handle autoplay failures - this is expected behavior in many browsers
+          console.debug('Video autoplay prevented by browser policy')
           // Fallback: play on first user interaction
           const playOnInteraction = () => {
-            video.play()
+            video.play().catch(() => {
+              // Silently handle play failures
+              console.debug('Video play failed on user interaction')
+            })
             document.removeEventListener('click', playOnInteraction)
             document.removeEventListener('touchstart', playOnInteraction)
           }
@@ -38,7 +42,7 @@ export default function HeroSection() {
       
       // Handle video errors
       video.addEventListener('error', (e) => {
-        console.log('Video error:', e)
+        console.debug('Video loading error:', e)
       })
       
       // Cleanup

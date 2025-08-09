@@ -12,13 +12,18 @@ export default function GoogleTagManager({ gtmId }: GoogleTagManagerProps) {
   const gtmIdToUse = gtmId || ANALYTICS_CONFIG.GTM_ID;
 
   useEffect(() => {
-    // Initialize Google Tag Manager
-    if (typeof window !== 'undefined' && window.dataLayer) {
-      window.dataLayer = window.dataLayer || [];
-      window.dataLayer.push({
-        'gtm.start': new Date().getTime(),
-        event: 'gtm.js',
-      });
+    // Initialize Google Tag Manager with error handling
+    if (typeof window !== 'undefined') {
+      try {
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+          'gtm.start': new Date().getTime(),
+          event: 'gtm.js',
+        });
+      } catch (error) {
+        // Silently handle initialization errors to prevent console pollution
+        console.debug('GTM initialization skipped:', error);
+      }
     }
   }, []);
 
@@ -58,40 +63,52 @@ export default function GoogleTagManager({ gtmId }: GoogleTagManagerProps) {
       {/* Google Analytics 4 Configuration - Load after interactive */}
       <Script id="ga4-config" strategy="afterInteractive">
         {`
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', '${ANALYTICS_CONFIG.GA4_ID}', {
-            page_title: document.title,
-            page_location: window.location.href,
-            send_page_view: true
-          });
+          try {
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${ANALYTICS_CONFIG.GA4_ID}', {
+              page_title: document.title || 'Unknown',
+              page_location: window.location.href,
+              send_page_view: true
+            });
+          } catch (error) {
+            console.debug('GA4 config error:', error);
+          }
         `}
       </Script>
 
       {/* Google Ads - Load with lazy strategy */}
       <Script id="google-ads" strategy="lazyOnload">
         {`
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', '${ANALYTICS_CONFIG.GOOGLE_ADS_ID}');
+          try {
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${ANALYTICS_CONFIG.GOOGLE_ADS_ID}');
+          } catch (error) {
+            console.debug('Google Ads config error:', error);
+          }
         `}
       </Script>
 
       {/* Meta (Facebook) Pixel - Load with lazy strategy */}
       <Script id="meta-pixel" strategy="lazyOnload">
         {`
-          !function(f,b,e,v,n,t,s)
-          {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-          n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-          if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-          n.queue=[];t=b.createElement(e);t.async=!0;
-          t.src=v;s=b.getElementsByTagName(e)[0];
-          s.parentNode.insertBefore(t,s)}(window, document,'script',
-          'https://connect.facebook.net/en_US/fbevents.js');
-          fbq('init', '${ANALYTICS_CONFIG.META_PIXEL_ID}');
-          fbq('track', 'PageView');
+          try {
+            !function(f,b,e,v,n,t,s)
+            {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+            n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+            if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+            n.queue=[];t=b.createElement(e);t.async=!0;
+            t.src=v;s=b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t,s)}(window, document,'script',
+            'https://connect.facebook.net/en_US/fbevents.js');
+            fbq('init', '${ANALYTICS_CONFIG.META_PIXEL_ID}');
+            fbq('track', 'PageView');
+          } catch (error) {
+            console.debug('Meta Pixel error:', error);
+          }
         `}
       </Script>
 
