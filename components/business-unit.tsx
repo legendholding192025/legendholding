@@ -62,7 +62,7 @@ export default function BusinessUnit() {
     },
     {
       name: "Legend Rent a Car",
-      image: "https://cdn.legendholding.com/images/cdn_685d4f795c2869.85524093_20250626_134737.jpg",
+      image: "https://cdn.legendholding.com/images/cdn_689713ef9c55a6.27572218_20250809_092503.png",
       url: "/our-businesses/legend-world-rent-a-car",
       bgColor: "bg-[#2B1C48]",
     },
