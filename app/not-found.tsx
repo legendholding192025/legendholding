@@ -12,7 +12,7 @@ export default function NotFound() {
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Button asChild variant="default" className="bg-[#5D376E] hover:bg-[#4A2B5A]">
-            <Link href="/home">
+            <Link href="/">
               Return Home
             </Link>
           </Button>

@@ -67,7 +67,7 @@ export default function SitemapPage() {
             {/* Column 1: Main & Who We Are */}
             <motion.div variants={itemVariants}>
               <ul className="space-y-4">
-                <li><Link href="/home" className="text-secondary font-semibold text-lg hover:underline">Home</Link></li>
+                <li><Link href="/" className="text-secondary font-semibold text-lg hover:underline">Home</Link></li>
                 <li className="mt-8 mb-2 text-secondary font-semibold text-lg">Who We Are</li>
                 <li><Link href="/who-we-are/about-us" className="text-gray-700 hover:text-secondary transition-colors">About Us</Link></li>
                 <li><Link href="/who-we-are/brand-story" className="text-gray-700 hover:text-secondary transition-colors">Brand Story</Link></li>

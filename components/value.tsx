@@ -42,7 +42,7 @@ export default function ValueSection() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-12 md:gap-16 mb-16 sm:mb-20">
           {/* Vision Column */}
           <div className="relative animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
-            <img src="https://cdn.legendholding.com/images/cloudinary/cloudinary_683da9c6ede476.24969316_20250602_134022.png" alt="" className="w-full h-auto opacity-90" />
+            <img src="https://cdn.legendholding.com/images/cloudinary/cloudinary_683da9c6ede476.24969316_20250602_134022.png" alt="Vision background card design" className="w-full h-auto opacity-90" />
             
             {/* Vision Icon */}
             <div className="absolute top-4 right-4 w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16">
@@ -72,7 +72,7 @@ export default function ValueSection() {
 
           {/* Mission Column */}
           <div className="relative animate-fade-in-up" style={{ animationDelay: "0.4s" }}>
-            <img src="https://cdn.legendholding.com/images/cloudinary/cloudinary_683da9c6ede476.24969316_20250602_134022.png" alt="" className="w-full h-auto opacity-90" />
+            <img src="https://cdn.legendholding.com/images/cloudinary/cloudinary_683da9c6ede476.24969316_20250602_134022.png" alt="Mission background card design" className="w-full h-auto opacity-90" />
             
             {/* Mission Icon */}
             <div className="absolute top-4 right-4 w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16">

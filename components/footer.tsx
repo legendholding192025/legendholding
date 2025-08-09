@@ -92,7 +92,7 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 mb-12">
           {/* Column 1: About */}
           <div className="space-y-6 flex items-center justify-center pt-4">
-            <Link href="/home" className="inline-block">
+            <Link href="/" className="inline-block">
               <Image
                 src="https://cdn.legendholding.com/images/cdn_68566af4952c38.73080836_20250621_081900.jpeg"
                 alt="Legend Holding Group"

@@ -661,7 +661,7 @@ export function Header({ hideHeader = false }: { hideHeader?: boolean }) {
               <div className="flex items-center justify-between relative h-12 md:h-16 lg:h-20">
                 {/* Logo */}
                 <Link 
-                  href="/home" 
+                  href="/" 
                   className="relative z-[9999] lg:absolute lg:left-4"
                 >
                   <Image
