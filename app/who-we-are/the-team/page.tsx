@@ -107,18 +107,18 @@ export default function LeadershipTeam() {
       company: "Legend Motors",
       image: "https://cdn.legendholding.com/images/cdn_685d58c3823fb8.82222303_20250626_142715.png"
     },
-    {
-      name: "Liu Xiaochen",
-      role: "General Manager | Operations",
-      company: "Legend Travel and Tourism",
-      image: "https://cdn.legendholding.com/images/cdn_68512fb352e378.07080550_20250617_090451.jpeg"
-    },
-    {
-      name: "Saif El-Akkary",
-      role: "General Manager | Premium Brands",
-      company: "Legend Motors - Dealerships",
-      image: "https://cdn.legendholding.com/images/cdn_684a919ece14d0.18569119_20250612_083646.jpg"
-    },
+    // {
+    //   name: "Liu Xiaochen",
+    //   role: "General Manager | Operations",
+    //   company: "Legend Travel and Tourism",
+    //   image: "https://cdn.legendholding.com/images/cdn_68512fb352e378.07080550_20250617_090451.jpeg"
+    // },
+    // {
+    //   name: "Saif El-Akkary",
+    //   role: "General Manager | Premium Brands",
+    //   company: "Legend Motors - Dealerships",
+    //   image: "https://cdn.legendholding.com/images/cdn_684a919ece14d0.18569119_20250612_083646.jpg"
+    // },
     {
       name: "Sun Bo",
       role: "Business Development Manager",
