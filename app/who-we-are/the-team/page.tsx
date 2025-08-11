@@ -42,16 +42,34 @@ export default function LeadershipTeam() {
 
   const teamData = [
     {
+      name: "Jade Li",
+      role: "Managing Director",
+      company: "Zul Energy",
+      image: "https://cdn.legendholding.com/images/cdn_685d5a2ca99729.20750755_20250626_143316.jpg"
+    },
+    {
+      name: "George Hua",
+      role: "Head of Commercial Vehicles",
+      company: "Legend Commercial Vehicles",
+      image: "https://cdn.legendholding.com/images/cdn_684a90f5e5e897.26452583_20250612_083357.jpg"
+    },
+    {
+      name: "Tamer Khalil",
+      role: "Head of After Sales",
+      company: "Legend World Automobile Service",
+      image: "https://cdn.legendholding.com/images/cdn_684a912f82b802.68059638_20250612_083455.jpg"
+    },
+    {
       name: "Waseem Khalayleh",
       role: "Brand Manager",
       company: "Legend Holding Group",
       image: "https://cdn.legendholding.com/images/cdn_685bac3b05ebd8.00933704_20250625_075851.jpg"
     },
     {
-      name: "Jade Li",
-      role: "Managing Director",
-      company: "Zul Energy",
-      image: "https://cdn.legendholding.com/images/cdn_685d5a2ca99729.20750755_20250626_143316.jpg"
+      name: "Xiaolong Ma",
+      role: "Branch Manager - KSA",
+      company: "Legend Motors",
+      image: "https://cdn.legendholding.com/images/cdn_685d58c3823fb8.82222303_20250626_142715.png"
     },
     {
       name: "Bo Feng",
@@ -64,30 +82,6 @@ export default function LeadershipTeam() {
       role: "Business Development Manager",
       company: "Legend Holding Group",
       image: "https://cdn.legendholding.com/images/cdn_6895948bb69536.52704074_20250808_060915.png"
-    },
-    {
-      name: "Tamer Khalil",
-      role: "Head of After Sales",
-      company: "Legend World Automobile Service",
-      image: "https://cdn.legendholding.com/images/cdn_684a912f82b802.68059638_20250612_083455.jpg"
-    },
-    {
-      name: "George Hua",
-      role: "Head of Commercial Vehicles",
-      company: "Legend Commercial Vehicles",
-      image: "https://cdn.legendholding.com/images/cdn_684a90f5e5e897.26452583_20250612_083357.jpg"
-    },
-    {
-      name: "Sonam Lama",
-      role: "Group HR Director",
-      company: "Legend Holding Group",
-      image: "https://cdn.legendholding.com/images/cdn_68887dd0765134.66878794_20250729_075248.jpg"
-    },
-    {
-      name: "Xiaolong Ma",
-      role: "Branch Manager - KSA",
-      company: "Legend Motors",
-      image: "https://cdn.legendholding.com/images/cdn_685d58c3823fb8.82222303_20250626_142715.png"
     },
     // {
     //   name: "Liu Xiaochen",
@@ -147,6 +141,12 @@ export default function LeadershipTeam() {
       role: "IT & Digital Transformation Director",
       company: "Legend Holding Group",
       image: "https://cdn.legendholding.com/images/cdn_684a8e1f4c3372.64281750_20250612_082151.jpg"
+    },
+    {
+      name: "Sonam Lama",
+      role: "Group HR Director",
+      company: "Legend Holding Group",
+      image: "https://cdn.legendholding.com/images/cdn_68887dd0765134.66878794_20250729_075248.jpg"
     },
   ];
 
