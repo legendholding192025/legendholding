@@ -3,26 +3,58 @@
 import Image from "next/image"
 import { Eye, Target } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { PageBanner } from "@/components/page-banner"
 
-// Preload critical images
+// Enhanced preloading with priority management
 const preloadImages = () => {
-  const imageUrls = [
-    'https://cdn.legendholding.com/images/cdn_6862a6e1eef048.35976175_20250630_150153.jpg',
-    'https://cdn.legendholding.com/images/cdn_6862aedc3ac7d3.80278555_20250630_153556.png',
-    'https://cdn.legendholding.com/images/cdn_686295fca18de1.20003521_20250630_134948.png'
+  const criticalImages = [
+    { url: 'https://cdn.legendholding.com/images/cdn_6862a6e1eef048.35976175_20250630_150153.jpg', priority: 'high' },
+    { url: 'https://cdn.legendholding.com/images/cdn_6862aedc3ac7d3.80278555_20250630_153556.png', priority: 'high' },
+    { url: 'https://cdn.legendholding.com/images/cdn_686295fca18de1.20003521_20250630_134948.png', priority: 'medium' }
   ]
   
-  imageUrls.forEach(url => {
-    const link = document.createElement('link')
-    link.rel = 'preload'
-    link.as = 'image'
-    link.href = url
-    document.head.appendChild(link)
+  // Preload critical images immediately
+  criticalImages.forEach(({ url, priority }) => {
+    if (priority === 'high') {
+      const link = document.createElement('link')
+      link.rel = 'preload'
+      link.as = 'image'
+      link.href = url
+      link.fetchPriority = 'high'
+      document.head.appendChild(link)
+    }
   })
+}
+
+// Image optimization helper
+const optimizeImageUrl = (url: string, width: number, quality: number = 85) => {
+  try {
+    const urlObj = new URL(url)
+    urlObj.searchParams.set('w', width.toString())
+    urlObj.searchParams.set('q', quality.toString())
+    urlObj.searchParams.set('f', 'auto')
+    urlObj.searchParams.set('fit', 'cover')
+    return urlObj.toString()
+  } catch {
+    return url
+  }
+}
+
+// Connection speed detection for adaptive loading
+const detectConnectionSpeed = () => {
+  if (typeof navigator !== 'undefined' && 'connection' in navigator) {
+    const connection = (navigator as any).connection
+    if (connection) {
+      const { effectiveType, downlink } = connection
+      if (effectiveType === '4g' && downlink > 10) return 'fast'
+      if (effectiveType === '4g' || (effectiveType === '3g' && downlink > 1.5)) return 'medium'
+      return 'slow'
+    }
+  }
+  return 'medium'
 }
  
 // Counter Animation Component
@@ -105,6 +137,28 @@ function AnimatedCounter({ target, suffix = "", prefix = "", duration = 2000, st
 export default function AboutUsPage() {
   const [scrollY, setScrollY] = useState(0)
   const [imagesLoaded, setImagesLoaded] = useState(false)
+  const [connectionSpeed, setConnectionSpeed] = useState<'slow' | 'medium' | 'fast'>('medium')
+  const [visibleSections, setVisibleSections] = useState<Set<string>>(new Set())
+  const observerRef = useRef<IntersectionObserver | null>(null)
+
+  // Add shimmer animation styles
+  useEffect(() => {
+    const style = document.createElement('style')
+    style.textContent = `
+      @keyframes shimmer {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(100%); }
+      }
+      .animate-shimmer {
+        animation: shimmer 2s infinite;
+      }
+    `
+    document.head.appendChild(style)
+    
+    return () => {
+      document.head.removeChild(style)
+    }
+  }, [])
  
   // Animated counters
   const [yearsCount, setYearsCount] = useState(0)
@@ -117,6 +171,52 @@ export default function AboutUsPage() {
     return years
   })()
   const clientsTarget = 10000
+
+  // Get optimal image dimensions based on connection speed
+  const getImageDimensions = (baseWidth: number, baseHeight: number) => {
+    if (connectionSpeed === 'slow') {
+      return { width: Math.floor(baseWidth * 0.8), height: Math.floor(baseHeight * 0.8) }
+    } else if (connectionSpeed === 'medium') {
+      return { width: Math.floor(baseWidth * 0.9), height: Math.floor(baseHeight * 0.9) }
+    }
+    return { width: baseWidth, height: baseHeight }
+  }
+
+  // Enhanced intersection observer for lazy loading
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      observerRef.current = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              const sectionId = entry.target.getAttribute('data-section')
+              if (sectionId) {
+                setVisibleSections(prev => new Set([...prev, sectionId]))
+              }
+            }
+          })
+        },
+        { 
+          rootMargin: '100px',
+          threshold: 0.1
+        }
+      )
+
+      // Observe all sections
+      const sections = document.querySelectorAll('[data-section]')
+      sections.forEach(section => {
+        if (observerRef.current) {
+          observerRef.current.observe(section)
+        }
+      })
+    }
+
+    return () => {
+      if (observerRef.current) {
+        observerRef.current.disconnect()
+      }
+    }
+  }, [])
  
   useEffect(() => {
     let yearsFrame: number, clientsFrame: number
@@ -147,11 +247,16 @@ export default function AboutUsPage() {
     const handleScroll = () => setScrollY(window.scrollY)
     window.addEventListener("scroll", handleScroll)
     
-    // Preload critical images
+    // Detect connection speed
+    const speed = detectConnectionSpeed()
+    setConnectionSpeed(speed)
+    
+    // Preload critical images with priority
     preloadImages()
     
-    // Set images as loaded after a short delay to allow for preloading
-    const timer = setTimeout(() => setImagesLoaded(true), 100)
+    // Progressive image loading based on connection speed
+    const loadDelay = speed === 'fast' ? 50 : speed === 'medium' ? 150 : 300
+    const timer = setTimeout(() => setImagesLoaded(true), loadDelay)
     
     return () => {
       window.removeEventListener("scroll", handleScroll)
@@ -166,17 +271,21 @@ export default function AboutUsPage() {
         {/* About Us and Our Story Section */}
         <div className="min-h-screen flex flex-col items-center relative overflow-hidden bg-white">
           {/* Our Story Section */}
-          <section className="w-full py-8 md:py-14 px-0 relative bg-[#5D376E] overflow-hidden">
+          <section className="w-full py-8 md:py-14 px-0 relative bg-[#5D376E] overflow-hidden" data-section="story">
             {/* Background Image with Next.js Image component */}
             <div className="absolute inset-0 z-0 flex justify-end items-end">
               <Image
-                src="https://cdn.legendholding.com/images/cdn_6862a6e1eef048.35976175_20250630_150153.jpg"
+                src={optimizeImageUrl(
+                  "https://cdn.legendholding.com/images/cdn_6862a6e1eef048.35976175_20250630_150153.jpg",
+                  getImageDimensions(1600, 1200).width,
+                  90
+                )}
                 alt="Legend Holding Group background"
-                width={1600}
-                height={1200}
+                width={getImageDimensions(1600, 1200).width}
+                height={getImageDimensions(1600, 1200).height}
                 priority
-                className={`transition-opacity duration-500 ${
-                  imagesLoaded ? 'opacity-100' : 'opacity-0'
+                className={`transition-all duration-700 ease-out ${
+                  imagesLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-105'
                 }`}
                 style={{
                   maxWidth: '1600px',
@@ -185,11 +294,16 @@ export default function AboutUsPage() {
                   objectFit: 'contain',
                   objectPosition: 'right bottom'
                 }}
-                quality={85}
+                quality={90}
                 onLoad={() => setImagesLoaded(true)}
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1600px"
+                placeholder="blur"
+                blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R+Rj"
               />
               {!imagesLoaded && (
-                <div className="absolute inset-0 bg-[#5D376E] animate-pulse"></div>
+                <div className="absolute inset-0 bg-[#5D376E] animate-pulse">
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#5D376E] via-[#6B4A7A] to-[#5D376E] animate-shimmer"></div>
+                </div>
               )}
             </div>
             {/* Overlay for better text readability */}
@@ -253,7 +367,7 @@ export default function AboutUsPage() {
           </section>
 
           {/* Vision Section */}
-          <section className="w-full py-12 md:py-20 px-0 bg-white relative">
+          <section className="w-full py-12 md:py-20 px-0 bg-white relative" data-section="vision">
             <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
                 {/* Vision Content */}
@@ -291,14 +405,22 @@ export default function AboutUsPage() {
                 <div className="order-2 lg:order-2">
                   <div className="relative">
                     <Image
-                      src="https://cdn.legendholding.com/images/cdn_6862aedc3ac7d3.80278555_20250630_153556.png"
+                      src={optimizeImageUrl(
+                        "https://cdn.legendholding.com/images/cdn_6862aedc3ac7d3.80278555_20250630_153556.png",
+                        getImageDimensions(600, 400).width,
+                        90
+                      )}
                       alt="Vision illustration"
-                      width={600}
-                      height={400}
-                      className="w-full h-auto opacity-90"
-                      priority
+                      width={getImageDimensions(600, 400).width}
+                      height={getImageDimensions(600, 400).height}
+                      className={`w-full h-auto transition-all duration-700 ease-out ${
+                        visibleSections.has('vision') ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+                      }`}
+                      loading="lazy"
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 600px"
-                      quality={85}
+                      quality={90}
+                      placeholder="blur"
+                      blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg=="
                     />
                     <div className="absolute -bottom-8 md:-bottom-14 right-6 text-black font-richmond font-bold text-lg z-10">
                       +<AnimatedCounter id="years-counter" target={18} prefix="" suffix=" Years of Excellence" duration={1200} startDelay={400} />
@@ -316,6 +438,7 @@ export default function AboutUsPage() {
               minHeight: '600px',
               background: '#E69736',
             }}
+            data-section="mission"
           >
             {/* Purple diagonal overlay - Desktop */}
             <div
@@ -379,7 +502,7 @@ export default function AboutUsPage() {
           </section>
 
           {/* Values Section */}
-          <section className="py-16">
+          <section className="py-16" data-section="values">
             <div className="max-w-7xl mx-auto">
               {/* Section Header */}
               <div className="text-center mb-10">
@@ -424,7 +547,12 @@ export default function AboutUsPage() {
                 ].map((value, index) => (
                   <div
                     key={value.title}
-                    className="group bg-[#5D376E] rounded-xl p-6 flex flex-col items-center text-center min-h-40 max-w-lg mx-auto transition-all duration-300 ease-in-out hover:-translate-y-2 hover:shadow-2xl hover:shadow-[#5D376E]/20 cursor-pointer transform hover:scale-[1.02]"
+                    className={`group bg-[#5D376E] rounded-xl p-6 flex flex-col items-center text-center min-h-40 max-w-lg mx-auto transition-all duration-500 ease-out transform ${
+                      visibleSections.has('values') 
+                        ? 'opacity-100 translate-y-0 scale-100' 
+                        : 'opacity-0 translate-y-4 scale-95'
+                    } hover:-translate-y-2 hover:shadow-2xl hover:shadow-[#5D376E]/20 cursor-pointer hover:scale-[1.02]`}
+                    style={{ transitionDelay: `${index * 100}ms` }}
                   >
                     <div className="text-white mb-2 transition-transform duration-300 group-hover:scale-110">
                       <Image
@@ -433,6 +561,8 @@ export default function AboutUsPage() {
                         width={48}
                         height={48}
                         className="w-12 h-12 mx-auto"
+                        loading={index < 3 ? "eager" : "lazy"}
+                        priority={index < 3}
                       />
                     </div>
                     <h3 className="text-xl font-bold text-[#F3A13B] font-richmond mb-2">{value.title}</h3>
