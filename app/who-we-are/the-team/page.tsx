@@ -271,6 +271,10 @@ export default function LeadershipTeam() {
             {/* Board of Directors */}
             <div className="mb-12">
               <h2 className="text-3xl font-bold text-[#2b1c48] mb-6">Board of Directors</h2>
+              <div className="flex gap-2 mb-6">
+                <div className="h-1 w-20 bg-[#5E366D] rounded-full animate-expand-width"></div>
+                <div className="h-1 w-12 bg-[#EE8900] rounded-full animate-expand-width animation-delay-200"></div>
+              </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {boardData.map((director, index) => (
                   <div 
@@ -344,6 +348,10 @@ export default function LeadershipTeam() {
             {/* Leadership Team */}
             <div className="mb-8">
               <h2 className="text-3xl font-bold text-[#2b1c48] mb-6">Leadership Team</h2>
+              <div className="flex gap-2 mb-6">
+                <div className="h-1 w-20 bg-[#5E366D] rounded-full animate-expand-width"></div>
+                <div className="h-1 w-12 bg-[#EE8900] rounded-full animate-expand-width animation-delay-200"></div>
+              </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
