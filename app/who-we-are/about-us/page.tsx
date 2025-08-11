@@ -152,6 +152,18 @@ export default function AboutUsPage() {
       .animate-shimmer {
         animation: shimmer 2s infinite;
       }
+      
+      /* Ensure no blue background on images */
+      img {
+        background-color: transparent !important;
+      }
+      
+      /* Remove any default image borders or backgrounds */
+      .vision-image img,
+      .vision-image {
+        background: transparent !important;
+        border: none !important;
+      }
     `
     document.head.appendChild(style)
     
@@ -403,7 +415,14 @@ export default function AboutUsPage() {
 
                 {/* Vision Card Image */}
                 <div className="order-2 lg:order-2">
-                  <div className="relative">
+                  <div className="relative bg-transparent vision-image">
+                    {/* Loading placeholder */}
+                    {!visibleSections.has('vision') && (
+                      <div className="w-full h-64 bg-gray-100 rounded-lg animate-pulse flex items-center justify-center">
+                        <div className="text-gray-400 text-sm">Loading...</div>
+                      </div>
+                    )}
+                    
                     <Image
                       src={optimizeImageUrl(
                         "https://cdn.legendholding.com/images/cdn_6862aedc3ac7d3.80278555_20250630_153556.png",
@@ -421,6 +440,9 @@ export default function AboutUsPage() {
                       quality={90}
                       placeholder="blur"
                       blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg=="
+                      style={{
+                        backgroundColor: 'transparent'
+                      }}
                     />
                     <div className="absolute -bottom-8 md:-bottom-14 right-6 text-black font-richmond font-bold text-lg z-10">
                       +<AnimatedCounter id="years-counter" target={18} prefix="" suffix=" Years of Excellence" duration={1200} startDelay={400} />
