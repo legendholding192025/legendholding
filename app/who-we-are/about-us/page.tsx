@@ -561,7 +561,7 @@ export default function AboutUsPage() {
                         width={48}
                         height={48}
                         className="w-12 h-12 mx-auto"
-                        loading={index < 3 ? "eager" : "lazy"}
+                        loading={index < 3 ? undefined : "lazy"}
                         priority={index < 3}
                       />
                     </div>
