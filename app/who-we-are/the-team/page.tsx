@@ -35,41 +35,17 @@ const optimizeImageUrl = (url: string, width: number, quality: number) => {
 
 export default function LeadershipTeam() {
   const [connectionSpeed, setConnectionSpeed] = useState<'slow' | 'medium' | 'fast'>('medium');
-  const [loadedImages, setLoadedImages] = useState<Set<number>>(new Set());
+  const [loadedImages, setLoadedImages] = useState<Set<string | number>>(new Set());
   const [preloadedImages, setPreloadedImages] = useState<Set<number>>(new Set());
   const [loadingStats, setLoadingStats] = useState({ loaded: 0, total: 0 });
   const observerRef = useRef<IntersectionObserver | null>(null);
 
   const teamData = [
     {
-      name: "Mr. Kai Zheng",
-      role: "Chairman & CEO",
+      name: "Waseem Khalayleh",
+      role: "Brand Manager",
       company: "Legend Holding Group",
-      image: "https://cdn.legendholding.com/images/cdn_68513066e231f1.05737267_20250617_090750.jpeg"
-    },
-    {
-      name: "Mrs. Mira Wu",
-      role: "Co-Founder & Chief Operating Officer",
-      company: "Legend Holding Group",
-      image: "https://cdn.legendholding.com/images/cdn_684c0d8b445f38.04199956_20250613_113747.jpg"
-    },
-    {
-      name: "Nagaraj P.",
-      role: "General Manager",
-      company: "Legend Motors - Trading",
-      image: "https://cdn.legendholding.com/images/cdn_685170f8cda310.20304631_20250617_134320.jpeg"
-    },
-    {
-      name: "Cannon Wang",
-      role: "VP Dealership & Strategy of LHG",
-      company: "Legend Motors - Dealerships",
-      image: "https://cdn.legendholding.com/images/cdn_684a91bab382b9.55226471_20250612_083714.jpg"
-    },
-    {
-      name: "Rejeesh Pillai",
-      role: "Group Finance Director",
-      company: "Legend Holding Group",
-      image: "https://cdn.legendholding.com/images/cdn_684a91542cc7b6.90399351_20250612_083532.jpg"
+      image: "https://cdn.legendholding.com/images/cdn_685bac3b05ebd8.00933704_20250625_075851.jpg"
     },
     {
       name: "Jade Li",
@@ -78,28 +54,34 @@ export default function LeadershipTeam() {
       image: "https://cdn.legendholding.com/images/cdn_685d5a2ca99729.20750755_20250626_143316.jpg"
     },
     {
-      name: "Sonam Lama",
-      role: "Group HR Director",
-      company: "Legend Holding Group",
-      image: "https://cdn.legendholding.com/images/cdn_68887dd0765134.66878794_20250729_075248.jpg"
-    },
-    {
       name: "Bo Feng",
       role: "Media Operations Manager",
       company: "Legend Media",
       image: "https://cdn.legendholding.com/images/cdn_684a91d8ce3885.00609400_20250612_083744.jpg"
     },
     {
-      name: "Emery Zhou",
-      role: "IT & Digital Transformation Director",
+      name: "Sun Bo",
+      role: "Business Development Manager",
       company: "Legend Holding Group",
-      image: "https://cdn.legendholding.com/images/cdn_684a8e1f4c3372.64281750_20250612_082151.jpg"
+      image: "https://cdn.legendholding.com/images/cdn_6895948bb69536.52704074_20250808_060915.png"
+    },
+    {
+      name: "Tamer Khalil",
+      role: "Head of After Sales",
+      company: "Legend World Automobile Service",
+      image: "https://cdn.legendholding.com/images/cdn_684a912f82b802.68059638_20250612_083455.jpg"
     },
     {
       name: "George Hua",
       role: "Head of Commercial Vehicles",
       company: "Legend Commercial Vehicles",
       image: "https://cdn.legendholding.com/images/cdn_684a90f5e5e897.26452583_20250612_083357.jpg"
+    },
+    {
+      name: "Sonam Lama",
+      role: "Group HR Director",
+      company: "Legend Holding Group",
+      image: "https://cdn.legendholding.com/images/cdn_68887dd0765134.66878794_20250729_075248.jpg"
     },
     {
       name: "Xiaolong Ma",
@@ -119,29 +101,52 @@ export default function LeadershipTeam() {
     //   company: "Legend Motors - Dealerships",
     //   image: "https://cdn.legendholding.com/images/cdn_684a919ece14d0.18569119_20250612_083646.jpg"
     // },
-    {
-      name: "Sun Bo",
-      role: "Business Development Manager",
-      company: "Legend Holding Group",
-      image: "https://cdn.legendholding.com/images/cdn_6895948bb69536.52704074_20250808_060915.png"
-    },
+    
     // {
     //   name: "Mubasher Farooq",
     //   role: "Head of Rent a Car Division",
     //   company: "Legend Rent a Car",
     //   image: "https://cdn.legendholding.com/images/cdn_684a9178c0b480.93010827_20250612_083608.jpg"
     // },
+    
+  ];
+
+  const boardData = [
     {
-      name: "Tamer Khalil",
-      role: "Head of After Sales",
-      company: "Legend World Automobile Service",
-      image: "https://cdn.legendholding.com/images/cdn_684a912f82b802.68059638_20250612_083455.jpg"
+      name: "Mr. Kai Zheng",
+      role: "Chairman & CEO",
+      company: "Legend Holding Group",
+      image: "https://cdn.legendholding.com/images/cdn_68513066e231f1.05737267_20250617_090750.jpeg"
     },
     {
-      name: "Waseem Khalayleh",
-      role: "Brand Manager",
+      name: "Mrs. Mira Wu",
+      role: "Co-Founder & Chief Operating Officer",
       company: "Legend Holding Group",
-      image: "https://cdn.legendholding.com/images/cdn_685bac3b05ebd8.00933704_20250625_075851.jpg"
+      image: "https://cdn.legendholding.com/images/cdn_684c0d8b445f38.04199956_20250613_113747.jpg"
+    },
+    {
+      name: "Cannon Wang",
+      role: "VP Dealership & Strategy of LHG",
+      company: "Legend Motors - Dealerships",
+      image: "https://cdn.legendholding.com/images/cdn_684a91bab382b9.55226471_20250612_083714.jpg"
+    },
+    {
+      name: "Rejeesh Pillai",
+      role: "Group Finance Director",
+      company: "Legend Holding Group",
+      image: "https://cdn.legendholding.com/images/cdn_684a91542cc7b6.90399351_20250612_083532.jpg"
+    },
+    {
+      name: "Nagaraj P.",
+      role: "General Manager",
+      company: "Legend Motors - Trading",
+      image: "https://cdn.legendholding.com/images/cdn_685170f8cda310.20304631_20250617_134320.jpeg"
+    },
+    {
+      name: "Emery Zhou",
+      role: "IT & Digital Transformation Director",
+      company: "Legend Holding Group",
+      image: "https://cdn.legendholding.com/images/cdn_684a8e1f4c3372.64281750_20250612_082151.jpg"
     },
   ];
 
@@ -193,7 +198,7 @@ export default function LeadershipTeam() {
   useEffect(() => {
     const speed = detectConnectionSpeed();
     setConnectionSpeed(speed);
-    setLoadingStats({ loaded: 0, total: teamData.length });
+    setLoadingStats({ loaded: 0, total: boardData.length + teamData.length });
 
     if (typeof window !== 'undefined') {
       // Preload images after a short delay
@@ -263,6 +268,79 @@ export default function LeadershipTeam() {
           </div>
 
           <div className="w-full max-w-7xl relative z-10">
+            {/* Board of Directors */}
+            <div className="mb-12">
+              <h2 className="text-3xl font-bold text-[#2b1c48] mb-6">Board of Directors</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {boardData.map((director, index) => (
+                  <div 
+                    key={`board-${index}`} 
+                    className="bg-white rounded-2xl shadow-lg p-6 transform transition-all duration-300 hover:-translate-y-2 hover:shadow-xl"
+                    data-index={`board-${index}`}
+                    ref={(el) => {
+                      if (el && observerRef.current) {
+                        observerRef.current.observe(el);
+                      }
+                    }}
+                  >
+                    <div className="relative mb-4 mx-auto rounded-xl w-full h-[400px] overflow-hidden bg-gray-100">
+                      {/* Loading placeholder */}
+                      {!loadedImages.has(`board-${index}`) && (
+                        <div className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 animate-pulse">
+                          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer"></div>
+                          <div className="absolute inset-0 flex items-center justify-center">
+                            <div className="text-gray-400 text-sm">Loading...</div>
+                          </div>
+                        </div>
+                      )}
+                      
+                      {/* Optimized image */}
+                      <Image
+                        src={optimizeImageUrl(director.image, getImageWidth(), getImageQuality(index))}
+                        alt={director.name}
+                        width={getImageWidth()}
+                        height={400}
+                        className={`w-full h-full object-cover ${getObjectPosition(director.name)} transition-opacity duration-500 ${
+                          loadedImages.has(`board-${index}`) ? 'opacity-100' : 'opacity-0'
+                        }`}
+                        loading={index < 3 ? 'eager' : 'lazy'}
+                        priority={index < 3}
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        quality={getImageQuality(index)}
+                        placeholder="blur"
+                        blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R+Rj"
+                        onLoad={() => {
+                          setLoadedImages(prev => {
+                            const newSet = new Set([...prev, `board-${index}`]);
+                            setLoadingStats(current => ({
+                              ...current,
+                              loaded: newSet.size
+                            }));
+                            return newSet;
+                          });
+                        }}
+                        onError={() => {
+                          // Fallback to original image if optimized version fails
+                          const img = document.querySelector(`[alt="${director.name}"]`) as HTMLImageElement;
+                          if (img) {
+                            img.src = director.image;
+                          }
+                        }}
+                      />
+                    </div>
+                    
+                    <h3 className="text-xl font-bold text-[#2b1c48] mb-2">{director.name}</h3>
+                    <div className="flex gap-2 mb-3">
+                      <div className="h-1 w-16 bg-[#5E366D] rounded-full animate-expand-width"></div>
+                      <div className="h-1 w-8 bg-[#EE8900] rounded-full animate-expand-width animation-delay-200"></div>
+                    </div>
+                    <p className="text-[#EE8900] font-semibold mb-2">{director.role}</p>
+                    <p className="text-[#5E366D] font-medium text-xl">{director.company}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
             {/* Leadership Team */}
             <div className="mb-8">
               <h2 className="text-3xl font-bold text-[#2b1c48] mb-6">Leadership Team</h2>
