@@ -12,7 +12,7 @@ export default function StructuredData() {
     "name": "Legend Holding Group",
     "url": "https://legendholding.com",
     "logo": "https://legendholding.com/images/legend-logo.png",
-    "description": "Legend Holding Group is a diversified enterprise headquartered in Dubai, operating across the Middle east and African region. With a strong focus on sustainability and innovation, the group manages a growing portfolio of companies in automotive, trading, energy, Travel and Tourism and mobility services.",
+    "description": "Legend Holding Group is a diversified enterprise headquartered in Dubai, operating across the Middle East and African region. With a strong focus on sustainability and innovation, the group manages a growing portfolio of companies in automotive, trading, energy, Travel and Tourism and mobility services.",
     "address": {
       "@type": "PostalAddress",
       "streetAddress": "Plot No- S30502 - opposite Redington, Gate5 - JAFZA",

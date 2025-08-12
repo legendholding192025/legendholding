@@ -340,7 +340,7 @@ export default function AboutUsPage() {
 
                   <div className="space-y-6">
                     <p className="text-lg md:text-xl text-white font-effra leading-relaxed">
-                      Legend Holding Group is a diversified enterprise headquartered in Dubai, operating across the Middle east and African region. With a strong focus on sustainability and innovation, the group manages a growing portfolio of companies in automotive, trading, energy, Travel and Tourism and mobility services.
+                      Legend Holding Group is a diversified enterprise headquartered in Dubai, operating across the Middle East and African region. With a strong focus on sustainability and innovation, the group manages a growing portfolio of companies in automotive, trading, energy, Travel and Tourism and mobility services.
                     </p>
                     <p className="text-lg md:text-xl text-white font-effra leading-relaxed">
                       Rooted in Loyalty, Excellence, and Progress, we lead with innovation and technology to seamlessly connect the physical and digital worlds.
