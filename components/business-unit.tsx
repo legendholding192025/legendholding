@@ -305,7 +305,11 @@ export default function BusinessUnit() {
                               : business.name === "Kaiyi" 
                               ? { transform: "scale(1.1)" }
                               : business.name === "Legend X"
-                              ? { transform: "scale(0.8)" }
+                              ? { 
+                                  objectPosition: "center center",
+                                  objectFit: "contain",
+                                  padding: "8px"
+                                }
                               : undefined
                           }
                           loading="lazy"
