@@ -88,10 +88,30 @@ export default function NewsManagement() {
   const articlesPerPage = 10
   const router = useRouter()
   const supabase = createClientComponentClient()
+  const [tinymceSrc, setTinymceSrc] = useState<string>("")
+  const [editorReady, setEditorReady] = useState<boolean>(false)
+  const [showFallback, setShowFallback] = useState<boolean>(false)
 
   useEffect(() => {
     fetchArticles()
   }, [currentPage])
+
+  useEffect(() => {
+    // Use TinyMCE 6 CDN to ensure compatibility with @tinymce/tinymce-react@6
+    setTinymceSrc('https://cdn.jsdelivr.net/npm/tinymce@6.8.5/tinymce.min.js')
+  }, [])
+
+  useEffect(() => {
+    // If editor doesn't initialize within 3s, show textarea fallback
+    if (!editorReady && (isAddDialogOpen || editingArticle !== null)) {
+      const timer = setTimeout(() => {
+        if (!editorReady) setShowFallback(true)
+      }, 3000)
+      return () => clearTimeout(timer)
+    } else {
+      setShowFallback(false)
+    }
+  }, [editorReady, isAddDialogOpen, editingArticle])
 
   // TinyMCE configuration
   const editorConfig = {
@@ -109,10 +129,6 @@ export default function NewsManagement() {
     content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
     promotion: false,
     branding: false,
-    // Production-safe settings
-    inline: true,
-    base_url: '/tinymce',
-    suffix: '.min',
     setup: function(editor: any) {
       editor.on('init', function() {
         editor.getContainer().style.visibility = 'visible';
@@ -869,13 +885,26 @@ export default function NewsManagement() {
                   Content <span className="text-red-500">*</span>
                 </Label>
                 <div className="border rounded-md overflow-hidden">
-                  <Editor
-                    id="content"
-                    init={editorConfig}
-                    value={formData.content}
-                    onEditorChange={handleEditorChange}
-                    tinymceScriptSrc="/tinymce/tinymce.min.js"
-                  />
+                  {showFallback || !tinymceSrc ? (
+                    <Textarea
+                      placeholder="Enter content"
+                      className="min-h-[200px]"
+                      value={formData.content}
+                      onChange={(e) => setFormData(prev => ({ ...prev, content: e.target.value }))}
+                    />
+                  ) : (
+                    <Editor
+                      id="content"
+                      init={editorConfig}
+                      value={formData.content}
+                      onEditorChange={handleEditorChange}
+                      onInit={() => {
+                        setEditorReady(true)
+                        setShowFallback(false)
+                      }}
+                      tinymceScriptSrc={tinymceSrc}
+                    />
+                  )}
                 </div>
                 <p className="text-sm text-gray-500">
                   Use the toolbar above to format your content, add images, and more.
