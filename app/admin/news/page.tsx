@@ -109,6 +109,10 @@ export default function NewsManagement() {
     content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
     promotion: false,
     branding: false,
+    // Production-safe settings
+    inline: true,
+    base_url: '/tinymce',
+    suffix: '.min',
     setup: function(editor: any) {
       editor.on('init', function() {
         editor.getContainer().style.visibility = 'visible';
@@ -599,6 +603,7 @@ export default function NewsManagement() {
 
         {/* Add/Edit Dialog */}
         <Dialog 
+          modal={false}
           open={isAddDialogOpen || editingArticle !== null} 
           onOpenChange={(open) => {
             if (!open) {
