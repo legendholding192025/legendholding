@@ -78,7 +78,7 @@ export default function LeadershipTeam() {
       image: "https://cdn.legendholding.com/images/cdn_684a8e1f4c3372.64281750_20250612_082151.jpg"
     },
     {
-      name: "Bo Feng",
+      name: "Feng Bo",
       role: "Media Operations Manager",
       company: "Legend Media",
       image: "https://cdn.legendholding.com/images/cdn_684a91d8ce3885.00609400_20250612_083744.jpg"
@@ -133,7 +133,7 @@ export default function LeadershipTeam() {
     {
       name: "Nagaraj Ponnada",
       role: "General Manager",
-      company: "Legend Motors - Trading",
+      company: "Legend Holding Group",
       image: "https://cdn.legendholding.com/images/cdn_685170f8cda310.20304631_20250617_134320.jpeg"
     },
     {
