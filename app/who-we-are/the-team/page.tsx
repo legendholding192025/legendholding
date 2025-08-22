@@ -243,6 +243,7 @@ export default function LeadershipTeam() {
   const getObjectPosition = (name: string) => {
     switch (name) {
       case "Mr. Kai Zheng": return "object-[center_25%]";
+      case "Kai Zheng": return "object-[center_20%]";
       case "Liu Xiaochen": return "object-[center_20%]";
       case "Waseem Khalayleh": return "object-[center_60%]";
       case "Xiaolong Ma": return "object-[center_40%]";
