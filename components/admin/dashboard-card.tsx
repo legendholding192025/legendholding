@@ -3,10 +3,10 @@ import { MessageSquare, Car, FileText, Newspaper, TrendingUp, TrendingDown } fro
 
 interface DashboardCardsProps {
   submissions: any[]
-  jobApplications?: any[]
+  jobApplicationsCount?: number
 }
 
-export function DashboardCards({ submissions, jobApplications = [] }: DashboardCardsProps) {
+export function DashboardCards({ submissions, jobApplicationsCount = 0 }: DashboardCardsProps) {
   const cards = [
     {
       title: "Contact Submissions",
@@ -19,7 +19,7 @@ export function DashboardCards({ submissions, jobApplications = [] }: DashboardC
     },
     {
       title: "Job Applications",
-      value: jobApplications.length,
+      value: jobApplicationsCount,
       change: "+15.3%",
       trend: "up",
       icon: FileText,

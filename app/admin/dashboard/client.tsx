@@ -32,12 +32,12 @@ export function DashboardClient() {
   const supabase = createClientComponentClient()
   const { userRole, isLoading: permissionsLoading, hasPermission } = useAdminPermissions()
   const [submissions, setSubmissions] = useState<ContactSubmission[]>([])
-  const [jobApplications, setJobApplications] = useState<any[]>([])
+  const [jobApplicationsCount, setJobApplicationsCount] = useState<number>(0)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     fetchSubmissions()
-    fetchJobApplications()
+    fetchJobApplicationsCount()
   }, [])
 
 
@@ -60,18 +60,16 @@ export function DashboardClient() {
     }
   }
 
-  const fetchJobApplications = async () => {
+  const fetchJobApplicationsCount = async () => {
     try {
-      const { data, error } = await supabase
+      const { count, error } = await supabase
         .from('job_applications')
-        .select('*')
-        .order('created_at', { ascending: false })
+        .select('id', { count: 'exact', head: true })
 
       if (error) throw error
-      setJobApplications(data || [])
+      setJobApplicationsCount(count || 0)
     } catch (error) {
-      console.error('Error fetching job applications:', error)
-      toast.error("Failed to fetch job applications")
+      console.error('Error fetching job applications count:', error)
     }
   }
 
@@ -177,7 +175,7 @@ export function DashboardClient() {
           <div className="mb-12">
             <h2 className="text-xl font-semibold mb-6">Submissions</h2>
             <div className="mt-8">
-              <DashboardCards submissions={submissions} jobApplications={jobApplications} />
+              <DashboardCards submissions={submissions} jobApplicationsCount={jobApplicationsCount} />
             </div>
 
 

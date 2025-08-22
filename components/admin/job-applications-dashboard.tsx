@@ -70,43 +70,58 @@ export function JobApplicationsDashboard({ onSignOut, showHeader = true }: JobAp
     return () => window.removeEventListener('focus', handleFocus)
   }, [])
 
-  useEffect(() => {
-    // Calculate stats with safe status handling
-    const stats = {
-      total: applications.length,
-      pending: applications.filter(app => (app.status || 'pending') === 'pending').length,
-      reviewed: applications.filter(app => (app.status || 'pending') === 'reviewed').length,
-      shortlisted: applications.filter(app => (app.status || 'pending') === 'shortlisted').length,
-      rejected: applications.filter(app => (app.status || 'pending') === 'rejected').length,
-      hired: applications.filter(app => (app.status || 'pending') === 'hired').length
-    }
-    setStats(stats)
-  }, [applications])
+  // Stats are computed via lightweight count queries inside fetchApplications
 
   const fetchApplications = async () => {
     try {
       setLoading(true)
-      const { data, error } = await supabase
-        .from('job_applications')
-        .select(`
-          *,
-          job:jobs(title, company, department)
-        `)
-        .order('created_at', { ascending: false })
+      // Fetch recent applications and counts in parallel for performance
+      const [
+        appsRes,
+        totalRes,
+        pendingRes,
+        reviewedRes,
+        shortlistedRes,
+        rejectedRes,
+        hiredRes
+      ] = await Promise.all([
+        supabase
+          .from('job_applications')
+          .select(`
+            id, job_id, full_name, email, phone, status, created_at,
+            job:jobs(title, department)
+          `)
+          .order('created_at', { ascending: false })
+          .limit(50),
+        supabase.from('job_applications').select('id', { count: 'exact', head: true }),
+        supabase.from('job_applications').select('id', { count: 'exact', head: true }).eq('status', 'pending'),
+        supabase.from('job_applications').select('id', { count: 'exact', head: true }).eq('status', 'reviewed'),
+        supabase.from('job_applications').select('id', { count: 'exact', head: true }).eq('status', 'shortlisted'),
+        supabase.from('job_applications').select('id', { count: 'exact', head: true }).eq('status', 'rejected'),
+        supabase.from('job_applications').select('id', { count: 'exact', head: true }).eq('status', 'hired')
+      ])
 
-      if (error) throw error
-      
-      // Ensure all applications have a valid status
-      const processedData = (data || []).map(app => ({
+      if (appsRes.error) throw appsRes.error
+
+      const processedData = (appsRes.data || []).map(app => ({
         ...app,
-        status: app.status || 'pending' // Fallback to pending if status is null/undefined
+        status: (app as any).status || 'pending'
       }))
-      
+
       setApplications(processedData)
+
+      setStats({
+        total: totalRes.count || 0,
+        pending: pendingRes.count || 0,
+        reviewed: reviewedRes.count || 0,
+        shortlisted: shortlistedRes.count || 0,
+        rejected: rejectedRes.count || 0,
+        hired: hiredRes.count || 0
+      })
     } catch (error) {
       console.error('Error fetching applications:', error)
       toast.error("Failed to fetch applications")
-      setApplications([]) // Set empty array on error
+      setApplications([])
     } finally {
       setLoading(false)
     }
