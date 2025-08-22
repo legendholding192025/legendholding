@@ -4,7 +4,7 @@ Create a `.env.local` file in your project root with the following variables:
 
 ```env
 # Google Analytics 4 (Already configured)
-NEXT_PUBLIC_GA4_ID=G-TFC4L94QL6
+NEXT_PUBLIC_GA4_ID=G-J17W3DWPLX
 
 # Google Tag Manager (Already configured)
 NEXT_PUBLIC_GTM_ID=GT-K8GMBZG5
@@ -30,7 +30,7 @@ NEXT_PUBLIC_YOUTUBE_CHANNEL_ID=UCY4V3u7xBMkBiXR5u_deryA
 
 ## Current Status
 
-✅ **Google Analytics 4**: Already configured with ID `G-TFC4L94QL6`
+✅ **Google Analytics 4**: Already configured with ID `G-J17W3DWPLX`
 ✅ **Google Tag Manager**: Already configured with ID `GT-K8GMBZG5`
 ✅ **Google Ads**: Already configured with ID `AW-5088079446`
 ✅ **Meta (Facebook) Pixel**: Already configured with ID `2991355601025019`
