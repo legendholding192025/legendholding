@@ -87,11 +87,11 @@ export function Footer() {
 
   return (
     <footer className="bg-[rgb(43,28,72)] text-white pt-16 pb-8">
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-4 lg:px-6 xl:px-8">
         {/* Main Footer Content */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10 xl:gap-12 mb-12">
           {/* Column 1: About */}
-          <div className="space-y-6 flex items-center justify-center pt-4">
+          <div className="flex items-center justify-center lg:justify-start space-y-6">
             <Link href="/" className="inline-block">
               <Image
                 src="https://cdn.legendholding.com/images/cdn_68566af4952c38.73080836_20250621_081900.jpeg"
@@ -203,7 +203,7 @@ export function Footer() {
               <span className="relative z-10">Connect With Us</span>
               <span className="absolute bottom-0 left-0 w-12 h-0.5 bg-secondary"></span>
             </h3>
-            <div className="flex items-center gap-4 mb-4">
+            <div className="flex items-center gap-5 mb-4">
               <Link
                 href="https://www.facebook.com/share/1XndETdEkF/"
                 target="_blank"
@@ -263,11 +263,11 @@ export function Footer() {
         <div className="border-t border-white/10 my-8"></div>
 
         {/* Bottom Footer */}
-        <div className="flex flex-col md:flex-row justify-between items-center">
-          <div className="text-white/70 text-sm mb-4 md:mb-0">
+        <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+          <div className="text-white/70 text-sm">
             © {currentYear} Legend Holding Group. All Rights Reserved.
           </div>
-          <div className="flex flex-wrap justify-center gap-4 text-sm">
+          <div className="flex flex-wrap justify-center gap-6 text-sm">
             <Link href="/privacy-policy" className="text-white/70 hover:text-white transition-colors">
               Privacy Policy
             </Link>

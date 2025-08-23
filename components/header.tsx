@@ -657,12 +657,12 @@ export function Header({ hideHeader = false }: { hideHeader?: boolean }) {
             )}
             role="banner"
           >
-            <div className="container mx-auto px-4">
+            <div className="container mx-auto px-4 lg:px-6 xl:px-8">
               <div className="flex items-center justify-between relative h-12 md:h-16 lg:h-20">
                 {/* Logo */}
                 <Link 
                   href="/" 
-                  className="relative z-[9999] lg:absolute lg:left-4"
+                  className="relative z-[9999] flex-shrink-0"
                 >
                   <Image
                     src={logoUrl || "/placeholder.svg"}
@@ -704,8 +704,8 @@ export function Header({ hideHeader = false }: { hideHeader?: boolean }) {
                 </button>
 
                 {/* Desktop Navigation Menu */}
-                <nav className="hidden lg:flex items-center justify-center flex-1 pl-20">
-                  <div className="flex items-center space-x-8 xl:space-x-12">
+                <nav className="hidden lg:flex items-center justify-center flex-1">
+                  <div className="flex items-center space-x-6 xl:space-x-8 2xl:space-x-10">
                     {menuItems.map((item) => (
                       <div
                         key={item.title}
