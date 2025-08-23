@@ -11,8 +11,10 @@ export const ANALYTICS_CONFIG = {
   // Google Ads
   GOOGLE_ADS_ID: process.env.NEXT_PUBLIC_GOOGLE_ADS_ID || 'AW-5088079446',
   
-  // Meta (Facebook) Pixel
+  // Meta (Facebook) Pixel (primary site pixel)
   META_PIXEL_ID: process.env.NEXT_PUBLIC_META_PIXEL_ID || '2991355601025019',
+  // Meta (Facebook) Pixel for Ads (additional pixel)
+  META_PIXEL_ADS_ID: process.env.NEXT_PUBLIC_META_PIXEL_ADS_ID || '24047128264987943',
   
   // X.com (Twitter) Pixel
   X_PIXEL_ID: process.env.NEXT_PUBLIC_X_PIXEL_ID || 'XXXXXXXXXX',

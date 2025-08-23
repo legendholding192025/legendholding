@@ -14,6 +14,8 @@ NEXT_PUBLIC_GOOGLE_ADS_ID=AW-5088079446
 
 # Meta (Facebook) Pixel (Already configured)
 NEXT_PUBLIC_META_PIXEL_ID=2991355601025019
+# Additional Meta Pixel for Ads (optional)
+NEXT_PUBLIC_META_PIXEL_ADS_ID=24047128264987943
 
 # X.com (Twitter) Pixel (Add your X.com Pixel ID)
 NEXT_PUBLIC_X_PIXEL_ID=XXXXXXXXXX
@@ -34,6 +36,7 @@ NEXT_PUBLIC_YOUTUBE_CHANNEL_ID=UCY4V3u7xBMkBiXR5u_deryA
 ✅ **Google Tag Manager**: Already configured with ID `GT-K8GMBZG5`
 ✅ **Google Ads**: Already configured with ID `AW-5088079446`
 ✅ **Meta (Facebook) Pixel**: Already configured with ID `2991355601025019`
+✅ **Meta (Facebook) Ads Pixel (extra)**: Configured with ID `24047128264987943`
 ✅ **Snapchat Pixel**: Already configured with ID `89a8f015-e28b-4075-83fe-ec5f12b27738`
 ✅ **TikTok Pixel**: Already configured with ID `D1D6VNBC77U8DLILDANG`
 ✅ **YouTube Channel**: Already configured with ID `UCY4V3u7xBMkBiXR5u_deryA`

@@ -92,7 +92,7 @@ export default function GoogleTagManager({ gtmId }: GoogleTagManagerProps) {
         `}
       </Script>
 
-      {/* Meta (Facebook) Pixel - Load with lazy strategy */}
+      {/* Meta (Facebook) Pixel - Load with lazy strategy (primary) */}
       <Script id="meta-pixel" strategy="lazyOnload">
         {`
           try {
@@ -112,7 +112,7 @@ export default function GoogleTagManager({ gtmId }: GoogleTagManagerProps) {
         `}
       </Script>
 
-      {/* Meta Pixel Noscript */}
+      {/* Meta Pixel Noscript (primary) */}
       <noscript>
         <img 
           height="1" 
@@ -122,6 +122,33 @@ export default function GoogleTagManager({ gtmId }: GoogleTagManagerProps) {
           alt=""
         />
       </noscript>
+
+      {/* Meta (Facebook) Pixel - Additional Ads Pixel (optional) */}
+      {ANALYTICS_CONFIG.META_PIXEL_ADS_ID && (
+        <>
+          <Script id="meta-pixel-ads" strategy="lazyOnload">
+            {`
+              try {
+                if (typeof fbq === 'function') {
+                  fbq('init', '${ANALYTICS_CONFIG.META_PIXEL_ADS_ID}');
+                  fbq('track', 'PageView');
+                }
+              } catch (error) {
+                console.debug('Meta Ads Pixel error:', error);
+              }
+            `}
+          </Script>
+          <noscript>
+            <img 
+              height="1" 
+              width="1" 
+              style={{ display: 'none' }}
+              src={`https://www.facebook.com/tr?id=${ANALYTICS_CONFIG.META_PIXEL_ADS_ID}&ev=PageView&noscript=1`}
+              alt=""
+            />
+          </noscript>
+        </>
+      )}
 
       {/* X.com (Twitter) Pixel - Load with lazy strategy */}
       {ANALYTICS_CONFIG.X_PIXEL_ID !== 'XXXXXXXXXX' && (
