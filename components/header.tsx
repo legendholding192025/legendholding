@@ -4,6 +4,7 @@ import type React from "react"
 import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
 import Image from "next/image"
+import { usePathname } from "next/navigation"
 import {
   ChevronDown,
   X,
@@ -209,6 +210,7 @@ const menuItems: MenuItem[] = [
 ]
 
 export function Header({ hideHeader = false }: { hideHeader?: boolean }) {
+  const pathname = usePathname()
   const [activeMenu, setActiveMenu] = useState<string | null>(null)
   const [activeNestedMenu, setActiveNestedMenu] = useState<string | null>(null)
   const [isScrolled, setIsScrolled] = useState(false)
@@ -238,6 +240,26 @@ export function Header({ hideHeader = false }: { hideHeader?: boolean }) {
   const legendMotorsRef = useRef<HTMLDivElement | null>(null)
   const [mobileNestedMenuOpen, setMobileNestedMenuOpen] = useState<string | null>(null);
   const [mobileDropdownOpen, setMobileDropdownOpen] = useState<string | null>(null);
+
+  const isActivePath = (url: string): boolean => {
+    if (!url || url === "#") return false
+    if (url === "/") return pathname === "/"
+    return pathname === url || pathname.startsWith(`${url}/`)
+  }
+
+  const isMenuItemActive = (item: MenuItem): boolean => {
+    if (isActivePath(item.url)) return true
+    if (item.submenu && item.submenu.some((sub) => isActivePath(sub.url))) return true
+    if (item.businessCategories) {
+      for (const category of item.businessCategories) {
+        for (const business of category.items) {
+          if (isActivePath(business.url)) return true
+          if (business.nestedSubmenu && business.nestedSubmenu.some((n) => isActivePath(n.url))) return true
+        }
+      }
+    }
+    return false
+  }
 
   // Handle scroll direction for header visibility
   useEffect(() => {
@@ -721,6 +743,7 @@ export function Header({ hideHeader = false }: { hideHeader?: boolean }) {
                           className={cn(
                             "text-gray-800 font-medium text-base hover:text-primary transition-colors duration-200 flex items-center py-2 px-1 relative group",
                             (activeMenu === item.title || hoveredItem === item.title) && "text-primary",
+                            isMenuItemActive(item) && "text-primary",
                           )}
                           onClick={(e) => {
                             if (item.hasSubmenu) {
@@ -736,6 +759,7 @@ export function Header({ hideHeader = false }: { hideHeader?: boolean }) {
                               className={cn(
                                 "absolute -bottom-1 left-0 w-0 h-0.5 bg-secondary transition-all duration-300 group-hover:w-full",
                                 (activeMenu === item.title || hoveredItem === item.title) && "w-full",
+                                isMenuItemActive(item) && "w-full",
                               )}
                             ></span>
                           </span>
@@ -767,11 +791,19 @@ export function Header({ hideHeader = false }: { hideHeader?: boolean }) {
                                     <Link
                                       key={subItem.title}
                                       href={subItem.url}
-                                      className="block px-5 py-3 text-sm text-gray-700 hover:text-primary rounded-md transition-colors group"
+                                      className={cn(
+                                        "block px-5 py-3 text-sm hover:text-primary rounded-md transition-colors group",
+                                        isActivePath(subItem.url) ? "text-primary" : "text-gray-700"
+                                      )}
                                     >
                                       <span className="relative">
                                         {subItem.title}
-                                        <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-secondary transition-all duration-300 group-hover:w-full"></span>
+                                        <span
+                                          className={cn(
+                                            "absolute -bottom-1 left-0 w-0 h-0.5 bg-secondary transition-all duration-300 group-hover:w-full",
+                                            isActivePath(subItem.url) && "w-full"
+                                          )}
+                                        ></span>
                                       </span>
                                     </Link>
                                   ))}
@@ -784,7 +816,10 @@ export function Header({ hideHeader = false }: { hideHeader?: boolean }) {
                                     <Link
                                       key={subItem.title}
                                       href={subItem.url}
-                                      className="group overflow-hidden rounded-lg border border-gray-100 hover:border-gray-200 hover:shadow-md transition-all duration-300 bg-white"
+                                      className={cn(
+                                        "group overflow-hidden rounded-lg border border-gray-100 hover:border-gray-200 hover:shadow-md transition-all duration-300 bg-white",
+                                        isActivePath(subItem.url) && "ring-1 ring-secondary"
+                                      )}
                                     >
                                       <div className="relative h-40 overflow-hidden">
                                         <Image
@@ -846,11 +881,19 @@ export function Header({ hideHeader = false }: { hideHeader?: boolean }) {
                                     ) : (
                                       <Link
                                         href={business.url}
-                                        className="block px-4 py-3 text-sm text-gray-700 hover:text-primary rounded-md transition-colors group"
+                                        className={cn(
+                                          "block px-4 py-3 text-sm hover:text-primary rounded-md transition-colors group",
+                                          isActivePath(business.url) ? "text-primary" : "text-gray-700"
+                                        )}
                                       >
                                         <span className="relative">
                                           {business.title}
-                                          <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-secondary transition-all duration-300 group-hover:w-full"></span>
+                                          <span
+                                            className={cn(
+                                              "absolute -bottom-1 left-0 w-0 h-0.5 bg-secondary transition-all duration-300 group-hover:w-full",
+                                              isActivePath(business.url) && "w-full"
+                                            )}
+                                          ></span>
                                         </span>
                                       </Link>
                                     )}
@@ -879,11 +922,19 @@ export function Header({ hideHeader = false }: { hideHeader?: boolean }) {
                                   <Link
                                     key={nestedItem.title}
                                     href={nestedItem.url}
-                                    className="block px-4 py-3 text-sm text-gray-700 hover:text-primary rounded-md transition-colors group"
+                                    className={cn(
+                                      "block px-4 py-3 text-sm hover:text-primary rounded-md transition-colors group",
+                                      isActivePath(nestedItem.url) ? "text-primary" : "text-gray-700"
+                                    )}
                                   >
                                     <span className="relative">
                                       {nestedItem.title}
-                                      <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-secondary transition-all duration-300 group-hover:w-full"></span>
+                                      <span
+                                        className={cn(
+                                          "absolute -bottom-1 left-0 w-0 h-0.5 bg-secondary transition-all duration-300 group-hover:w-full",
+                                          isActivePath(nestedItem.url) && "w-full"
+                                        )}
+                                      ></span>
                                     </span>
                                   </Link>
                                 ))}
@@ -949,7 +1000,7 @@ export function Header({ hideHeader = false }: { hideHeader?: boolean }) {
                             onClick={() => setMobileDropdownOpen(mobileDropdownOpen === item.title ? null : item.title)}
                             className="w-full flex justify-between items-center p-4 cursor-pointer"
                           >
-                            <span className="text-lg font-medium text-gray-800">{item.title}</span>
+                            <span className={cn("text-lg font-medium", isMenuItemActive(item) ? "text-primary" : "text-gray-800")}>{item.title}</span>
                             <ChevronDown className={cn(
                               "h-5 w-5 text-primary transition-transform duration-200",
                               mobileDropdownOpen === item.title && "rotate-180"
@@ -1025,7 +1076,7 @@ export function Header({ hideHeader = false }: { hideHeader?: boolean }) {
                       ) : (
                         <Link
                           href={item.url}
-                          className="block p-4 text-lg font-medium text-gray-800 hover:bg-gray-50"
+                          className={cn("block p-4 text-lg font-medium hover:bg-gray-50", isMenuItemActive(item) ? "text-primary" : "text-gray-800")}
                           onClick={() => setMobileMenuOpen(false)}
                         >
                           {item.title}
