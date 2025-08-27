@@ -203,6 +203,32 @@ export function NewsPage() {
     setShowAllMobile(!showAllMobile)
   }
 
+  const handleShare = async (e: React.MouseEvent, article: NewsArticle) => {
+    e.preventDefault()
+    e.stopPropagation()
+    try {
+      const shareUrl = `${window.location.origin}/news/${article.id}`
+      if (navigator.share) {
+        await navigator.share({
+          title: article.title,
+          text: article.excerpt,
+          url: shareUrl,
+        })
+      } else {
+        await navigator.clipboard.writeText(shareUrl)
+        toast.success("Link copied to clipboard")
+      }
+    } catch (err) {
+      try {
+        const fallbackUrl = `${window.location.origin}/news/${article.id}`
+        await navigator.clipboard.writeText(fallbackUrl)
+        toast.success("Link copied to clipboard")
+      } catch {
+        toast.error("Failed to share this article")
+      }
+    }
+  }
+
   const handleNewsletterSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubscribing(true)
@@ -321,7 +347,12 @@ export function NewsPage() {
                           <ArrowRight className="ml-1 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                         </div>
                         <div className="flex gap-2">
-                          <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8 rounded-full"
+                            onClick={(e) => featuredArticle && handleShare(e, featuredArticle)}
+                          >
                             <Share2 className="h-4 w-4" />
                             <span className="sr-only">Share</span>
                           </Button>
@@ -495,7 +526,12 @@ export function NewsPage() {
                                 Read More
                                 <ArrowRight className="ml-1 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                               </div>
-                              <Button variant="ghost" size="icon" className="h-7 w-7 rounded-full">
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-7 w-7 rounded-full"
+                                onClick={(e) => handleShare(e, article)}
+                              >
                                 <Share2 className="h-3 w-3" />
                                 <span className="sr-only">Share</span>
                               </Button>
@@ -579,7 +615,12 @@ export function NewsPage() {
                                     Read More
                                     <ArrowRight className="ml-1 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                                   </div>
-                                  <Button variant="ghost" size="icon" className="h-7 w-7 rounded-full">
+                                  <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className="h-7 w-7 rounded-full"
+                                    onClick={(e) => handleShare(e, article)}
+                                  >
                                     <Share2 className="h-3 w-3" />
                                     <span className="sr-only">Share</span>
                                   </Button>
