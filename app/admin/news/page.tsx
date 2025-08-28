@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
+import { ImageUpload } from "@/components/admin/ImageUpload"
 import {
   Dialog,
   DialogContent,
@@ -55,7 +56,7 @@ interface NewsArticle {
   seo_title?: string
   seo_description?: string
   seo_keywords?: string
-  seo_image_url?: string
+
   images?: NewsArticleImage[] // New field for multiple images
 }
 
@@ -73,7 +74,7 @@ type FormData = Omit<NewsArticle, 'id' | 'created_at' | 'read_time' | 'images'> 
   seo_title: string
   seo_description: string
   seo_keywords: string
-  seo_image_url: string
+
   images: ImageFormData[]
 }
 
@@ -167,7 +168,6 @@ export default function NewsManagement() {
     seo_title: "",
     seo_description: "",
     seo_keywords: "",
-    seo_image_url: "",
     images: [{
       image_url: "",
       image_order: 1,
@@ -268,7 +268,6 @@ export default function NewsManagement() {
         seo_title: formData.seo_title,
         seo_description: formData.seo_description,
         seo_keywords: formData.seo_keywords,
-        seo_image_url: formData.seo_image_url,
         read_time
       }
 
@@ -326,7 +325,6 @@ export default function NewsManagement() {
         seo_title: "",
         seo_description: "",
         seo_keywords: "",
-        seo_image_url: "",
         images: [{
           image_url: "",
           image_order: 1,
@@ -374,7 +372,6 @@ export default function NewsManagement() {
         seo_title: formData.seo_title,
         seo_description: formData.seo_description,
         seo_keywords: formData.seo_keywords,
-        seo_image_url: formData.seo_image_url,
         read_time
       }
 
@@ -556,7 +553,6 @@ export default function NewsManagement() {
                               seo_title: article.seo_title || "",
                               seo_description: article.seo_description || "",
                               seo_keywords: article.seo_keywords || "",
-                              seo_image_url: article.seo_image_url || "",
                               images: imagesToEdit,
                             })
                             setEditingArticle(article)
@@ -639,7 +635,6 @@ export default function NewsManagement() {
         seo_title: "",
         seo_description: "",
         seo_keywords: "",
-        seo_image_url: "",
         images: [{
           image_url: "",
           image_order: 1,
@@ -815,17 +810,18 @@ export default function NewsManagement() {
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                         <div className="space-y-2">
                           <Label className="text-sm font-medium">
-                            Image URL <span className="text-red-500">*</span>
+                            Image Upload <span className="text-red-500">*</span>
                           </Label>
-                          <Input
-                            placeholder="Enter image URL"
-                            className="border-gray-300 focus:border-[#5E366D] focus:ring-[#5E366D]"
+                          <ImageUpload
                             value={image.image_url}
-                            onChange={(e) => {
+                            onChange={(url) => {
                               const newImages = [...formData.images]
-                              newImages[index].image_url = e.target.value
+                              newImages[index].image_url = url
                               setFormData({ ...formData, images: newImages })
                             }}
+                            placeholder={`Upload ${image.image_type} image`}
+                            showPreview={true}
+                            maxSize={10}
                           />
                         </div>
                         <div className="space-y-2">
@@ -861,7 +857,8 @@ export default function NewsManagement() {
                 </div>
                 
                 <p className="text-sm text-gray-500">
-                  <strong>Banner images</strong> appear at the top of the article. <strong>Content images</strong> appear within the article content.
+                  <strong>Banner images</strong> appear at the top of the article. <strong>Content images</strong> appear within the article content. 
+                  Images are automatically uploaded to our CDN for optimal performance.
                 </p>
               </div>
 
@@ -966,22 +963,7 @@ export default function NewsManagement() {
                     </p>
                   </div>
 
-                  {/* SEO Image URL */}
-                  <div className="space-y-2">
-                    <Label htmlFor="seo_image_url" className="font-semibold">
-                      SEO Image URL
-                    </Label>
-                    <Input
-                      id="seo_image_url"
-                      placeholder="Custom image for social sharing (optional)"
-                      className="border-gray-300 focus:border-[#5E366D] focus:ring-[#5E366D]"
-                      value={formData.seo_image_url || ""}
-                      onChange={(e) => setFormData({ ...formData, seo_image_url: e.target.value })}
-                    />
-                    <p className="text-sm text-gray-500">
-                      Leave empty to use the article image. Recommended size: 1200x630 pixels.
-                    </p>
-                  </div>
+
                 </div>
               </div>
 
