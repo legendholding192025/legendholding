@@ -1,6 +1,5 @@
 import { Metadata } from 'next';
-import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
-import { cookies } from 'next/headers';
+import { supabase } from '@/lib/supabase';
 import { generatePageMetadata } from '@/config/metadata';
 
 interface NewsArticle {
@@ -16,14 +15,16 @@ interface NewsArticle {
   seo_image_url?: string
 }
 
-export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
-  const supabase = createServerComponentClient({ cookies });
+export async function generateMetadata(
+  props: { params: Promise<{ id: string }> }
+): Promise<Metadata> {
+  const { id } = await props.params;
   
   try {
     const { data: article } = await supabase
       .from('news_articles')
       .select('title, excerpt, image_url, category, author, seo_title, seo_description, seo_keywords, seo_image_url')
-      .eq('id', params.id)
+      .eq('id', id)
       .eq('published', true)
       .single();
 
