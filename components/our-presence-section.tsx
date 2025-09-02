@@ -7,11 +7,19 @@ const countries = [
   "United Arab Emirates",
   "Saudi Arabia",
   "China",
+  "United States",
+  "Canada",
+  "South Africa",
+  "Egypt",
   "Germany",
   "Kuwait",
   "Bahrain",
+  "Iraq",
   "Ethiopia",
-  "Nigeria"
+  "Nigeria",
+  "Oman",
+  "Brazil",
+  "Jordan"
 ]
 
 const continents = ["Asia", "Europe", "Africa"]
@@ -89,7 +97,7 @@ export function OurPresenceSection() {
             variants={fadeInUp}
           >
             <Image
-              src="https://cdn.legendholding.com/images/cdn_6889e38756a091.57618167_20250730_091903.png"
+              src="https://cdn.legendholding.com/images/cdn_68b68c99868ab7.99539621_20250902_062009.webp"
               alt="Global Presence Map"
               fill
               className="object-contain"
@@ -98,31 +106,34 @@ export function OurPresenceSection() {
             />
           </motion.div>
           {/* Right side - Country list */}
-          <div className="lg:col-span-5 flex flex-col items-center lg:items-start ml-0 md:ml-10 lg:ml-32 pl-4 md:pl-0">
+          <div className="lg:col-span-5 flex flex-col items-center lg:items-start ml-0 md:ml-6 lg:ml-16 pl-4 md:pl-0">
             <motion.div 
-              className="space-y-5 md:space-y-6 mt-2 md:mt-8 w-full"
+              className="mt-2 md:mt-8 w-full"
               variants={containerVariants}
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, amount: 0.4 }}
             >
-              {countries.map((country, idx) => (
-                <motion.div
-                  key={country}
-                  variants={itemVariants}
-                  custom={idx}
-                  className="flex items-center gap-3 md:gap-4"
-                >
-                  <Image
-                    src="https://cdn.legendholding.com/images/cdn_683e960b1997b5.22165608_20250603_062827.png"
-                    alt="bullet"
-                    width={18}
-                    height={18}
-                    className="min-w-[18px] min-h-[18px]"
-                  />
-                  <span className="text-[#4B4068] text-lg md:text-xl font-medium">{country}</span>
-                </motion.div>
-              ))}
+                             {/* Two column layout for countries */}
+               <div className="grid grid-cols-1 md:grid-cols-2 gap-x-24 gap-y-5 md:gap-y-6">
+                {countries.map((country, idx) => (
+                  <motion.div
+                    key={country}
+                    variants={itemVariants}
+                    custom={idx}
+                    className="flex items-center gap-3 md:gap-4"
+                  >
+                    <Image
+                      src="https://cdn.legendholding.com/images/cdn_683e960b1997b5.22165608_20250603_062827.png"
+                      alt="bullet"
+                      width={18}
+                      height={18}
+                      className="min-w-[18px] min-h-[18px]"
+                    />
+                    <span className={`text-[#4B4068] text-lg md:text-xl font-medium ${country === "United Arab Emirates" ? "whitespace-nowrap" : ""}`}>{country}</span>
+                  </motion.div>
+                ))}
+              </div>
             </motion.div>
           </div>
         </div>
