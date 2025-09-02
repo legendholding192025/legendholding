@@ -92,8 +92,8 @@ export function OurJourney() {
       title: "Regional Operations",
       description:
         "Established new regional operations at Jabal Al Barakha to better serve our growing customer base across different territories.",
-      image: "https://cdn.legendholding.com/images/cdn_6889e38756a091.57618167_20250730_091903.png",
-      mobileImage: "https://cdn.legendholding.com/images/cdn_6889e38756a091.57618167_20250730_091903.png",
+      image: "https://cdn.legendholding.com/images/cdn_683e930040dfb1.08078741_20250603_061528.png",
+      mobileImage: "https://cdn.legendholding.com/images/cdn_683e930040dfb1.08078741_20250603_061528.png",
       icon: <MapPin className="w-6 h-6" />,
       color: "#4c1d95",
       achievements: ["Jabal Al Barakha Operations", "Regional Expansion", "Territory Coverage"],
