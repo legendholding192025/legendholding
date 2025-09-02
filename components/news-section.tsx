@@ -34,8 +34,14 @@ type NewsItem = {
 export function Newsroom() {
   const [newsItems, setNewsItems] = useState<NewsItem[]>([])
   const [loading, setLoading] = useState(true)
+  const [mounted, setMounted] = useState(false)
 
   const supabase = createClientComponentClient()
+
+  // Prevent hydration mismatch
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   // Helper function to get display image for a news item
   const getDisplayImage = (newsItem: NewsItem) => {
@@ -53,8 +59,10 @@ export function Newsroom() {
   }
 
   useEffect(() => {
-    fetchNews()
-  }, [])
+    if (mounted) {
+      fetchNews()
+    }
+  }, [mounted])
 
   const fetchNews = async () => {
     try {
@@ -103,7 +111,8 @@ export function Newsroom() {
     }
   }
 
-  if (loading) {
+  // Show loading state or return null if not mounted to prevent hydration mismatch
+  if (!mounted || loading) {
     return (
       <section className="py-16 bg-[#EAE2D6]">
         <div className="container mx-auto px-4">

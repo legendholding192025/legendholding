@@ -30,8 +30,8 @@ export async function generateMetadata(
 
     if (!article) {
       return generatePageMetadata({
-        title: 'Article Not Found',
-        description: 'The requested article could not be found.',
+        title: 'News Article | Legend Holding Group',
+        description: 'Legend Holding Group news and updates.',
         keywords: 'Legend Holding Group, news, article',
       });
     }
