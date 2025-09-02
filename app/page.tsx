@@ -9,7 +9,7 @@ export const metadata = generatePageMetadata({
   title: 'Legend Holding Group | Investment Company | UAE',
   description: 'Legend Holding Group is a diversified UAE holding company leading innovation in automotive, energy, tourism, and smart mobility across the Middle East & Africa. Delivering excellence with every transaction.',
   keywords: 'Legend Holding Group, Automotive, Energy, Technology, Travel, Business, Innovation, Sustainability, UAE, Middle East, UAE holding group driving sustainable growth in automotive, energy, tourism & mobility across the Middle East and Africa, building a better future in every industry',
-  imageUrl: 'https://cdn.legendholding.com/images/hero-poster.png',
+  imageUrl: 'https://cdn.legendholding.com/images/cloudinary/cloudinary_683ea90f29b708.04231409_20250603_074935.jpg',
 });
 
 // Defer heavy/below-the-fold sections
