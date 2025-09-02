@@ -5,7 +5,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { ArrowRight, Calendar, ChevronLeft, ChevronRight } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
+import { supabase } from "@/lib/supabaseClient"
 
 interface NewsArticleImage {
   id: string
@@ -36,7 +36,7 @@ export function Newsroom() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  const supabase = createClientComponentClient()
+
 
   // Helper function to get display image for a news item
   const getDisplayImage = (newsItem: NewsItem) => {
@@ -61,7 +61,14 @@ export function Newsroom() {
     try {
       setError(null)
       
-      const { data, error } = await supabase
+      // Check if supabase client is properly configured
+      if (!supabase) {
+        console.error("Supabase client is not configured")
+        setError("Configuration error")
+        return
+      }
+      
+      const { data, error } = await supabase!
         .from("news_articles")
         .select("*")
         .eq("published", true)

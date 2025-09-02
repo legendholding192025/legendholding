@@ -19,7 +19,7 @@ import {
 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
+import { supabase } from "@/lib/supabaseClient"
 import { cn } from "@/lib/utils"
 
 import { Button } from "@/components/ui/button"
@@ -103,7 +103,7 @@ export function NewsPage() {
     return { src: article.image_url || "/placeholder.svg", alt: article.title }
   }
 
-  const supabase = createClientComponentClient()
+
 
   useEffect(() => {
     fetchArticles()
@@ -111,8 +111,14 @@ export function NewsPage() {
 
   const fetchArticles = async () => {
     try {
+      // Check if supabase client is properly configured
+      if (!supabase) {
+        console.error("Supabase client is not configured")
+        return
+      }
+      
       // Fetch all published articles ordered by publication date (newest first)
-      const { data: allArticlesData, error: articlesError } = await supabase
+      const { data: allArticlesData, error: articlesError } = await supabase!
         .from("news_articles")
         .select("*")
         .eq("published", true)
@@ -134,7 +140,7 @@ export function NewsPage() {
       const articlesWithImages = await Promise.all(
         allArticles.map(async (article) => {
           try {
-            const { data: imagesData, error: imagesError } = await supabase
+            const { data: imagesData, error: imagesError } = await supabase!
               .from("news_article_images")
               .select("*")
               .eq("article_id", article.id)
