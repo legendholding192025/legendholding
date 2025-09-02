@@ -109,32 +109,72 @@ export function NewsPage() {
     fetchArticles()
   }, [])
 
+  const fetchArticlesWithRetry = async (retries = 3, delay = 1000) => {
+    for (let attempt = 1; attempt <= retries; attempt++) {
+      try {
+        // Check if supabase client is properly configured
+        if (!supabase) {
+          console.error("Supabase client is not configured")
+          return
+        }
+        
+        // Fetch all published articles ordered by publication date (newest first)
+        const { data: allArticlesData, error: articlesError } = await supabase!
+          .from("news_articles")
+          .select("*")
+          .eq("published", true)
+          .order("publication_date", { ascending: false })
+
+        if (articlesError) {
+          // If it's a network error and we have retries left, retry
+          if ((articlesError.message.includes('fetch') || articlesError.message.includes('network') || articlesError.message.includes('timeout')) && attempt < retries) {
+            console.warn(`Attempt ${attempt} failed, retrying in ${delay}ms:`, {
+              message: articlesError.message,
+              code: articlesError.code
+            })
+            await new Promise(resolve => setTimeout(resolve, delay))
+            delay *= 2 // Exponential backoff
+            continue
+          }
+          
+          console.error("Error fetching articles:", {
+            message: articlesError.message,
+            code: articlesError.code,
+            details: articlesError.details,
+            hint: articlesError.hint,
+            attempt: attempt
+          })
+          throw articlesError
+        }
+
+        return allArticlesData || []
+        
+      } catch (error) {
+        // If it's a network error and we have retries left, retry
+        if (attempt < retries && (
+          error instanceof TypeError && error.message.includes('fetch') ||
+          error instanceof Error && (error.message.includes('network') || error.message.includes('timeout'))
+        )) {
+          console.warn(`Attempt ${attempt} failed with network error, retrying in ${delay}ms:`, {
+            message: error instanceof Error ? error.message : 'Unknown error'
+          })
+          await new Promise(resolve => setTimeout(resolve, delay))
+          delay *= 2 // Exponential backoff
+          continue
+        }
+        
+        throw error
+      }
+    }
+  }
+
   const fetchArticles = async () => {
     try {
-      // Check if supabase client is properly configured
-      if (!supabase) {
-        console.error("Supabase client is not configured")
+      const allArticles = await fetchArticlesWithRetry()
+      
+      if (!allArticles) {
         return
       }
-      
-      // Fetch all published articles ordered by publication date (newest first)
-      const { data: allArticlesData, error: articlesError } = await supabase!
-        .from("news_articles")
-        .select("*")
-        .eq("published", true)
-        .order("publication_date", { ascending: false })
-
-      if (articlesError) {
-        console.error("Error fetching articles:", {
-          message: articlesError.message,
-          code: articlesError.code,
-          details: articlesError.details,
-          hint: articlesError.hint
-        })
-        throw articlesError
-      }
-
-      const allArticles = allArticlesData || []
 
       // Fetch images for all articles
       const articlesWithImages = await Promise.all(

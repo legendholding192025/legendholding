@@ -57,50 +57,87 @@ export function Newsroom() {
     fetchNews()
   }, [])
 
-  const fetchNews = async () => {
-    try {
-      setError(null)
-      
-      // Check if supabase client is properly configured
-      if (!supabase) {
-        console.error("Supabase client is not configured")
-        setError("Configuration error")
-        return
-      }
-      
-      const { data, error } = await supabase!
-        .from("news_articles")
-        .select("*")
-        .eq("published", true)
-        .order("publication_date", { ascending: false })
-        .limit(3) // Only fetch 3 latest news items
+  const fetchNewsWithRetry = async (retries = 3, delay = 1000): Promise<void> => {
+    for (let attempt = 1; attempt <= retries; attempt++) {
+      try {
+        setError(null)
+        
+        // Check if supabase client is properly configured
+        if (!supabase) {
+          console.error("Supabase client is not configured")
+          setError("Configuration error")
+          return
+        }
+        
+        const { data, error } = await supabase!
+          .from("news_articles")
+          .select("*")
+          .eq("published", true)
+          .order("publication_date", { ascending: false })
+          .limit(3) // Only fetch 3 latest news items
 
-      if (error) {
-        console.error("Supabase error:", {
-          message: error.message,
-          code: error.code,
-          details: error.details,
-          hint: error.hint
+        if (error) {
+          // If it's a network error and we have retries left, retry
+          if ((error.message.includes('fetch') || error.message.includes('network') || error.message.includes('timeout')) && attempt < retries) {
+            console.warn(`Attempt ${attempt} failed, retrying in ${delay}ms:`, {
+              message: error.message,
+              code: error.code
+            })
+            await new Promise(resolve => setTimeout(resolve, delay))
+            delay *= 2 // Exponential backoff
+            continue
+          }
+          
+          console.error("Supabase error:", {
+            message: error.message,
+            code: error.code,
+            details: error.details,
+            hint: error.hint,
+            attempt: attempt
+          })
+          setError("Failed to load news articles")
+          return
+        }
+
+        if (!data || data.length === 0) {
+          console.warn("No news articles found")
+          setNewsItems([])
+          return
+        }
+
+        // For home page, we don't need to fetch additional images to improve loading speed
+        // The legacy image_url field should be sufficient for the home page display
+        setNewsItems(data.map(newsItem => ({ ...newsItem, images: [] })))
+        return // Success, exit retry loop
+        
+      } catch (error) {
+        // If it's a network error and we have retries left, retry
+        if (attempt < retries && (
+          error instanceof TypeError && error.message.includes('fetch') ||
+          error instanceof Error && (error.message.includes('network') || error.message.includes('timeout'))
+        )) {
+          console.warn(`Attempt ${attempt} failed with network error, retrying in ${delay}ms:`, {
+            message: error instanceof Error ? error.message : 'Unknown error'
+          })
+          await new Promise(resolve => setTimeout(resolve, delay))
+          delay *= 2 // Exponential backoff
+          continue
+        }
+        
+        console.error("Error fetching news:", {
+          message: error instanceof Error ? error.message : 'Unknown error',
+          stack: error instanceof Error ? error.stack : undefined,
+          attempt: attempt
         })
         setError("Failed to load news articles")
         return
       }
+    }
+  }
 
-      if (!data || data.length === 0) {
-        console.warn("No news articles found")
-        setNewsItems([])
-        return
-      }
-
-      // For home page, we don't need to fetch additional images to improve loading speed
-      // The legacy image_url field should be sufficient for the home page display
-      setNewsItems(data.map(newsItem => ({ ...newsItem, images: [] })))
-    } catch (error) {
-      console.error("Error fetching news:", {
-        message: error instanceof Error ? error.message : 'Unknown error',
-        stack: error instanceof Error ? error.stack : undefined
-      })
-      setError("Failed to load news articles")
+  const fetchNews = async () => {
+    try {
+      await fetchNewsWithRetry()
     } finally {
       setLoading(false)
     }
