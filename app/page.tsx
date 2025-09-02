@@ -1,17 +1,7 @@
+import dynamic from "next/dynamic"
 import { Header } from "@/components/header"
 import HeroSection from "@/components/hero-section"
-import { Newsroom } from "@/components/news-section"
-import { CSRSection } from "@/components/csr-section"
-import { BrandLogoCarousel } from "@/components/brand-logo-carousel"
-import { BrandStatsSection } from "@/components/brand-stats-section"
 import { Footer } from "@/components/footer"
-import { PartnerSection } from "@/components/partner-section"
-import { OurPresenceSection } from "@/components/our-presence-section"
-import Newsletter from "@/components/newsletter"
-import ValueSection from "@/components/value"
-import GroupIndustries from "@/components/group-industries"
-import { AboutUsSection } from "@/components/about-us-section"
-import BusinessUnit from "@/components/business-unit"
 import { generatePageMetadata } from '@/config/metadata';
 
 export const metadata = generatePageMetadata({
@@ -20,6 +10,18 @@ export const metadata = generatePageMetadata({
   keywords: 'Legend Holding Group, Automotive, Energy, Technology, Travel, Business, Innovation, Sustainability, UAE, Middle East, UAE holding group driving sustainable growth in automotive, energy, tourism & mobility across the Middle East and Africa, building a better future in every industry',
   imageUrl: 'https://cdn.legendholding.com/images/hero-poster.png',
 });
+
+// Defer heavy/below-the-fold sections
+const AboutUsSection = dynamic(() => import("@/components/about-us-section").then(m => m.AboutUsSection), { ssr: true, loading: () => null })
+const BusinessUnit = dynamic(() => import("@/components/business-unit"), { loading: () => null })
+const ValueSection = dynamic(() => import("@/components/value"), { ssr: true, loading: () => null })
+const GroupIndustries = dynamic(() => import("@/components/group-industries"), { loading: () => null })
+const BrandStatsSection = dynamic(() => import("@/components/brand-stats-section").then(m => m.BrandStatsSection), { ssr: true, loading: () => null })
+const OurPresenceSection = dynamic(() => import("@/components/our-presence-section").then(m => m.OurPresenceSection), { ssr: true, loading: () => null })
+const CSRSection = dynamic(() => import("@/components/csr-section").then(m => m.CSRSection), { loading: () => null })
+const PartnerSection = dynamic(() => import("@/components/partner-section").then(m => m.PartnerSection), { loading: () => null })
+const Newsroom = dynamic(() => import("@/components/news-section").then(m => m.Newsroom), { loading: () => null })
+const Newsletter = dynamic(() => import("@/components/newsletter"), { loading: () => null })
 
 export default function Home() {
   return (

@@ -94,7 +94,7 @@ export function OurPresenceSection() {
               fill
               className="object-contain"
               sizes="(max-width: 768px) 100vw, 65vw"
-              priority
+              priority={false}
             />
           </motion.div>
           {/* Right side - Country list */}

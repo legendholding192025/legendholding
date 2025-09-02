@@ -14,7 +14,7 @@ export function AboutUsSection() {
           alt="About Us Background"
           fill
           className="object-cover object-center opacity-100"
-          priority
+          priority={false}
         />
       </div>
       {/* Content */}

@@ -13,7 +13,7 @@ export default function ValueSection() {
           fill
           className="object-contain object-top"
           sizes="(max-width: 640px) 192px, (max-width: 768px) 256px, (max-width: 1024px) 320px, 384px"
-          priority
+          priority={false}
         />
       </div>
 
@@ -25,7 +25,7 @@ export default function ValueSection() {
           fill
           className="object-contain object-bottom"
           sizes="(max-width: 640px) 192px, (max-width: 768px) 256px, (max-width: 1024px) 320px, 384px"
-          priority
+          priority={false}
         />
       </div>
       
