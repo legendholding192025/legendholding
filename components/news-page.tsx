@@ -118,7 +118,15 @@ export function NewsPage() {
         .eq("published", true)
         .order("publication_date", { ascending: false })
 
-      if (articlesError) throw articlesError
+      if (articlesError) {
+        console.error("Error fetching articles:", {
+          message: articlesError.message,
+          code: articlesError.code,
+          details: articlesError.details,
+          hint: articlesError.hint
+        })
+        throw articlesError
+      }
 
       const allArticles = allArticlesData || []
 
@@ -138,7 +146,11 @@ export function NewsPage() {
                 console.warn("news_article_images table not found. Please run the database migration.")
                 return { ...article, images: [] }
               }
-              console.error("Error fetching images for article:", article.id, imagesError)
+              console.error("Error fetching images for article:", article.id, {
+                message: imagesError.message,
+                code: imagesError.code,
+                details: imagesError.details
+              })
               return { ...article, images: [] }
             }
 
@@ -165,7 +177,10 @@ export function NewsPage() {
       const articlesForCarousel = articlesWithImages.filter(article => article.id !== currentFeaturedId)
       setAllArticles(articlesForCarousel)
     } catch (error) {
-      console.error("Error fetching articles:", error)
+      console.error("Error fetching articles:", {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined
+      })
       toast.error("Failed to load articles")
     } finally {
       setLoading(false)

@@ -34,14 +34,9 @@ type NewsItem = {
 export function Newsroom() {
   const [newsItems, setNewsItems] = useState<NewsItem[]>([])
   const [loading, setLoading] = useState(true)
-  const [mounted, setMounted] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const supabase = createClientComponentClient()
-
-  // Prevent hydration mismatch
-  useEffect(() => {
-    setMounted(true)
-  }, [])
 
   // Helper function to get display image for a news item
   const getDisplayImage = (newsItem: NewsItem) => {
@@ -59,13 +54,13 @@ export function Newsroom() {
   }
 
   useEffect(() => {
-    if (mounted) {
-      fetchNews()
-    }
-  }, [mounted])
+    fetchNews()
+  }, [])
 
   const fetchNews = async () => {
     try {
+      setError(null)
+      
       const { data, error } = await supabase
         .from("news_articles")
         .select("*")
@@ -73,51 +68,58 @@ export function Newsroom() {
         .order("publication_date", { ascending: false })
         .limit(3) // Only fetch 3 latest news items
 
-      if (error) throw error
-
-      // Fetch images for each news item
-      const newsWithImages = await Promise.all(
-        (data || []).map(async (newsItem) => {
-          try {
-            const { data: imagesData, error: imagesError } = await supabase
-              .from("news_article_images")
-              .select("*")
-              .eq("article_id", newsItem.id)
-              .order("image_order", { ascending: true })
-
-            if (imagesError) {
-              // Check if table doesn't exist (common error code: PGRST116)
-              if (imagesError.code === 'PGRST116' || imagesError.message?.includes('does not exist')) {
-                console.warn("news_article_images table not found. Please run the database migration.")
-                return { ...newsItem, images: [] }
-              }
-              console.error("Error fetching images for news item:", newsItem.id, imagesError)
-              return { ...newsItem, images: [] }
-            }
-
-            return { ...newsItem, images: imagesData || [] }
-          } catch (error) {
-            console.warn("Failed to fetch images for news item (table may not exist yet):", newsItem.id)
-            return { ...newsItem, images: [] }
-          }
+      if (error) {
+        console.error("Supabase error:", {
+          message: error.message,
+          code: error.code,
+          details: error.details,
+          hint: error.hint
         })
-      )
+        setError("Failed to load news articles")
+        return
+      }
 
-      setNewsItems(newsWithImages)
+      if (!data || data.length === 0) {
+        console.warn("No news articles found")
+        setNewsItems([])
+        return
+      }
+
+      // For home page, we don't need to fetch additional images to improve loading speed
+      // The legacy image_url field should be sufficient for the home page display
+      setNewsItems(data.map(newsItem => ({ ...newsItem, images: [] })))
     } catch (error) {
-      console.error("Error fetching news:", error)
+      console.error("Error fetching news:", {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined
+      })
+      setError("Failed to load news articles")
     } finally {
       setLoading(false)
     }
   }
 
-  // Show loading state or return null if not mounted to prevent hydration mismatch
-  if (!mounted || loading) {
+  // Show loading state
+  if (loading) {
     return (
       <section className="py-16 bg-[#EAE2D6]">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-center h-64">
             <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#5E366D] border-t-transparent"></div>
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  // Show error state
+  if (error) {
+    return (
+      <section className="py-16 bg-[#EAE2D6]">
+        <div className="container mx-auto px-4">
+          <div className="text-center">
+            <h2 className="text-3xl sm:text-4xl font-bold text-[#F08900] mb-4">Latest News</h2>
+            <p className="text-[rgb(93,55,110)] text-lg">Unable to load news articles at this time. Please try again later.</p>
           </div>
         </div>
       </section>
