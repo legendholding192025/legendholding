@@ -1,7 +1,6 @@
 import dynamic from "next/dynamic"
 import { Header } from "@/components/header"
 import HeroSection from "@/components/hero-section"
-import { Newsroom } from "@/components/news-section"
 import { Footer } from "@/components/footer"
 import { generatePageMetadata } from '@/config/metadata';
 
@@ -21,6 +20,7 @@ const BrandStatsSection = dynamic(() => import("@/components/brand-stats-section
 const OurPresenceSection = dynamic(() => import("@/components/our-presence-section").then(m => m.OurPresenceSection), { ssr: true, loading: () => null })
 const CSRSection = dynamic(() => import("@/components/csr-section").then(m => m.CSRSection), { loading: () => null })
 const PartnerSection = dynamic(() => import("@/components/partner-section").then(m => m.PartnerSection), { loading: () => null })
+const Newsroom = dynamic(() => import("@/components/news-section").then(m => m.Newsroom), { loading: () => null })
 const Newsletter = dynamic(() => import("@/components/newsletter"), { loading: () => null })
 
 export default function Home() {
