@@ -1,45 +1,42 @@
-"use client"
- 
-import React, { useState, useEffect, useRef } from 'react';
+import React from 'react';
 import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
 import Image from 'next/image';
 import { PageBanner } from '@/components/page-banner';
+import { Metadata } from 'next';
 
-// Connection speed detection
-const detectConnectionSpeed = () => {
-  if (typeof navigator !== 'undefined' && 'connection' in navigator) {
-    const connection = (navigator as any).connection;
-    if (connection) {
-      const { effectiveType, downlink } = connection;
-      if (effectiveType === '4g' && downlink > 10) return 'fast';
-      if (effectiveType === '4g' || (effectiveType === '3g' && downlink > 1.5)) return 'medium';
-      return 'slow';
-    }
+export const metadata: Metadata = {
+  title: 'Leadership Team | Legend Holding Group | Board of Directors & Management',
+  description: 'Meet the leadership team of Legend Holding Group. Kai Zheng, Co-founder and Chairman, is an expert entrepreneur with extensive experience in developing companies and a clear vision for the future of technologies. Mira Wu, Co-Founder and CEO, is the executive leader of multiple businesses within the group, bringing over 20 years of experience across the region. Rejeesh Raveendran, Head of Finance, has over 20 years of cross-industry experience and oversees the group\'s financial management. Nagaraj Ponnada, Head of Legend Motors Trading, has over 20 years of automotive experience across the region. Waseem Khalayleh, Marketing and communication head, has +15 years of experience across Automotive, Technology, Media and Group companies.',
+  keywords: 'Kai Zheng, Mira Wu, Cannon Wang, Nagaraj Ponnada, Rejeesh Raveendran, Sonam Lama, Jade Li, George Hua, Tamer Khalil, Waseem Khalayleh, Xiaolong Ma, Zhou Xiaofeng, Feng Bo, Sun Bo, Legend Holding Group leadership, board of directors, management team, CEO, COO, UAE business leaders, automotive executives, energy sector leaders, technology directors, Zul Energy, Legend Commercial Vehicles, Legend Motors, Legend Media',
+  openGraph: {
+    title: 'Leadership Team | Legend Holding Group',
+    description: 'Meet the leadership team of Legend Holding Group. Kai Zheng, Co-founder and Chairman, is an expert entrepreneur with extensive experience in developing companies and a clear vision for the future of technologies. Mira Wu, Co-Founder and CEO, brings over 20 years of experience across the region.',
+    type: 'website',
+    url: 'https://legendholding.com/who-we-are/the-team',
+    images: [
+      {
+        url: 'https://cdn.legendholding.com/images/cdn_684c1882b54a16.04269006_20250613_122434.jpeg',
+        width: 1200,
+        height: 630,
+        alt: 'Legend Holding Group Leadership Team'
+      }
+    ]
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Leadership Team | Legend Holding Group',
+    description: 'Meet the leadership team of Legend Holding Group. Learn about our board of directors and management team.',
+    images: ['https://cdn.legendholding.com/images/cdn_684c1882b54a16.04269006_20250613_122434.jpeg']
+  },
+  alternates: {
+    canonical: 'https://legendholding.com/who-we-are/the-team'
   }
-  return 'medium';
 };
 
-// Image optimization helper
-const optimizeImageUrl = (url: string, width: number, quality: number) => {
-  try {
-    const urlObj = new URL(url);
-    urlObj.searchParams.set('w', width.toString());
-    urlObj.searchParams.set('q', quality.toString());
-    urlObj.searchParams.set('f', 'auto');
-    return urlObj.toString();
-  } catch {
-    return url;
-  }
-};
+import { TeamDisplay } from '@/components/team-display';
 
 export default function LeadershipTeam() {
-  const [connectionSpeed, setConnectionSpeed] = useState<'slow' | 'medium' | 'fast'>('medium');
-  const [loadedImages, setLoadedImages] = useState<Set<string | number>>(new Set());
-  const [preloadedImages, setPreloadedImages] = useState<Set<number>>(new Set());
-  const [loadingStats, setLoadingStats] = useState({ loaded: 0, total: 0 });
-  const observerRef = useRef<IntersectionObserver | null>(null);
-
   const teamData = [
     {
       name: "Jade Li",
@@ -88,27 +85,7 @@ export default function LeadershipTeam() {
       role: "Business Development Manager",
       company: "Legend Holding Group",
       image: "https://cdn.legendholding.com/images/cdn_6895948bb69536.52704074_20250808_060915.png"
-    },
-    // {
-    //   name: "Liu Xiaochen",
-    //   role: "General Manager | Operations",
-    //   company: "Legend Travel and Tourism",
-    //   image: "https://cdn.legendholding.com/images/cdn_68512fb352e378.07080550_20250617_090451.jpeg"
-    // },
-    // {
-    //   name: "Saif El-Akkary",
-    //   role: "General Manager | Premium Brands",
-    //   company: "Legend Motors - Dealerships",
-    //   image: "https://cdn.legendholding.com/images/cdn_684a919ece14d0.18569119_20250612_083646.jpg"
-    // },
-    
-    // {
-    //   name: "Mubasher Farooq",
-    //   role: "Head of Rent a Car Division",
-    //   company: "Legend Rent a Car",
-    //   image: "https://cdn.legendholding.com/images/cdn_684a9178c0b480.93010827_20250612_083608.jpg"
-    // },
-    
+    }
   ];
 
   const boardData = [
@@ -147,283 +124,135 @@ export default function LeadershipTeam() {
       role: "Group HR Director",
       company: "Legend Holding Group",
       image: "https://cdn.legendholding.com/images/cdn_68887dd0765134.66878794_20250729_075248.jpg"
-    },
+    }
   ];
 
-  // Get image quality based on connection speed
-  const getImageQuality = (index: number) => {
-    if (connectionSpeed === 'slow') return 60;
-    if (connectionSpeed === 'medium') return 70;
-    return index < 3 ? 80 : 75; // Higher quality for first 3 images
-  };
-
-  // Get image width based on screen size and connection
-  const getImageWidth = () => {
-    if (typeof window !== 'undefined') {
-      const isMobile = window.innerWidth < 768;
-      const baseWidth = isMobile ? 400 : 600;
-      return connectionSpeed === 'slow' ? Math.floor(baseWidth * 0.8) : baseWidth;
-    }
-    return 600;
-  };
-
-  // Enhanced preloading with connection awareness
-  const preloadImages = () => {
-    const preloadCount = connectionSpeed === 'fast' ? 6 : connectionSpeed === 'medium' ? 4 : 2;
-    
-    teamData.slice(0, preloadCount).forEach((leader, index) => {
-      if (!preloadedImages.has(index)) {
-        const img = new window.Image();
-        const optimizedUrl = optimizeImageUrl(leader.image, getImageWidth(), getImageQuality(index));
-        
-        img.onload = () => {
-          setPreloadedImages(prev => new Set([...prev, index]));
-        };
-        
-        img.onerror = () => {
-          // Fallback to original URL if optimized fails
-          const fallbackImg = new window.Image();
-          fallbackImg.onload = () => {
-            setPreloadedImages(prev => new Set([...prev, index]));
-          };
-          fallbackImg.src = leader.image;
-        };
-        
-        img.src = optimizedUrl;
-      }
-    });
-  };
-
-  // Enhanced intersection observer
-  useEffect(() => {
-    const speed = detectConnectionSpeed();
-    setConnectionSpeed(speed);
-    setLoadingStats({ loaded: 0, total: boardData.length + teamData.length });
-
-    if (typeof window !== 'undefined') {
-      // Preload images after a short delay
-      setTimeout(preloadImages, 100);
-
-      // Enhanced intersection observer with larger margin
-      observerRef.current = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              const index = parseInt(entry.target.getAttribute('data-index') || '0');
-              
-              // Staggered loading for better UX
-              setTimeout(() => {
-                setLoadedImages(prev => {
-                  const newSet = new Set([...prev, index]);
-                  setLoadingStats(current => ({
-                    ...current,
-                    loaded: newSet.size
-                  }));
-                  return newSet;
-                });
-              }, index * 50); // 50ms delay between each image
-            }
-          });
-        },
-        { 
-          rootMargin: '150px',
-          threshold: 0.1
+  // Structured data for SEO
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Legend Holding Group",
+    "url": "https://legendholding.com",
+    "logo": "https://legendholding.com/logo.png",
+    "description": "Legend Holding Group is a diversified UAE holding company leading innovation in automotive, energy, tourism, and smart mobility across the Middle East & Africa.",
+    "address": {
+      "@type": "PostalAddress",
+      "addressCountry": "AE",
+      "addressRegion": "UAE"
+    },
+    "employee": [
+      ...boardData.map(member => ({
+        "@type": "Person",
+        "name": member.name,
+        "jobTitle": member.role,
+        "worksFor": {
+          "@type": "Organization",
+          "name": member.company
         }
-      );
-    }
-
-    return () => {
-      if (observerRef.current) {
-        observerRef.current.disconnect();
-      }
-    };
-  }, []);
-
-  // Get object position for specific team members
-  const getObjectPosition = (name: string) => {
-    switch (name) {
-      case "Mr. Kai Zheng": return "object-[center_25%]";
-      case "Kai Zheng": return "object-[center_20%]";
-      case "Liu Xiaochen": return "object-[center_20%]";
-      case "Waseem Khalayleh": return "object-[center_60%]";
-      case "Xiaolong Ma": return "object-[center_40%]";
-      case "Sun Bo": return "object-center";
-      default: return "object-center";
-    }
+      })),
+      ...teamData.map(member => ({
+        "@type": "Person",
+        "name": member.name,
+        "jobTitle": member.role,
+        "worksFor": {
+          "@type": "Organization",
+          "name": member.company
+        }
+      }))
+    ]
   };
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(structuredData)
+        }}
+      />
       <Header />
       <main className="pt-20">
         <PageBanner 
           title="The Team"
           imageUrl="https://cdn.legendholding.com/images/cdn_684c1882b54a16.04269006_20250613_122434.jpeg"
         />
-
-        <div className="min-h-screen bg-white flex flex-col items-center py-12 px-4 relative overflow-hidden">
-          {/* Decorative Elements */}
-          <div className="absolute inset-0 overflow-hidden pointer-events-none">
-            <div className="absolute top-0 left-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl transform -translate-x-1/2 -translate-y-1/2" />
-            <div className="absolute bottom-0 right-0 w-96 h-96 bg-secondary/5 rounded-full blur-3xl transform translate-x-1/2 translate-y-1/2" />
-          </div>
-
-          <div className="w-full max-w-7xl relative z-10">
-            {/* Board of Directors */}
-            <div className="mb-12">
-              <h2 className="text-3xl font-bold text-[#2b1c48] mb-6">Board of Directors</h2>
-              <div className="flex gap-2 mb-6">
-                <div className="h-1 w-20 bg-[#5E366D] rounded-full animate-expand-width"></div>
-                <div className="h-1 w-12 bg-[#EE8900] rounded-full animate-expand-width animation-delay-200"></div>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {boardData.map((director, index) => (
-                  <div 
-                    key={`board-${index}`} 
-                    className="bg-white rounded-2xl shadow-lg p-6 transform transition-all duration-300 hover:-translate-y-2 hover:shadow-xl"
-                    data-index={`board-${index}`}
-                    ref={(el) => {
-                      if (el && observerRef.current) {
-                        observerRef.current.observe(el);
-                      }
-                    }}
-                  >
-                    <div className="relative mb-4 mx-auto rounded-xl w-full h-[400px] overflow-hidden bg-gray-100">
-                      {/* Loading placeholder */}
-                      {!loadedImages.has(`board-${index}`) && (
-                        <div className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 animate-pulse">
-                          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer"></div>
-                          <div className="absolute inset-0 flex items-center justify-center">
-                            <div className="text-gray-400 text-sm">Loading...</div>
-                          </div>
-                        </div>
-                      )}
-                      
-                      {/* Optimized image */}
-                      <Image
-                        src={optimizeImageUrl(director.image, getImageWidth(), getImageQuality(index))}
-                        alt={director.name}
-                        width={getImageWidth()}
-                        height={400}
-                        className={`w-full h-full object-cover ${getObjectPosition(director.name)} transition-opacity duration-500 ${
-                          loadedImages.has(`board-${index}`) ? 'opacity-100' : 'opacity-0'
-                        }`}
-                        loading={index < 3 ? 'eager' : 'lazy'}
-                        priority={index < 3}
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                        quality={getImageQuality(index)}
-                        placeholder="blur"
-                        blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R+Rj"
-                        onLoad={() => {
-                          setLoadedImages(prev => {
-                            const newSet = new Set([...prev, `board-${index}`]);
-                            setLoadingStats(current => ({
-                              ...current,
-                              loaded: newSet.size
-                            }));
-                            return newSet;
-                          });
-                        }}
-                        onError={() => {
-                          // Fallback to original image if optimized version fails
-                          const img = document.querySelector(`[alt="${director.name}"]`) as HTMLImageElement;
-                          if (img) {
-                            img.src = director.image;
-                          }
-                        }}
-                      />
-                    </div>
-                    
-                    <h3 className="text-xl font-bold text-[#2b1c48] mb-2">{director.name}</h3>
-                    <div className="flex gap-2 mb-3">
-                      <div className="h-1 w-16 bg-[#5E366D] rounded-full animate-expand-width"></div>
-                      <div className="h-1 w-8 bg-[#EE8900] rounded-full animate-expand-width animation-delay-200"></div>
-                    </div>
-                    <p className="text-[#EE8900] font-semibold mb-2">{director.role}</p>
-                    <p className="text-[#5E366D] font-medium text-xl">{director.company}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Leadership Team */}
-            <div className="mb-8">
-              <h2 className="text-3xl font-bold text-[#2b1c48] mb-6">Leadership Team</h2>
-              <div className="flex gap-2 mb-6">
-                <div className="h-1 w-20 bg-[#5E366D] rounded-full animate-expand-width"></div>
-                <div className="h-1 w-12 bg-[#EE8900] rounded-full animate-expand-width animation-delay-200"></div>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {teamData.map((leader, index) => (
-                <div 
-                  key={index} 
-                  className="bg-white rounded-2xl shadow-lg p-6 transform transition-all duration-300 hover:-translate-y-2 hover:shadow-xl"
-                  data-index={index}
-                  ref={(el) => {
-                    if (el && observerRef.current) {
-                      observerRef.current.observe(el);
-                    }
-                  }}
-                >
-                  <div className="relative mb-4 mx-auto rounded-xl w-full h-[400px] overflow-hidden bg-gray-100">
-                    {/* Loading placeholder */}
-                    {!loadedImages.has(index) && (
-                      <div className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 animate-pulse">
-                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer"></div>
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <div className="text-gray-400 text-sm">Loading...</div>
-                        </div>
-                      </div>
-                    )}
-                    
-                    {/* Optimized image */}
-                    <Image
-                      src={optimizeImageUrl(leader.image, getImageWidth(), getImageQuality(index))}
-                      alt={leader.name}
-                      width={getImageWidth()}
-                      height={400}
-                      className={`w-full h-full object-cover ${getObjectPosition(leader.name)} transition-opacity duration-500 ${
-                        loadedImages.has(index) ? 'opacity-100' : 'opacity-0'
-                      }`}
-                      loading={index < 3 ? 'eager' : 'lazy'}
-                      priority={index < 3}
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      quality={getImageQuality(index)}
-                      placeholder="blur"
-                      blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R+Rj"
-                      onLoad={() => {
-                        setLoadedImages(prev => {
-                          const newSet = new Set([...prev, index]);
-                          setLoadingStats(current => ({
-                            ...current,
-                            loaded: newSet.size
-                          }));
-                          return newSet;
-                        });
-                      }}
-                      onError={() => {
-                        // Fallback to original image if optimized version fails
-                        const img = document.querySelector(`[alt="${leader.name}"]`) as HTMLImageElement;
-                        if (img) {
-                          img.src = leader.image;
-                        }
-                      }}
-                    />
-                  </div>
-                  
-                  <h3 className="text-xl font-bold text-[#2b1c48] mb-2">{leader.name}</h3>
-                  <div className="flex gap-2 mb-3">
-                    <div className="h-1 w-16 bg-[#5E366D] rounded-full animate-expand-width"></div>
-                    <div className="h-1 w-8 bg-[#EE8900] rounded-full animate-expand-width animation-delay-200"></div>
-                  </div>
-                  <p className="text-[#EE8900] font-semibold mb-2">{leader.role}</p>
-                  <p className="text-[#5E366D] font-medium text-xl">{leader.company}</p>
-                </div>
-              ))}
-            </div>
-          </div>
+        <TeamDisplay teamData={teamData} boardData={boardData} />
+        
+        {/* Hidden SEO content for better searchability */}
+        <div className="sr-only">
+          <h1>Legend Holding Group Leadership Team</h1>
+          <p>
+            Meet the executive leadership team of Legend Holding Group, a diversified UAE holding company. 
+            Our board of directors and management team includes Kai Zheng (Chairman & CEO), Mira Wu (Co-Founder & COO), 
+            Cannon Wang (VP Dealership & Strategy), Nagaraj Ponnada (General Manager), Rejeesh Raveendran (Group Finance Director), 
+            Sonam Lama (Group HR Director), Jade Li (Managing Director of Zul Energy), George Hua (Head of Commercial Vehicles), 
+            Tamer Khalil (Head of After Sales), Waseem Khalayleh (Brand Manager), Xiaolong Ma (Branch Manager KSA), 
+            Zhou Xiaofeng (IT & Digital Transformation Director), Feng Bo (Media Operations Manager), and Sun Bo (Business Development Manager). 
+            These experienced leaders drive innovation across automotive, energy, technology, and mobility sectors in the Middle East and Africa.
+          </p>
+          
+          <h2>Board of Directors and Executive Leadership</h2>
+          <p>
+            The board of directors at Legend Holding Group is led by Kai Zheng, Co-founder and Chairman, who is an expert entrepreneur with extensive experience in developing companies and a clear vision for the future of technologies. Mira Wu serves as Co-Founder and CEO, and is the executive leader of multiple businesses within the group, bringing over 20 years of experience across the region. Cannon Wang leads as VP of Dealership & Strategy, while Rejeesh Raveendran, Head of Finance, has over 20 years of cross-industry experience and oversees the group's financial management. Nagaraj Ponnada, Head of Legend Motors Trading, has over 20 years of automotive experience across the region, managing sales, business development, and other key departments. Sonam Lama leads human resources as Group HR Director.
+          </p>
+          
+          <h2>Senior Management Team</h2>
+          <p>
+            Our senior management team includes Jade Li, Managing Director of Zul Energy division, George Hua who heads Commercial Vehicles operations, 
+            Tamer Khalil leading After Sales services, Waseem Khalayleh, the Marketing and communication head of Legend Holding Group, with +15 years of experience across industries from Automotive, Technology, Media and Group companies, Xiaolong Ma serving as Branch Manager for KSA operations, 
+            Zhou Xiaofeng directing IT and Digital Transformation, Feng Bo managing Media Operations, and Sun Bo leading Business Development initiatives.
+          </p>
+          
+          <h2>Complete Team Directory</h2>
+          <h3>Board of Directors</h3>
+          <ul>
+            {boardData.map((member, index) => {
+              let description = `${member.name} is a key leader in the ${member.company} organization.`;
+              
+              // Add specific SEO descriptions for key members
+              if (member.name === "Kai Zheng") {
+                description = "Kai Zheng, Co-founder and Chairman of Legend Holding Group, is an expert entrepreneur with extensive experience in developing companies and a clear vision for the future of technologies.";
+              } else if (member.name === "Mira Wu") {
+                description = "Mira Wu, Co-Founder and CEO of Legend Holding Group, is the executive leader of multiple businesses within the group, bringing over 20 years of experience across the region.";
+              } else if (member.name === "Rejeesh Raveendran") {
+                description = "Rejeesh Raveendran, Head of Finance at Legend Holding Group, has over 20 years of cross-industry experience and oversees the group's financial management.";
+              } else if (member.name === "Nagaraj Ponnada") {
+                description = "Nagaraj Ponnada, Head of Legend Motors Trading, has over 20 years of automotive experience across the region, managing sales, business development, and other key departments.";
+              }
+              
+              return (
+                <li key={index}>
+                  <strong>{member.name}</strong> - {member.role} at {member.company}. {description}
+                </li>
+              );
+            })}
+          </ul>
+          
+          <h3>Leadership Team</h3>
+          <ul>
+            {teamData.map((member, index) => {
+              let description = `${member.name} plays a crucial role in ${member.company} operations and strategy.`;
+              
+              // Add specific SEO description for Waseem Khalayleh
+              if (member.name === "Waseem Khalayleh") {
+                description = "Waseem Khalayleh, the Marketing and communication head of Legend Holding Group, with +15 years of experience across industries from Automotive, Technology, Media and Group companies.";
+              }
+              
+              return (
+                <li key={index}>
+                  <strong>{member.name}</strong> - {member.role} at {member.company}. {description}
+                </li>
+              );
+            })}
+          </ul>
+          
+          <h2>Company Divisions and Leadership</h2>
+          <p>
+            Legend Holding Group operates multiple divisions including Zul Energy led by Jade Li, Legend Commercial Vehicles managed by George Hua, 
+            Legend World Automobile Service under Tamer Khalil, Legend Motors with Xiaolong Ma in KSA, Legend Media directed by Feng Bo, 
+            and various other subsidiaries. Each division is led by experienced professionals who bring expertise in automotive, energy, 
+            technology, and business development sectors.
+          </p>
         </div>
       </main>
       <Footer />
