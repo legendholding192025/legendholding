@@ -66,7 +66,7 @@ export function useAdminPermissions(): AdminPermissions {
       console.log('Current user:', user.email, user.id)
 
       // Create fallback role based on email
-      const isSuperAdmin = user.email === 'waseem.k@legendholding.com'
+      const isSuperAdmin = user.email === 'waseem.k@legendholding.com' || user.email === 'sonam.lama@legendholding.com'
       const fallbackRole: UserRole = {
         id: 'fallback',
         user_id: user.id,
@@ -168,7 +168,7 @@ export function useAdminPermissions(): AdminPermissions {
       try {
         const { data: { user } } = await supabase.auth.getUser()
         if (user) {
-          const isSuperAdmin = user.email === 'waseem.k@legendholding.com'
+          const isSuperAdmin = user.email === 'waseem.k@legendholding.com' || user.email === 'sonam.lama@legendholding.com'
           const fallbackRole: UserRole = {
             id: 'fallback',
             user_id: user.id,
