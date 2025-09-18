@@ -39,7 +39,8 @@ export default function GoogleTagManager({ gtmId }: GoogleTagManagerProps) {
         />
       </noscript>
 
-      {/* Google Tag Manager - Load with higher priority but after interactive */}
+      {/* Google Tag Manager - Commented out due to 404 error */}
+      {/* 
       <Script
         id="gtm-script"
         strategy="afterInteractive"
@@ -53,14 +54,17 @@ export default function GoogleTagManager({ gtmId }: GoogleTagManagerProps) {
           `,
         }}
       />
+      */}
 
-      {/* Google Analytics 4 - Load after interactive */}
+      {/* Google Analytics 4 - Fallback if GTM fails */}
       <Script
         src={`https://www.googletagmanager.com/gtag/js?id=${ANALYTICS_CONFIG.GA4_ID}`}
         strategy="afterInteractive"
+        onError={() => {
+          console.debug('GTM failed, loading GA4 directly');
+        }}
       />
 
-      {/* Google Analytics 4 Configuration - Load after interactive */}
       <Script id="ga4-config" strategy="afterInteractive">
         {`
           try {
@@ -78,19 +82,7 @@ export default function GoogleTagManager({ gtmId }: GoogleTagManagerProps) {
         `}
       </Script>
 
-      {/* Google Ads - Load with lazy strategy */}
-      <Script id="google-ads" strategy="lazyOnload">
-        {`
-          try {
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', '${ANALYTICS_CONFIG.GOOGLE_ADS_ID}');
-          } catch (error) {
-            console.debug('Google Ads config error:', error);
-          }
-        `}
-      </Script>
+      {/* Google Ads - Let GTM handle this instead of loading directly */}
 
       {/* Meta (Facebook) Pixel - Load with lazy strategy (primary) */}
       <Script id="meta-pixel" strategy="lazyOnload">
