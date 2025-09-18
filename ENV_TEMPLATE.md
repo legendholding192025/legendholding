@@ -7,7 +7,7 @@ Create a `.env.local` file in your project root with the following variables:
 NEXT_PUBLIC_GA4_ID=G-TFC4L94QL6
 
 # Google Tag Manager (Already configured)
-NEXT_PUBLIC_GTM_ID=GTM-K8GMBZG5
+NEXT_PUBLIC_GTM_ID=GTM-TBV3SHGV
 
 # Google Ads (Already configured)
 NEXT_PUBLIC_GOOGLE_ADS_ID=AW-5088079446
@@ -33,7 +33,7 @@ NEXT_PUBLIC_YOUTUBE_CHANNEL_ID=UCY4V3u7xBMkBiXR5u_deryA
 ## Current Status
 
 ✅ **Google Analytics 4**: Already configured with ID `G-TFC4L94QL6`
-✅ **Google Tag Manager**: Already configured with ID `GTM-K8GMBZG5`
+✅ **Google Tag Manager**: Already configured with ID `GTM-TBV3SHGV`
 ✅ **Google Ads**: Already configured with ID `AW-5088079446`
 ✅ **Meta (Facebook) Pixel**: Already configured with ID `2991355601025019`
 ✅ **Meta (Facebook) Ads Pixel (extra)**: Configured with ID `24047128264987943`
@@ -51,7 +51,7 @@ You also have another Google Tag Manager ID: `GTM-TBV3SHGV`
 ## Next Steps
 
 1. **Google Analytics 4** is already working with ID `G-TFC4L94QL6`
-2. **Google Tag Manager** is already working with ID `GTM-K8GMBZG5`
+2. **Google Tag Manager** is already working with ID `GTM-TBV3SHGV`
 3. **Google Ads** is already working with ID `AW-5088079446`
 4. **Meta Pixel** is already working with ID `2991355601025019`
 5. **Snapchat Pixel** is already working with ID `89a8f015-e28b-4075-83fe-ec5f12b27738`
@@ -69,7 +69,7 @@ To verify tracking is working:
 3. Go to Network tab
 4. Look for requests to:
    - `google-analytics.com` (GA4: G-TFC4L94QL6)
-   - `googletagmanager.com` (GTM: GTM-K8GMBZG5)
+   - `googletagmanager.com` (GTM: GTM-TBV3SHGV)
    - `googleads.g.doubleclick.net` (Google Ads: AW-5088079446)
    - `facebook.com` (Meta Pixel: 2991355601025019)
    - `sc-static.net` (Snapchat Pixel: 89a8f015-e28b-4075-83fe-ec5f12b27738)
