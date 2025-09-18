@@ -62,7 +62,6 @@ export default function HeroSection() {
         muted
         playsInline
         preload="none"
-        poster="https://cdn.legendholding.com/images/hero-poster.png"
         className="absolute inset-0 w-full h-full object-cover mt-6 md:mt-28"
         style={{ zIndex: 0 }}
       >
