@@ -37,6 +37,12 @@ export const metadata: Metadata = {
 import { TeamDisplay } from '@/components/team-display';
 
 export default function LeadershipTeam() {
+  const toSlug = (value: string) =>
+    value
+      .toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, '')
+      .trim()
+      .replace(/\s+/g, '-');
   const teamData = [
     {
       name: "Jade Li",
@@ -127,49 +133,85 @@ export default function LeadershipTeam() {
     }
   ];
 
-  // Structured data for SEO
-  const structuredData = {
+  // Structured data for SEO (Organization + WebPage + ItemList + Person with images and anchors)
+  const pageUrl = 'https://legendholding.com/who-we-are/the-team';
+  const bannerUrl = 'https://cdn.legendholding.com/images/cdn_684c1882b54a16.04269006_20250613_122434.jpeg';
+
+  const personFrom = (member: { name: string; role: string; company: string; image: string }, position?: number) => ({
+    "@type": "Person",
+    name: member.name,
+    jobTitle: member.role,
+    image: member.image,
+    url: `${pageUrl}#${toSlug(`${member.name}-${member.role}`)}`,
+    worksFor: {
+      "@type": "Organization",
+      name: member.company
+    },
+    ...(typeof position === 'number' ? { position } : {})
+  });
+
+  const organizationData = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    "name": "Legend Holding Group",
-    "url": "https://legendholding.com",
-    "logo": "https://legendholding.com/logo.png",
-    "description": "Legend Holding Group is a diversified UAE holding company leading innovation in automotive, energy, tourism, and smart mobility across the Middle East & Africa.",
-    "address": {
+    name: "Legend Holding Group",
+    url: "https://legendholding.com",
+    logo: "https://legendholding.com/images/legend-logo.png",
+    description: "Legend Holding Group is a diversified UAE holding company leading innovation in automotive, energy, tourism, and smart mobility across the Middle East & Africa.",
+    address: {
       "@type": "PostalAddress",
-      "addressCountry": "AE",
-      "addressRegion": "UAE"
+      addressCountry: "AE",
+      addressRegion: "UAE"
     },
-    "employee": [
-      ...boardData.map(member => ({
-        "@type": "Person",
-        "name": member.name,
-        "jobTitle": member.role,
-        "worksFor": {
-          "@type": "Organization",
-          "name": member.company
-        }
+    employee: [
+      ...boardData.map((m) => personFrom(m)),
+      ...teamData.map((m) => personFrom(m)),
+    ]
+  };
+
+  const webPageData = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: 'The Team',
+    url: pageUrl,
+    primaryImageOfPage: {
+      "@type": "ImageObject",
+      url: bannerUrl,
+      width: 1200,
+      height: 630,
+      caption: 'Legend Holding Group Leadership Team'
+    },
+    about: {
+      "@type": "Organization",
+      name: "Legend Holding Group",
+      url: "https://legendholding.com"
+    }
+  };
+
+  const itemListData = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: 'Legend Holding Group Leadership',
+    itemListOrder: 'https://schema.org/ItemListOrderAscending',
+    numberOfItems: boardData.length + teamData.length,
+    itemListElement: [
+      ...boardData.map((m, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        item: personFrom(m, index + 1)
       })),
-      ...teamData.map(member => ({
-        "@type": "Person",
-        "name": member.name,
-        "jobTitle": member.role,
-        "worksFor": {
-          "@type": "Organization",
-          "name": member.company
-        }
+      ...teamData.map((m, i) => ({
+        "@type": "ListItem",
+        position: boardData.length + i + 1,
+        item: personFrom(m, boardData.length + i + 1)
       }))
     ]
   };
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(structuredData)
-        }}
-      />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationData) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageData) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListData) }} />
       <Header />
       <main className="pt-20">
         <PageBanner 

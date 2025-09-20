@@ -151,6 +151,14 @@ export function TeamDisplay({ teamData, boardData }: TeamDisplayProps) {
     }
   };
 
+  // Create stable, SEO-friendly slug to use as element id/anchor
+  const toSlug = (value: string) =>
+    value
+      .toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, '')
+      .trim()
+      .replace(/\s+/g, '-');
+
   return (
     <div className="min-h-screen bg-white flex flex-col items-center py-12 px-4 relative overflow-hidden">
       {/* Decorative Elements */}
@@ -171,6 +179,7 @@ export function TeamDisplay({ teamData, boardData }: TeamDisplayProps) {
             {boardData.map((director, index) => (
               <div 
                 key={`board-${index}`} 
+                id={toSlug(`${director.name}-${director.role}`)}
                 className="bg-white rounded-2xl shadow-lg p-6 transform transition-all duration-300 hover:-translate-y-2 hover:shadow-xl"
                 data-index={`board-${index}`}
                 ref={(el) => {
@@ -250,6 +259,7 @@ export function TeamDisplay({ teamData, boardData }: TeamDisplayProps) {
           {teamData.map((leader, index) => (
             <div 
               key={index} 
+              id={toSlug(`${leader.name}-${leader.role}`)}
               className="bg-white rounded-2xl shadow-lg p-6 transform transition-all duration-300 hover:-translate-y-2 hover:shadow-xl"
               data-index={index}
               ref={(el) => {
