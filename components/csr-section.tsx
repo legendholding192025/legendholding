@@ -3,8 +3,7 @@
 import type React from "react"
 import { useState, useId, useEffect } from "react"
 import Image from "next/image"
-import Link from "next/link"
-import { ArrowRight, Heart, Leaf, Lightbulb, Users } from "lucide-react"
+import { Heart, Users } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 type CSRInitiative = {
@@ -13,7 +12,6 @@ type CSRInitiative = {
   description: string
   image: string
   icon: React.ReactNode
-  url: string
 }
 
 const csrInitiatives: CSRInitiative[] = [
@@ -24,7 +22,6 @@ const csrInitiatives: CSRInitiative[] = [
       "Providing immediate emergency response and long-term support during natural disasters, including earthquake relief efforts, ensuring essential aid reaches affected communities.",
     image: "https://cdn.legendholding.com/images/cloudinary/cloudinary_683ea24ace9db9.23851636_20250603_072042.jpg",
     icon: <Heart className="h-6 w-6" />,
-    url: "/csr/humanitarian-relief",
   },
   {
     id: "csr-2",
@@ -33,7 +30,6 @@ const csrInitiatives: CSRInitiative[] = [
       "Supporting communities through year-round initiatives, including special Ramadan programs providing food, essential supplies, and support to families in need.",
     image: "https://cdn.legendholding.com/images/cloudinary/cloudinary_683ea1e520f8a0.56379725_20250603_071901.jpg",
     icon: <Users className="h-6 w-6" />,
-    url: "/csr/community-development",
   }
 ]
 
@@ -174,16 +170,6 @@ export function CSRSection() {
           </div>
         </div>
 
-        {/* CSR Button - Moved outside the grid */}
-        {/* <div className="mt-8 lg:mt-4 lg:relative lg:left-0">
-          <Link
-            href="/who-we-are/csr"
-            className="inline-flex items-center text-[#EE8900] font-medium hover:text-[#EE8900]/80 transition-colors group text-base md:text-lg"
-          >
-            View All CSR Initiatives
-            <ArrowRight className="ml-2 h-4 w-4 md:h-5 md:w-5 transition-transform duration-300 group-hover:translate-x-1" />
-          </Link>
-        </div> */}
       </div>
     </section>
   )

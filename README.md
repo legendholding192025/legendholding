@@ -5,7 +5,6 @@ A modern, responsive website for Legend Holding Group built with Next.js 15, Rea
 ## Features
 
 - Modern UI/UX with responsive design
-- Corporate Social Responsibility (CSR) initiatives showcase
 - Brand logo carousel
 - News section
 - Hero section with video background

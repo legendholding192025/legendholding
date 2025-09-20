@@ -21,11 +21,8 @@ This document provides a comprehensive list of all pages on the Legend Holding G
 |-----------|----------|----------------|-------------|
 | Who We Are | `/who-we-are` | Who We Are | Company introduction |
 | About Us | `/who-we-are/about-us` | About Us | Company vision and mission |
-| Brand Story | `/who-we-are/brand-story` | Brand Story | Company history and story |
 | Our Journey | `/who-we-are/journey` | Our Journey | Company timeline and milestones |
 | The Team | `/who-we-are/the-team` | The Team | Team members and leadership |
-| Partners | `/who-we-are/partners` | Partners | Business partners and collaborations |
-| Corporate Social Responsibility | `/who-we-are/csr` | Corporate Social Responsibility | CSR initiatives and programs |
 
 ## 🏢 Our Brands Section
 
@@ -85,10 +82,8 @@ This document provides a comprehensive list of all pages on the Legend Holding G
 - About Us
 - Who We Are
 - About Us
-- Brand Story
 - Our Journey
 - The Team
-- Partners
 - CSR
 
 ### Content Pages (Content Consumption Focus)
