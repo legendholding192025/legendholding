@@ -8,7 +8,7 @@ import { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Leadership Team | Legend Holding Group | Board of Directors & Management',
   description: 'Meet the leadership team of Legend Holding Group. Kai Zheng, Co-founder and Chairman, is an expert entrepreneur with extensive experience in developing companies and a clear vision for the future of technologies. Mira Wu, Co-Founder and CEO, is the executive leader of multiple businesses within the group, bringing over 20 years of experience across the region. Rejeesh Raveendran, Head of Finance, has over 20 years of cross-industry experience and oversees the group\'s financial management. Nagaraj Ponnada, Head of Legend Motors Trading, has over 20 years of automotive experience across the region. Waseem Khalayleh, Marketing and communication head, has +15 years of experience across Automotive, Technology, Media and Group companies.',
-  keywords: 'Kai Zheng, Mira Wu, Cannon Wang, Nagaraj Ponnada, Rejeesh Raveendran, Sonam Lama, Jade Li, George Hua, Tamer Khalil, Waseem Khalayleh, Xiaolong Ma, Zhou Xiaofeng, Feng Bo, Sun Bo, Legend Holding Group leadership, board of directors, management team, CEO, COO, UAE business leaders, automotive executives, energy sector leaders, technology directors, Zul Energy, Legend Commercial Vehicles, Legend Motors, Legend Media',
+  keywords: 'Kai Zheng, Mira Wu, Cannon Wang, Nagaraj Ponnada, Rejeesh Raveendran, Sonam Lama, Jade Li, George Hua, Tamer Khalil, Waseem Khalayleh, Xiaolong Ma, Feng Bo, Sun Bo, Legend Holding Group leadership, board of directors, management team, CEO, COO, UAE business leaders, automotive executives, energy sector leaders, technology directors, Zul Energy, Legend Commercial Vehicles, Legend Motors, Legend Media',
   openGraph: {
     title: 'Leadership Team | Legend Holding Group',
     description: 'Meet the leadership team of Legend Holding Group. Kai Zheng, Co-founder and Chairman, is an expert entrepreneur with extensive experience in developing companies and a clear vision for the future of technologies. Mira Wu, Co-Founder and CEO, brings over 20 years of experience across the region.',
@@ -73,12 +73,6 @@ export default function LeadershipTeam() {
       role: "Branch Manager - KSA",
       company: "Legend Motors",
       image: "https://cdn.legendholding.com/images/cdn_685d58c3823fb8.82222303_20250626_142715.png"
-    },
-    {
-      name: "Zhou Xiaofeng",
-      role: "IT & Digital Transformation Director",
-      company: "Legend Holding Group",
-      image: "https://cdn.legendholding.com/images/cdn_684a8e1f4c3372.64281750_20250612_082151.jpg"
     },
     {
       name: "Feng Bo",
@@ -229,7 +223,7 @@ export default function LeadershipTeam() {
             Cannon Wang (VP Dealership & Strategy), Nagaraj Ponnada (General Manager), Rejeesh Raveendran (Group Finance Director), 
             Sonam Lama (Group HR Director), Jade Li (Managing Director of Zul Energy), George Hua (Head of Commercial Vehicles), 
             Tamer Khalil (Head of After Sales), Waseem Khalayleh (Brand Manager), Xiaolong Ma (Branch Manager KSA), 
-            Zhou Xiaofeng (IT & Digital Transformation Director), Feng Bo (Media Operations Manager), and Sun Bo (Business Development Manager). 
+            Feng Bo (Media Operations Manager), and Sun Bo (Business Development Manager). 
             These experienced leaders drive innovation across automotive, energy, technology, and mobility sectors in the Middle East and Africa.
           </p>
           
@@ -242,7 +236,7 @@ export default function LeadershipTeam() {
           <p>
             Our senior management team includes Jade Li, Managing Director of Zul Energy division, George Hua who heads Commercial Vehicles operations, 
             Tamer Khalil leading After Sales services, Waseem Khalayleh, the Marketing and communication head of Legend Holding Group, with +15 years of experience across industries from Automotive, Technology, Media and Group companies, Xiaolong Ma serving as Branch Manager for KSA operations, 
-            Zhou Xiaofeng directing IT and Digital Transformation, Feng Bo managing Media Operations, and Sun Bo leading Business Development initiatives.
+            Feng Bo managing Media Operations, and Sun Bo leading Business Development initiatives.
           </p>
           
           <h2>Complete Team Directory</h2>
