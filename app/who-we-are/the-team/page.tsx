@@ -91,13 +91,13 @@ export default function LeadershipTeam() {
   const boardData = [
     {
       name: "Kai Zheng",
-      role: "Chairman & CEO",
+      role: "Founder & Chairman",
       company: "Legend Holding Group",
       image: "https://cdn.legendholding.com/images/cdn_68513066e231f1.05737267_20250617_090750.jpeg"
     },
     {
       name: "Mira Wu",
-      role: "Co-Founder & Chief Operating Officer",
+      role: "Co-Founder & Vice Chairman",
       company: "Legend Holding Group",
       image: "https://cdn.legendholding.com/images/cdn_684c0d8b445f38.04199956_20250613_113747.jpg"
     },
