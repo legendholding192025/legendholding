@@ -75,12 +75,6 @@ export default function LeadershipTeam() {
       image: "https://cdn.legendholding.com/images/cdn_685d58c3823fb8.82222303_20250626_142715.png"
     },
     {
-      name: "Feng Bo",
-      role: "Media Operations Manager",
-      company: "Legend Media",
-      image: "https://cdn.legendholding.com/images/cdn_684a91d8ce3885.00609400_20250612_083744.jpg"
-    },
-    {
       name: "Sun Bo",
       role: "Business Development Manager",
       company: "Legend Holding Group",
