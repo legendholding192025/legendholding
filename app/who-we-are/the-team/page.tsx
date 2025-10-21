@@ -48,37 +48,37 @@ export default function LeadershipTeam() {
       name: "Jade Li",
       role: "Managing Director",
       company: "Zul Energy",
-      image: "https://cdn.legendholding.com/images/cdn_685d5a2ca99729.20750755_20250626_143316.jpg"
+      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1761054540/WhatsApp_Image_2025-06-20_at_12.08.37_c6eb4fd2_a7ztid.jpg"
     },
     {
       name: "George Hua",
       role: "Head of Commercial Vehicles",
       company: "Legend Commercial Vehicles",
-      image: "https://cdn.legendholding.com/images/cdn_684a90f5e5e897.26452583_20250612_083357.jpg"
+      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1761054559/3_copy_mxnwc7.jpg"
     },
     {
       name: "Tamer Khalil",
       role: "Head of After Sales",
       company: "Legend World Automobile Service",
-      image: "https://cdn.legendholding.com/images/cdn_684a912f82b802.68059638_20250612_083455.jpg"
+      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1761054567/4_copy_upgmzf.jpg"
     },
     {
       name: "Waseem Khalayleh",
       role: "Brand Manager",
       company: "Legend Holding Group",
-      image: "https://cdn.legendholding.com/images/cdn_685bac3b05ebd8.00933704_20250625_075851.jpg"
+      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1761054540/waseem-new_tre9rx.jpg"
     },
     {
       name: "Xiaolong Ma",
       role: "Branch Manager - KSA",
       company: "Legend Motors",
-      image: "https://cdn.legendholding.com/images/cdn_685d58c3823fb8.82222303_20250626_142715.png"
+      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1761054605/Mou-new_eh2vsp.png"
     },
     {
       name: "Sun Bo",
       role: "Business Development Manager",
       company: "Legend Holding Group",
-      image: "https://cdn.legendholding.com/images/cdn_6895948bb69536.52704074_20250808_060915.png"
+      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1761054580/sun_bo-new_wzmjs1.png"
     }
   ];
 
@@ -87,37 +87,37 @@ export default function LeadershipTeam() {
       name: "Kai Zheng",
       role: "Founder & Chairman",
       company: "Legend Holding Group",
-      image: "https://cdn.legendholding.com/images/cdn_68513066e231f1.05737267_20250617_090750.jpeg"
+      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1761054607/image_5_xtngrn.jpg"
     },
     {
       name: "Mira Wu",
       role: "Co-Founder & Vice Chairman",
       company: "Legend Holding Group",
-      image: "https://cdn.legendholding.com/images/cdn_684c0d8b445f38.04199956_20250613_113747.jpg"
+      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1761054550/10_copy_xhh1bh.jpg"
     },
     {
       name: "Cannon Wang",
       role: "VP Dealership & Strategy of LHG",
       company: "Legend Holding Group",
-      image: "https://cdn.legendholding.com/images/cdn_684a91bab382b9.55226471_20250612_083714.jpg"
+      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1761054569/8_copy_wxobcr.jpg"
     },
     {
       name: "Nagaraj Ponnada",
       role: "General Manager",
       company: "Legend Holding Group",
-      image: "https://cdn.legendholding.com/images/cdn_685170f8cda310.20304631_20250617_134320.jpeg"
+      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1761054540/image_8_swwqoy.jpg"
     },
     {
       name: "Rejeesh Raveendran",
       role: "Group Finance Director",
       company: "Legend Holding Group",
-      image: "https://cdn.legendholding.com/images/cdn_684a91542cc7b6.90399351_20250612_083532.jpg"
+      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1761054567/5_copy_uuxcob.jpg"
     },
     {
       name: "Sonam Lama",
       role: "Group HR Director",
       company: "Legend Holding Group",
-      image: "https://cdn.legendholding.com/images/cdn_68887dd0765134.66878794_20250729_075248.jpg"
+      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1761054545/sonam_bwxv4m.jpg"
     }
   ];
 
