@@ -11,9 +11,9 @@ import { PageBanner } from "@/components/page-banner"
 // Enhanced preloading with priority management
 const preloadImages = () => {
   const criticalImages = [
-    { url: 'https://cdn.legendholding.com/images/cdn_6862a6e1eef048.35976175_20250630_150153.jpg', priority: 'high' },
-    { url: 'https://cdn.legendholding.com/images/cdn_6862aedc3ac7d3.80278555_20250630_153556.png', priority: 'high' },
-    { url: 'https://cdn.legendholding.com/images/cdn_686295fca18de1.20003521_20250630_134948.png', priority: 'medium' }
+    { url: 'https://res.cloudinary.com/dzfhqvxnf/image/upload/v1761120794/cdn_6862a6e1eef048.35976175_20250630_150153_zzb2ar.jpg', priority: 'high' },
+    { url: 'https://res.cloudinary.com/dzfhqvxnf/image/upload/v1761120728/cdn_6862aedc3ac7d3.80278555_20250630_153556_o8i9jv.png', priority: 'high' },
+    { url: 'https://res.cloudinary.com/dzfhqvxnf/image/upload/v1761120674/cdn_68831dafb50c56.86321986_20250725_060119_uwrksc.png', priority: 'medium' }
   ]
   
   // Preload critical images immediately
@@ -288,7 +288,7 @@ export default function AboutUsPage() {
             <div className="absolute inset-0 z-0 flex justify-end items-end">
               <Image
                 src={optimizeImageUrl(
-                  "https://cdn.legendholding.com/images/cdn_6862a6e1eef048.35976175_20250630_150153.jpg",
+                  "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1761120794/cdn_6862a6e1eef048.35976175_20250630_150153_zzb2ar.jpg",
                   getImageDimensions(1600, 1200).width,
                   90
                 )}
@@ -425,7 +425,7 @@ export default function AboutUsPage() {
                     
                     <Image
                       src={optimizeImageUrl(
-                        "https://cdn.legendholding.com/images/cdn_6862aedc3ac7d3.80278555_20250630_153556.png",
+                        "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1761120728/cdn_6862aedc3ac7d3.80278555_20250630_153556_o8i9jv.png",
                         getImageDimensions(600, 400).width,
                         90
                       )}
@@ -506,7 +506,7 @@ export default function AboutUsPage() {
               <div className="order-2 lg:order-2 relative flex flex-col items-center justify-center h-full min-h-[500px]">
                 <div className="flex-1 flex items-center justify-center w-full lg:ml-16 -mt-12 md:mt-0">
                   <Image
-                    src="https://cdn.legendholding.com/images/cdn_68831dafb50c56.86321986_20250725_060119.png"
+                    src="https://res.cloudinary.com/dzfhqvxnf/image/upload/v1761120674/cdn_68831dafb50c56.86321986_20250725_060119_uwrksc.png"
                     alt="Mascot"
                     width={400}
                     height={400}
