@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     url: 'https://legendholding.com/who-we-are/the-team',
     images: [
       {
-        url: 'https://cdn.legendholding.com/images/cdn_684c1882b54a16.04269006_20250613_122434.jpeg',
+        url: 'https://res.cloudinary.com/dzfhqvxnf/image/upload/v1761119956/cdn_684c1882b54a16.04269006_20250613_122434_vwphxo.jpg',
         width: 1200,
         height: 630,
         alt: 'Legend Holding Group Leadership Team'
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Leadership Team | Legend Holding Group',
     description: 'Meet the leadership team of Legend Holding Group. Learn about our board of directors and management team.',
-    images: ['https://cdn.legendholding.com/images/cdn_684c1882b54a16.04269006_20250613_122434.jpeg']
+    images: ['https://res.cloudinary.com/dzfhqvxnf/image/upload/v1761119956/cdn_684c1882b54a16.04269006_20250613_122434_vwphxo.jpg']
   },
   alternates: {
     canonical: 'https://legendholding.com/who-we-are/the-team'
@@ -123,7 +123,7 @@ export default function LeadershipTeam() {
 
   // Structured data for SEO (Organization + WebPage + ItemList + Person with images and anchors)
   const pageUrl = 'https://legendholding.com/who-we-are/the-team';
-  const bannerUrl = 'https://cdn.legendholding.com/images/cdn_684c1882b54a16.04269006_20250613_122434.jpeg';
+  const bannerUrl = 'https://res.cloudinary.com/dzfhqvxnf/image/upload/v1761119956/cdn_684c1882b54a16.04269006_20250613_122434_vwphxo.jpg';
 
   const personFrom = (member: { name: string; role: string; company: string; image: string }, position?: number) => ({
     "@type": "Person",
@@ -204,7 +204,7 @@ export default function LeadershipTeam() {
       <main className="pt-20">
         <PageBanner 
           title="The Team"
-          imageUrl="https://cdn.legendholding.com/images/cdn_684c1882b54a16.04269006_20250613_122434.jpeg"
+          imageUrl="https://res.cloudinary.com/dzfhqvxnf/image/upload/v1761119956/cdn_684c1882b54a16.04269006_20250613_122434_vwphxo.jpg"
         />
         <TeamDisplay teamData={teamData} boardData={boardData} />
         
