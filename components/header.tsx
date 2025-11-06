@@ -264,6 +264,11 @@ export function Header({ hideHeader = false }: { hideHeader?: boolean }) {
   // Handle scroll direction for header visibility
   useEffect(() => {
     const handleScroll = () => {
+      // Don't handle scroll when any dropdown menu is open (except Who We Are)
+      if (activeMenu && activeMenu !== "Who We Are") {
+        return;
+      }
+      
       const st = window.scrollY;
       // Only handle header visibility if no menus are open or if Who We Are is open
       if ((!mobileMenuOpen && !activeMenu) || activeMenu === "Who We Are") {
@@ -507,12 +512,21 @@ export function Header({ hideHeader = false }: { hideHeader?: boolean }) {
     }
   }, [])
 
-  const handleMenuHover = (menuTitle: string) => {
+  const handleMenuHover = (menuTitle: string, e?: React.MouseEvent) => {
+    // Prevent any scroll behavior when opening dropdown
+    const currentScrollY = window.scrollY;
     setHoveredItem(menuTitle);
     if (submenuTimeoutRef.current) {
       clearTimeout(submenuTimeoutRef.current);
     }
     setActiveMenu(menuTitle);
+    
+    // Ensure scroll position doesn't change
+    requestAnimationFrame(() => {
+      if (window.scrollY !== currentScrollY) {
+        window.scrollTo(0, currentScrollY);
+      }
+    });
   };
 
   const handleMenuLeave = () => {
@@ -724,7 +738,12 @@ export function Header({ hideHeader = false }: { hideHeader?: boolean }) {
                           menuItemRefs.current[item.title] = el;
                         }}
                         className="relative"
-                        onMouseEnter={() => item.hasSubmenu && handleMenuHover(item.title)}
+                        onMouseEnter={(e) => {
+                          if (item.hasSubmenu) {
+                            e.preventDefault();
+                            handleMenuHover(item.title, e);
+                          }
+                        }}
                         onMouseLeave={handleMenuLeave}
                       >
                         <Link
@@ -769,7 +788,10 @@ export function Header({ hideHeader = false }: { hideHeader?: boolean }) {
                               "absolute top-full bg-white shadow-lg z-[9998] animate-submenu-slide-down",
                               item.title === "Who We Are" ? "w-48" : "w-screen"
                             )}
-                            onMouseEnter={cancelMenuClose}
+                            onMouseEnter={(e) => {
+                              e.preventDefault();
+                              cancelMenuClose();
+                            }}
                             onMouseLeave={handleMenuLeave}
                             style={getDropdownPosition(item.title)}
                           >
@@ -841,7 +863,10 @@ export function Header({ hideHeader = false }: { hideHeader?: boolean }) {
                               "absolute top-full bg-white shadow-lg z-[9998] animate-submenu-slide-down",
                               "w-52"
                             )}
-                            onMouseEnter={cancelMenuClose}
+                            onMouseEnter={(e) => {
+                              e.preventDefault();
+                              cancelMenuClose();
+                            }}
                             onMouseLeave={handleMenuLeave}
                             style={getDropdownPosition(item.title)}
                           >
