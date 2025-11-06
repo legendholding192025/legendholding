@@ -283,9 +283,9 @@ export function Header({ hideHeader = false }: { hideHeader?: boolean }) {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [lastScrollTop, mobileMenuOpen, activeMenu]);
 
-  // Prevent body scroll when any menu is open
+  // Prevent body scroll only when mobile menu is open (not for desktop dropdowns)
   useEffect(() => {
-    if (mobileMenuOpen || (activeMenu && activeMenu !== "Who We Are")) {
+    if (mobileMenuOpen) {
       document.body.style.overflow = 'hidden';
       document.body.style.position = 'fixed';
       document.body.style.width = '100%';
@@ -304,7 +304,7 @@ export function Header({ hideHeader = false }: { hideHeader?: boolean }) {
       document.body.style.width = '';
       document.body.style.top = '';
     };
-  }, [mobileMenuOpen, activeMenu]);
+  }, [mobileMenuOpen]);
 
   // Close mobile menu when header is hidden
   useEffect(() => {
@@ -506,17 +506,6 @@ export function Header({ hideHeader = false }: { hideHeader?: boolean }) {
       }
     }
   }, [])
-
-  useEffect(() => {
-    if (activeMenu) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, [activeMenu]);
 
   const handleMenuHover = (menuTitle: string) => {
     setHoveredItem(menuTitle);
