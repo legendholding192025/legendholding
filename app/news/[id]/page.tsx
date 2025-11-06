@@ -272,10 +272,6 @@ export default function NewsArticlePage() {
                     <CalendarIcon className="mr-1 h-4 w-4" />
                     {new Date(article.publication_date).toLocaleDateString()}
                   </div>
-                  <div className="flex items-center text-sm text-gray-500">
-                    <Clock className="mr-1 h-4 w-4" />
-                    {article.read_time}
-                  </div>
                 </div>
 
                 {/* Title */}

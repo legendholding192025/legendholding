@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { ArrowRight, Calendar, ChevronLeft, ChevronRight } from "lucide-react"
+import { ArrowRight, Calendar, ChevronLeft, ChevronRight, Clock } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { supabase } from "@/lib/supabaseClient"
 
@@ -229,6 +229,8 @@ export function Newsroom() {
                 <div className="flex items-center text-gray-500 text-sm mb-3">
                   <Calendar className="h-4 w-4 mr-1" />
                   {new Date(news.publication_date).toLocaleDateString()}
+                  <Clock className="h-4 w-4 ml-3 mr-1" />
+                  {news.read_time}
                 </div>
                 <h3 className="text-lg font-semibold mb-3 text-[rgb(43,28,72)] line-clamp-2">
                   {news.title}
