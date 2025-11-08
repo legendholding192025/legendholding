@@ -92,9 +92,26 @@ const TikTokIcon = ({ className = "h-6 w-6" }: IconProps) => (
   </svg>
 );
 
+const GlobeIcon = ({ className = "h-6 w-6" }: IconProps) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    className={className}
+    aria-hidden="true"
+  >
+    <path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm6.93 9h-3.197a15.64 15.64 0 0 0-1.47-6.191A8.024 8.024 0 0 1 18.93 11zM12 4c.78 0 2.559 2.495 2.897 7H9.103C9.441 6.495 11.22 4 12 4zM4.176 13h3.198a15.64 15.64 0 0 0 1.47 6.191A8.024 8.024 0 0 1 4.176 13zm3.198-2H4.176a8.024 8.024 0 0 1 4.668-6.191A15.64 15.64 0 0 0 7.374 11zm1.729 2h5.794c-.424 4.046-2.203 6.5-2.897 6.5-.694 0-2.473-2.454-2.897-6.5zM15.626 13h3.198a8.024 8.024 0 0 1-4.668 6.191A15.64 15.64 0 0 0 15.626 13z" />
+  </svg>
+);
+
 const YoutubeIconFilled = YoutubeIcon;
 
 const socialLinks: SocialLink[] = [
+  {
+    label: "Website",
+    href: "https://www.legendholding.com",
+    Icon: GlobeIcon,
+  },
   {
     label: "LinkedIn",
     href: "https://www.linkedin.com/company/legend-holding-group/",

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import Script from "next/script"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 
 declare global {
   interface Window {
@@ -13,10 +14,19 @@ declare global {
 }
 
 export default function CookieConsent() {
+  const pathname = usePathname()
+  const isSocialProfilePage = pathname === "/social-profile"
+
   const [privacyAccepted, setPrivacyAccepted] = useState(true) // Start with true to prevent flash
   const [isLoaded, setIsLoaded] = useState(false)
 
   useEffect(() => {
+    if (isSocialProfilePage) {
+      setPrivacyAccepted(true)
+      setIsLoaded(false)
+      return
+    }
+
     // Check if privacy policy was previously accepted
     try {
       const privacyConsent = localStorage.getItem("privacyConsent")
@@ -43,7 +53,7 @@ export default function CookieConsent() {
         }
       }, 100)
     }
-  }, [])
+  }, [isSocialProfilePage])
 
   const handlePrivacyAccept = () => {
     try {
@@ -54,6 +64,10 @@ export default function CookieConsent() {
       console.debug('Failed to save privacy consent to localStorage')
       setPrivacyAccepted(true) // Still accept to prevent repeated prompts
     }
+  }
+
+  if (isSocialProfilePage) {
+    return null
   }
 
   return (
