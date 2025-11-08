@@ -1,6 +1,9 @@
+'use client';
+
 import type { JSX } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { motion } from "framer-motion";
 
 type IconProps = {
   className?: string;
@@ -158,24 +161,35 @@ export default function SocialProfile() {
         <div className="mx-auto flex w-full max-w-xl flex-col items-center gap-10">
           <section className="w-full rounded-[36px] border border-primary/10 bg-white p-6 shadow-[0_20px_45px_-25px_rgba(30,30,60,0.45)]">
             <div className="flex flex-col gap-3">
-              {socialLinks.map(({ label, href, Icon }) => (
-                <Link
+              {socialLinks.map(({ label, href, Icon }, index) => (
+                <motion.div
                   key={label}
-                  href={href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group flex items-center justify-between rounded-[36px] bg-primary px-4 py-2.5 text-base font-semibold text-primary-foreground transition-all duration-200 hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 focus-visible:ring-offset-white sm:px-5 sm:py-3"
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.07, duration: 0.4, ease: "easeOut" }}
+                  className="w-full"
                 >
-                  <span className="flex items-center gap-4">
-                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#EE8900] text-white transition group-hover:opacity-90">
-                      <Icon className="h-5 w-5" />
+                  <Link
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group flex items-center justify-between rounded-[36px] bg-primary px-4 py-2.5 text-base font-semibold text-primary-foreground transition-all duration-200 hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 focus-visible:ring-offset-white sm:px-5 sm:py-3"
+                  >
+                    <span className="flex items-center gap-4">
+                      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#EE8900] text-white transition group-hover:opacity-90">
+                        <Icon className="h-5 w-5" />
+                      </span>
+                      <span>{label}</span>
                     </span>
-                    <span>{label}</span>
-                  </span>
-                  <span className="text-lg transition-transform duration-200 group-hover:translate-x-1">
-                    →
-                  </span>
-                </Link>
+                    <motion.span
+                      className="text-lg"
+                      animate={{ x: [0, 6, 0] }}
+                      transition={{ repeat: Infinity, duration: 1.2, ease: "easeInOut" }}
+                    >
+                      →
+                    </motion.span>
+                  </Link>
+                </motion.div>
               ))}
             </div>
           </section>
