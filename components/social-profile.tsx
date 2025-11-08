@@ -9,7 +9,6 @@ type IconProps = {
 type SocialLink = {
   label: string;
   href: string;
-  hoverClass: string;
   Icon: (props: IconProps) => JSX.Element;
 };
 
@@ -96,37 +95,31 @@ const socialLinks: SocialLink[] = [
   {
     label: "LinkedIn",
     href: "https://www.linkedin.com/company/legend-holding-group/",
-    hoverClass: "hover:bg-[#0A66C2]",
     Icon: LinkedInIcon,
   },
   {
     label: "Instagram",
     href: "https://www.instagram.com/legendholdinggroup?igsh=MTk3Z3NqOXB4b2gzZQ==",
-    hoverClass: "hover:bg-[#E4405F]",
     Icon: InstagramIcon,
   },
   {
     label: "Facebook",
     href: "https://www.facebook.com/share/1XndETdEkF/",
-    hoverClass: "hover:bg-[#1877F2]",
     Icon: FacebookIcon,
   },
   {
     label: "YouTube",
     href: "https://youtube.com/@legendholdinggroup?si=h_xMStdscyQv_LdW",
-    hoverClass: "hover:bg-[#FF0000]",
     Icon: YoutubeIconFilled,
   },
   {
     label: "TikTok",
     href: "https://www.tiktok.com/@legendholdinggroup",
-    hoverClass: "hover:bg-[#010101]",
     Icon: TikTokIcon,
   },
   {
     label: "X (Twitter)",
     href: "https://x.com/Legendholding1?s=09",
-    hoverClass: "hover:bg-black hover:text-white",
     Icon: TwitterIcon,
   },
 ];
@@ -165,13 +158,13 @@ export default function SocialProfile() {
         <div className="mx-auto flex w-full max-w-xl flex-col items-center gap-10">
           <section className="w-full rounded-[36px] border border-primary/10 bg-white p-6 shadow-[0_20px_45px_-25px_rgba(30,30,60,0.45)]">
             <div className="flex flex-col gap-3">
-              {socialLinks.map(({ label, href, hoverClass, Icon }) => (
+              {socialLinks.map(({ label, href, Icon }) => (
                 <Link
                   key={label}
                   href={href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`group flex items-center justify-between rounded-[36px] bg-primary px-4 py-2.5 text-base font-semibold text-primary-foreground transition-all duration-200 hover:scale-[1.02] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 focus-visible:ring-offset-white sm:px-5 sm:py-3 ${hoverClass}`}
+                  className="group flex items-center justify-between rounded-[36px] bg-primary px-4 py-2.5 text-base font-semibold text-primary-foreground transition-all duration-200 hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 focus-visible:ring-offset-white sm:px-5 sm:py-3"
                 >
                   <span className="flex items-center gap-4">
                     <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#EE8900] text-white transition group-hover:opacity-90">
@@ -186,13 +179,20 @@ export default function SocialProfile() {
               ))}
             </div>
           </section>
-
-          {/* <footer className="text-center text-xs text-[#2B1C48]/60">
-            Update the company name, description, and social links above to
-            match your profiles.
-          </footer> */}
         </div>
       </div>
+      <footer className="mt-10 w-full">
+        <div className="relative h-10 w-full sm:h-14">
+          <Image
+            src="/profile-footer.svg"
+            alt="Legend Holding Group"
+            fill
+            className="object-contain object-right-bottom"
+            priority={false}
+            sizes="100vw"
+          />
+        </div>
+      </footer>
     </main>
   );
 }
