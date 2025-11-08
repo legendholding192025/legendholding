@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
 import { useParams } from "next/navigation"
 import Image from "next/image"
@@ -8,15 +8,18 @@ import Link from "next/link"
 import {
   CalendarIcon,
   ChevronLeft,
+  ChevronRight,
   Clock,
   ArrowRight,
   Link2,
+  X,
 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { toast } from "sonner"
+import { cn } from "@/lib/utils"
 
 interface NewsArticleImage {
   id: string
@@ -93,8 +96,189 @@ export default function NewsArticlePage() {
   const [relatedArticles, setRelatedArticles] = useState<NewsArticle[]>([])
   const [latestArticles, setLatestArticles] = useState<NewsArticle[]>([])
   const [loading, setLoading] = useState(true)
+  const [isImagePreviewOpen, setIsImagePreviewOpen] = useState(false)
+  const [activeImageIndex, setActiveImageIndex] = useState(0)
   const params = useParams()
   const supabase = createClientComponentClient()
+
+  const allImages = useMemo(() => {
+    if (!article) return []
+
+    if (article.images && article.images.length > 0) {
+      return article.images
+    }
+
+    if (article.image_url) {
+      return [
+        {
+          id: 'legacy',
+          article_id: article.id,
+          image_url: article.image_url,
+          image_order: 0,
+          image_type: 'banner',
+          alt_text: article.title,
+          caption: '',
+          created_at: article.created_at,
+        },
+      ]
+    }
+
+    return []
+  }, [article])
+
+  const openImagePreview = useCallback((index: number) => {
+    if (allImages.length === 0) return
+    setActiveImageIndex(index)
+    setIsImagePreviewOpen(true)
+  }, [allImages.length])
+
+  const closeImagePreview = useCallback(() => {
+    setIsImagePreviewOpen(false)
+  }, [])
+
+  const showNextImage = useCallback(() => {
+    if (allImages.length < 2) return
+    setActiveImageIndex((prev) => (prev + 1) % allImages.length)
+  }, [allImages.length])
+
+  const showPreviousImage = useCallback(() => {
+    if (allImages.length < 2) return
+    setActiveImageIndex((prev) => (prev - 1 + allImages.length) % allImages.length)
+  }, [allImages.length])
+
+  useEffect(() => {
+    if (!isImagePreviewOpen) return
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        closeImagePreview()
+      }
+      if (event.key === "ArrowRight") {
+        showNextImage()
+      }
+      if (event.key === "ArrowLeft") {
+        showPreviousImage()
+      }
+    }
+
+    window.addEventListener("keydown", handleKeyDown)
+    return () => window.removeEventListener("keydown", handleKeyDown)
+  }, [isImagePreviewOpen, closeImagePreview, showNextImage, showPreviousImage])
+
+  useEffect(() => {
+    if (activeImageIndex >= allImages.length && allImages.length > 0) {
+      setActiveImageIndex(allImages.length - 1)
+    }
+  }, [allImages.length, activeImageIndex])
+
+  const renderImageGallery = () => {
+    if (allImages.length === 0) return null
+
+    const renderImageItem = (
+      image: NewsArticleImage,
+      index: number,
+      wrapperClass?: string,
+      imageClass?: string,
+      priority?: boolean,
+      overlayCount?: number
+    ) => (
+      <div
+        key={`${image.id ?? 'image'}-${index}`}
+        role="button"
+        tabIndex={0}
+        className={cn(
+          "relative overflow-hidden cursor-zoom-in group focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#5E366D]",
+          wrapperClass
+        )}
+        onClick={() => openImagePreview(index)}
+        onKeyDown={(event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault()
+            openImagePreview(index)
+          }
+        }}
+      >
+        <Image
+          src={image.image_url}
+          alt={image.alt_text || `${article?.title ?? 'Article image'} ${index + 1}`}
+          fill
+          className={cn(
+            "object-cover transition-transform duration-500 group-hover:scale-105",
+            imageClass
+          )}
+          priority={priority}
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
+        />
+        {image.caption && (
+          <div className="absolute bottom-0 left-0 right-0 bg-black/70 text-white p-3 text-sm">
+            {image.caption}
+          </div>
+        )}
+        {overlayCount && overlayCount > 0 && (
+          <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
+            <span className="text-white text-xl font-bold">
+              +{overlayCount}
+            </span>
+          </div>
+        )}
+      </div>
+    )
+
+    if (allImages.length === 1) {
+      return (
+        <div className="relative mb-6 h-[300px] w-full overflow-hidden rounded-xl md:h-[500px]">
+          {renderImageItem(allImages[0], 0, "h-full w-full", "object-cover", true)}
+        </div>
+      )
+    }
+
+    if (allImages.length === 2) {
+      return (
+        <div className="relative mb-6 w-full overflow-hidden rounded-xl">
+          <div className="grid grid-rows-2 gap-1 h-[350px] md:h-[600px]">
+            {allImages.map((image, index) =>
+              renderImageItem(image, index, "h-full w-full")
+            )}
+          </div>
+        </div>
+      )
+    }
+
+    if (allImages.length === 3) {
+      return (
+        <div className="relative mb-6 w-full overflow-hidden rounded-xl">
+          <div className="grid grid-rows-2 gap-1 h-[350px] md:h-[600px]">
+            {renderImageItem(allImages[0], 0, "h-full w-full", undefined, true)}
+            <div className="grid grid-cols-2 gap-1 h-full">
+              {allImages.slice(1).map((image, index) =>
+                renderImageItem(image, index + 1, "h-full w-full")
+              )}
+            </div>
+          </div>
+        </div>
+      )
+    }
+
+    return (
+      <div className="relative mb-6 w-full overflow-hidden rounded-xl">
+        <div className="grid grid-rows-2 gap-1 h-[350px] md:h-[600px]">
+          {renderImageItem(allImages[0], 0, "h-full w-full", undefined, true)}
+          <div className="grid grid-cols-3 gap-1 h-full">
+            {allImages.slice(1, 4).map((image, index) => (
+              renderImageItem(
+                image,
+                index + 1,
+                "h-full w-full",
+                undefined,
+                false,
+                index === 2 && allImages.length > 4 ? allImages.length - 4 : undefined
+              )
+            ))}
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   useEffect(() => {
     if (params?.id) {
@@ -280,130 +464,7 @@ export default function NewsArticlePage() {
                 </h1>
 
                 {/* Images Gallery */}
-                {(() => {
-                  // Get all images (both banner and content)
-                  const allImages = article.images && article.images.length > 0 
-                    ? article.images 
-                    : article.image_url 
-                      ? [{ id: 'legacy', image_url: article.image_url, alt_text: article.title, caption: '' }] 
-                      : []
-
-                  if (allImages.length === 0) return null
-
-                  // Single image - full width
-                  if (allImages.length === 1) {
-                    const image = allImages[0]
-                    return (
-                      <div className="relative mb-6 h-[300px] w-full overflow-hidden rounded-xl md:h-[500px]">
-                        <Image
-                          src={image.image_url}
-                          alt={image.alt_text || article.title}
-                          fill
-                          className="object-cover"
-                          priority
-                        />
-                        {image.caption && (
-                          <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white p-3 text-sm">
-                            {image.caption}
-                          </div>
-                        )}
-                      </div>
-                    )
-                  }
-
-                  // Two images - one above, one below
-                  if (allImages.length === 2) {
-                    return (
-                      <div className="relative mb-6 w-full overflow-hidden rounded-xl">
-                        <div className="grid grid-rows-2 gap-1 h-[350px] md:h-[600px]">
-                          {allImages.map((image, index) => (
-                            <div key={image.id || index} className="relative overflow-hidden">
-                              <Image
-                                src={image.image_url}
-                                alt={image.alt_text || `Image ${index + 1}`}
-                                fill
-                                className="object-cover"
-                                priority={index === 0}
-                              />
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )
-                  }
-
-                  // Three images - one on top, two below
-                  if (allImages.length === 3) {
-                    return (
-                      <div className="relative mb-6 w-full overflow-hidden rounded-xl">
-                        <div className="grid grid-rows-2 gap-1 h-[350px] md:h-[600px]">
-                          {/* First image - top full width */}
-                          <div className="relative overflow-hidden">
-                            <Image
-                              src={allImages[0].image_url}
-                              alt={allImages[0].alt_text || "Main image"}
-                              fill
-                              className="object-cover"
-                              priority
-                            />
-                          </div>
-                          {/* Two images - bottom row */}
-                          <div className="grid grid-cols-2 gap-1 h-full">
-                            {allImages.slice(1).map((image, index) => (
-                              <div key={image.id || index} className="relative overflow-hidden">
-                                <Image
-                                  src={image.image_url}
-                                  alt={image.alt_text || `Image ${index + 2}`}
-                                  fill
-                                  className="object-cover"
-                                />
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    )
-                  }
-
-                  // Four or more images - one on top, grid below
-                  return (
-                    <div className="relative mb-6 w-full overflow-hidden rounded-xl">
-                      <div className="grid grid-rows-2 gap-1 h-[350px] md:h-[600px]">
-                        {/* First image - top full width */}
-                        <div className="relative overflow-hidden">
-                          <Image
-                            src={allImages[0].image_url}
-                            alt={allImages[0].alt_text || "Main image"}
-                            fill
-                            className="object-cover"
-                            priority
-                          />
-                        </div>
-                        {/* Grid of images - bottom row */}
-                        <div className="grid grid-cols-3 gap-1 h-full">
-                          {allImages.slice(1, 4).map((image, index) => (
-                            <div key={image.id || index} className="relative overflow-hidden">
-                              <Image
-                                src={image.image_url}
-                                alt={image.alt_text || `Image ${index + 2}`}
-                                fill
-                                className="object-cover"
-                              />
-                              {/* Show +N indicator on last visible image if there are more */}
-                              {index === 2 && allImages.length > 4 && (
-                                <div className="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center">
-                                  <span className="text-white text-xl font-bold">
-                                    +{allImages.length - 4}
-                                  </span>
-                                </div>
-                              )}
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  )
-                })()}
+                {renderImageGallery()}
 
                 {/* Content */}
                 <div 
@@ -555,6 +616,61 @@ export default function NewsArticlePage() {
           </div>
         </main>
       </div>
+      {isImagePreviewOpen && allImages.length > 0 && (
+        <div
+          className="fixed inset-0 z-[10000] bg-black/90 backdrop-blur-sm flex flex-col items-center justify-center px-4 py-10"
+          onClick={closeImagePreview}
+        >
+          <button
+            type="button"
+            className="absolute top-6 right-6 text-white/80 hover:text-white transition-colors"
+            onClick={closeImagePreview}
+            aria-label="Close image preview"
+          >
+            <X className="h-6 w-6" />
+          </button>
+          <div
+            className="relative w-full max-w-5xl h-[70vh] flex items-center justify-center"
+            onClick={(event) => event.stopPropagation()}
+          >
+            {allImages.length > 1 && (
+              <button
+                type="button"
+                onClick={showPreviousImage}
+                aria-label="Previous image"
+                className="absolute left-0 md:left-[-3rem] top-1/2 -translate-y-1/2 text-white/80 hover:text-white transition-colors p-3"
+              >
+                <ChevronLeft className="h-8 w-8" />
+              </button>
+            )}
+            <div className="relative w-full h-full">
+              <Image
+                src={allImages[activeImageIndex].image_url}
+                alt={allImages[activeImageIndex].alt_text || `${article.title} image ${activeImageIndex + 1}`}
+                fill
+                className="object-contain"
+                sizes="(max-width: 768px) 100vw, 80vw"
+                priority
+              />
+            </div>
+            {allImages.length > 1 && (
+              <button
+                type="button"
+                onClick={showNextImage}
+                aria-label="Next image"
+                className="absolute right-0 md:right-[-3rem] top-1/2 -translate-y-1/2 text-white/80 hover:text-white transition-colors p-3"
+              >
+                <ChevronRight className="h-8 w-8" />
+              </button>
+            )}
+          </div>
+          {allImages[activeImageIndex].caption && (
+            <p className="mt-4 text-white/90 text-sm md:text-base text-center max-w-3xl">
+              {allImages[activeImageIndex].caption}
+            </p>
+          )}
+        </div>
+      )}
       <Footer />
     </>
   )

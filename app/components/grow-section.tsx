@@ -11,7 +11,7 @@ const slides = [
     description:
       "We've built a culture rooted in trust, respect, and shared ambition. With over 35 nationalities working toward one vision, we celebrate diversity and grow together. Our leaders are transparent and accessible, and we recognize every win, big or small, because we believe that when one of us grows, we all do.",
     image:
-      "https://cdn.legendholding.com/images/cdn_684c22e344b9e8.68563671_20250613_130851.jpeg",
+      "https://cdn.legendholding.com/images/cdn_690f2d6f1cfb68.70592687_20251108_114551.webp",
   },
   {
     id: 2,
@@ -19,7 +19,7 @@ const slides = [
     description:
       "We don't believe in one-track careers. As a diversified group, we offer cross-industry exposure and clear pathways for development. Whether it's through our training academy, mentorship, or hands-on experience, we give you the tools to shape your career.",
     image:
-      "https://cdn.legendholding.com/images/cdn_684c22c6e23ed4.90404297_20250613_130822.jpg",
+      "https://cdn.legendholding.com/images/cdn_690f32cdcb8ef8.81099701_20251108_120845.webp",
   },
   {
     id: 3,
