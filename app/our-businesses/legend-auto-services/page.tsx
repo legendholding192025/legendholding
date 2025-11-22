@@ -112,7 +112,7 @@ function AnimatedCounter({ target, suffix = "", duration = 2000, startDelay = 0 
   )
 }
 
-export default function AutomobileServicesPage() {
+export default function AutoServicesPage() {
   const [isLoaded, setIsLoaded] = useState(false)
   const [activeSection, setActiveSection] = useState<string | null>(null)
 
@@ -133,7 +133,7 @@ export default function AutomobileServicesPage() {
             {/* Page Header (title and decorative lines outside) */}
             <section className="w-full mb-16 animate-fade-in-up">
               <h2 className="text-2xl md:text-3xl font-semibold text-[#2b1c48] mb-6 font-richmond">
-                Legend Automobile Services
+                Legend Auto Services
               </h2>
               <div className="flex gap-2">
                 <div className="h-1 w-16 bg-[#2b1c48] rounded-full animate-expand-width"></div>
@@ -151,7 +151,7 @@ export default function AutomobileServicesPage() {
                         src="https://cdn.legendholding.com/images/cdn_685659501dfc76.49951087_20250621_070344.png"
                         width={800}
                         height={600}
-                        alt="Legend Automobile Services - Professional Service Bay"
+                        alt="Legend Auto Services - Professional Service Bay"
                         className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                         priority
                         sizes="(max-width: 768px) 100vw, 40vw"
@@ -166,7 +166,7 @@ export default function AutomobileServicesPage() {
                   <div className="flex-1 p-8 flex flex-col justify-center">
                     {/* Description moved inside card */}
                     <p className="text-lg text-gray-700 font-effra leading-relaxed mb-6">
-                      Legend World Automobile Services, a premier provider of high-end automotive care, 
+                      Legend World Auto Services, a premier provider of high-end automotive care, 
                       offering a full spectrum of repair, maintenance, and detailing solutions for all types of luxury vehicles, 
                       including electric models.
                     </p>
@@ -207,3 +207,4 @@ export default function AutomobileServicesPage() {
     </>
   )
 }
+

@@ -35,7 +35,7 @@ export default function PageTracker({ pageName }: PageTrackerProps) {
         'who-we-are/journey': PAGE_NAMES.JOURNEY,
         'who-we-are/the-team': PAGE_NAMES.THE_TEAM,
         'our-businesses': PAGE_NAMES.OUR_BRANDS,
-        'our-businesses/legend-automobile-services': PAGE_NAMES.LEGEND_AUTOMOBILE_SERVICES,
+        'our-businesses/legend-auto-services': PAGE_NAMES.LEGEND_AUTOMOBILE_SERVICES,
         'our-businesses/legend-commercial-vehicles': PAGE_NAMES.LEGEND_COMMERCIAL_VEHICLES,
         'our-businesses/legend-global-media': PAGE_NAMES.LEGEND_GLOBAL_MEDIA,
         'our-businesses/legend-green-energy': PAGE_NAMES.LEGEND_GREEN_ENERGY,

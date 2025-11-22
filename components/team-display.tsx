@@ -175,12 +175,12 @@ export function TeamDisplay({ teamData, boardData }: TeamDisplayProps) {
             <div className="h-1 w-20 bg-[#5E366D] rounded-full animate-expand-width"></div>
             <div className="h-1 w-12 bg-[#EE8900] rounded-full animate-expand-width animation-delay-200"></div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
             {boardData.map((director, index) => (
               <div 
                 key={`board-${index}`} 
                 id={toSlug(`${director.name}-${director.role}`)}
-                className="bg-white rounded-2xl shadow-lg p-6 transform transition-all duration-300 hover:-translate-y-2 hover:shadow-xl"
+                className="bg-white rounded-2xl shadow-lg p-4 sm:p-6 transform transition-all duration-300 hover:-translate-y-2 hover:shadow-xl flex flex-col h-full"
                 data-index={`board-${index}`}
                 ref={(el) => {
                   if (el && observerRef.current) {
@@ -188,7 +188,7 @@ export function TeamDisplay({ teamData, boardData }: TeamDisplayProps) {
                   }
                 }}
               >
-                <div className="relative mb-4 mx-auto rounded-xl w-full h-[400px] overflow-hidden bg-gray-100">
+                <div className="relative mb-4 mx-auto rounded-xl w-full aspect-[5/6] overflow-hidden bg-gray-100 flex-shrink-0">
                   {/* Loading placeholder */}
                   {!loadedImages.has(`board-${index}`) && (
                     <div className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 animate-pulse">
@@ -203,9 +203,8 @@ export function TeamDisplay({ teamData, boardData }: TeamDisplayProps) {
                   <Image
                     src={optimizeImageUrl(director.image, getImageWidth(), getImageQuality(index))}
                     alt={`${director.name} - ${director.role} at ${director.company}`}
-                    width={getImageWidth()}
-                    height={400}
-                    className={`w-full h-full object-cover ${getObjectPosition(director.name)} transition-opacity duration-500 ${
+                    fill
+                    className={`object-cover ${getObjectPosition(director.name)} transition-opacity duration-500 ${
                       loadedImages.has(`board-${index}`) ? 'opacity-100' : 'opacity-0'
                     }`}
                     loading={index < 3 ? 'eager' : 'lazy'}
@@ -234,13 +233,15 @@ export function TeamDisplay({ teamData, boardData }: TeamDisplayProps) {
                   />
                 </div>
                 
-                <h3 className="text-xl font-bold text-[#2b1c48] mb-2">{director.name}</h3>
-                <div className="flex gap-2 mb-3">
-                  <div className="h-1 w-16 bg-[#5E366D] rounded-full animate-expand-width"></div>
-                  <div className="h-1 w-8 bg-[#EE8900] rounded-full animate-expand-width animation-delay-200"></div>
+                <div className="flex-1 flex flex-col">
+                  <h3 className="text-lg sm:text-xl font-bold text-[#2b1c48] mb-2 line-clamp-2">{director.name}</h3>
+                  <div className="flex gap-2 mb-3">
+                    <div className="h-1 w-16 bg-[#5E366D] rounded-full animate-expand-width"></div>
+                    <div className="h-1 w-8 bg-[#EE8900] rounded-full animate-expand-width animation-delay-200"></div>
+                  </div>
+                  <p className="text-[#EE8900] font-semibold mb-2 text-sm sm:text-base line-clamp-2">{director.role}</p>
+                  <p className="text-[#5E366D] font-medium text-base sm:text-lg line-clamp-1">{director.company}</p>
                 </div>
-                <p className="text-[#EE8900] font-semibold mb-2">{director.role}</p>
-                <p className="text-[#5E366D] font-medium text-xl">{director.company}</p>
               </div>
             ))}
           </div>
@@ -255,12 +256,12 @@ export function TeamDisplay({ teamData, boardData }: TeamDisplayProps) {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
           {teamData.map((leader, index) => (
             <div 
               key={index} 
               id={toSlug(`${leader.name}-${leader.role}`)}
-              className="bg-white rounded-2xl shadow-lg p-6 transform transition-all duration-300 hover:-translate-y-2 hover:shadow-xl"
+              className="bg-white rounded-2xl shadow-lg p-4 sm:p-6 transform transition-all duration-300 hover:-translate-y-2 hover:shadow-xl flex flex-col h-full"
               data-index={index}
               ref={(el) => {
                 if (el && observerRef.current) {
@@ -268,7 +269,7 @@ export function TeamDisplay({ teamData, boardData }: TeamDisplayProps) {
                 }
               }}
             >
-              <div className="relative mb-4 mx-auto rounded-xl w-full h-[400px] overflow-hidden bg-gray-100">
+              <div className="relative mb-4 mx-auto rounded-xl w-full aspect-[5/6] overflow-hidden bg-gray-100 flex-shrink-0">
                 {/* Loading placeholder */}
                 {!loadedImages.has(index) && (
                   <div className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 animate-pulse">
@@ -283,9 +284,8 @@ export function TeamDisplay({ teamData, boardData }: TeamDisplayProps) {
                 <Image
                   src={optimizeImageUrl(leader.image, getImageWidth(), getImageQuality(index))}
                   alt={`${leader.name} - ${leader.role} at ${leader.company}`}
-                  width={getImageWidth()}
-                  height={400}
-                  className={`w-full h-full object-cover ${getObjectPosition(leader.name)} transition-opacity duration-500 ${
+                  fill
+                  className={`object-cover ${getObjectPosition(leader.name)} transition-opacity duration-500 ${
                     loadedImages.has(index) ? 'opacity-100' : 'opacity-0'
                   }`}
                   loading={index < 3 ? 'eager' : 'lazy'}
@@ -314,13 +314,15 @@ export function TeamDisplay({ teamData, boardData }: TeamDisplayProps) {
                 />
               </div>
               
-              <h3 className="text-xl font-bold text-[#2b1c48] mb-2">{leader.name}</h3>
-              <div className="flex gap-2 mb-3">
-                <div className="h-1 w-16 bg-[#5E366D] rounded-full animate-expand-width"></div>
-                <div className="h-1 w-8 bg-[#EE8900] rounded-full animate-expand-width animation-delay-200"></div>
+              <div className="flex-1 flex flex-col">
+                <h3 className="text-lg sm:text-xl font-bold text-[#2b1c48] mb-2 line-clamp-2">{leader.name}</h3>
+                <div className="flex gap-2 mb-3">
+                  <div className="h-1 w-16 bg-[#5E366D] rounded-full animate-expand-width"></div>
+                  <div className="h-1 w-8 bg-[#EE8900] rounded-full animate-expand-width animation-delay-200"></div>
+                </div>
+                <p className="text-[#EE8900] font-semibold mb-2 text-sm sm:text-base line-clamp-2">{leader.role}</p>
+                <p className="text-[#5E366D] font-medium text-base sm:text-lg line-clamp-1">{leader.company}</p>
               </div>
-              <p className="text-[#EE8900] font-semibold mb-2">{leader.role}</p>
-              <p className="text-[#5E366D] font-medium text-xl">{leader.company}</p>
             </div>
           ))}
         </div>

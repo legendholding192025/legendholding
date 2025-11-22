@@ -111,7 +111,7 @@ The following page names are automatically tracked for better analytics clarity:
 
 ### Our Brands Section
 - **Our Brands** - `/our-brands`
-- **Legend Automobile Services** - `/our-brands/legend-automobile-services`
+- **Legend Auto Services** - `/our-businesses/legend-auto-services`
 - **Legend Commercial Vehicles** - `/our-brands/legend-commercial-vehicles`
 - **Legend Global Media** - `/our-brands/legend-global-media`
 - **Legend Green Energy** - `/our-brands/legend-green-energy`

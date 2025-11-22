@@ -29,7 +29,7 @@ This document provides a comprehensive list of all pages on the Legend Holding G
 | Page Name | URL Path | Analytics Name | Description |
 |-----------|----------|----------------|-------------|
 | Our Brands | `/our-brands` | Our Brands | Brands overview |
-| Legend Automobile Services | `/our-brands/legend-automobile-services` | Legend Automobile Services | Automotive services brand |
+| Legend Auto Services | `/our-businesses/legend-auto-services` | Legend Auto Services | Automotive services brand |
 | Legend Commercial Vehicles | `/our-brands/legend-commercial-vehicles` | Legend Commercial Vehicles | Commercial vehicles brand |
 | Legend Global Media | `/our-brands/legend-global-media` | Legend Global Media | Media and communications brand |
 | Legend Green Energy | `/our-brands/legend-green-energy` | Legend Green Energy | Renewable energy brand |

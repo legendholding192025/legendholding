@@ -17,7 +17,7 @@ export async function GET() {
     '/who-we-are/about-us',
     '/who-we-are/journey',
     '/who-we-are/the-team',
-    '/our-businesses/legend-automobile-services',
+    '/our-businesses/legend-auto-services',
     '/our-businesses/legend-commercial-vehicles',
     '/our-businesses/legend-global-media',
     '/our-businesses/legend-green-energy',

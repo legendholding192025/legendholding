@@ -10,7 +10,7 @@ const brands = [
   { name: "Legend Commercial Vehicles", path: "/our-businesses/legend-commercial-vehicles" },
   { name: "Legend World Rent A Car", path: "/our-businesses/legend-world-rent-a-car" },
   { name: "Zul Energy", path: "/our-businesses/zul-energy" },
-  { name: "Legend Automobile Services", path: "/our-businesses/legend-automobile-services" },
+  { name: "Legend Auto Services", path: "/our-businesses/legend-auto-services" },
   { name: "Legend Global Media", path: "/our-businesses/legend-global-media" },
   { name: "Legend Green Energy", path: "/our-businesses/legend-green-energy" },
   { name: "Legend X", path: "/our-businesses/legend-x" },

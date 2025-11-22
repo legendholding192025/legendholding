@@ -67,9 +67,9 @@ export default function BusinessUnit() {
       bgColor: "bg-[#2B1C48]",
     },
     {
-      name: "Legend Automobile Services",
+      name: "Legend Auto Services",
       image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1761117891/cdn_685659501dfc76.49951087_20250621_070344_xriexc.png",
-      url: "/our-businesses/legend-automobile-services",
+      url: "/our-businesses/legend-auto-services",
       bgColor: "bg-[#5D376E]",
     },
     {

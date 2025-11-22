@@ -150,8 +150,8 @@ const menuItems: MenuItem[] = [
             description: "Premium car rental services across UAE."
           },
           { 
-            title: "Legend Automobile Services",
-            url: "/our-businesses/legend-automobile-services",
+            title: "Legend Auto Services",
+            url: "/our-businesses/legend-auto-services",
             image: "https://cdn.legendholding.com/images/cloudinary/cloudinary_683d9e25db0112.44798593_20250602_125045.jpg",
             description: "Professional automotive maintenance and repair services."
           },
