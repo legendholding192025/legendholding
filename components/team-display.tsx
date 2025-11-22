@@ -168,9 +168,9 @@ export function TeamDisplay({ teamData, boardData }: TeamDisplayProps) {
       </div>
 
       <div className="w-full max-w-7xl relative z-10">
-        {/* Board of Directors */}
+        {/* United Arab Emirates - Headquarters */}
         <div className="mb-12">
-          <h2 className="text-3xl font-bold text-[#2b1c48] mb-6">Board of Directors</h2>
+          <h2 className="text-3xl font-bold text-[#2b1c48] mb-6">United Arab Emirates - Headquarters</h2>
           <div className="flex gap-2 mb-6">
             <div className="h-1 w-20 bg-[#5E366D] rounded-full animate-expand-width"></div>
             <div className="h-1 w-12 bg-[#EE8900] rounded-full animate-expand-width animation-delay-200"></div>
@@ -247,9 +247,9 @@ export function TeamDisplay({ teamData, boardData }: TeamDisplayProps) {
           </div>
         </div>
 
-        {/* Leadership Team */}
+        {/* Kingdom of Saudi Arabia */}
         <div className="mb-8">
-          <h2 className="text-3xl font-bold text-[#2b1c48] mb-6">Leadership Team</h2>
+          <h2 className="text-3xl font-bold text-[#2b1c48] mb-6">Kingdom of Saudi Arabia</h2>
           <div className="flex gap-2 mb-6">
             <div className="h-1 w-20 bg-[#5E366D] rounded-full animate-expand-width"></div>
             <div className="h-1 w-12 bg-[#EE8900] rounded-full animate-expand-width animation-delay-200"></div>

@@ -43,51 +43,6 @@ export default function LeadershipTeam() {
       .replace(/[^a-z0-9\s-]/g, '')
       .trim()
       .replace(/\s+/g, '-');
-  const teamData = [
-    {
-      name: "Jade Li",
-      role: "Managing Director",
-      company: "Zul Energy",
-      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1761054540/WhatsApp_Image_2025-06-20_at_12.08.37_c6eb4fd2_a7ztid.jpg"
-    },
-    {
-      name: "George Hua",
-      role: "Head of Commercial Vehicles",
-      company: "Legend Commercial Vehicles",
-      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1761054559/3_copy_mxnwc7.jpg"
-    },
-    {
-      name: "Tamer Khalil",
-      role: "Head of After Sales",
-      company: "Legend World Automobile Service",
-      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1761054567/4_copy_upgmzf.jpg"
-    },
-    {
-      name: "Waseem Khalayleh",
-      role: "Brand Manager",
-      company: "Legend Holding Group",
-      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1761054540/waseem-new_tre9rx.jpg"
-    },
-    {
-      name: "Xiaolong Ma",
-      role: "Branch Manager - KSA",
-      company: "Legend Motors",
-      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1761054605/Mou-new_eh2vsp.png"
-    },
-    {
-      name: "Sun Bo",
-      role: "Business Development Manager",
-      company: "Legend Holding Group",
-      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1761054580/sun_bo-new_wzmjs1.png"
-    },
-    {
-      name: "Pawan Rathi",
-      role: "General Manager",
-      company: "Legend Rent a Car",
-      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1761218676/123_cytlaq.png"
-    }
-  ];
-
   const boardData = [
     {
       name: "Kai Zheng",
@@ -108,22 +63,67 @@ export default function LeadershipTeam() {
       image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1761054569/8_copy_wxobcr.jpg"
     },
     {
-      name: "Nagaraj Ponnada",
-      role: "General Manager",
-      company: "Legend Holding Group",
-      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1761054540/image_8_swwqoy.jpg"
-    },
-    {
       name: "Rejeesh Raveendran",
       role: "Group Finance Director",
       company: "Legend Holding Group",
       image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1761054567/5_copy_uuxcob.jpg"
     },
     {
+      name: "Nagaraj Ponnada",
+      role: "General Manager",
+      company: "Legend Holding Group",
+      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1761054540/image_8_swwqoy.jpg"
+    },
+    {
       name: "Sonam Lama",
       role: "Group HR Director",
       company: "Legend Holding Group",
       image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1761054545/sonam_bwxv4m.jpg"
+    },
+    {
+      name: "Waseem Khalayleh",
+      role: "Head of Brand",
+      company: "Legend Holding Group",
+      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1763818241/WhatsApp_Image_2025-06-20_at_12.082222_asqhsk.png"
+    },
+    {
+      name: "Jade Li",
+      role: "Managing Director",
+      company: "Zul Energy",
+      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1763817365/WhatsApp_Image_2025-06-20_at_12.08_1_ch0zex.png"
+    },
+    {
+      name: "George Hua",
+      role: "Head of Commercial Vehicles",
+      company: "Legend Commercial Vehicles",
+      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1761054559/3_copy_mxnwc7.jpg"
+    },
+    {
+      name: "Tamer Khalil",
+      role: "Head of After Sales",
+      company: "Legend Auto Services",
+      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1761054567/4_copy_upgmzf.jpg"
+    }, 
+    {
+      name: "Sun Bo",
+      role: "Business Development Manager",
+      company: "Legend Holding Group",
+      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1761054580/sun_bo-new_wzmjs1.png"
+    },
+    {
+      name: "Pawan Rathi",
+      role: "General Manager",
+      company: "Legend Rent a Car",
+      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1763818661/656_ynivxt.png"
+    }
+  ];
+
+  const teamData = [
+    {
+      name: "Xiaolong Ma",
+      role: "Branch Manager - KSA",
+      company: "Legend Motors",
+      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1761054605/Mou-new_eh2vsp.png"
     }
   ];
 
