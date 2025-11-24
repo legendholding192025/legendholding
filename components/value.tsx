@@ -8,7 +8,7 @@ export default function ValueSection() {
       {/* Top Left Background Image */}
       <div className="absolute top-0 left-0 w-48 sm:w-64 md:w-80 lg:w-96 h-[50%] sm:h-[60%] md:h-[70%]">
         <Image
-          src="https://cdn.legendholding.com/images/cloudinary/cloudinary_683da96eaa2ac2.38253748_20250602_133854.png"
+          src="/pillar1.png"
           alt="Top left decoration"
           fill
           className="object-contain object-top"
@@ -20,7 +20,7 @@ export default function ValueSection() {
       {/* Bottom Right Background Image */}
       <div className="absolute bottom-0 right-0 w-48 sm:w-64 md:w-80 lg:w-96 h-[50%] sm:h-[60%] md:h-[70%]">
         <Image
-          src="https://cdn.legendholding.com/images/cloudinary/cloudinary_683da9a99cd6c6.97768081_20250602_133953.png"
+          src="/pillar2.png"
           alt="Background decoration"
           fill
           className="object-contain object-bottom"
@@ -33,7 +33,7 @@ export default function ValueSection() {
         {/* Header */}
         <div className="text-center mt-16 sm:mt-20 md:mt-24 mb-10 sm:mb-12 md:mb-14">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#F08900] mb-2 sm:mb-3 animate-fade-in">
-            About Us
+            Our Pillars
           </h2>
           <div className="w-24 sm:w-28 md:w-32 h-1 bg-[#2B1C48] mx-auto animate-slide-in" style={{ marginTop: '4px' }}></div>
         </div>
@@ -42,12 +42,12 @@ export default function ValueSection() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-12 md:gap-16 mb-16 sm:mb-20">
           {/* Vision Column */}
           <div className="relative animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
-            <img src="https://cdn.legendholding.com/images/cloudinary/cloudinary_683da9c6ede476.24969316_20250602_134022.png" alt="Vision background card design" className="w-full h-auto opacity-90" />
+            <img src="/card.png" alt="Vision background card design" className="w-full h-auto opacity-90" />
             
             {/* Vision Icon */}
             <div className="absolute top-4 right-4 w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16">
               <Image
-                src="https://cdn.legendholding.com/images/cdn_683e960b1997b5.22165608_20250603_062827.png"
+                src="/icon.png"
                 alt="Vision icon"
                 fill
                 className="object-contain"
@@ -72,12 +72,12 @@ export default function ValueSection() {
 
           {/* Mission Column */}
           <div className="relative animate-fade-in-up" style={{ animationDelay: "0.4s" }}>
-            <img src="https://cdn.legendholding.com/images/cloudinary/cloudinary_683da9c6ede476.24969316_20250602_134022.png" alt="Mission background card design" className="w-full h-auto opacity-90" />
+            <img src="/card.png" alt="Mission background card design" className="w-full h-auto opacity-90" />
             
             {/* Mission Icon */}
             <div className="absolute top-4 right-4 w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16">
               <Image
-                src="https://cdn.legendholding.com/images/cdn_683e960b1997b5.22165608_20250603_062827.png"
+                src="/icon.png"
                 alt="Mission icon"
                 fill
                 className="object-contain"
