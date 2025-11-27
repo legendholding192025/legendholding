@@ -40,9 +40,10 @@ interface TeamMember {
 interface TeamDisplayProps {
   teamData: TeamMember[];
   boardData: TeamMember[];
+  chinaData?: TeamMember[];
 }
 
-export function TeamDisplay({ teamData, boardData }: TeamDisplayProps) {
+export function TeamDisplay({ teamData, boardData, chinaData = [] }: TeamDisplayProps) {
   const [connectionSpeed, setConnectionSpeed] = useState<'slow' | 'medium' | 'fast'>('medium');
   const [loadedImages, setLoadedImages] = useState<Set<string | number>>(new Set());
   const [preloadedImages, setPreloadedImages] = useState<Set<number>>(new Set());
@@ -97,7 +98,7 @@ export function TeamDisplay({ teamData, boardData }: TeamDisplayProps) {
   useEffect(() => {
     const speed = detectConnectionSpeed();
     setConnectionSpeed(speed);
-    setLoadingStats({ loaded: 0, total: boardData.length + teamData.length });
+    setLoadingStats({ loaded: 0, total: boardData.length + teamData.length + chinaData.length });
 
     if (typeof window !== 'undefined') {
       // Preload images after a short delay
@@ -326,6 +327,90 @@ export function TeamDisplay({ teamData, boardData }: TeamDisplayProps) {
             </div>
           ))}
         </div>
+
+        {/* People's Republic of China */}
+        {chinaData.length > 0 && (
+          <>
+            <div className="mb-8 mt-12">
+              <h2 className="text-3xl font-bold text-[#2b1c48] mb-6">People's Republic of China</h2>
+              <div className="flex gap-2 mb-6">
+                <div className="h-1 w-20 bg-[#5E366D] rounded-full animate-expand-width"></div>
+                <div className="h-1 w-12 bg-[#EE8900] rounded-full animate-expand-width animation-delay-200"></div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+              {chinaData.map((member, index) => (
+                <div 
+                  key={`china-${index}`} 
+                  id={toSlug(`${member.name}-${member.role}`)}
+                  className="bg-white rounded-2xl shadow-lg p-4 sm:p-6 transform transition-all duration-300 hover:-translate-y-2 hover:shadow-xl flex flex-col h-full"
+                  data-index={`china-${index}`}
+                  ref={(el) => {
+                    if (el && observerRef.current) {
+                      observerRef.current.observe(el);
+                    }
+                  }}
+                >
+                  <div className="relative mb-4 mx-auto rounded-xl w-full aspect-[5/6] overflow-hidden bg-gray-100 flex-shrink-0">
+                    {/* Loading placeholder */}
+                    {!loadedImages.has(`china-${index}`) && (
+                      <div className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 animate-pulse">
+                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer"></div>
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <div className="text-gray-400 text-sm">Loading...</div>
+                        </div>
+                      </div>
+                    )}
+                    
+                    {/* Optimized image */}
+                    <Image
+                      src={optimizeImageUrl(member.image, getImageWidth(), getImageQuality(index))}
+                      alt={`${member.name} - ${member.role} at ${member.company}`}
+                      fill
+                      className={`object-cover ${getObjectPosition(member.name)} transition-opacity duration-500 ${
+                        loadedImages.has(`china-${index}`) ? 'opacity-100' : 'opacity-0'
+                      }`}
+                      loading={index < 3 ? 'eager' : 'lazy'}
+                      priority={index < 3}
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      quality={getImageQuality(index)}
+                      placeholder="blur"
+                      blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R+Rj"
+                      onLoad={() => {
+                        setLoadedImages(prev => {
+                          const newSet = new Set([...prev, `china-${index}`]);
+                          setLoadingStats(current => ({
+                            ...current,
+                            loaded: newSet.size
+                          }));
+                          return newSet;
+                        });
+                      }}
+                      onError={() => {
+                        // Fallback to original image if optimized version fails
+                        const img = document.querySelector(`[alt="${member.name}"]`) as HTMLImageElement;
+                        if (img) {
+                          img.src = member.image;
+                        }
+                      }}
+                    />
+                  </div>
+                  
+                  <div className="flex-1 flex flex-col">
+                    <h3 className="text-lg sm:text-xl font-bold text-[#2b1c48] mb-2 line-clamp-2">{member.name}</h3>
+                    <div className="flex gap-2 mb-3">
+                      <div className="h-1 w-16 bg-[#5E366D] rounded-full animate-expand-width"></div>
+                      <div className="h-1 w-8 bg-[#EE8900] rounded-full animate-expand-width animation-delay-200"></div>
+                    </div>
+                    <p className="text-[#EE8900] font-semibold mb-2 text-sm sm:text-base line-clamp-2">{member.role}</p>
+                    <p className="text-[#5E366D] font-medium text-base sm:text-lg line-clamp-1">{member.company}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

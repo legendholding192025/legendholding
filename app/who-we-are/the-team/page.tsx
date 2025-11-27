@@ -78,7 +78,13 @@ export default function LeadershipTeam() {
       name: "Sonam Lama",
       role: "Group HR Director",
       company: "Legend Holding Group",
-      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1761054545/sonam_bwxv4m.jpg"
+      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1764143856/sonam_2_hpe4ou.png"
+    },
+    {
+      name: "Noha Mohamed Shekib",
+      role: "Chief Technology Officer",
+      company: "Legend Holding Group",
+      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1764144180/NOHA_ehwbwg.png"
     },
     {
       name: "Waseem Khalayleh",
@@ -127,6 +133,21 @@ export default function LeadershipTeam() {
     }
   ];
 
+  const chinaData = [
+    {
+      name: "Person 1",
+      role: "Role 1",
+      company: "Legend Holding Group",
+      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1764161813/4_copy_ukrn7s.png"
+    },
+    {
+      name: "Person 2",
+      role: "Role 2",
+      company: "Legend Holding Group",
+      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1764144502/4_copy2_exbafg.png"
+    }
+  ];
+
   // Structured data for SEO (Organization + WebPage + ItemList + Person with images and anchors)
   const pageUrl = 'https://legendholding.com/who-we-are/the-team';
   const bannerUrl = 'https://res.cloudinary.com/dzfhqvxnf/image/upload/v1761119956/cdn_684c1882b54a16.04269006_20250613_122434_vwphxo.jpg';
@@ -159,6 +180,7 @@ export default function LeadershipTeam() {
     employee: [
       ...boardData.map((m) => personFrom(m)),
       ...teamData.map((m) => personFrom(m)),
+      ...chinaData.map((m) => personFrom(m)),
     ]
   };
 
@@ -186,7 +208,7 @@ export default function LeadershipTeam() {
     "@type": "ItemList",
     name: 'Legend Holding Group Leadership',
     itemListOrder: 'https://schema.org/ItemListOrderAscending',
-    numberOfItems: boardData.length + teamData.length,
+    numberOfItems: boardData.length + teamData.length + chinaData.length,
     itemListElement: [
       ...boardData.map((m, index) => ({
         "@type": "ListItem",
@@ -197,6 +219,11 @@ export default function LeadershipTeam() {
         "@type": "ListItem",
         position: boardData.length + i + 1,
         item: personFrom(m, boardData.length + i + 1)
+      })),
+      ...chinaData.map((m, i) => ({
+        "@type": "ListItem",
+        position: boardData.length + teamData.length + i + 1,
+        item: personFrom(m, boardData.length + teamData.length + i + 1)
       }))
     ]
   };
