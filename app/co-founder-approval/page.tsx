@@ -1,0 +1,537 @@
+"use client"
+
+import { useEffect, useState } from "react"
+import { Button } from "@/components/ui/button"
+import { 
+  Eye, 
+  CheckCircle, 
+  XCircle,
+  FileText,
+  Calendar,
+  Download,
+  Shield
+} from "lucide-react"
+import { toast } from "sonner"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
+import { Card, CardContent } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { motion } from "framer-motion"
+
+interface FileData {
+  fileName: string
+  fileUrl: string
+  fileType: string
+  fileSize: number
+}
+
+interface WorkflowSubmission {
+  id: string
+  created_at: string
+  name: string
+  email: string
+  subject: string
+  message: string
+  files: FileData[] | null
+  status: 'pending' | 'finance_approved' | 'finance_rejected' | 'cofounder_approved' | 'cofounder_rejected' | 'approved' | 'founder_rejected'
+  finance_reviewed_at: string | null
+  cofounder_reviewed_at: string | null
+  founder_reviewed_at: string | null
+  finance_comment: string | null
+  cofounder_comment: string | null
+  founder_comment: string | null
+}
+
+export default function CoFounderApprovalPage() {
+  const [submissions, setSubmissions] = useState<WorkflowSubmission[]>([])
+  const [loading, setLoading] = useState(true)
+  const [selectedSubmission, setSelectedSubmission] = useState<WorkflowSubmission | null>(null)
+  const [isViewDialogOpen, setIsViewDialogOpen] = useState(false)
+  const [reviewComment, setReviewComment] = useState("")
+
+  useEffect(() => {
+    fetchSubmissions()
+  }, [])
+
+  const fetchSubmissions = async () => {
+    try {
+      setLoading(true)
+      
+      const response = await fetch('/api/workflow')
+      const result = await response.json()
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to fetch submissions')
+      }
+
+      // Filter to show only finance-approved items and reviewed items
+      const filteredData = result.data?.filter((s: WorkflowSubmission) => 
+        s.status === 'finance_approved' || 
+        s.status === 'cofounder_approved' ||
+        s.status === 'cofounder_rejected' ||
+        s.status === 'approved' ||
+        s.status === 'founder_rejected'
+      ) || []
+
+      setSubmissions(filteredData)
+    } catch (error) {
+      console.error("Error fetching submissions:", error)
+      toast.error("Failed to fetch submissions")
+      setSubmissions([])
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleViewSubmission = (submission: WorkflowSubmission) => {
+    setSelectedSubmission(submission)
+    setReviewComment("")
+    setIsViewDialogOpen(true)
+  }
+
+  const handleUpdateStatus = async (id: string, action: 'approve' | 'reject') => {
+    if (!reviewComment.trim()) {
+      toast.error('Please add a comment before ' + (action === 'approve' ? 'approving' : 'rejecting'))
+      return
+    }
+
+    try {
+      const status = action === 'approve' ? 'cofounder_approved' : 'cofounder_rejected'
+      
+      const response = await fetch('/api/workflow', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+          id, 
+          status, 
+          reviewer: 'cofounder',
+          comment: reviewComment 
+        }),
+      })
+
+      const result = await response.json()
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to update status')
+      }
+
+      setSubmissions(prev =>
+        prev.map(submission =>
+          submission.id === id ? { ...submission, status } : submission
+        )
+      )
+
+      const message = action === 'approve' 
+        ? 'Submission approved and sent to founder for final approval'
+        : 'Submission rejected'
+      
+      toast.success(message)
+      setIsViewDialogOpen(false)
+      setReviewComment("")
+      
+      // Refresh to show updated list
+      fetchSubmissions()
+    } catch (error: any) {
+      console.error("Error updating status:", error)
+      toast.error(error.message || "Failed to update status")
+    }
+  }
+
+  const handleDownloadFile = (file: FileData) => {
+    try {
+      const link = document.createElement('a')
+      link.href = file.fileUrl
+      link.download = file.fileName
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      toast.success("File download started")
+    } catch (error) {
+      console.error("Error downloading file:", error)
+      toast.error("Failed to download file")
+    }
+  }
+
+  const formatFileSize = (bytes: number | null) => {
+    if (!bytes) return 'N/A'
+    if (bytes === 0) return '0 Bytes'
+    const k = 1024
+    const sizes = ['Bytes', 'KB', 'MB']
+    const i = Math.floor(Math.log(bytes) / Math.log(k))
+    return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i]
+  }
+
+  const getStatusBadge = (status: string) => {
+    switch (status) {
+      case 'approved':
+        return <Badge className="bg-green-500 hover:bg-green-600">Fully Approved</Badge>
+      case 'cofounder_approved':
+        return <Badge className="bg-blue-500 hover:bg-blue-600">Sent to Founder</Badge>
+      case 'finance_approved':
+        return <Badge className="bg-blue-500 hover:bg-blue-600">Pending Your Approval</Badge>
+      case 'cofounder_rejected':
+        return <Badge className="bg-red-500 hover:bg-red-600">Rejected</Badge>
+      case 'founder_rejected':
+        return <Badge className="bg-red-500 hover:bg-red-600">Rejected by Founder</Badge>
+      default:
+        return <Badge variant="outline">{status}</Badge>
+    }
+  }
+
+  const pendingSubmissions = submissions.filter(s => s.status === 'finance_approved')
+  const reviewedSubmissions = submissions.filter(s => s.status === 'cofounder_approved' || s.status === 'cofounder_rejected' || s.status === 'approved' || s.status === 'founder_rejected')
+
+  return (
+    <>
+      <main className="min-h-screen bg-slate-50">
+      {/* Hero Banner */}
+      <div className="relative h-[300px] sm:h-[400px] w-full">
+        <div 
+          className="absolute inset-0 bg-cover bg-center"
+          style={{
+            backgroundImage: "url('https://cdn.legendholding.com/images/cloudinary/cloudinary_683ea90f29b708.04231409_20250603_074935.jpg')"
+          }}
+        >
+          <div className="absolute inset-0 bg-gradient-to-r from-[#5D376E]/95 to-[#5D376E]/80" />
+        </div>
+        <div className="relative h-full flex items-center px-4 sm:px-6">
+          <div className="max-w-7xl mx-auto text-white flex items-start gap-4">
+            <Shield className="h-12 w-12 sm:h-16 sm:w-16 mt-2 flex-shrink-0" />
+            <div>
+              <h1 className="text-4xl sm:text-5xl font-bold mb-4">Co-Founder Approval</h1>
+              <p className="text-lg sm:text-xl text-white/95">
+                Review and approve documents that have been cleared by the finance team
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <section className="py-16 px-4 sm:px-6">
+          <div className="max-w-7xl mx-auto">
+
+            {/* Stats */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+              <Card className="bg-white">
+                <CardContent className="pt-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-gray-600 mb-1">Awaiting Your Approval</p>
+                      <p className="text-3xl font-bold text-blue-600">{pendingSubmissions.length}</p>
+                    </div>
+                    <Shield className="h-12 w-12 text-blue-400" />
+                  </div>
+                </CardContent>
+              </Card>
+              <Card className="bg-white">
+                <CardContent className="pt-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-gray-600 mb-1">Sent to Founder</p>
+                      <p className="text-3xl font-bold text-green-600">
+                        {submissions.filter(s => s.status === 'cofounder_approved').length}
+                      </p>
+                    </div>
+                    <CheckCircle className="h-12 w-12 text-green-400" />
+                  </div>
+                </CardContent>
+              </Card>
+              <Card className="bg-white">
+                <CardContent className="pt-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-gray-600 mb-1">Rejected</p>
+                      <p className="text-3xl font-bold text-red-600">
+                        {submissions.filter(s => s.status === 'cofounder_rejected').length}
+                      </p>
+                    </div>
+                    <XCircle className="h-12 w-12 text-red-400" />
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {loading ? (
+              <div className="text-center py-12">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#5D376E] mx-auto mb-4"></div>
+                <p className="text-gray-600">Loading submissions...</p>
+              </div>
+            ) : (
+              <>
+                {/* Pending Approval Submissions */}
+                {pendingSubmissions.length > 0 && (
+                  <div className="mb-12">
+                    <h2 className="text-2xl font-bold text-[#5D376E] mb-4 flex items-center gap-2">
+                      <Shield className="h-6 w-6" />
+                      Awaiting Your Approval
+                    </h2>
+                    <div className="grid grid-cols-1 gap-4">
+                      {pendingSubmissions.map((submission, index) => (
+                        <motion.div
+                          key={submission.id}
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: index * 0.1 }}
+                        >
+                          <Card className="bg-white hover:shadow-lg transition-shadow border-l-4 border-l-blue-500">
+                            <CardContent className="p-6">
+                              <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+                                <div className="flex-1">
+                                  <div className="flex items-start justify-between mb-2">
+                                    <div>
+                                      <h3 className="text-xl font-semibold text-gray-900 mb-1">
+                                        {submission.subject}
+                                      </h3>
+                                      <div className="flex items-center gap-4 text-sm text-gray-500 mb-2">
+                                        <div className="flex items-center gap-2">
+                                          <Calendar className="h-4 w-4" />
+                                          <span>{new Date(submission.created_at).toLocaleDateString()}</span>
+                                        </div>
+                                        {submission.finance_reviewed_at && (
+                                          <Badge variant="outline" className="text-green-600 border-green-600">
+                                            ✓ Finance Approved
+                                          </Badge>
+                                        )}
+                                      </div>
+                                    </div>
+                                    {getStatusBadge(submission.status)}
+                                  </div>
+                                  <p className="text-gray-600 mb-3 line-clamp-2">{submission.message}</p>
+                                  {submission.files && submission.files.length > 0 && (
+                                    <div className="flex items-center gap-2 text-sm text-gray-500">
+                                      <FileText className="h-4 w-4" />
+                                      <span>{submission.files.length} file{submission.files.length > 1 ? 's' : ''} attached</span>
+                                    </div>
+                                  )}
+                                </div>
+                                <div className="flex justify-end">
+                                  <Button
+                                    onClick={() => handleViewSubmission(submission)}
+                                    variant="outline"
+                                  >
+                                    <Eye className="h-4 w-4 mr-2" />
+                                    View Details
+                                  </Button>
+                                </div>
+                              </div>
+                            </CardContent>
+                          </Card>
+                        </motion.div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Reviewed Submissions */}
+                {reviewedSubmissions.length > 0 && (
+                  <div>
+                    <h2 className="text-2xl font-bold text-[#5D376E] mb-4">Your Decisions</h2>
+                    <div className="grid grid-cols-1 gap-4">
+                      {reviewedSubmissions.map((submission, index) => (
+                        <motion.div
+                          key={submission.id}
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: index * 0.1 }}
+                        >
+                          <Card className="bg-white hover:shadow-md transition-shadow opacity-75">
+                            <CardContent className="p-6">
+                              <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+                                <div className="flex-1">
+                                  <div className="flex items-start justify-between mb-2">
+                                    <div>
+                                      <h3 className="text-lg font-semibold text-gray-900 mb-1">
+                                        {submission.subject}
+                                      </h3>
+                                      <div className="flex items-center gap-2 text-sm text-gray-500">
+                                        <Calendar className="h-4 w-4" />
+                                        <span>{new Date(submission.created_at).toLocaleDateString()}</span>
+                                      </div>
+                                    </div>
+                                    {getStatusBadge(submission.status)}
+                                  </div>
+                                  <p className="text-gray-600 mb-2 line-clamp-1">{submission.message}</p>
+                                  {submission.files && submission.files.length > 0 && (
+                                    <div className="flex items-center gap-2 text-sm text-gray-500">
+                                      <FileText className="h-4 w-4" />
+                                      <span>{submission.files.length} file{submission.files.length > 1 ? 's' : ''}</span>
+                                    </div>
+                                  )}
+                                </div>
+                                <Button
+                                  onClick={() => handleViewSubmission(submission)}
+                                  variant="outline"
+                                  size="sm"
+                                >
+                                  <Eye className="h-4 w-4 mr-2" />
+                                  View
+                                </Button>
+                              </div>
+                            </CardContent>
+                          </Card>
+                        </motion.div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* No Submissions */}
+                {submissions.length === 0 && (
+                  <Card className="bg-white">
+                    <CardContent className="py-12">
+                      <div className="text-center">
+                        <Shield className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+                        <h3 className="text-xl font-semibold text-gray-900 mb-2">No Submissions</h3>
+                        <p className="text-gray-600">There are no documents awaiting your approval at this time.</p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
+              </>
+            )}
+          </div>
+        </section>
+      </main>
+
+      {/* View Dialog */}
+      <Dialog open={isViewDialogOpen} onOpenChange={setIsViewDialogOpen}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="text-2xl">Submission Details</DialogTitle>
+            <DialogDescription>
+              Submitted on {selectedSubmission && new Date(selectedSubmission.created_at).toLocaleString()}
+            </DialogDescription>
+            {selectedSubmission?.finance_reviewed_at && (
+              <p className="text-sm text-green-600 mt-2">
+                ✓ Approved by Finance on {new Date(selectedSubmission.finance_reviewed_at).toLocaleString()}
+              </p>
+            )}
+          </DialogHeader>
+          {selectedSubmission && (
+            <div className="space-y-6">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-semibold text-[#5D376E] mb-2">Name</label>
+                  <p className="text-gray-900 text-lg">{selectedSubmission.name}</p>
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-[#5D376E] mb-2">Email</label>
+                  <p className="text-gray-900 text-lg">{selectedSubmission.email}</p>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-[#5D376E] mb-2">Subject</label>
+                <p className="text-gray-900 text-lg">{selectedSubmission.subject}</p>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-semibold text-[#5D376E] mb-2">Message</label>
+                <div className="bg-gray-50 p-4 rounded-lg">
+                  <p className="text-gray-900 whitespace-pre-wrap">{selectedSubmission.message}</p>
+                </div>
+              </div>
+              
+              {selectedSubmission.files && selectedSubmission.files.length > 0 && (
+                <div>
+                  <label className="block text-sm font-semibold text-[#5D376E] mb-2">
+                    Attached Documents ({selectedSubmission.files.length})
+                  </label>
+                  <div className="space-y-3">
+                    {selectedSubmission.files.map((file, index) => (
+                      <div key={index} className="flex items-center justify-between p-4 border-2 border-gray-200 rounded-lg bg-gray-50">
+                        <div className="flex items-center gap-3 min-w-0 flex-1">
+                          <div className="w-12 h-12 bg-[#EE8900] bg-opacity-10 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <FileText className="h-6 w-6 text-[#EE8900]" />
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <p className="font-medium text-gray-900 truncate">{file.fileName}</p>
+                            <p className="text-sm text-gray-500">
+                              {formatFileSize(file.fileSize)}
+                            </p>
+                          </div>
+                        </div>
+                        <Button
+                          onClick={() => handleDownloadFile(file)}
+                          className="bg-[#F08900] hover:bg-[#d67a00] ml-3 flex-shrink-0"
+                        >
+                          <Download className="h-4 w-4 mr-2" />
+                          Download
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+              
+              <div>
+                <label className="block text-sm font-semibold text-[#5D376E] mb-2">Status</label>
+                <div>{getStatusBadge(selectedSubmission.status)}</div>
+              </div>
+
+              {/* Finance Review Comment */}
+              {selectedSubmission.finance_comment && (
+                <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
+                  <div className="flex items-start gap-2">
+                    <div className="flex-1">
+                      <p className="text-sm font-semibold text-blue-900 mb-1">💼 Finance Review Comment</p>
+                      <p className="text-sm text-blue-800 whitespace-pre-wrap">{selectedSubmission.finance_comment}</p>
+                      {selectedSubmission.finance_reviewed_at && (
+                        <p className="text-xs text-blue-600 mt-2">
+                          Reviewed on {new Date(selectedSubmission.finance_reviewed_at).toLocaleString()}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+              
+              {selectedSubmission.status === 'finance_approved' && (
+                <div className="space-y-4 pt-4 border-t">
+                  <div>
+                    <label htmlFor="reviewComment" className="block text-sm font-semibold text-[#5D376E] mb-2">
+                      Review Comment <span className="text-red-600">*</span>
+                    </label>
+                    <textarea
+                      id="reviewComment"
+                      value={reviewComment}
+                      onChange={(e) => setReviewComment(e.target.value)}
+                      placeholder="Add your review comments here..."
+                      rows={4}
+                      className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#EE8900] focus:border-transparent transition-all duration-200 resize-none"
+                    />
+                  </div>
+                  <div className="flex gap-3">
+                    <Button
+                      onClick={() => handleUpdateStatus(selectedSubmission.id, 'approve')}
+                      className="flex-1 bg-green-600 hover:bg-green-700 text-lg py-6"
+                    >
+                      <CheckCircle className="h-5 w-5 mr-2" />
+                      Approve & Send to Founder
+                    </Button>
+                    <Button
+                      onClick={() => handleUpdateStatus(selectedSubmission.id, 'reject')}
+                      variant="destructive"
+                      className="flex-1 text-lg py-6"
+                    >
+                      <XCircle className="h-5 w-5 mr-2" />
+                      Reject
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+    </>
+  )
+}
+
