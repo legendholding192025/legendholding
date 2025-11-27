@@ -412,7 +412,7 @@ export async function sendWorkflowRejectionEmail(data: {
                 <div class="info-box">
                   <strong>📋 Submission Details</strong>
                   <p style="margin: 8px 0; color: #374151;"><strong>Subject:</strong> ${subject}</p>
-                  <p style="margin: 8px 0; color: #374151;"><strong>Reviewed By:</strong> <span class="reviewer-badge">${reviewerName}</span></p>
+                  <p style="margin: 8px 0; color: #374151;"><strong>Rejected by:</strong> <span style="color: #5D376E; font-weight: 600;">${reviewerName}</span></p>
                   <p style="margin: 8px 0; color: #374151;"><strong>Status:</strong> <span style="color: #dc2626; font-weight: 600;">Rejected</span></p>
                 </div>
 

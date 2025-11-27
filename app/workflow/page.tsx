@@ -218,14 +218,14 @@ export default function WorkflowPage() {
         <div 
           className="absolute inset-0 bg-cover bg-center"
           style={{
-            backgroundImage: "url('https://cdn.legendholding.com/images/cloudinary/cloudinary_683ea90f29b708.04231409_20250603_074935.jpg')"
+            backgroundImage: "url('https://res.cloudinary.com/dzfhqvxnf/image/upload/v1761119956/cdn_684c1882b54a16.04269006_20250613_122434_vwphxo.jpg')"
           }}
         >
-          <div className="absolute inset-0 bg-gradient-to-r from-[#5D376E]/95 to-[#5D376E]/80" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#5D376E]/70 to-[#5D376E]/60" />
         </div>
-        <div className="relative h-full flex items-center px-4 sm:px-6">
-          <div className="max-w-4xl mx-auto text-white">
-            <h1 className="text-4xl sm:text-5xl font-bold mb-4">Workflow Document Submission</h1>
+        <div className="relative h-full flex items-center justify-center px-4 sm:px-6">
+          <div className="max-w-4xl mx-auto text-white text-center">
+            <h1 className="text-4xl sm:text-5xl font-bold mb-4 text-[#EE8900]">Workflow Document Submission</h1>
             <p className="text-lg sm:text-xl text-white/95">
               Upload your workflow documents securely. Supported formats: PDF, DOC, DOCX, XLS, XLSX (Max 10MB)
             </p>
