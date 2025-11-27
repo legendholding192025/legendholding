@@ -152,6 +152,14 @@ export function TeamDisplay({ teamData, boardData, chinaData = [] }: TeamDisplay
     }
   };
 
+  // Get custom height for specific team members
+  const getImageHeight = (name: string) => {
+    switch (name) {
+      case "Noha Mohamed Shekib": return "h-[109%] inset-x-0 top-0";
+      default: return "";
+    }
+  };
+
   // Create stable, SEO-friendly slug to use as element id/anchor
   const toSlug = (value: string) =>
     value
@@ -201,13 +209,14 @@ export function TeamDisplay({ teamData, boardData, chinaData = [] }: TeamDisplay
                   )}
                   
                   {/* Optimized image */}
-                  <Image
-                    src={optimizeImageUrl(director.image, getImageWidth(), getImageQuality(index))}
-                    alt={`${director.name} - ${director.role} at ${director.company}`}
-                    fill
-                    className={`object-cover ${getObjectPosition(director.name)} transition-opacity duration-500 ${
-                      loadedImages.has(`board-${index}`) ? 'opacity-100' : 'opacity-0'
-                    }`}
+                  <div className={`absolute inset-0 ${getImageHeight(director.name)}`}>
+                    <Image
+                      src={optimizeImageUrl(director.image, getImageWidth(), getImageQuality(index))}
+                      alt={`${director.name} - ${director.role} at ${director.company}`}
+                      fill
+                      className={`object-cover ${getObjectPosition(director.name)} transition-opacity duration-500 ${
+                        loadedImages.has(`board-${index}`) ? 'opacity-100' : 'opacity-0'
+                      }`}
                     loading={index < 3 ? 'eager' : 'lazy'}
                     priority={index < 3}
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -224,14 +233,15 @@ export function TeamDisplay({ teamData, boardData, chinaData = [] }: TeamDisplay
                         return newSet;
                       });
                     }}
-                    onError={() => {
-                      // Fallback to original image if optimized version fails
-                      const img = document.querySelector(`[alt="${director.name}"]`) as HTMLImageElement;
-                      if (img) {
-                        img.src = director.image;
-                      }
-                    }}
-                  />
+                      onError={() => {
+                        // Fallback to original image if optimized version fails
+                        const img = document.querySelector(`[alt="${director.name}"]`) as HTMLImageElement;
+                        if (img) {
+                          img.src = director.image;
+                        }
+                      }}
+                    />
+                  </div>
                 </div>
                 
                 <div className="flex-1 flex flex-col">
@@ -282,13 +292,14 @@ export function TeamDisplay({ teamData, boardData, chinaData = [] }: TeamDisplay
                 )}
                 
                 {/* Optimized image */}
-                <Image
-                  src={optimizeImageUrl(leader.image, getImageWidth(), getImageQuality(index))}
-                  alt={`${leader.name} - ${leader.role} at ${leader.company}`}
-                  fill
-                  className={`object-cover ${getObjectPosition(leader.name)} transition-opacity duration-500 ${
-                    loadedImages.has(index) ? 'opacity-100' : 'opacity-0'
-                  }`}
+                <div className={`absolute inset-0 ${getImageHeight(leader.name)}`}>
+                  <Image
+                    src={optimizeImageUrl(leader.image, getImageWidth(), getImageQuality(index))}
+                    alt={`${leader.name} - ${leader.role} at ${leader.company}`}
+                    fill
+                    className={`object-cover ${getObjectPosition(leader.name)} transition-opacity duration-500 ${
+                      loadedImages.has(index) ? 'opacity-100' : 'opacity-0'
+                    }`}
                   loading={index < 3 ? 'eager' : 'lazy'}
                   priority={index < 3}
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -305,14 +316,15 @@ export function TeamDisplay({ teamData, boardData, chinaData = [] }: TeamDisplay
                       return newSet;
                     });
                   }}
-                  onError={() => {
-                    // Fallback to original image if optimized version fails
-                    const img = document.querySelector(`[alt="${leader.name}"]`) as HTMLImageElement;
-                    if (img) {
-                      img.src = leader.image;
-                    }
-                  }}
-                />
+                    onError={() => {
+                      // Fallback to original image if optimized version fails
+                      const img = document.querySelector(`[alt="${leader.name}"]`) as HTMLImageElement;
+                      if (img) {
+                        img.src = leader.image;
+                      }
+                    }}
+                  />
+                </div>
               </div>
               
               <div className="flex-1 flex flex-col">
@@ -364,13 +376,14 @@ export function TeamDisplay({ teamData, boardData, chinaData = [] }: TeamDisplay
                     )}
                     
                     {/* Optimized image */}
-                    <Image
-                      src={optimizeImageUrl(member.image, getImageWidth(), getImageQuality(index))}
-                      alt={`${member.name} - ${member.role} at ${member.company}`}
-                      fill
-                      className={`object-cover ${getObjectPosition(member.name)} transition-opacity duration-500 ${
-                        loadedImages.has(`china-${index}`) ? 'opacity-100' : 'opacity-0'
-                      }`}
+                    <div className={`absolute inset-0 ${getImageHeight(member.name)}`}>
+                      <Image
+                        src={optimizeImageUrl(member.image, getImageWidth(), getImageQuality(index))}
+                        alt={`${member.name} - ${member.role} at ${member.company}`}
+                        fill
+                        className={`object-cover ${getObjectPosition(member.name)} transition-opacity duration-500 ${
+                          loadedImages.has(`china-${index}`) ? 'opacity-100' : 'opacity-0'
+                        }`}
                       loading={index < 3 ? 'eager' : 'lazy'}
                       priority={index < 3}
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -387,14 +400,15 @@ export function TeamDisplay({ teamData, boardData, chinaData = [] }: TeamDisplay
                           return newSet;
                         });
                       }}
-                      onError={() => {
-                        // Fallback to original image if optimized version fails
-                        const img = document.querySelector(`[alt="${member.name}"]`) as HTMLImageElement;
-                        if (img) {
-                          img.src = member.image;
-                        }
-                      }}
-                    />
+                        onError={() => {
+                          // Fallback to original image if optimized version fails
+                          const img = document.querySelector(`[alt="${member.name}"]`) as HTMLImageElement;
+                          if (img) {
+                            img.src = member.image;
+                          }
+                        }}
+                      />
+                    </div>
                   </div>
                   
                   <div className="flex-1 flex flex-col">
