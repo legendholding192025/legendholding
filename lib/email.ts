@@ -86,52 +86,154 @@ export async function sendWorkflowApprovalEmail(data: {
         <!DOCTYPE html>
         <html>
           <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <style>
-              body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-              .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-              .header { background-color: #5E366D; color: white; padding: 30px; text-align: center; border-radius: 8px 8px 0 0; }
-              .content { padding: 30px; background-color: #f9f9f9; }
-              .approval-badge { background-color: #10b981; color: white; padding: 10px 20px; border-radius: 5px; display: inline-block; margin: 20px 0; }
-              .info-box { background-color: #e0f2fe; border-left: 4px solid #0284c7; padding: 15px; margin: 20px 0; border-radius: 4px; }
-              .footer { text-align: center; padding: 20px; color: #666; font-size: 14px; background-color: #f3f4f6; border-radius: 0 0 8px 8px; }
-              .button { display: inline-block; padding: 12px 24px; background-color: #5E366D; color: white; text-decoration: none; border-radius: 5px; margin: 20px 0; }
+              * { margin: 0; padding: 0; box-sizing: border-box; }
+              body { 
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; 
+                line-height: 1.6; 
+                color: #333333; 
+                background-color: #f5f5f5;
+                padding: 20px;
+              }
+              .email-container { 
+                max-width: 600px; 
+                margin: 0 auto; 
+                background-color: #ffffff;
+                border-radius: 12px;
+                overflow: hidden;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+              }
+              .header { 
+                background: linear-gradient(135deg, #5D376E 0%, #7B4A8F 100%);
+                color: white; 
+                padding: 40px 30px;
+                text-align: center;
+              }
+              .header h1 {
+                font-size: 28px;
+                font-weight: 700;
+                margin-bottom: 10px;
+                color: white;
+              }
+              .content { 
+                padding: 40px 30px; 
+                background-color: #ffffff;
+              }
+              .greeting {
+                font-size: 18px;
+                color: #5D376E;
+                font-weight: 600;
+                margin-bottom: 20px;
+              }
+              .approval-badge { 
+                background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+                color: white; 
+                padding: 16px 32px; 
+                border-radius: 8px; 
+                display: inline-block; 
+                margin: 30px 0;
+                font-size: 18px;
+                font-weight: 700;
+                box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+              }
+              .info-box { 
+                background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+                border-left: 4px solid #5D376E; 
+                padding: 20px; 
+                margin: 25px 0; 
+                border-radius: 8px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+              }
+              .info-box strong {
+                color: #5D376E;
+                font-size: 16px;
+                display: block;
+                margin-bottom: 10px;
+              }
+              .comment-box {
+                background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+                border-left: 4px solid #10b981;
+                padding: 20px;
+                margin: 25px 0;
+                border-radius: 8px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+              }
+              .comment-box strong {
+                color: #059669;
+                font-size: 16px;
+                display: block;
+                margin-bottom: 10px;
+              }
+              .footer { 
+                text-align: center; 
+                padding: 30px; 
+                color: #666666; 
+                font-size: 14px; 
+                background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+                border-top: 1px solid #e5e7eb;
+              }
+              .footer-text {
+                color: #6b7280;
+                line-height: 1.8;
+              }
+              .divider {
+                height: 1px;
+                background: linear-gradient(90deg, transparent, #e5e7eb, transparent);
+                margin: 30px 0;
+              }
+              @media only screen and (max-width: 600px) {
+                .content { padding: 30px 20px; }
+                .header { padding: 30px 20px; }
+                .header h1 { font-size: 24px; }
+              }
             </style>
           </head>
           <body>
-            <div class="container">
+            <div class="email-container">
               <div class="header">
-                <h2>🎉 Workflow Submission Approved</h2>
+                <h1>✓ Submission Approved</h1>
+                <p style="margin-top: 10px; opacity: 0.95;">Your workflow has been fully approved</p>
               </div>
               <div class="content">
-                <p>Dear ${name},</p>
-                <p>We are pleased to inform you that your workflow submission has been <strong>fully approved</strong> by all reviewers.</p>
+                <p class="greeting">Dear ${name},</p>
+                
+                <p style="font-size: 16px; color: #4b5563; margin-bottom: 25px;">
+                  We are pleased to inform you that your workflow submission has been <strong style="color: #5D376E;">fully approved</strong> by all reviewers and has successfully completed the approval process.
+                </p>
                 
                 <div style="text-align: center;">
                   <div class="approval-badge">
-                    ✓ APPROVED
+                    ✓ FULLY APPROVED
                   </div>
                 </div>
 
                 <div class="info-box">
-                  <p><strong>Submission Details:</strong></p>
-                  <p><strong>Subject:</strong> ${subject}</p>
-                  <p><strong>Status:</strong> Fully Approved</p>
+                  <strong>📋 Submission Details</strong>
+                  <p style="margin: 8px 0; color: #374151;"><strong>Subject:</strong> ${subject}</p>
+                  <p style="margin: 8px 0; color: #374151;"><strong>Status:</strong> <span style="color: #10b981; font-weight: 600;">Fully Approved</span></p>
                 </div>
 
                 ${comment ? `
-                <div class="info-box" style="background-color: #f0fdf4; border-left-color: #10b981;">
-                  <p><strong>Final Review Comment:</strong></p>
-                  <p>${comment.replace(/\n/g, '<br>')}</p>
+                <div class="comment-box">
+                  <strong>💬 Final Review Comment</strong>
+                  <p style="margin-top: 10px; color: #374151; white-space: pre-wrap;">${comment.replace(/\n/g, '<br>')}</p>
                 </div>
                 ` : ''}
 
-                <p>Your submission has successfully completed the approval workflow and has been processed.</p>
-                
-                <p>If you have any questions or need further assistance, please don't hesitate to contact us.</p>
+                <div class="divider"></div>
+
+                <p style="font-size: 16px; color: #4b5563; margin-bottom: 15px;">
+                  Your submission has been processed and is now complete. If you have any questions or need further assistance, please don't hesitate to contact us.
+                </p>
               </div>
               <div class="footer">
-                <p>This is an automated message from Legend Holding Group.</p>
-                <p>Please do not reply to this email.</p>
+                <p class="footer-text">
+                  <strong>Legend Holding Group</strong><br>
+                  This is an automated message. Please do not reply to this email.<br>
+                  <span style="color: #9ca3af; font-size: 12px;">© ${new Date().getFullYear()} Legend Holding Group. All rights reserved.</span>
+                </p>
               </div>
             </div>
           </body>
@@ -161,7 +263,7 @@ export async function sendWorkflowRejectionEmail(data: {
     const fromEmail = 'no-reply@legendholding.com';
 
     const reviewerName = reviewer === 'finance' 
-      ? 'Finance Team' 
+      ? 'Finance' 
       : reviewer === 'cofounder' 
       ? 'Co-Founder' 
       : 'Founder';
@@ -174,52 +276,165 @@ export async function sendWorkflowRejectionEmail(data: {
         <!DOCTYPE html>
         <html>
           <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <style>
-              body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-              .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-              .header { background-color: #dc2626; color: white; padding: 30px; text-align: center; border-radius: 8px 8px 0 0; }
-              .content { padding: 30px; background-color: #f9f9f9; }
-              .rejection-badge { background-color: #dc2626; color: white; padding: 10px 20px; border-radius: 5px; display: inline-block; margin: 20px 0; }
-              .info-box { background-color: #fee2e2; border-left: 4px solid #dc2626; padding: 15px; margin: 20px 0; border-radius: 4px; }
-              .footer { text-align: center; padding: 20px; color: #666; font-size: 14px; background-color: #f3f4f6; border-radius: 0 0 8px 8px; }
+              * { margin: 0; padding: 0; box-sizing: border-box; }
+              body { 
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; 
+                line-height: 1.6; 
+                color: #333333; 
+                background-color: #f5f5f5;
+                padding: 20px;
+              }
+              .email-container { 
+                max-width: 600px; 
+                margin: 0 auto; 
+                background-color: #ffffff;
+                border-radius: 12px;
+                overflow: hidden;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+              }
+              .header { 
+                background: linear-gradient(135deg, #5D376E 0%, #7B4A8F 100%);
+                color: white; 
+                padding: 40px 30px;
+                text-align: center;
+              }
+              .header h1 {
+                font-size: 28px;
+                font-weight: 700;
+                margin-bottom: 10px;
+                color: white;
+              }
+              .content { 
+                padding: 40px 30px; 
+                background-color: #ffffff;
+              }
+              .greeting {
+                font-size: 18px;
+                color: #5D376E;
+                font-weight: 600;
+                margin-bottom: 20px;
+              }
+              .rejection-badge { 
+                background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+                color: white; 
+                padding: 16px 32px; 
+                border-radius: 8px; 
+                display: inline-block; 
+                margin: 30px 0;
+                font-size: 18px;
+                font-weight: 700;
+                box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+              }
+              .info-box { 
+                background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+                border-left: 4px solid #dc2626; 
+                padding: 20px; 
+                margin: 25px 0; 
+                border-radius: 8px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+              }
+              .info-box strong {
+                color: #991b1b;
+                font-size: 16px;
+                display: block;
+                margin-bottom: 10px;
+              }
+              .comment-box {
+                background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+                border-left: 4px solid #EE8900;
+                padding: 20px;
+                margin: 25px 0;
+                border-radius: 8px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+              }
+              .comment-box strong {
+                color: #c2410c;
+                font-size: 16px;
+                display: block;
+                margin-bottom: 10px;
+              }
+              .reviewer-badge {
+                display: inline-block;
+                background: linear-gradient(135deg, #5D376E 0%, #7B4A8F 100%);
+                color: white;
+                padding: 8px 16px;
+                border-radius: 6px;
+                font-size: 14px;
+                font-weight: 600;
+                margin-top: 5px;
+              }
+              .footer { 
+                text-align: center; 
+                padding: 30px; 
+                color: #666666; 
+                font-size: 14px; 
+                background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+                border-top: 1px solid #e5e7eb;
+              }
+              .footer-text {
+                color: #6b7280;
+                line-height: 1.8;
+              }
+              .divider {
+                height: 1px;
+                background: linear-gradient(90deg, transparent, #e5e7eb, transparent);
+                margin: 30px 0;
+              }
+              @media only screen and (max-width: 600px) {
+                .content { padding: 30px 20px; }
+                .header { padding: 30px 20px; }
+                .header h1 { font-size: 24px; }
+              }
             </style>
           </head>
           <body>
-            <div class="container">
+            <div class="email-container">
               <div class="header">
-                <h2>Workflow Submission Update</h2>
+                <h1>Submission Update</h1>
+                <p style="margin-top: 10px; opacity: 0.95;">Review status notification</p>
               </div>
               <div class="content">
-                <p>Dear ${name},</p>
-                <p>We regret to inform you that your workflow submission has been <strong>rejected</strong> during the review process.</p>
+                <p class="greeting">Dear ${name},</p>
+                
+                <p style="font-size: 16px; color: #4b5563; margin-bottom: 25px;">
+                  We regret to inform you that your workflow submission has been <strong style="color: #dc2626;">rejected</strong> during the review process.
+                </p>
                 
                 <div style="text-align: center;">
                   <div class="rejection-badge">
-                    ✗ REJECTED
+                    REJECTED BY ${reviewerName.toUpperCase()}
                   </div>
                 </div>
 
                 <div class="info-box">
-                  <p><strong>Submission Details:</strong></p>
-                  <p><strong>Subject:</strong> ${subject}</p>
-                  <p><strong>Reviewed By:</strong> ${reviewerName}</p>
-                  <p><strong>Status:</strong> Rejected</p>
+                  <strong>📋 Submission Details</strong>
+                  <p style="margin: 8px 0; color: #374151;"><strong>Subject:</strong> ${subject}</p>
+                  <p style="margin: 8px 0; color: #374151;"><strong>Reviewed By:</strong> <span class="reviewer-badge">${reviewerName}</span></p>
+                  <p style="margin: 8px 0; color: #374151;"><strong>Status:</strong> <span style="color: #dc2626; font-weight: 600;">Rejected</span></p>
                 </div>
 
                 ${comment ? `
-                <div class="info-box" style="background-color: #fef2f2; border-left-color: #dc2626;">
-                  <p><strong>Review Comment:</strong></p>
-                  <p>${comment.replace(/\n/g, '<br>')}</p>
+                <div class="comment-box">
+                  <strong>💬 Review Comment</strong>
+                  <p style="margin-top: 10px; color: #374151; white-space: pre-wrap;">${comment.replace(/\n/g, '<br>')}</p>
                 </div>
                 ` : ''}
 
-                <p>Please review the feedback above and feel free to submit a new request with the necessary corrections.</p>
-                
-                <p>If you have any questions or need clarification, please don't hesitate to contact us.</p>
+                <div class="divider"></div>
+
+                <p style="font-size: 16px; color: #4b5563; margin-bottom: 15px;">
+                  Please review the feedback above and feel free to submit a new request with the necessary corrections. If you have any questions or need clarification, please don't hesitate to contact us.
+                </p>
               </div>
               <div class="footer">
-                <p>This is an automated message from Legend Holding Group.</p>
-                <p>Please do not reply to this email.</p>
+                <p class="footer-text">
+                  <strong>Legend Holding Group</strong><br>
+                  This is an automated message. Please do not reply to this email.<br>
+                  <span style="color: #9ca3af; font-size: 12px;">© ${new Date().getFullYear()} Legend Holding Group. All rights reserved.</span>
+                </p>
               </div>
             </div>
           </body>
