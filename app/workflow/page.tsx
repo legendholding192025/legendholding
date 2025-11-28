@@ -11,6 +11,7 @@ import {
   File,
 } from "lucide-react"
 import { toast } from "sonner"
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 
 export default function WorkflowPage() {
   const [formData, setFormData] = useState({
@@ -54,10 +55,10 @@ export default function WorkflowPage() {
         continue
       }
 
-      // Validate file size (max 30MB)
-      const maxSize = 30 * 1024 * 1024 // 30MB
+      // Validate file size (max 100MB - no longer limited by Vercel since we upload directly to Supabase)
+      const maxSize = 100 * 1024 * 1024 // 100MB
       if (file.size > maxSize) {
-        toast.error(`${file.name}: File size must be less than 30MB`)
+        toast.error(`${file.name}: File size must be less than 100MB`)
         continue
       }
 
@@ -126,20 +127,64 @@ export default function WorkflowPage() {
     setIsSubmitting(true)
 
     try {
-      const formDataToSend = new FormData()
-      formDataToSend.append('name', formData.name)
-      formDataToSend.append('email', formData.email)
-      formDataToSend.append('subject', formData.subject)
-      formDataToSend.append('message', formData.message)
+      const supabase = createClientComponentClient()
       
-      // Append multiple files
-      selectedFiles.forEach((file) => {
-        formDataToSend.append('files', file)
-      })
+      // Upload files directly to Supabase Storage
+      const uploadedFiles: Array<{
+        fileName: string;
+        fileUrl: string;
+        fileType: string;
+        fileSize: number;
+      }> = []
 
+      if (selectedFiles.length > 0) {
+        for (const file of selectedFiles) {
+          // Generate unique filename with timestamp
+          const timestamp = Date.now()
+          const randomString = Math.random().toString(36).substring(2, 15)
+          const fileExtension = file.name.split('.').pop()
+          const fileName = `workflow/${timestamp}-${randomString}.${fileExtension}`
+
+          // Upload to Supabase Storage
+          const { data: uploadData, error: uploadError } = await supabase.storage
+            .from('workflow-documents')
+            .upload(fileName, file, {
+              cacheControl: '3600',
+              upsert: false,
+              contentType: file.type || 'application/octet-stream'
+            })
+
+          if (uploadError) {
+            throw new Error(`Failed to upload ${file.name}: ${uploadError.message}`)
+          }
+
+          // Get public URL
+          const { data: urlData } = supabase.storage
+            .from('workflow-documents')
+            .getPublicUrl(fileName)
+
+          uploadedFiles.push({
+            fileName: file.name,
+            fileUrl: urlData.publicUrl,
+            fileType: file.type || '',
+            fileSize: file.size,
+          })
+        }
+      }
+
+      // Send form data with file URLs (not the files themselves)
       const response = await fetch('/api/workflow', {
         method: 'POST',
-        body: formDataToSend,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          subject: formData.subject,
+          message: formData.message,
+          files: uploadedFiles,
+        }),
       })
 
       const data = await response.json()
@@ -378,7 +423,7 @@ export default function WorkflowPage() {
                             Click to upload multiple files
                           </span>
                           <span className="text-sm text-gray-500">
-                            PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX (max 30MB each)
+                            PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX (max 100MB each)
                           </span>
                         </label>
                       </div>
@@ -479,7 +524,7 @@ export default function WorkflowPage() {
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-[#EE8900] mt-1">•</span>
-                  <span>Maximum file size is 30MB per submission</span>
+                  <span>Maximum file size is 100MB per file</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-[#EE8900] mt-1">•</span>

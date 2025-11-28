@@ -10,29 +10,12 @@ export const maxDuration = 30;
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 
-// Helper function to get MIME type from file extension
-function getMimeTypeFromExtension(fileName: string): string | null {
-  const extension = fileName.toLowerCase().split('.').pop();
-  const mimeTypes: { [key: string]: string } = {
-    'pdf': 'application/pdf',
-    'doc': 'application/msword',
-    'docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-    'xls': 'application/vnd.ms-excel',
-    'xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-    'ppt': 'application/vnd.ms-powerpoint',
-    'pptx': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-  };
-  return extension ? mimeTypes[extension] || null : null;
-}
 
 export async function POST(request: Request) {
   try {
-    const formData = await request.formData();
-    const name = formData.get('name') as string;
-    const email = formData.get('email') as string;
-    const subject = formData.get('subject') as string;
-    const message = formData.get('message') as string;
-    const files = formData.getAll('files') as File[];
+    // Parse JSON body (files are now uploaded directly to Supabase Storage)
+    const body = await request.json();
+    const { name, email, subject, message, files: uploadedFiles } = body;
 
     // Validate required fields
     if (!name || !email || !subject || !message) {
@@ -51,74 +34,8 @@ export async function POST(request: Request) {
       );
     }
 
-    const filesData: Array<{
-      fileName: string;
-      fileUrl: string;
-      fileType: string;
-      fileSize: number;
-    }> = [];
-
-    // Handle multiple file uploads if provided
-    if (files && files.length > 0) {
-      const allowedTypes = [
-        'application/pdf',
-        'application/msword',
-        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-        'application/vnd.ms-excel',
-        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-        'application/vnd.ms-powerpoint',
-        'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-      ];
-
-      for (const file of files) {
-        // Get MIME type - use file.type if available, otherwise detect from extension
-        let mimeType = file.type;
-        if (!mimeType || mimeType === '' || !allowedTypes.includes(mimeType)) {
-          const detectedMimeType = getMimeTypeFromExtension(file.name);
-          if (detectedMimeType) {
-            mimeType = detectedMimeType;
-          }
-        }
-
-        // Validate file type
-        if (!mimeType || !allowedTypes.includes(mimeType)) {
-          return NextResponse.json(
-            { error: `Invalid file type for ${file.name}. Only PDF, DOC, DOCX, XLS, XLSX, PPT, and PPTX files are allowed.` },
-            { status: 400 }
-          );
-        }
-
-        // Validate file size (max 30MB)
-        const maxSize = 30 * 1024 * 1024; // 30MB
-        if (file.size > maxSize) {
-          return NextResponse.json(
-            { error: `File ${file.name} size must be less than 30MB` },
-            { status: 400 }
-          );
-        }
-
-        try {
-          // Convert file to base64 for storage
-          const arrayBuffer = await file.arrayBuffer();
-          const buffer = Buffer.from(arrayBuffer);
-          const base64 = buffer.toString('base64');
-          const base64Data = `data:${mimeType};base64,${base64}`;
-
-          filesData.push({
-            fileName: file.name,
-            fileUrl: base64Data,
-            fileType: mimeType,
-            fileSize: file.size,
-          });
-        } catch (error) {
-          console.error('File processing error:', error);
-          return NextResponse.json(
-            { error: `Failed to process file ${file.name}` },
-            { status: 500 }
-          );
-        }
-      }
-    }
+    // Files are already uploaded to Supabase Storage, just use the URLs
+    const filesData = uploadedFiles || [];
 
     // Create Supabase client
     const supabase = createClient(supabaseUrl, supabaseServiceKey, {

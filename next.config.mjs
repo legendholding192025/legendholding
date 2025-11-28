@@ -13,10 +13,10 @@ const nextConfig = {
       { protocol: 'https', hostname: 'cdn.legendholding.com' },
     ],
   },
-  // Increase body size limit for API routes
+  // Increase body size limit for API routes (accounting for base64 encoding overhead)
   experimental: {
     serverActions: {
-      bodySizeLimit: '30mb',
+      bodySizeLimit: '50mb', // Vercel Pro supports up to 50MB
     },
   },
   async rewrites() {
