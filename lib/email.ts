@@ -386,10 +386,31 @@ export async function sendWorkflowRejectionEmail(data: {
                 background: linear-gradient(90deg, transparent, #e5e7eb, transparent);
                 margin: 30px 0;
               }
+              .action-button {
+                display: inline-block;
+                background: linear-gradient(135deg, #EE8900 0%, #d97706 100%);
+                color: white;
+                padding: 16px 32px;
+                border-radius: 8px;
+                text-decoration: none;
+                font-size: 16px;
+                font-weight: 600;
+                margin: 25px 0;
+                box-shadow: 0 4px 12px rgba(238, 137, 0, 0.3);
+                transition: all 0.3s ease;
+              }
+              .action-button:hover {
+                background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+                box-shadow: 0 6px 16px rgba(238, 137, 0, 0.4);
+              }
               @media only screen and (max-width: 600px) {
                 .content { padding: 30px 20px; }
                 .header { padding: 30px 20px; }
                 .header h1 { font-size: 24px; }
+                .action-button {
+                  padding: 14px 28px;
+                  font-size: 15px;
+                }
               }
             </style>
           </head>
@@ -428,7 +449,13 @@ export async function sendWorkflowRejectionEmail(data: {
 
                 <div class="divider"></div>
 
-                <p style="font-size: 16px; color: #4b5563; margin-bottom: 15px;">
+                <div style="text-align: center; margin: 30px 0;">
+                  <a href="https://www.legendholding.com/workflow" class="action-button" style="color: white; text-decoration: none;">
+                    Resubmit Annual Plan
+                  </a>
+                </div>
+
+                <p style="font-size: 16px; color: #4b5563; margin-bottom: 15px; text-align: center;">
                   Thank you for understanding.
                 </p>
               </div>
