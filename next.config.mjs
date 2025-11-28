@@ -13,6 +13,12 @@ const nextConfig = {
       { protocol: 'https', hostname: 'cdn.legendholding.com' },
     ],
   },
+  // Increase body size limit for API routes
+  experimental: {
+    serverActions: {
+      bodySizeLimit: '30mb',
+    },
+  },
   async rewrites() {
     return [
       {

@@ -2,6 +2,10 @@ import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { sendWorkflowApprovalEmail, sendWorkflowRejectionEmail } from '@/lib/email';
 
+// Route segment config - increase body size limit to 30MB
+export const runtime = 'nodejs';
+export const maxDuration = 30;
+
 // Initialize Supabase client with service role for server-side operations
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
