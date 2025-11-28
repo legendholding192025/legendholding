@@ -198,7 +198,6 @@ export default function FounderApprovalPage() {
         <div className="relative h-full flex items-center justify-center px-4 sm:px-6">
           <div className="max-w-7xl mx-auto text-white text-center">
             <div className="flex items-center justify-center gap-4 mb-4">
-              <Crown className="h-12 w-12 sm:h-16 sm:w-16 text-[#EE8900] flex-shrink-0" />
               <h1 className="text-4xl sm:text-5xl font-bold text-[#EE8900]">Founder Final Approval</h1>
             </div>
             <p className="text-lg sm:text-xl text-white/95">
