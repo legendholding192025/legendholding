@@ -134,25 +134,6 @@ export default function FinanceReviewPage() {
     }
   }
 
-  const handleDownloadFile = (submission: WorkflowSubmission) => {
-    if (!submission.file_url || !submission.file_name) {
-      toast.error("No file available to download")
-      return
-    }
-
-    try {
-      const link = document.createElement('a')
-      link.href = submission.file_url
-      link.download = submission.file_name
-      document.body.appendChild(link)
-      link.click()
-      document.body.removeChild(link)
-      toast.success("File download started")
-    } catch (error) {
-      console.error("Error downloading file:", error)
-      toast.error("Failed to download file")
-    }
-  }
 
   const formatFileSize = (bytes: number | null) => {
     if (!bytes) return 'N/A'
@@ -168,7 +149,7 @@ export default function FinanceReviewPage() {
       case 'approved':
         return <Badge className="bg-green-500 hover:bg-green-600">Fully Approved</Badge>
       case 'finance_approved':
-        return <Badge className="bg-blue-500 hover:bg-blue-600">Sent to Co-Founder</Badge>
+        return <Badge className="bg-blue-500 hover:bg-blue-600">Rejeesh approved to Co-founder</Badge>
       case 'finance_rejected':
         return <Badge className="bg-red-500 hover:bg-red-600">Rejected by Finance</Badge>
       case 'cofounder_rejected':
@@ -282,11 +263,10 @@ export default function FinanceReviewPage() {
                                     {getStatusBadge(submission.status)}
                                   </div>
                                   <p className="text-gray-600 mb-3 line-clamp-2">{submission.message}</p>
-                                  {submission.file_name && (
+                                  {submission.files && submission.files.length > 0 && (
                                     <div className="flex items-center gap-2 text-sm text-gray-500">
                                       <FileText className="h-4 w-4" />
-                                      <span>{submission.file_name}</span>
-                                      <span className="text-xs">({formatFileSize(submission.file_size)})</span>
+                                      <span>{submission.files.length} file{submission.files.length > 1 ? 's' : ''} attached</span>
                                     </div>
                                   )}
                                 </div>
@@ -337,10 +317,10 @@ export default function FinanceReviewPage() {
                                     {getStatusBadge(submission.status)}
                                   </div>
                                   <p className="text-gray-600 mb-2 line-clamp-1">{submission.message}</p>
-                                  {submission.file_name && (
+                                  {submission.files && submission.files.length > 0 && (
                                     <div className="flex items-center gap-2 text-sm text-gray-500">
                                       <FileText className="h-4 w-4" />
-                                      <span>{submission.file_name}</span>
+                                      <span>{submission.files.length} file{submission.files.length > 1 ? 's' : ''} attached</span>
                                     </div>
                                   )}
                                 </div>
@@ -476,7 +456,7 @@ export default function FinanceReviewPage() {
                       className="flex-1 bg-green-600 hover:bg-green-700 text-lg py-6"
                     >
                       <CheckCircle className="h-5 w-5 mr-2" />
-                      Approve & Send to Co-Founder
+                      Approved & Send to Mrs. Mira
                     </Button>
                     <Button
                       onClick={() => handleUpdateStatus(selectedSubmission.id, 'reject')}
@@ -484,7 +464,7 @@ export default function FinanceReviewPage() {
                       className="flex-1 text-lg py-6"
                     >
                       <XCircle className="h-5 w-5 mr-2" />
-                      Reject
+                      Rejected
                     </Button>
                   </div>
                 </div>

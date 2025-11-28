@@ -93,11 +93,6 @@ export default function FounderApprovalPage() {
   }
 
   const handleUpdateStatus = async (id: string, action: 'approve' | 'reject') => {
-    if (!reviewComment.trim()) {
-      toast.error('Please add a comment before ' + (action === 'approve' ? 'approving' : 'rejecting'))
-      return
-    }
-
     try {
       const status = action === 'approve' ? 'approved' : 'founder_rejected'
       
@@ -413,12 +408,12 @@ export default function FounderApprovalPage() {
               <div className="mt-2 space-y-1 text-sm">
                 {selectedSubmission.finance_reviewed_at && (
                   <p className="text-green-600">
-                    ✓ Finance approved: {new Date(selectedSubmission.finance_reviewed_at).toLocaleString()}
+                    ✓ Rejeesh approved to Co-founder: {new Date(selectedSubmission.finance_reviewed_at).toLocaleString()}
                   </p>
                 )}
                 {selectedSubmission.cofounder_reviewed_at && (
                   <p className="text-green-600">
-                    ✓ Co-Founder approved: {new Date(selectedSubmission.cofounder_reviewed_at).toLocaleString()}
+                    ✓ Mrs. Mira approved to Founder: {new Date(selectedSubmission.cofounder_reviewed_at).toLocaleString()}
                   </p>
                 )}
               </div>
@@ -523,7 +518,7 @@ export default function FounderApprovalPage() {
                 <div className="space-y-4 pt-4 border-t">
                   <div>
                     <label htmlFor="reviewComment" className="block text-sm font-semibold text-[#5D376E] mb-2">
-                      Review Comment <span className="text-red-600">*</span>
+                      Review Comment
                     </label>
                     <textarea
                       id="reviewComment"

@@ -263,9 +263,9 @@ export async function sendWorkflowRejectionEmail(data: {
     const fromEmail = 'no-reply@legendholding.com';
 
     const reviewerName = reviewer === 'finance' 
-      ? 'Finance' 
+      ? 'Rejeesh' 
       : reviewer === 'cofounder' 
-      ? 'Co-Founder' 
+      ? 'Mrs. Mira' 
       : 'Founder';
 
     // Extract first name from full name

@@ -95,11 +95,6 @@ export default function CoFounderApprovalPage() {
   }
 
   const handleUpdateStatus = async (id: string, action: 'approve' | 'reject') => {
-    if (!reviewComment.trim()) {
-      toast.error('Please add a comment before ' + (action === 'approve' ? 'approving' : 'rejecting'))
-      return
-    }
-
     try {
       const status = action === 'approve' ? 'cofounder_approved' : 'cofounder_rejected'
       
@@ -204,10 +199,10 @@ export default function CoFounderApprovalPage() {
         <div className="relative h-full flex items-center justify-center px-4 sm:px-6">
           <div className="max-w-7xl mx-auto text-white text-center">
             <div className="flex items-center justify-center gap-4 mb-4">
-              <h1 className="text-4xl sm:text-5xl font-bold text-[#EE8900]">Co-Founder Approval</h1>
+              <h1 className="text-4xl sm:text-5xl font-bold text-[#EE8900]">Mrs. Mira Approval</h1>
             </div>
             <p className="text-lg sm:text-xl text-white/95">
-              Review and approve documents that have been cleared by the finance team
+              Please review and approve the annual plan as the finance approval is done.
             </p>
           </div>
         </div>
@@ -295,7 +290,7 @@ export default function CoFounderApprovalPage() {
                                         </div>
                                         {submission.finance_reviewed_at && (
                                           <Badge variant="outline" className="text-green-600 border-green-600">
-                                            ✓ Finance Approved
+                                            ✓ Rejeesh approved to Co-founder
                                           </Badge>
                                         )}
                                       </div>
@@ -496,7 +491,7 @@ export default function CoFounderApprovalPage() {
                 <div className="space-y-4 pt-4 border-t">
                   <div>
                     <label htmlFor="reviewComment" className="block text-sm font-semibold text-[#5D376E] mb-2">
-                      Review Comment <span className="text-red-600">*</span>
+                      Review Comment
                     </label>
                     <textarea
                       id="reviewComment"
@@ -513,7 +508,7 @@ export default function CoFounderApprovalPage() {
                       className="flex-1 bg-green-600 hover:bg-green-700 text-lg py-6"
                     >
                       <CheckCircle className="h-5 w-5 mr-2" />
-                      Approve & Send to Founder
+                      Approved & Send to Mr. Kai
                     </Button>
                     <Button
                       onClick={() => handleUpdateStatus(selectedSubmission.id, 'reject')}
