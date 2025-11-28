@@ -6,6 +6,21 @@ import { sendWorkflowApprovalEmail, sendWorkflowRejectionEmail } from '@/lib/ema
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 
+// Helper function to get MIME type from file extension
+function getMimeTypeFromExtension(fileName: string): string | null {
+  const extension = fileName.toLowerCase().split('.').pop();
+  const mimeTypes: { [key: string]: string } = {
+    'pdf': 'application/pdf',
+    'doc': 'application/msword',
+    'docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    'xls': 'application/vnd.ms-excel',
+    'xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    'ppt': 'application/vnd.ms-powerpoint',
+    'pptx': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+  };
+  return extension ? mimeTypes[extension] || null : null;
+}
+
 export async function POST(request: Request) {
   try {
     const formData = await request.formData();
@@ -52,8 +67,17 @@ export async function POST(request: Request) {
       ];
 
       for (const file of files) {
+        // Get MIME type - use file.type if available, otherwise detect from extension
+        let mimeType = file.type;
+        if (!mimeType || mimeType === '' || !allowedTypes.includes(mimeType)) {
+          const detectedMimeType = getMimeTypeFromExtension(file.name);
+          if (detectedMimeType) {
+            mimeType = detectedMimeType;
+          }
+        }
+
         // Validate file type
-        if (!allowedTypes.includes(file.type)) {
+        if (!mimeType || !allowedTypes.includes(mimeType)) {
           return NextResponse.json(
             { error: `Invalid file type for ${file.name}. Only PDF, DOC, DOCX, XLS, XLSX, PPT, and PPTX files are allowed.` },
             { status: 400 }
@@ -74,13 +98,12 @@ export async function POST(request: Request) {
           const arrayBuffer = await file.arrayBuffer();
           const buffer = Buffer.from(arrayBuffer);
           const base64 = buffer.toString('base64');
-          const mimeType = file.type;
           const base64Data = `data:${mimeType};base64,${base64}`;
 
           filesData.push({
             fileName: file.name,
             fileUrl: base64Data,
-            fileType: file.type,
+            fileType: mimeType,
             fileSize: file.size,
           });
         } catch (error) {
