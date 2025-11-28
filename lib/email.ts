@@ -268,6 +268,9 @@ export async function sendWorkflowRejectionEmail(data: {
       ? 'Co-Founder' 
       : 'Founder';
 
+    // Extract first name from full name
+    const firstName = name.split(' ')[0];
+
     const emailResponse = await resend.emails.send({
       from: fromEmail,
       to: [email],
@@ -397,10 +400,10 @@ export async function sendWorkflowRejectionEmail(data: {
                 <p style="margin-top: 10px; opacity: 0.95;">Review status notification</p>
               </div>
               <div class="content">
-                <p class="greeting">Dear ${name},</p>
+                <p class="greeting">Dear ${firstName},</p>
                 
                 <p style="font-size: 16px; color: #4b5563; margin-bottom: 25px;">
-                  We regret to inform you that your workflow submission has been <strong style="color: #dc2626;">rejected</strong> during the review process.
+                  Unfortunately the Annual plan need more modification, please review the comments and re-upload again.
                 </p>
                 
                 <div style="text-align: center;">
@@ -426,7 +429,7 @@ export async function sendWorkflowRejectionEmail(data: {
                 <div class="divider"></div>
 
                 <p style="font-size: 16px; color: #4b5563; margin-bottom: 15px;">
-                  Please review the feedback above and feel free to submit a new request with the necessary corrections. If you have any questions or need clarification, please don't hesitate to contact us.
+                  Thank you for understanding.
                 </p>
               </div>
               <div class="footer">

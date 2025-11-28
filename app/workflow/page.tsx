@@ -37,6 +37,8 @@ export default function WorkflowPage() {
     'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
     'application/vnd.ms-excel',
     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    'application/vnd.ms-powerpoint',
+    'application/vnd.openxmlformats-officedocument.presentationml.presentation',
   ]
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -48,14 +50,14 @@ export default function WorkflowPage() {
     for (const file of files) {
       // Validate file type
       if (!allowedFileTypes.includes(file.type)) {
-        toast.error(`${file.name}: Invalid file type. Only PDF, DOC, DOCX, XLS, and XLSX files are allowed.`)
+        toast.error(`${file.name}: Invalid file type. Only PDF, DOC, DOCX, XLS, XLSX, PPT, and PPTX files are allowed.`)
         continue
       }
 
-      // Validate file size (max 10MB)
-      const maxSize = 10 * 1024 * 1024 // 10MB
+      // Validate file size (max 30MB)
+      const maxSize = 30 * 1024 * 1024 // 30MB
       if (file.size > maxSize) {
-        toast.error(`${file.name}: File size must be less than 10MB`)
+        toast.error(`${file.name}: File size must be less than 30MB`)
         continue
       }
 
@@ -225,9 +227,9 @@ export default function WorkflowPage() {
         </div>
         <div className="relative h-full flex items-center justify-center px-4 sm:px-6">
           <div className="max-w-4xl mx-auto text-white text-center">
-            <h1 className="text-4xl sm:text-5xl font-bold mb-4 text-[#EE8900]">Workflow Document Submission</h1>
+            <h1 className="text-4xl sm:text-5xl font-bold mb-4 text-[#EE8900]">Annual Plan Approval</h1>
             <p className="text-lg sm:text-xl text-white/95">
-              Upload your workflow documents securely. Supported formats: PDF, DOC, DOCX, XLS, XLSX (Max 10MB)
+              Please upload your annual plan and budget for the year 2026
             </p>
           </div>
         </div>
@@ -300,7 +302,7 @@ export default function WorkflowPage() {
                     transition={{ delay: 0.1, duration: 0.5 }}
                   >
                     <label htmlFor="subject" className="block text-sm font-semibold text-[#5D376E] mb-2">
-                      Subject <span className="text-red-600">*</span>
+                      Submission <span className="text-red-600">*</span>
                     </label>
                     <input
                       type="text"
@@ -326,7 +328,7 @@ export default function WorkflowPage() {
                     transition={{ delay: 0.15, duration: 0.5 }}
                   >
                     <label htmlFor="message" className="block text-sm font-semibold text-[#5D376E] mb-2">
-                      Message <span className="text-red-600">*</span>
+                      Comments <span className="text-red-600">*</span>
                     </label>
                     <textarea
                       id="message"
@@ -352,7 +354,7 @@ export default function WorkflowPage() {
                     transition={{ delay: 0.2, duration: 0.5 }}
                   >
                     <label className="block text-sm font-semibold text-[#5D376E] mb-2">
-                      Upload Documents {selectedFiles.length > 0 && `(${selectedFiles.length} file${selectedFiles.length > 1 ? 's' : ''})`}
+                      Upload Documents  {selectedFiles.length > 0 && `(${selectedFiles.length} file${selectedFiles.length > 1 ? 's' : ''})`}
                     </label>
                     
                     <div className="space-y-3">
@@ -362,7 +364,7 @@ export default function WorkflowPage() {
                           ref={fileInputRef}
                           type="file"
                           onChange={handleFileSelect}
-                          accept=".pdf,.doc,.docx,.xls,.xlsx"
+                          accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx"
                           className="hidden"
                           id="file-upload"
                           multiple
@@ -376,7 +378,7 @@ export default function WorkflowPage() {
                             Click to upload multiple files
                           </span>
                           <span className="text-sm text-gray-500">
-                            PDF, DOC, DOCX, XLS, XLSX (max 10MB each)
+                            PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX (max 30MB each)
                           </span>
                         </label>
                       </div>
@@ -477,15 +479,11 @@ export default function WorkflowPage() {
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-[#EE8900] mt-1">•</span>
-                  <span>You will receive a confirmation once your document is processed</span>
+                  <span>Maximum file size is 30MB per submission</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-[#EE8900] mt-1">•</span>
-                  <span>Maximum file size is 10MB per submission</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-[#EE8900] mt-1">•</span>
-                  <span>Supported formats: PDF, DOC, DOCX, XLS, XLSX</span>
+                  <span>Supported formats: PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX</span>
                 </li>
               </ul>
             </div>

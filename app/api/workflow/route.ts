@@ -47,22 +47,24 @@ export async function POST(request: Request) {
         'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
         'application/vnd.ms-excel',
         'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        'application/vnd.ms-powerpoint',
+        'application/vnd.openxmlformats-officedocument.presentationml.presentation',
       ];
 
       for (const file of files) {
         // Validate file type
         if (!allowedTypes.includes(file.type)) {
           return NextResponse.json(
-            { error: `Invalid file type for ${file.name}. Only PDF, DOC, DOCX, XLS, and XLSX files are allowed.` },
+            { error: `Invalid file type for ${file.name}. Only PDF, DOC, DOCX, XLS, XLSX, PPT, and PPTX files are allowed.` },
             { status: 400 }
           );
         }
 
-        // Validate file size (max 10MB)
-        const maxSize = 10 * 1024 * 1024; // 10MB
+        // Validate file size (max 30MB)
+        const maxSize = 30 * 1024 * 1024; // 30MB
         if (file.size > maxSize) {
           return NextResponse.json(
-            { error: `File ${file.name} size must be less than 10MB` },
+            { error: `File ${file.name} size must be less than 30MB` },
             { status: 400 }
           );
         }
@@ -108,7 +110,7 @@ export async function POST(request: Request) {
           email,
           subject,
           message,
-          files: filesData.length > 0 ? filesData : null,
+          files: filesData.length > 0 ? filesData : [],
           status: 'pending',
         },
       ])
@@ -117,7 +119,7 @@ export async function POST(request: Request) {
     if (error) {
       console.error('Database error:', error);
       return NextResponse.json(
-        { error: 'Failed to submit workflow document' },
+        { error: `Failed to submit workflow document: ${error.message || JSON.stringify(error)}` },
         { status: 500 }
       );
     }
