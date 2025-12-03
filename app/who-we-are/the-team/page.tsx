@@ -66,7 +66,7 @@ export default function LeadershipTeam() {
       name: "Rejeesh Raveendran",
       role: "Group Finance Director",
       company: "Legend Holding Group",
-      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1761054567/5_copy_uuxcob.jpg"
+      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1764740125/5_copy_lgomsk.png"
     },
     {
       name: "Nagaraj Ponnada",

@@ -148,6 +148,7 @@ export function TeamDisplay({ teamData, boardData, chinaData = [] }: TeamDisplay
       case "Waseem Khalayleh": return "object-[center_60%]";
       case "Xiaolong Ma": return "object-[center_40%]";
       case "Sun Bo": return "object-center";
+      case "Rejeesh Raveendran": return "object-[35%_center]";
       default: return "object-center";
     }
   };
