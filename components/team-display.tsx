@@ -156,7 +156,7 @@ export function TeamDisplay({ teamData, boardData, chinaData = [] }: TeamDisplay
   // Get custom height for specific team members
   const getImageHeight = (name: string) => {
     switch (name) {
-      case "Noha Mohamed Shekib": return "h-[109%] inset-x-0 top-0";
+      case "Noha Shekib": return "h-[109%] inset-x-0 top-0";
       default: return "";
     }
   };

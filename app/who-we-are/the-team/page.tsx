@@ -135,14 +135,14 @@ export default function LeadershipTeam() {
 
   const chinaData = [
     {
-      name: "Person 1",
-      role: "Role 1",
+      name: "Junfu Gao",
+      role: "General Manager of China Branch",
       company: "Legend Holding Group",
       image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1764161813/4_copy_ukrn7s.png"
     },
     {
-      name: "Person 2",
-      role: "Role 2",
+      name: "Xiaoya Zhao",
+      role: "Deputy General Manager of China Branch",
       company: "Legend Holding Group",
       image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1764144502/4_copy2_exbafg.png"
     }
@@ -239,7 +239,7 @@ export default function LeadershipTeam() {
           title="The Team"
           imageUrl="https://res.cloudinary.com/dzfhqvxnf/image/upload/v1761119956/cdn_684c1882b54a16.04269006_20250613_122434_vwphxo.jpg"
         />
-        <TeamDisplay teamData={teamData} boardData={boardData} />
+        <TeamDisplay teamData={teamData} boardData={boardData} chinaData={chinaData} />
         
         {/* Hidden SEO content for better searchability */}
         <div className="sr-only">
