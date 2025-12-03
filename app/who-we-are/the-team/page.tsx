@@ -81,7 +81,7 @@ export default function LeadershipTeam() {
       image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1764143856/sonam_2_hpe4ou.png"
     },
     {
-      name: "Noha Mohamed Shekib",
+      name: "Noha Shekib",
       role: "Chief Technology Officer",
       company: "Legend Holding Group",
       image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1764144180/NOHA_ehwbwg.png"
