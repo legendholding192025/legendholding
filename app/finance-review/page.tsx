@@ -38,7 +38,7 @@ interface WorkflowSubmission {
   subject: string
   message: string
   files: FileData[] | null
-  status: 'pending' | 'finance_approved' | 'finance_rejected' | 'approved' | 'cofounder_rejected'
+  status: 'pending' | 'finance_approved' | 'finance_rejected' | 'approved' | 'cofounder_approved' | 'cofounder_rejected'
   finance_reviewed_at: string | null
   cofounder_reviewed_at: string | null
   finance_comment: string | null
@@ -148,8 +148,10 @@ export default function FinanceReviewPage() {
     switch (status) {
       case 'approved':
         return <Badge className="bg-green-500 hover:bg-green-600">Fully Approved</Badge>
+      case 'cofounder_approved':
+        return <Badge className="bg-green-500 hover:bg-green-600">Mrs. Mira approved</Badge>
       case 'finance_approved':
-        return <Badge className="bg-blue-500 hover:bg-blue-600">Rejeesh approved to Co-founder</Badge>
+        return <Badge className="bg-blue-500 hover:bg-blue-600">Approved to Mrs. Mira</Badge>
       case 'finance_rejected':
         return <Badge className="bg-red-500 hover:bg-red-600">Rejected by Finance</Badge>
       case 'cofounder_rejected':

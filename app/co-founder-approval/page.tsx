@@ -168,7 +168,7 @@ export default function CoFounderApprovalPage() {
       case 'approved':
         return <Badge className="bg-green-500 hover:bg-green-600">Fully Approved</Badge>
       case 'cofounder_approved':
-        return <Badge className="bg-blue-500 hover:bg-blue-600">Sent to Founder</Badge>
+        return <Badge className="bg-blue-500 hover:bg-blue-600">Approved to Mr. Kai</Badge>
       case 'finance_approved':
         return <Badge className="bg-blue-500 hover:bg-blue-600">Pending Your Approval</Badge>
       case 'cofounder_rejected':
@@ -228,7 +228,7 @@ export default function CoFounderApprovalPage() {
                 <CardContent className="pt-6">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm text-gray-600 mb-1">Sent to Founder</p>
+                      <p className="text-sm text-gray-600 mb-1">Approved to Mr. Kai</p>
                       <p className="text-3xl font-bold text-green-600">
                         {submissions.filter(s => s.status === 'cofounder_approved').length}
                       </p>
@@ -290,7 +290,7 @@ export default function CoFounderApprovalPage() {
                                         </div>
                                         {submission.finance_reviewed_at && (
                                           <Badge variant="outline" className="text-green-600 border-green-600">
-                                            ✓ Rejeesh approved to Co-founder
+                                            ✓ Rejeesh approved
                                           </Badge>
                                         )}
                                       </div>
@@ -404,7 +404,7 @@ export default function CoFounderApprovalPage() {
             </DialogDescription>
             {selectedSubmission?.finance_reviewed_at && (
               <p className="text-sm text-green-600 mt-2">
-                ✓ Approved by Finance on {new Date(selectedSubmission.finance_reviewed_at).toLocaleString()}
+                ✓ Approved by Rejeesh on {new Date(selectedSubmission.finance_reviewed_at).toLocaleString()}
               </p>
             )}
           </DialogHeader>
@@ -475,7 +475,7 @@ export default function CoFounderApprovalPage() {
                 <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
                   <div className="flex items-start gap-2">
                     <div className="flex-1">
-                      <p className="text-sm font-semibold text-blue-900 mb-1">💼 Finance Review Comment</p>
+                      <p className="text-sm font-semibold text-blue-900 mb-1">💼 Rejeesh Review Comment</p>
                       <p className="text-sm text-blue-800 whitespace-pre-wrap">{selectedSubmission.finance_comment}</p>
                       {selectedSubmission.finance_reviewed_at && (
                         <p className="text-xs text-blue-600 mt-2">

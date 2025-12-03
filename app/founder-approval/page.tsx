@@ -196,7 +196,7 @@ export default function FounderApprovalPage() {
               <h1 className="text-4xl sm:text-5xl font-bold text-[#EE8900]">Founder Final Approval</h1>
             </div>
             <p className="text-lg sm:text-xl text-white/95">
-              Review and provide final approval for documents approved by Finance and Co-Founder teams
+              Review and provide final approval for documents approved by Rejeesh and Mrs. Mira
             </p>
           </div>
         </div>
@@ -284,12 +284,12 @@ export default function FounderApprovalPage() {
                                         </div>
                                         {submission.finance_reviewed_at && (
                                           <Badge variant="outline" className="text-green-600 border-green-600">
-                                            ✓ Finance
+                                            ✓ Rejeesh
                                           </Badge>
                                         )}
                                         {submission.cofounder_reviewed_at && (
                                           <Badge variant="outline" className="text-green-600 border-green-600">
-                                            ✓ Co-Founder
+                                            ✓ Mrs. Mira
                                           </Badge>
                                         )}
                                       </div>
@@ -408,12 +408,12 @@ export default function FounderApprovalPage() {
               <div className="mt-2 space-y-1 text-sm">
                 {selectedSubmission.finance_reviewed_at && (
                   <p className="text-green-600">
-                    ✓ Rejeesh approved to Co-founder: {new Date(selectedSubmission.finance_reviewed_at).toLocaleString()}
+                    ✓ Rejeesh approved to Mrs. Mira: {new Date(selectedSubmission.finance_reviewed_at).toLocaleString()}
                   </p>
                 )}
                 {selectedSubmission.cofounder_reviewed_at && (
                   <p className="text-green-600">
-                    ✓ Mrs. Mira approved to Founder: {new Date(selectedSubmission.cofounder_reviewed_at).toLocaleString()}
+                    ✓ Mrs. Mira approved to you: {new Date(selectedSubmission.cofounder_reviewed_at).toLocaleString()}
                   </p>
                 )}
               </div>
@@ -486,7 +486,7 @@ export default function FounderApprovalPage() {
                 <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
                   <div className="flex items-start gap-2">
                     <div className="flex-1">
-                      <p className="text-sm font-semibold text-blue-900 mb-1">💼 Finance Review Comment</p>
+                      <p className="text-sm font-semibold text-blue-900 mb-1">💼 Rejeesh Review Comment</p>
                       <p className="text-sm text-blue-800 whitespace-pre-wrap">{selectedSubmission.finance_comment}</p>
                       {selectedSubmission.finance_reviewed_at && (
                         <p className="text-xs text-blue-600 mt-2">
@@ -502,7 +502,7 @@ export default function FounderApprovalPage() {
                 <div className="bg-purple-50 border-l-4 border-purple-500 p-4 rounded">
                   <div className="flex items-start gap-2">
                     <div className="flex-1">
-                      <p className="text-sm font-semibold text-purple-900 mb-1">🛡️ Co-Founder Review Comment</p>
+                      <p className="text-sm font-semibold text-purple-900 mb-1">🛡️ Mrs. Mira Review Comment</p>
                       <p className="text-sm text-purple-800 whitespace-pre-wrap">{selectedSubmission.cofounder_comment}</p>
                       {selectedSubmission.cofounder_reviewed_at && (
                         <p className="text-xs text-purple-600 mt-2">

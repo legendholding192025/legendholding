@@ -461,17 +461,17 @@ export default function WorkflowSubmissionsPage() {
                   {getStatusBadge(selectedSubmission.status)}
                   {selectedSubmission.finance_reviewed_at && (
                     <p className="text-sm text-gray-600">
-                      Finance reviewed: {new Date(selectedSubmission.finance_reviewed_at).toLocaleString()}
+                      Rejeesh reviewed: {new Date(selectedSubmission.finance_reviewed_at).toLocaleString()}
                     </p>
                   )}
                   {selectedSubmission.cofounder_reviewed_at && (
                     <p className="text-sm text-gray-600">
-                      Co-founder reviewed: {new Date(selectedSubmission.cofounder_reviewed_at).toLocaleString()}
+                      Mrs. Mira reviewed: {new Date(selectedSubmission.cofounder_reviewed_at).toLocaleString()}
                     </p>
                   )}
                   {selectedSubmission.founder_reviewed_at && (
                     <p className="text-sm text-gray-600">
-                      Founder reviewed: {new Date(selectedSubmission.founder_reviewed_at).toLocaleString()}
+                      Mr. Kai reviewed: {new Date(selectedSubmission.founder_reviewed_at).toLocaleString()}
                     </p>
                   )}
                 </div>
@@ -480,19 +480,19 @@ export default function WorkflowSubmissionsPage() {
               {/* Review Comments */}
               {selectedSubmission.finance_comment && (
                 <div className="bg-blue-50 border-l-4 border-blue-500 p-3 rounded">
-                  <p className="text-sm font-semibold text-blue-900 mb-1">💼 Finance Comment</p>
+                  <p className="text-sm font-semibold text-blue-900 mb-1">💼 Rejeesh Comment</p>
                   <p className="text-sm text-blue-800 whitespace-pre-wrap">{selectedSubmission.finance_comment}</p>
                 </div>
               )}
               {selectedSubmission.cofounder_comment && (
                 <div className="bg-purple-50 border-l-4 border-purple-500 p-3 rounded">
-                  <p className="text-sm font-semibold text-purple-900 mb-1">🛡️ Co-Founder Comment</p>
+                  <p className="text-sm font-semibold text-purple-900 mb-1">🛡️ Mrs. Mira Comment</p>
                   <p className="text-sm text-purple-800 whitespace-pre-wrap">{selectedSubmission.cofounder_comment}</p>
                 </div>
               )}
               {selectedSubmission.founder_comment && (
                 <div className="bg-amber-50 border-l-4 border-amber-500 p-3 rounded">
-                  <p className="text-sm font-semibold text-amber-900 mb-1">👑 Founder Comment</p>
+                  <p className="text-sm font-semibold text-amber-900 mb-1">👑 Mr. Kai Comment</p>
                   <p className="text-sm text-amber-800 whitespace-pre-wrap">{selectedSubmission.founder_comment}</p>
                 </div>
               )}
