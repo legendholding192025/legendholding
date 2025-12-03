@@ -9,7 +9,7 @@ import {
   FileText,
   Calendar,
   Download,
-  Crown
+  Shield
 } from "lucide-react"
 import { toast } from "sonner"
 import {
@@ -207,18 +207,18 @@ export default function FounderApprovalPage() {
 
             {/* Stats */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-              <Card className="bg-white border-t-4 border-t-blue-500">
+              <Card className="bg-white">
                 <CardContent className="pt-6">
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm text-gray-600 mb-1">Awaiting Final Approval</p>
                       <p className="text-3xl font-bold text-blue-600">{pendingSubmissions.length}</p>
                     </div>
-                    <Crown className="h-12 w-12 text-blue-400" />
+                    <Shield className="h-12 w-12 text-blue-400" />
                   </div>
                 </CardContent>
               </Card>
-              <Card className="bg-white border-t-4 border-t-green-500">
+              <Card className="bg-white">
                 <CardContent className="pt-6">
                   <div className="flex items-center justify-between">
                     <div>
@@ -231,7 +231,7 @@ export default function FounderApprovalPage() {
                   </div>
                 </CardContent>
               </Card>
-              <Card className="bg-white border-t-4 border-t-red-500">
+              <Card className="bg-white">
                 <CardContent className="pt-6">
                   <div className="flex items-center justify-between">
                     <div>
@@ -257,7 +257,7 @@ export default function FounderApprovalPage() {
                 {pendingSubmissions.length > 0 && (
                   <div className="mb-12">
                     <h2 className="text-2xl font-bold text-[#5D376E] mb-4 flex items-center gap-2">
-                      <Crown className="h-6 w-6 text-[#EE8900]" />
+                      <Shield className="h-6 w-6 text-[#EE8900]" />
                       Awaiting Final Approval
                     </h2>
                     <div className="grid grid-cols-1 gap-4">
@@ -380,7 +380,7 @@ export default function FounderApprovalPage() {
                   <Card className="bg-white">
                     <CardContent className="py-12">
                       <div className="text-center">
-                        <Crown className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+                        <Shield className="h-16 w-16 text-gray-400 mx-auto mb-4" />
                         <h3 className="text-xl font-semibold text-gray-900 mb-2">No Submissions</h3>
                         <p className="text-gray-600">There are no documents awaiting your final approval at this time.</p>
                       </div>
@@ -398,7 +398,7 @@ export default function FounderApprovalPage() {
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="text-2xl flex items-center gap-2">
-              <Crown className="h-6 w-6 text-[#EE8900]" />
+              <Shield className="h-6 w-6 text-[#EE8900]" />
               Final Approval Review
             </DialogTitle>
             <DialogDescription>
