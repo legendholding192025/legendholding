@@ -487,7 +487,7 @@ export default function WorkflowPage() {
                       ) : (
                         <>
                           <FileText className="w-5 h-5" />
-                          Submit Document
+                          Submit Documents
                         </>
                       )}
                     </button>
