@@ -24,6 +24,7 @@ import {
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { motion } from "framer-motion"
+import { SignaturePad } from "@/app/components/SignaturePad"
 
 interface FileData {
   fileName: string
@@ -55,6 +56,8 @@ export default function FounderApprovalPage() {
   const [selectedSubmission, setSelectedSubmission] = useState<WorkflowSubmission | null>(null)
   const [isViewDialogOpen, setIsViewDialogOpen] = useState(false)
   const [reviewComment, setReviewComment] = useState("")
+  const [submitterSignature, setSubmitterSignature] = useState<string | null>(null)
+  const [founderSignature, setFounderSignature] = useState<string | null>(null)
   const [downloadingFileIndex, setDownloadingFileIndex] = useState<number | null>(null)
 
   useEffect(() => {
@@ -92,10 +95,24 @@ export default function FounderApprovalPage() {
   const handleViewSubmission = (submission: WorkflowSubmission) => {
     setSelectedSubmission(submission)
     setReviewComment("")
+    setSubmitterSignature(null)
+    setFounderSignature(null)
     setIsViewDialogOpen(true)
   }
 
   const handleUpdateStatus = async (id: string, action: 'approve' | 'reject') => {
+    // For approval, require both signatures
+    if (action === 'approve') {
+      if (!submitterSignature) {
+        toast.error("Please provide the submitter's signature before approving")
+        return
+      }
+      if (!founderSignature) {
+        toast.error("Please provide your signature before approving")
+        return
+      }
+    }
+
     try {
       const status = action === 'approve' ? 'approved' : 'founder_rejected'
       
@@ -108,7 +125,9 @@ export default function FounderApprovalPage() {
           id, 
           status, 
           reviewer: 'founder',
-          comment: reviewComment 
+          comment: reviewComment,
+          submitterSignature: action === 'approve' ? submitterSignature : null,
+          founderSignature: action === 'approve' ? founderSignature : null
         }),
       })
 
@@ -131,6 +150,8 @@ export default function FounderApprovalPage() {
       toast.success(message)
       setIsViewDialogOpen(false)
       setReviewComment("")
+      setSubmitterSignature(null)
+      setFounderSignature(null)
       
       // Refresh to show updated list
       fetchSubmissions()
@@ -588,10 +609,38 @@ export default function FounderApprovalPage() {
                       className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#EE8900] focus:border-transparent transition-all duration-200 resize-none"
                     />
                   </div>
+                  
+                  <div>
+                    <label className="block text-sm font-semibold text-[#5D376E] mb-2">
+                      Waseem's Signature <span className="text-red-600">*</span>
+                    </label>
+                    <SignaturePad 
+                      onSignatureChange={setSubmitterSignature} 
+                      signature={submitterSignature} 
+                    />
+                    <p className="text-xs text-gray-500 mt-1">
+                      The submitter's signature is required to approve this submission
+                    </p>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-semibold text-[#5D376E] mb-2">
+                      Founder Signature <span className="text-red-600">*</span>
+                    </label>
+                    <SignaturePad 
+                      onSignatureChange={setFounderSignature} 
+                      signature={founderSignature} 
+                    />
+                    <p className="text-xs text-gray-500 mt-1">
+                      Your signature is required to approve this submission
+                    </p>
+                  </div>
+
                   <div className="flex gap-3">
                     <Button
                       onClick={() => handleUpdateStatus(selectedSubmission.id, 'approve')}
-                      className="flex-1 bg-green-600 hover:bg-green-700 text-lg py-6"
+                      disabled={!submitterSignature || !founderSignature}
+                      className="flex-1 bg-green-600 hover:bg-green-700 text-lg py-6 disabled:bg-gray-400 disabled:cursor-not-allowed"
                     >
                       <CheckCircle className="h-5 w-5 mr-2" />
                       Final Approve

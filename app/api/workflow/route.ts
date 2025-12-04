@@ -13,9 +13,9 @@ const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 
 export async function POST(request: Request) {
   try {
-    // Parse JSON body (files are now uploaded directly to Supabase Storage)
-    const body = await request.json();
-    const { name, email, subject, message, files: uploadedFiles } = body;
+      // Parse JSON body (files are now uploaded directly to Supabase Storage)
+      const body = await request.json();
+      const { name, email, subject, message, files: uploadedFiles } = body;
 
     // Validate required fields
     if (!name || !email || !subject || !message) {
@@ -139,7 +139,7 @@ export async function GET(request: Request) {
 export async function PATCH(request: Request) {
   try {
     const body = await request.json();
-    const { id, status, reviewer, comment } = body;
+    const { id, status, reviewer, comment, submitterSignature, founderSignature } = body;
 
     if (!id || !status) {
       return NextResponse.json(
@@ -176,6 +176,11 @@ export async function PATCH(request: Request) {
     } else if (reviewer === 'founder' && (status === 'approved' || status === 'founder_rejected')) {
       updateData.founder_reviewed_at = new Date().toISOString();
       if (comment) updateData.founder_comment = comment;
+      // Store both signatures for approval
+      if (status === 'approved') {
+        if (submitterSignature) updateData.submitter_signature = submitterSignature;
+        if (founderSignature) updateData.founder_signature = founderSignature;
+      }
     }
 
     // First, fetch the submission to get submitter details for email
