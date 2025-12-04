@@ -457,8 +457,26 @@ export async function sendWorkflowRejectionEmail(data: {
                 <div class="divider"></div>
 
                 <div style="text-align: center; margin: 30px 0;">
-                  <a href="${workflowLink}" class="action-button" style="color: white; text-decoration: none;">
-                    Resubmit Annual Plan
+                  <a href="${workflowLink}" 
+                     style="display: inline-block; 
+                            background: linear-gradient(135deg, #EE8900 0%, #d97706 100%); 
+                            background-color: #EE8900;
+                            color: #ffffff !important; 
+                            padding: 16px 32px; 
+                            border-radius: 8px; 
+                            text-decoration: none; 
+                            font-size: 16px; 
+                            font-weight: 600; 
+                            box-shadow: 0 4px 12px rgba(238, 137, 0, 0.3);
+                            mso-padding-alt: 0;
+                            text-align: center;">
+                    <!--[if mso]>
+                    <i style="letter-spacing: 25px; mso-font-width: -100%; mso-text-raise: 30pt;">&nbsp;</i>
+                    <![endif]-->
+                    <span style="mso-text-raise: 15pt; color: #ffffff; font-weight: 600;">Resubmit Annual Plan</span>
+                    <!--[if mso]>
+                    <i style="letter-spacing: 25px; mso-font-width: -100%;">&nbsp;</i>
+                    <![endif]-->
                   </a>
                 </div>
 
