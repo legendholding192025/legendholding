@@ -180,97 +180,58 @@ function WorkflowForm() {
         const fileExtension = file.name.split('.').pop()
         const storagePath = `workflow/${timestamp}-${randomString}.${fileExtension}`
 
-        // Get Supabase session and project URL for direct upload with progress
-        const { data: { session } } = await supabase.auth.getSession()
-        const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ''
-        
-        if (!supabaseUrl) {
-          throw new Error('Supabase URL not configured')
+        // Simulate smooth progress updates during upload
+        const progressInterval = setInterval(() => {
+          setUploadedFiles(prev => prev.map(f => {
+            if (f.file === file && f.uploadProgress < 90) {
+              // Gradually increase progress up to 90%
+              const increment = Math.random() * 15 + 5 // Random increment between 5-20%
+              return { ...f, uploadProgress: Math.min(90, f.uploadProgress + increment) }
+            }
+            return f
+          }))
+        }, 300) // Update every 300ms
+
+        try {
+          // Upload to Supabase Storage
+          const { data: uploadData, error: uploadError } = await supabase.storage
+            .from('workflow-documents')
+            .upload(storagePath, file, {
+              cacheControl: '3600',
+              upsert: false,
+              contentType: file.type || 'application/octet-stream'
+            })
+
+          // Clear progress interval
+          clearInterval(progressInterval)
+
+          if (uploadError) {
+            throw new Error(uploadError.message)
+          }
+
+          // Get public URL
+          const { data: urlData } = supabase.storage
+            .from('workflow-documents')
+            .getPublicUrl(storagePath)
+
+          // Update file state with uploaded URL and complete progress
+          setUploadedFiles(prev => prev.map(f => 
+            f.file === file 
+              ? {
+                  ...f,
+                  fileUrl: urlData.publicUrl,
+                  uploadProgress: 100,
+                  isUploading: false,
+                  storagePath
+                }
+              : f
+          ))
+
+          toast.success(`${file.name} uploaded successfully`)
+        } catch (uploadError) {
+          clearInterval(progressInterval)
+          throw uploadError
         }
-
-        // Construct upload URL
-        const uploadUrl = `${supabaseUrl}/storage/v1/object/workflow-documents/${storagePath}`
-        
-        // Upload using XMLHttpRequest for progress tracking
-        await new Promise<void>((resolve, reject) => {
-          const xhr = new XMLHttpRequest()
-          
-          // Track upload progress
-          xhr.upload.addEventListener('progress', (e) => {
-            if (e.lengthComputable) {
-              const progress = Math.round((e.loaded / e.total) * 100)
-              setUploadedFiles(prev => prev.map(f => 
-                f.file === file 
-                  ? { ...f, uploadProgress: progress }
-                  : f
-              ))
-            }
-          })
-
-          // Handle completion
-          xhr.addEventListener('load', () => {
-            if (xhr.status >= 200 && xhr.status < 300) {
-              // Get public URL
-              const { data: urlData } = supabase.storage
-                .from('workflow-documents')
-                .getPublicUrl(storagePath)
-
-              // Update file state with uploaded URL
-              setUploadedFiles(prev => prev.map(f => 
-                f.file === file 
-                  ? {
-                      ...f,
-                      fileUrl: urlData.publicUrl,
-                      uploadProgress: 100,
-                      isUploading: false,
-                      storagePath
-                    }
-                  : f
-              ))
-
-              toast.success(`${file.name} uploaded successfully`)
-              resolve()
-            } else {
-              let errorMessage = `Upload failed with status ${xhr.status}`
-              try {
-                const error = JSON.parse(xhr.responseText || '{}')
-                errorMessage = error.message || error.error || errorMessage
-              } catch {
-                // If response is not JSON, use status text
-                errorMessage = xhr.statusText || errorMessage
-              }
-              reject(new Error(errorMessage))
-            }
-          })
-
-          // Handle errors
-          xhr.addEventListener('error', () => {
-            reject(new Error('Upload failed'))
-          })
-
-          xhr.addEventListener('abort', () => {
-            reject(new Error('Upload aborted'))
-          })
-
-          // Open and send request
-          xhr.open('POST', uploadUrl)
-          xhr.setRequestHeader('Content-Type', file.type || 'application/octet-stream')
-          xhr.setRequestHeader('x-upsert', 'false')
-          xhr.setRequestHeader('cache-control', '3600')
-          
-          // Add authorization header if session exists
-          if (session?.access_token) {
-            xhr.setRequestHeader('Authorization', `Bearer ${session.access_token}`)
-          }
-          
-          // Add apikey header (required for Supabase Storage)
-          const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
-          if (supabaseAnonKey) {
-            xhr.setRequestHeader('apikey', supabaseAnonKey)
-          }
-
-          xhr.send(file)
-        })
       } catch (error: any) {
         console.error(`Error uploading ${file.name}:`, error)
         toast.error(`Failed to upload ${file.name}: ${error.message}`)
