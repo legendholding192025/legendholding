@@ -12,6 +12,7 @@ import {
 } from "lucide-react"
 import * as XLSX from 'xlsx'
 import { toast } from "sonner"
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import {
   Table,
   TableBody,
@@ -133,18 +134,60 @@ export default function WorkflowSubmissionsPage() {
     }
   }
 
-  const handleDownloadFile = (file: FileData) => {
+  const handleDownloadFile = async (file: FileData) => {
     try {
-      const link = document.createElement('a')
-      link.href = file.fileUrl
-      link.download = file.fileName
-      document.body.appendChild(link)
-      link.click()
-      document.body.removeChild(link)
-      toast.success("File download started")
-    } catch (error) {
-      console.error("Error downloading file:", error)
-      toast.error("Failed to download file")
+      // Try direct URL first
+      if (file.fileUrl && file.fileUrl.startsWith('http')) {
+        const response = await fetch(file.fileUrl);
+        if (response.ok) {
+          const blob = await response.blob();
+          const url = window.URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = file.fileName;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          window.URL.revokeObjectURL(url);
+          toast.success("File downloaded successfully");
+          return;
+        }
+      }
+      
+      // If direct URL fails, try to extract path and use Supabase storage
+      const supabase = createClientComponentClient();
+      let filePath = file.fileUrl;
+      
+      // Extract path from full URL if needed
+      if (filePath.includes('/workflow-documents/')) {
+        filePath = filePath.split('/workflow-documents/')[1];
+      } else if (filePath.startsWith('workflow/')) {
+        // Already a path
+      } else {
+        // Try to get from stored path
+        filePath = filePath.replace(/^.*\/workflow\//, 'workflow/');
+      }
+      
+      const { data, error } = await supabase.storage
+        .from('workflow-documents')
+        .download(filePath);
+      
+      if (error) {
+        throw error;
+      }
+      
+      const url = window.URL.createObjectURL(data);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = file.fileName;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+      toast.success("File downloaded successfully");
+    } catch (error: any) {
+      console.error("Error downloading file:", error);
+      toast.error(error.message || "Failed to download file");
     }
   }
 

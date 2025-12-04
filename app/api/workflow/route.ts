@@ -84,11 +84,12 @@ export async function POST(request: Request) {
   }
 }
 
-// GET endpoint to retrieve workflow submissions (for admin)
+// GET endpoint to retrieve workflow submissions (for admin or user)
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const status = searchParams.get('status');
+    const email = searchParams.get('email'); // Filter by user email
 
     const supabase = createClient(supabaseUrl, supabaseServiceKey, {
       auth: {
@@ -104,6 +105,11 @@ export async function GET(request: Request) {
 
     if (status) {
       query = query.eq('status', status);
+    }
+
+    // Filter by email if provided (for user-specific submissions)
+    if (email) {
+      query = query.eq('email', email);
     }
 
     const { data, error } = await query;
@@ -254,6 +260,7 @@ export async function DELETE(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');
+    const email = searchParams.get('email'); // Email for ownership validation
 
     if (!id) {
       return NextResponse.json(
@@ -269,6 +276,66 @@ export async function DELETE(request: Request) {
       }
     });
 
+    // If email is provided, validate ownership before deleting
+    if (email) {
+      const { data: submission, error: fetchError } = await supabase
+        .from('workflow_submissions')
+        .select('email')
+        .eq('id', id)
+        .single();
+
+      if (fetchError) {
+        console.error('Error fetching submission:', fetchError);
+        return NextResponse.json(
+          { error: 'Submission not found' },
+          { status: 404 }
+        );
+      }
+
+      if (submission.email !== email) {
+        return NextResponse.json(
+          { error: 'You can only delete your own submissions' },
+          { status: 403 }
+        );
+      }
+    }
+
+    // Delete files from storage if they exist
+    const { data: submissionData } = await supabase
+      .from('workflow_submissions')
+      .select('files')
+      .eq('id', id)
+      .single();
+
+    if (submissionData?.files && Array.isArray(submissionData.files)) {
+      // Delete files from Supabase Storage
+      for (const file of submissionData.files) {
+        if (file.fileUrl) {
+          try {
+            // Extract file path from URL
+            // URL format: https://[project].supabase.co/storage/v1/object/public/workflow-documents/workflow/[filename]
+            const urlParts = file.fileUrl.split('/workflow-documents/');
+            if (urlParts.length > 1) {
+              // The path after /workflow-documents/ is the file path in storage
+              const filePath = urlParts[1];
+              const { error: storageError } = await supabase.storage
+                .from('workflow-documents')
+                .remove([filePath]);
+              
+              if (storageError) {
+                console.error('Error deleting file from storage:', storageError);
+                // Continue with database deletion even if file deletion fails
+              }
+            }
+          } catch (storageError) {
+            console.error('Error deleting file from storage:', storageError);
+            // Continue with database deletion even if file deletion fails
+          }
+        }
+      }
+    }
+
+    // Delete submission from database
     const { error } = await supabase
       .from('workflow_submissions')
       .delete()

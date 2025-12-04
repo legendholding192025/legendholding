@@ -1,7 +1,8 @@
 "use client"
 
 import type React from "react"
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect, Suspense } from "react"
+import { useSearchParams } from "next/navigation"
 import { motion } from "framer-motion"
 import {
   FileText,
@@ -9,28 +10,123 @@ import {
   CheckCircle,
   X,
   File,
+  Eye,
+  Calendar,
+  Trash2,
+  Download,
+  Loader2,
 } from "lucide-react"
 import { toast } from "sonner"
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { getUserById } from '@/lib/workflow-users'
+import { Badge } from "@/components/ui/badge"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
 
-export default function WorkflowPage() {
-  const [formData, setFormData] = useState({
+function WorkflowForm() {
+  const searchParams = useSearchParams()
+  const [userInfo, setUserInfo] = useState({
     name: "",
     email: "",
+    department: "",
+  })
+  const [formData, setFormData] = useState({
     subject: "",
     message: "",
   })
 
   const [selectedFiles, setSelectedFiles] = useState<File[]>([])
+  const [uploadedFiles, setUploadedFiles] = useState<Array<{
+    file: File
+    fileName: string
+    fileUrl: string
+    fileType: string
+    fileSize: number
+    uploadProgress: number
+    isUploading: boolean
+    storagePath?: string
+  }>>([])
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [formStep, setFormStep] = useState(0)
   const [errors, setErrors] = useState({
-    name: "",
-    email: "",
     subject: "",
     message: "",
   })
   const fileInputRef = useRef<HTMLInputElement>(null)
+
+  // User submissions state
+  const [userSubmissions, setUserSubmissions] = useState<any[]>([])
+  const [loadingSubmissions, setLoadingSubmissions] = useState(false)
+  const [selectedSubmission, setSelectedSubmission] = useState<any | null>(null)
+  const [isViewDialogOpen, setIsViewDialogOpen] = useState(false)
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
+  const [submissionToDelete, setSubmissionToDelete] = useState<string | null>(null)
+  const [isDeleting, setIsDeleting] = useState(false)
+  const [downloadingFileIndex, setDownloadingFileIndex] = useState<number | null>(null)
+
+  // Get user info from URL parameter (id)
+  useEffect(() => {
+    const userId = searchParams.get('id') || ''
+    
+    if (!userId) {
+      toast.error("Invalid form link. Please use a valid personalized link.")
+      return
+    }
+    
+    const user = getUserById(userId)
+    
+    if (!user) {
+      toast.error("Invalid user ID. Please use a valid personalized link.")
+      return
+    }
+    
+    setUserInfo({
+      name: user.name,
+      email: user.email,
+      department: user.department,
+    })
+  }, [searchParams])
+
+  // Fetch user submissions when email is available
+  useEffect(() => {
+    if (userInfo.email) {
+      fetchUserSubmissions()
+    }
+  }, [userInfo.email])
+
+  const fetchUserSubmissions = async () => {
+    try {
+      setLoadingSubmissions(true)
+      const response = await fetch(`/api/workflow?email=${encodeURIComponent(userInfo.email)}`)
+      const result = await response.json()
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to fetch submissions')
+      }
+
+      setUserSubmissions(result.data || [])
+    } catch (error) {
+      console.error("Error fetching user submissions:", error)
+      // Don't show error toast for user submissions, just log it
+    } finally {
+      setLoadingSubmissions(false)
+    }
+  }
 
   const allowedFileTypes = [
     'application/pdf',
@@ -42,12 +138,13 @@ export default function WorkflowPage() {
     'application/vnd.openxmlformats-officedocument.presentationml.presentation',
   ]
 
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || [])
     if (files.length === 0) return
 
-    // Validate each file
-    const validFiles: File[] = []
+    const supabase = createClientComponentClient()
+
+    // Validate and upload each file immediately
     for (const file of files) {
       // Validate file type
       if (!allowedFileTypes.includes(file.type)) {
@@ -55,19 +152,129 @@ export default function WorkflowPage() {
         continue
       }
 
-      // Validate file size (max 100MB - no longer limited by Vercel since we upload directly to Supabase)
+      // Validate file size (max 100MB)
       const maxSize = 100 * 1024 * 1024 // 100MB
       if (file.size > maxSize) {
         toast.error(`${file.name}: File size must be less than 100MB`)
         continue
       }
 
-      validFiles.push(file)
-    }
+      // Add file to state with uploading status
+      const fileId = `${file.name}-${Date.now()}-${Math.random()}`
+      setUploadedFiles(prev => [...prev, {
+        file,
+        fileName: file.name,
+        fileUrl: '',
+        fileType: file.type || '',
+        fileSize: file.size,
+        uploadProgress: 0,
+        isUploading: true,
+      }])
 
-    if (validFiles.length > 0) {
-      setSelectedFiles(prev => [...prev, ...validFiles])
-      toast.success(`${validFiles.length} file(s) added successfully`)
+      try {
+        // Generate unique filename with timestamp
+        const timestamp = Date.now()
+        const randomString = Math.random().toString(36).substring(2, 15)
+        const fileExtension = file.name.split('.').pop()
+        const storagePath = `workflow/${timestamp}-${randomString}.${fileExtension}`
+
+        // Get Supabase session and project URL for direct upload with progress
+        const { data: { session } } = await supabase.auth.getSession()
+        const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ''
+        
+        if (!supabaseUrl) {
+          throw new Error('Supabase URL not configured')
+        }
+
+        // Construct upload URL
+        const uploadUrl = `${supabaseUrl}/storage/v1/object/workflow-documents/${storagePath}`
+        
+        // Upload using XMLHttpRequest for progress tracking
+        await new Promise<void>((resolve, reject) => {
+          const xhr = new XMLHttpRequest()
+          
+          // Track upload progress
+          xhr.upload.addEventListener('progress', (e) => {
+            if (e.lengthComputable) {
+              const progress = Math.round((e.loaded / e.total) * 100)
+              setUploadedFiles(prev => prev.map(f => 
+                f.file === file 
+                  ? { ...f, uploadProgress: progress }
+                  : f
+              ))
+            }
+          })
+
+          // Handle completion
+          xhr.addEventListener('load', () => {
+            if (xhr.status >= 200 && xhr.status < 300) {
+              // Get public URL
+              const { data: urlData } = supabase.storage
+                .from('workflow-documents')
+                .getPublicUrl(storagePath)
+
+              // Update file state with uploaded URL
+              setUploadedFiles(prev => prev.map(f => 
+                f.file === file 
+                  ? {
+                      ...f,
+                      fileUrl: urlData.publicUrl,
+                      uploadProgress: 100,
+                      isUploading: false,
+                      storagePath
+                    }
+                  : f
+              ))
+
+              toast.success(`${file.name} uploaded successfully`)
+              resolve()
+            } else {
+              let errorMessage = `Upload failed with status ${xhr.status}`
+              try {
+                const error = JSON.parse(xhr.responseText || '{}')
+                errorMessage = error.message || error.error || errorMessage
+              } catch {
+                // If response is not JSON, use status text
+                errorMessage = xhr.statusText || errorMessage
+              }
+              reject(new Error(errorMessage))
+            }
+          })
+
+          // Handle errors
+          xhr.addEventListener('error', () => {
+            reject(new Error('Upload failed'))
+          })
+
+          xhr.addEventListener('abort', () => {
+            reject(new Error('Upload aborted'))
+          })
+
+          // Open and send request
+          xhr.open('POST', uploadUrl)
+          xhr.setRequestHeader('Content-Type', file.type || 'application/octet-stream')
+          xhr.setRequestHeader('x-upsert', 'false')
+          xhr.setRequestHeader('cache-control', '3600')
+          
+          // Add authorization header if session exists
+          if (session?.access_token) {
+            xhr.setRequestHeader('Authorization', `Bearer ${session.access_token}`)
+          }
+          
+          // Add apikey header (required for Supabase Storage)
+          const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
+          if (supabaseAnonKey) {
+            xhr.setRequestHeader('apikey', supabaseAnonKey)
+          }
+
+          xhr.send(file)
+        })
+      } catch (error: any) {
+        console.error(`Error uploading ${file.name}:`, error)
+        toast.error(`Failed to upload ${file.name}: ${error.message}`)
+        // Remove failed file from state
+        setUploadedFiles(prev => prev.filter(f => f.file !== file))
+      }
     }
 
     // Reset input to allow selecting the same file again
@@ -76,8 +283,27 @@ export default function WorkflowPage() {
     }
   }
 
-  const handleRemoveFile = (index: number) => {
-    setSelectedFiles(prev => prev.filter((_, i) => i !== index))
+  const handleRemoveFile = async (index: number) => {
+    const fileToRemove = uploadedFiles[index]
+    
+    // If file was uploaded, delete it from storage
+    if (fileToRemove.storagePath && fileToRemove.fileUrl) {
+      try {
+        const supabase = createClientComponentClient()
+        const { error } = await supabase.storage
+          .from('workflow-documents')
+          .remove([fileToRemove.storagePath])
+        
+        if (error) {
+          console.error('Error deleting file from storage:', error)
+          // Still remove from UI even if storage deletion fails
+        }
+      } catch (error) {
+        console.error('Error deleting file:', error)
+      }
+    }
+    
+    setUploadedFiles(prev => prev.filter((_, i) => i !== index))
     toast.success('File removed')
   }
 
@@ -88,20 +314,19 @@ export default function WorkflowPage() {
 
   const validateForm = () => {
     const newErrors = {
-      name: "",
-      email: "",
       subject: "",
       message: "",
     }
 
-    if (!formData.name.trim()) {
-      newErrors.name = "Name is required"
+    // Validate user info from URL parameter
+    if (!userInfo.name.trim() || !userInfo.email.trim()) {
+      toast.error("Invalid form link. Please use a valid personalized link.")
+      return false
     }
 
-    if (!formData.email.trim()) {
-      newErrors.email = "Email is required"
-    } else if (!validateEmail(formData.email)) {
-      newErrors.email = "Please enter a valid email address"
+    if (!validateEmail(userInfo.email)) {
+      toast.error("Invalid email address in the form link")
+      return false
     }
 
     if (!formData.subject.trim()) {
@@ -124,66 +349,42 @@ export default function WorkflowPage() {
       return
     }
 
+    // Check if all files are uploaded
+    const filesStillUploading = uploadedFiles.some(f => f.isUploading)
+    if (filesStillUploading) {
+      toast.error("Please wait for all files to finish uploading")
+      return
+    }
+
+    // Check if there are any files
+    if (uploadedFiles.length === 0) {
+      toast.error("Please upload at least one file")
+      return
+    }
+
     setIsSubmitting(true)
 
     try {
-      const supabase = createClientComponentClient()
-      
-      // Upload files directly to Supabase Storage
-      const uploadedFiles: Array<{
-        fileName: string;
-        fileUrl: string;
-        fileType: string;
-        fileSize: number;
-      }> = []
+      // Prepare file data from already uploaded files
+      const filesData = uploadedFiles.map(f => ({
+        fileName: f.fileName,
+        fileUrl: f.fileUrl,
+        fileType: f.fileType,
+        fileSize: f.fileSize,
+      }))
 
-      if (selectedFiles.length > 0) {
-        for (const file of selectedFiles) {
-          // Generate unique filename with timestamp
-          const timestamp = Date.now()
-          const randomString = Math.random().toString(36).substring(2, 15)
-          const fileExtension = file.name.split('.').pop()
-          const fileName = `workflow/${timestamp}-${randomString}.${fileExtension}`
-
-          // Upload to Supabase Storage
-          const { data: uploadData, error: uploadError } = await supabase.storage
-            .from('workflow-documents')
-            .upload(fileName, file, {
-              cacheControl: '3600',
-              upsert: false,
-              contentType: file.type || 'application/octet-stream'
-            })
-
-          if (uploadError) {
-            throw new Error(`Failed to upload ${file.name}: ${uploadError.message}`)
-          }
-
-          // Get public URL
-          const { data: urlData } = supabase.storage
-            .from('workflow-documents')
-            .getPublicUrl(fileName)
-
-          uploadedFiles.push({
-            fileName: file.name,
-            fileUrl: urlData.publicUrl,
-            fileType: file.type || '',
-            fileSize: file.size,
-          })
-        }
-      }
-
-      // Send form data with file URLs (not the files themselves)
+      // Send form data with file URLs (files are already uploaded)
       const response = await fetch('/api/workflow', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
+          name: userInfo.name,
+          email: userInfo.email,
           subject: formData.subject,
           message: formData.message,
-          files: uploadedFiles,
+          files: filesData,
         }),
       })
 
@@ -195,24 +396,24 @@ export default function WorkflowPage() {
 
       // Clear form and show success message
       setFormData({
-        name: "",
-        email: "",
         subject: "",
         message: "",
       })
       setErrors({
-        name: "",
-        email: "",
         subject: "",
         message: "",
       })
-      setSelectedFiles([])
+      setUploadedFiles([])
       if (fileInputRef.current) {
         fileInputRef.current.value = ''
       }
       
       toast.success("Document submitted successfully!")
       setFormStep(1)
+      // Refresh user submissions after successful submission
+      if (userInfo.email) {
+        fetchUserSubmissions()
+      }
     } catch (error: any) {
       console.error("Error submitting form:", error)
       toast.error(error.message || "Failed to submit document. Please try again later.")
@@ -231,14 +432,10 @@ export default function WorkflowPage() {
 
   const resetForm = () => {
     setFormData({
-      name: "",
-      email: "",
       subject: "",
       message: "",
     })
     setErrors({
-      name: "",
-      email: "",
       subject: "",
       message: "",
     })
@@ -247,6 +444,10 @@ export default function WorkflowPage() {
       fileInputRef.current.value = ''
     }
     setFormStep(0)
+    // Refresh submissions when resetting form
+    if (userInfo.email) {
+      fetchUserSubmissions()
+    }
   }
 
   const formatFileSize = (bytes: number) => {
@@ -255,6 +456,62 @@ export default function WorkflowPage() {
     const sizes = ['Bytes', 'KB', 'MB']
     const i = Math.floor(Math.log(bytes) / Math.log(k))
     return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i]
+  }
+
+  const getStatusBadge = (status: string) => {
+    switch (status) {
+      case 'approved':
+        return <Badge className="bg-green-500 hover:bg-green-600">✓ Fully Approved</Badge>
+      case 'cofounder_approved':
+        return <Badge className="bg-blue-500 hover:bg-blue-600">Awaiting Founder</Badge>
+      case 'finance_approved':
+        return <Badge className="bg-blue-500 hover:bg-blue-600">Awaiting Co-Founder</Badge>
+      case 'finance_rejected':
+        return <Badge className="bg-red-500 hover:bg-red-600">Rejected by Finance</Badge>
+      case 'cofounder_rejected':
+        return <Badge className="bg-red-500 hover:bg-red-600">Rejected by Co-Founder</Badge>
+      case 'founder_rejected':
+        return <Badge className="bg-red-500 hover:bg-red-600">Rejected by Founder</Badge>
+      case 'pending':
+        return <Badge className="bg-yellow-500 hover:bg-yellow-600">Pending Finance</Badge>
+      default:
+        return <Badge variant="outline">{status}</Badge>
+    }
+  }
+
+  const handleViewSubmission = (submission: any) => {
+    setSelectedSubmission(submission)
+    setIsViewDialogOpen(true)
+  }
+
+  const handleDeleteSubmission = async () => {
+    if (!submissionToDelete || !userInfo.email) return
+
+    try {
+      setIsDeleting(true)
+      
+      const response = await fetch(`/api/workflow?id=${submissionToDelete}&email=${encodeURIComponent(userInfo.email)}`, {
+        method: 'DELETE',
+      })
+
+      const result = await response.json()
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to delete submission')
+      }
+
+      // Remove from local state
+      setUserSubmissions(prev => prev.filter(submission => submission.id !== submissionToDelete))
+      toast.success("Submission deleted successfully")
+      setIsDeleteDialogOpen(false)
+      setSubmissionToDelete(null)
+      setIsViewDialogOpen(false)
+    } catch (error: any) {
+      console.error("Error deleting submission:", error)
+      toast.error(error.message || "Failed to delete submission")
+    } finally {
+      setIsDeleting(false)
+    }
   }
 
   return (
@@ -287,64 +544,30 @@ export default function WorkflowPage() {
             <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-lg">
               {formStep === 0 ? (
                 <form onSubmit={handleSubmit} className="space-y-6">
-                  {/* Name Field */}
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0, duration: 0.5 }}
-                  >
-                    <label htmlFor="name" className="block text-sm font-semibold text-[#5D376E] mb-2">
-                      Name <span className="text-red-600">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      id="name"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleChange}
-                      placeholder="Enter your full name"
-                      className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#EE8900] focus:border-transparent transition-all duration-200 ${
-                        errors.name ? 'border-red-500' : 'border-gray-200'
-                      }`}
-                    />
-                    {errors.name && (
-                      <p className="mt-1 text-sm text-red-600">{errors.name}</p>
-                    )}
-                  </motion.div>
-
-                  {/* Email Field */}
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.05, duration: 0.5 }}
-                  >
-                    <label htmlFor="email" className="block text-sm font-semibold text-[#5D376E] mb-2">
-                      Email <span className="text-red-600">*</span>
-                    </label>
-                    <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      placeholder="Enter your email address"
-                      className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#EE8900] focus:border-transparent transition-all duration-200 ${
-                        errors.email ? 'border-red-500' : 'border-gray-200'
-                      }`}
-                    />
-                    {errors.email && (
-                      <p className="mt-1 text-sm text-red-600">{errors.email}</p>
-                    )}
-                  </motion.div>
+                  {/* User Info Display (from URL parameters) */}
+                  {userInfo.name && userInfo.email && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: 0, duration: 0.5 }}
+                      className="bg-blue-50 border border-blue-200 rounded-lg p-4"
+                    >
+                      <p className="text-sm font-semibold text-[#5D376E] mb-2">Submitting as:</p>
+                      <p className="text-gray-700"><strong>Name:</strong> {userInfo.name}</p>
+                      {userInfo.department && (
+                        <p className="text-gray-700"><strong>Department:</strong> {userInfo.department}</p>
+                      )}
+                      <p className="text-gray-700"><strong>Email:</strong> {userInfo.email}</p>
+                    </motion.div>
+                  )}
 
                   {/* Subject Field */}
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    transition={{ delay: 0.1, duration: 0.5 }}
+                    transition={{ delay: 0.05, duration: 0.5 }}
                   >
                     <label htmlFor="subject" className="block text-sm font-semibold text-[#5D376E] mb-2">
                       Submission <span className="text-red-600">*</span>
@@ -370,7 +593,7 @@ export default function WorkflowPage() {
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    transition={{ delay: 0.15, duration: 0.5 }}
+                    transition={{ delay: 0.1, duration: 0.5 }}
                   >
                     <label htmlFor="message" className="block text-sm font-semibold text-[#5D376E] mb-2">
                       Comments <span className="text-red-600">*</span>
@@ -396,10 +619,10 @@ export default function WorkflowPage() {
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    transition={{ delay: 0.2, duration: 0.5 }}
+                    transition={{ delay: 0.15, duration: 0.5 }}
                   >
                     <label className="block text-sm font-semibold text-[#5D376E] mb-2">
-                      Upload Documents  {selectedFiles.length > 0 && `(${selectedFiles.length} file${selectedFiles.length > 1 ? 's' : ''})`}
+                      Upload Documents  {uploadedFiles.length > 0 && `(${uploadedFiles.length} file${uploadedFiles.length > 1 ? 's' : ''})`}
                     </label>
                     
                     <div className="space-y-3">
@@ -413,14 +636,15 @@ export default function WorkflowPage() {
                           className="hidden"
                           id="file-upload"
                           multiple
+                          disabled={uploadedFiles.some(f => f.isUploading)}
                         />
                         <label
                           htmlFor="file-upload"
-                          className="cursor-pointer flex flex-col items-center"
+                          className={`cursor-pointer flex flex-col items-center ${uploadedFiles.some(f => f.isUploading) ? 'opacity-50 cursor-not-allowed' : ''}`}
                         >
                           <Upload className="w-10 h-10 text-[#EE8900] mb-2" />
                           <span className="text-gray-700 font-medium mb-1">
-                            Click to upload multiple files
+                            {uploadedFiles.some(f => f.isUploading) ? 'Uploading files...' : 'Click to upload multiple files'}
                           </span>
                           <span className="text-sm text-gray-500">
                             PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX (max 100MB each)
@@ -428,30 +652,59 @@ export default function WorkflowPage() {
                         </label>
                       </div>
 
-                      {/* Selected files list */}
-                      {selectedFiles.length > 0 && (
+                      {/* Uploaded files list */}
+                      {uploadedFiles.length > 0 && (
                         <div className="space-y-2">
-                          {selectedFiles.map((file, index) => (
-                            <div key={`${file.name}-${index}`} className="border border-gray-200 rounded-lg p-3 bg-gray-50">
+                          {uploadedFiles.map((fileData, index) => (
+                            <div key={`${fileData.fileName}-${index}`} className="border border-gray-200 rounded-lg p-3 bg-gray-50">
                               <div className="flex items-center justify-between">
                                 <div className="flex items-center gap-3 min-w-0 flex-1">
-                                  <div className="w-10 h-10 bg-[#EE8900] bg-opacity-10 rounded-lg flex items-center justify-center flex-shrink-0">
-                                    <File className="w-5 h-5 text-[#EE8900]" />
+                                  <div className={`w-10 h-10 ${fileData.isUploading ? 'bg-blue-100' : fileData.fileUrl ? 'bg-green-100' : 'bg-[#EE8900] bg-opacity-10'} rounded-lg flex items-center justify-center flex-shrink-0`}>
+                                    {fileData.isUploading ? (
+                                      <Loader2 className="w-5 h-5 text-blue-600 animate-spin" />
+                                    ) : fileData.fileUrl ? (
+                                      <CheckCircle className="w-5 h-5 text-green-600" />
+                                    ) : (
+                                      <File className="w-5 h-5 text-[#EE8900]" />
+                                    )}
                                   </div>
                                   <div className="min-w-0 flex-1">
                                     <p className="text-sm font-medium text-gray-900 truncate">
-                                      {file.name}
+                                      {fileData.fileName}
                                     </p>
-                                    <p className="text-xs text-gray-500">
-                                      {formatFileSize(file.size)}
-                                    </p>
+                                    <div className="flex items-center gap-2">
+                                      <p className="text-xs text-gray-500">
+                                        {formatFileSize(fileData.fileSize)}
+                                      </p>
+                                      {fileData.isUploading && (
+                                        <>
+                                          <span className="text-xs text-blue-600">•</span>
+                                          <span className="text-xs text-blue-600">{fileData.uploadProgress}%</span>
+                                        </>
+                                      )}
+                                      {fileData.fileUrl && !fileData.isUploading && (
+                                        <>
+                                          <span className="text-xs text-green-600">•</span>
+                                          <span className="text-xs text-green-600">Uploaded</span>
+                                        </>
+                                      )}
+                                    </div>
+                                    {fileData.isUploading && (
+                                      <div className="mt-1 w-full bg-gray-200 rounded-full h-1.5">
+                                        <div 
+                                          className="bg-blue-600 h-1.5 rounded-full transition-all duration-300"
+                                          style={{ width: `${fileData.uploadProgress}%` }}
+                                        />
+                                      </div>
+                                    )}
                                   </div>
                                 </div>
                                 <button
                                   type="button"
                                   onClick={() => handleRemoveFile(index)}
-                                  className="p-1 hover:bg-gray-200 rounded-full transition-colors flex-shrink-0 ml-2"
-                                  title="Remove file"
+                                  disabled={fileData.isUploading}
+                                  className="p-1 hover:bg-gray-200 rounded-full transition-colors flex-shrink-0 ml-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                                  title={fileData.isUploading ? "Uploading..." : "Remove file"}
                                 >
                                   <X className="w-5 h-5 text-gray-500 hover:text-red-600" />
                                 </button>
@@ -468,7 +721,7 @@ export default function WorkflowPage() {
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    transition={{ delay: 0.3, duration: 0.5 }}
+                    transition={{ delay: 0.2, duration: 0.5 }}
                   >
                     <button
                       type="submit"
@@ -533,23 +786,274 @@ export default function WorkflowPage() {
               </ul>
             </div>
 
-            {/* View All Submissions Button */}
-            <div className="mt-8 text-center">
-              <a
-                href="/workflow-submissions"
-                className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-[#5D376E] text-white font-semibold rounded-lg hover:bg-[#4a2c5a] transition-colors duration-300 shadow-lg hover:shadow-xl"
-              >
-                <FileText className="w-5 h-5" />
-                View All Submissions
-              </a>
-              <p className="mt-3 text-sm text-gray-600">
-                Track the status of all workflow documents
-              </p>
-            </div>
+            {/* User Submissions Section */}
+            {userInfo.email && (
+              <div className="mt-12 bg-white rounded-2xl p-6 sm:p-8 shadow-lg">
+                <h2 className="text-2xl font-bold text-[#5D376E] mb-6">Your Submissions</h2>
+                
+                {loadingSubmissions ? (
+                  <div className="text-center py-8">
+                    <div className="w-8 h-8 border-4 border-[#EE8900] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                    <p className="text-gray-600">Loading your submissions...</p>
+                  </div>
+                ) : userSubmissions.length === 0 ? (
+                  <div className="text-center py-8">
+                    <FileText className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                    <p className="text-gray-600">No submissions yet. Submit your first document above.</p>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {userSubmissions.map((submission) => (
+                      <div
+                        key={submission.id}
+                        className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
+                      >
+                        <div className="flex items-start justify-between gap-4">
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-3 mb-2">
+                              <h3 className="text-lg font-semibold text-gray-900 truncate flex-1">
+                                {submission.subject}
+                              </h3>
+                              <div className="flex-shrink-0">
+                                {getStatusBadge(submission.status)}
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-4 text-xs text-gray-500">
+                              <span className="flex items-center gap-1">
+                                <Calendar className="w-4 h-4" />
+                                {new Date(submission.created_at).toLocaleDateString()}
+                              </span>
+                              {submission.files && submission.files.length > 0 && (
+                                <span className="flex items-center gap-1">
+                                  <File className="w-4 h-4" />
+                                  {submission.files.length} file{submission.files.length > 1 ? 's' : ''}
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2 flex-shrink-0">
+                            <button
+                              onClick={() => handleViewSubmission(submission)}
+                              className="flex items-center gap-2 px-4 py-2 bg-[#5D376E] text-white rounded-lg hover:bg-[#4a2c5a] transition-colors"
+                            >
+                              <Eye className="w-4 h-4" />
+                              View
+                            </button>
+                            <button
+                              onClick={() => {
+                                setSubmissionToDelete(submission.id)
+                                setIsDeleteDialogOpen(true)
+                              }}
+                              className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                              Delete
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </section>
       </main>
+
+      {/* View Submission Dialog */}
+      <Dialog open={isViewDialogOpen} onOpenChange={setIsViewDialogOpen}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Submission Details</DialogTitle>
+            <DialogDescription>
+              Submitted on {selectedSubmission && new Date(selectedSubmission.created_at).toLocaleString()}
+            </DialogDescription>
+          </DialogHeader>
+          {selectedSubmission && (
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="text-sm font-semibold text-gray-700">Subject</label>
+                  <p className="mt-1 text-gray-900">{selectedSubmission.subject}</p>
+                </div>
+                <div>
+                  <label className="text-sm font-semibold text-gray-700">Status</label>
+                  <div className="mt-1">{getStatusBadge(selectedSubmission.status)}</div>
+                </div>
+              </div>
+              
+              <div>
+                <label className="text-sm font-semibold text-gray-700">Comments</label>
+                <p className="mt-1 text-gray-900 whitespace-pre-wrap">{selectedSubmission.message}</p>
+              </div>
+              
+              {selectedSubmission.files && selectedSubmission.files.length > 0 && (
+                <div>
+                  <label className="text-sm font-semibold text-gray-700">
+                    Attached Files ({selectedSubmission.files.length})
+                  </label>
+                  <div className="mt-2 space-y-2">
+                    {selectedSubmission.files.map((file: any, index: number) => (
+                      <div key={index} className="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
+                        <div className="flex items-center gap-3 min-w-0 flex-1">
+                          <FileText className="h-8 w-8 text-gray-400 flex-shrink-0" />
+                          <div className="min-w-0 flex-1">
+                            <p className="font-medium truncate">{file.fileName}</p>
+                            <p className="text-sm text-gray-500">
+                              {formatFileSize(file.fileSize)}
+                            </p>
+                          </div>
+                        </div>
+                        <button
+                          onClick={async () => {
+                            setDownloadingFileIndex(index);
+                            try {
+                              // Try direct URL first
+                              if (file.fileUrl && file.fileUrl.startsWith('http')) {
+                                const response = await fetch(file.fileUrl);
+                                if (response.ok) {
+                                  const blob = await response.blob();
+                                  const url = window.URL.createObjectURL(blob);
+                                  const link = document.createElement('a');
+                                  link.href = url;
+                                  link.download = file.fileName;
+                                  document.body.appendChild(link);
+                                  link.click();
+                                  document.body.removeChild(link);
+                                  window.URL.revokeObjectURL(url);
+                                  toast.success("File downloaded successfully");
+                                  setDownloadingFileIndex(null);
+                                  return;
+                                }
+                              }
+                              
+                              // If direct URL fails, try to extract path and use Supabase storage
+                              const supabase = createClientComponentClient();
+                              let filePath = file.fileUrl;
+                              
+                              // Extract path from full URL if needed
+                              if (filePath.includes('/workflow-documents/')) {
+                                filePath = filePath.split('/workflow-documents/')[1];
+                              } else if (filePath.startsWith('workflow/')) {
+                                // Already a path
+                              } else {
+                                // Try to get from stored path
+                                filePath = filePath.replace(/^.*\/workflow\//, 'workflow/');
+                              }
+                              
+                              const { data, error } = await supabase.storage
+                                .from('workflow-documents')
+                                .download(filePath);
+                              
+                              if (error) {
+                                throw error;
+                              }
+                              
+                              const url = window.URL.createObjectURL(data);
+                              const link = document.createElement('a');
+                              link.href = url;
+                              link.download = file.fileName;
+                              document.body.appendChild(link);
+                              link.click();
+                              document.body.removeChild(link);
+                              window.URL.revokeObjectURL(url);
+                              toast.success("File downloaded successfully");
+                            } catch (error: any) {
+                              console.error("Error downloading file:", error);
+                              toast.error(error.message || "Failed to download file");
+                            } finally {
+                              setDownloadingFileIndex(null);
+                            }
+                          }}
+                          disabled={downloadingFileIndex === index}
+                          className="px-3 py-1.5 text-sm bg-[#F08900] hover:bg-[#d67a00] disabled:bg-gray-400 disabled:cursor-not-allowed text-white rounded-lg transition-colors flex items-center gap-1 flex-shrink-0"
+                        >
+                          {downloadingFileIndex === index ? (
+                            <>
+                              <Loader2 className="h-4 w-4 animate-spin" />
+                              Downloading...
+                            </>
+                          ) : (
+                            <>
+                              <Download className="h-4 w-4" />
+                              Download
+                            </>
+                          )}
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Review Comments */}
+              {selectedSubmission.finance_comment && (
+                <div className="bg-blue-50 border-l-4 border-blue-500 p-3 rounded">
+                  <p className="text-sm font-semibold text-blue-900 mb-1">💼 Rejeesh Comment</p>
+                  <p className="text-sm text-blue-800 whitespace-pre-wrap">{selectedSubmission.finance_comment}</p>
+                </div>
+              )}
+              {selectedSubmission.cofounder_comment && (
+                <div className="bg-purple-50 border-l-4 border-purple-500 p-3 rounded">
+                  <p className="text-sm font-semibold text-purple-900 mb-1">🛡️ Mrs. Mira Comment</p>
+                  <p className="text-sm text-purple-800 whitespace-pre-wrap">{selectedSubmission.cofounder_comment}</p>
+                </div>
+              )}
+              {selectedSubmission.founder_comment && (
+                <div className="bg-amber-50 border-l-4 border-amber-500 p-3 rounded">
+                  <p className="text-sm font-semibold text-amber-900 mb-1">👑 Mr. Kai Comment</p>
+                  <p className="text-sm text-amber-800 whitespace-pre-wrap">{selectedSubmission.founder_comment}</p>
+                </div>
+              )}
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete the submission and its associated files.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDeleteSubmission}
+              disabled={isDeleting}
+              className="bg-red-600 hover:bg-red-700"
+            >
+              {isDeleting ? (
+                <>
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                  Deleting...
+                </>
+              ) : (
+                'Delete'
+              )}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </>
   )
 }
 
+export default function WorkflowPage() {
+  return (
+    <Suspense fallback={
+      <main className="min-h-screen bg-slate-100 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-10 h-10 border-4 border-[#EE8900] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading form...</p>
+        </div>
+      </main>
+    }>
+      <WorkflowForm />
+    </Suspense>
+  )
+}

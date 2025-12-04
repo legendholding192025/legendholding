@@ -9,9 +9,11 @@ import {
   FileText,
   Calendar,
   Download,
-  ChevronLeft
+  ChevronLeft,
+  Loader2
 } from "lucide-react"
 import { toast } from "sonner"
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import {
   Dialog,
   DialogContent,
@@ -52,6 +54,7 @@ export default function FinanceReviewPage() {
   const [selectedSubmission, setSelectedSubmission] = useState<WorkflowSubmission | null>(null)
   const [isViewDialogOpen, setIsViewDialogOpen] = useState(false)
   const [reviewComment, setReviewComment] = useState("")
+  const [downloadingFileIndex, setDownloadingFileIndex] = useState<number | null>(null)
 
   useEffect(() => {
     fetchSubmissions()
@@ -252,19 +255,18 @@ export default function FinanceReviewPage() {
                             <CardContent className="p-6">
                               <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                                 <div className="flex-1">
-                                  <div className="flex items-start justify-between mb-2">
-                                    <div>
-                                      <h3 className="text-xl font-semibold text-gray-900 mb-1">
-                                        {submission.subject}
-                                      </h3>
-                                      <div className="flex items-center gap-2 text-sm text-gray-500">
+                                  <div className="mb-2">
+                                    <h3 className="text-xl font-semibold text-gray-900 mb-1">
+                                      {submission.subject}
+                                    </h3>
+                                    <div className="flex items-center gap-4 text-sm text-gray-500">
+                                      <span className="font-medium text-gray-700">{submission.name}</span>
+                                      <div className="flex items-center gap-2">
                                         <Calendar className="h-4 w-4" />
                                         <span>{new Date(submission.created_at).toLocaleDateString()}</span>
                                       </div>
                                     </div>
-                                    {getStatusBadge(submission.status)}
                                   </div>
-                                  <p className="text-gray-600 mb-3 line-clamp-2">{submission.message}</p>
                                   {submission.files && submission.files.length > 0 && (
                                     <div className="flex items-center gap-2 text-sm text-gray-500">
                                       <FileText className="h-4 w-4" />
@@ -272,7 +274,8 @@ export default function FinanceReviewPage() {
                                     </div>
                                   )}
                                 </div>
-                                <div className="flex justify-end">
+                                <div className="flex items-center gap-3">
+                                  {getStatusBadge(submission.status)}
                                   <Button
                                     onClick={() => handleViewSubmission(submission)}
                                     variant="outline"
@@ -306,19 +309,18 @@ export default function FinanceReviewPage() {
                             <CardContent className="p-6">
                               <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                                 <div className="flex-1">
-                                  <div className="flex items-start justify-between mb-2">
-                                    <div>
-                                      <h3 className="text-lg font-semibold text-gray-900 mb-1">
-                                        {submission.subject}
-                                      </h3>
-                                      <div className="flex items-center gap-2 text-sm text-gray-500">
+                                  <div className="mb-2">
+                                    <h3 className="text-lg font-semibold text-gray-900 mb-1">
+                                      {submission.subject}
+                                    </h3>
+                                    <div className="flex items-center gap-4 text-sm text-gray-500">
+                                      <span className="font-medium text-gray-700">{submission.name}</span>
+                                      <div className="flex items-center gap-2">
                                         <Calendar className="h-4 w-4" />
                                         <span>{new Date(submission.created_at).toLocaleDateString()}</span>
                                       </div>
                                     </div>
-                                    {getStatusBadge(submission.status)}
                                   </div>
-                                  <p className="text-gray-600 mb-2 line-clamp-1">{submission.message}</p>
                                   {submission.files && submission.files.length > 0 && (
                                     <div className="flex items-center gap-2 text-sm text-gray-500">
                                       <FileText className="h-4 w-4" />
@@ -326,14 +328,17 @@ export default function FinanceReviewPage() {
                                     </div>
                                   )}
                                 </div>
-                                <Button
-                                  onClick={() => handleViewSubmission(submission)}
-                                  variant="outline"
-                                  size="sm"
-                                >
-                                  <Eye className="h-4 w-4 mr-2" />
-                                  View
-                                </Button>
+                                <div className="flex items-center gap-3">
+                                  {getStatusBadge(submission.status)}
+                                  <Button
+                                    onClick={() => handleViewSubmission(submission)}
+                                    variant="outline"
+                                    size="sm"
+                                  >
+                                    <Eye className="h-4 w-4 mr-2" />
+                                    View
+                                  </Button>
+                                </div>
                               </div>
                             </CardContent>
                           </Card>
@@ -415,16 +420,80 @@ export default function FinanceReviewPage() {
                           </div>
                         </div>
                         <Button
-                          onClick={() => {
-                            const link = document.createElement('a');
-                            link.href = file.fileUrl;
-                            link.download = file.fileName;
-                            link.click();
+                          onClick={async () => {
+                            setDownloadingFileIndex(index);
+                            try {
+                              // Try direct URL first
+                              if (file.fileUrl && file.fileUrl.startsWith('http')) {
+                                const response = await fetch(file.fileUrl);
+                                if (response.ok) {
+                                  const blob = await response.blob();
+                                  const url = window.URL.createObjectURL(blob);
+                                  const link = document.createElement('a');
+                                  link.href = url;
+                                  link.download = file.fileName;
+                                  document.body.appendChild(link);
+                                  link.click();
+                                  document.body.removeChild(link);
+                                  window.URL.revokeObjectURL(url);
+                                  toast.success("File downloaded successfully");
+                                  setDownloadingFileIndex(null);
+                                  return;
+                                }
+                              }
+                              
+                              // If direct URL fails, try to extract path and use Supabase storage
+                              const supabase = createClientComponentClient();
+                              let filePath = file.fileUrl;
+                              
+                              // Extract path from full URL if needed
+                              if (filePath.includes('/workflow-documents/')) {
+                                filePath = filePath.split('/workflow-documents/')[1];
+                              } else if (filePath.startsWith('workflow/')) {
+                                // Already a path
+                              } else {
+                                // Try to get from stored path
+                                filePath = filePath.replace(/^.*\/workflow\//, 'workflow/');
+                              }
+                              
+                              const { data, error } = await supabase.storage
+                                .from('workflow-documents')
+                                .download(filePath);
+                              
+                              if (error) {
+                                throw error;
+                              }
+                              
+                              const url = window.URL.createObjectURL(data);
+                              const link = document.createElement('a');
+                              link.href = url;
+                              link.download = file.fileName;
+                              document.body.appendChild(link);
+                              link.click();
+                              document.body.removeChild(link);
+                              window.URL.revokeObjectURL(url);
+                              toast.success("File downloaded successfully");
+                            } catch (error: any) {
+                              console.error("Error downloading file:", error);
+                              toast.error(error.message || "Failed to download file");
+                            } finally {
+                              setDownloadingFileIndex(null);
+                            }
                           }}
-                          className="bg-[#F08900] hover:bg-[#d67a00] ml-3 flex-shrink-0"
+                          disabled={downloadingFileIndex === index}
+                          className="bg-[#F08900] hover:bg-[#d67a00] disabled:bg-gray-400 disabled:cursor-not-allowed ml-3 flex-shrink-0"
                         >
-                          <Download className="h-4 w-4 mr-2" />
-                          Download
+                          {downloadingFileIndex === index ? (
+                            <>
+                              <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                              Downloading...
+                            </>
+                          ) : (
+                            <>
+                              <Download className="h-4 w-4 mr-2" />
+                              Download
+                            </>
+                          )}
                         </Button>
                       </div>
                     ))}
