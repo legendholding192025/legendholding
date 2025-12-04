@@ -133,6 +133,11 @@ export function getUserById(id: string): WorkflowUser | undefined {
   return WORKFLOW_USERS.find(user => user.id === id)
 }
 
+// Helper function to get user by email
+export function getUserByEmail(email: string): WorkflowUser | undefined {
+  return WORKFLOW_USERS.find(user => user.email.toLowerCase() === email.toLowerCase())
+}
+
 // Helper function to get all user IDs for generating links
 export function getAllUserIds(): string[] {
   return WORKFLOW_USERS.map(user => user.id)

@@ -78,20 +78,21 @@ function WorkflowForm() {
   const [submissionToDelete, setSubmissionToDelete] = useState<string | null>(null)
   const [isDeleting, setIsDeleting] = useState(false)
   const [downloadingFileIndex, setDownloadingFileIndex] = useState<number | null>(null)
+  const [hasValidId, setHasValidId] = useState(false)
 
   // Get user info from URL parameter (id)
   useEffect(() => {
     const userId = searchParams.get('id') || ''
     
     if (!userId) {
-      toast.error("Invalid form link. Please use a valid personalized link.")
+      setHasValidId(false)
       return
     }
     
     const user = getUserById(userId)
     
     if (!user) {
-      toast.error("Invalid user ID. Please use a valid personalized link.")
+      setHasValidId(false)
       return
     }
     
@@ -100,6 +101,7 @@ function WorkflowForm() {
       email: user.email,
       department: user.department,
     })
+    setHasValidId(true)
   }, [searchParams])
 
   // Fetch user submissions when email is available
@@ -542,7 +544,43 @@ function WorkflowForm() {
           <div className="max-w-4xl mx-auto">
 
             <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-lg">
-              {formStep === 0 ? (
+              {!hasValidId ? (
+                // Disabled state when no valid ID parameter
+                <div className="text-center py-12 px-4">
+                  <div className="max-w-md mx-auto">
+                    <div className="w-20 h-20 mx-auto mb-6 bg-gray-100 rounded-full flex items-center justify-center">
+                      <FileText className="w-10 h-10 text-gray-400" />
+                    </div>
+                    <h2 className="text-2xl font-bold text-gray-900 mb-3">
+                      Personalized Link Required
+                    </h2>
+                    <p className="text-gray-600 mb-6 leading-relaxed">
+                      This form requires a personalized access link to submit your annual plan. 
+                      Please use the unique link provided to you to access this form.
+                    </p>
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-left">
+                      <p className="text-sm font-semibold text-blue-900 mb-2">
+                        <span className="inline-block w-5 h-5 bg-blue-500 text-white rounded-full text-xs flex items-center justify-center mr-2">!</span>
+                        How to access this form:
+                      </p>
+                      <ul className="text-sm text-blue-800 space-y-2 ml-7">
+                        <li className="flex items-start">
+                          <span className="mr-2">•</span>
+                          <span>Use the personalized link sent to you via email</span>
+                        </li>
+                        <li className="flex items-start">
+                          <span className="mr-2">•</span>
+                          <span>Contact your administrator if you haven't received your link</span>
+                        </li>
+                        <li className="flex items-start">
+                          <span className="mr-2">•</span>
+                          <span>The link should include your unique identifier (id parameter)</span>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              ) : formStep === 0 ? (
                 <form onSubmit={handleSubmit} className="space-y-6">
                   {/* User Info Display (from URL parameters) */}
                   {userInfo.name && userInfo.email && (
@@ -767,27 +805,29 @@ function WorkflowForm() {
               )}
             </div>
 
-            {/* Information Section */}
-            <div className="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-6">
-              <h3 className="text-lg font-semibold text-[#5D376E] mb-3">Important Information</h3>
-              <ul className="space-y-2 text-gray-700">
-                <li className="flex items-start gap-2">
-                  <span className="text-[#EE8900] mt-1">•</span>
-                  <span>All submitted documents are securely stored and encrypted</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-[#EE8900] mt-1">•</span>
-                  <span>Maximum file size is 100MB per file</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-[#EE8900] mt-1">•</span>
-                  <span>Supported formats: PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX</span>
-                </li>
-              </ul>
-            </div>
+            {/* Information Section - Only show when valid ID */}
+            {hasValidId && (
+              <div className="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-6">
+                <h3 className="text-lg font-semibold text-[#5D376E] mb-3">Important Information</h3>
+                <ul className="space-y-2 text-gray-700">
+                  <li className="flex items-start gap-2">
+                    <span className="text-[#EE8900] mt-1">•</span>
+                    <span>All submitted documents are securely stored and encrypted</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-[#EE8900] mt-1">•</span>
+                    <span>Maximum file size is 100MB per file</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-[#EE8900] mt-1">•</span>
+                    <span>Supported formats: PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX</span>
+                  </li>
+                </ul>
+              </div>
+            )}
 
             {/* User Submissions Section */}
-            {userInfo.email && (
+            {hasValidId && userInfo.email && (
               <div className="mt-12 bg-white rounded-2xl p-6 sm:p-8 shadow-lg">
                 <h2 className="text-2xl font-bold text-[#5D376E] mb-6">Your Submissions</h2>
                 

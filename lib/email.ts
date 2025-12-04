@@ -1,4 +1,5 @@
 import { Resend } from 'resend';
+import { getUserByEmail } from './workflow-users';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -271,6 +272,12 @@ export async function sendWorkflowRejectionEmail(data: {
     // Extract first name from full name
     const firstName = name.split(' ')[0];
 
+    // Get personalized workflow link based on submitter's email
+    const user = getUserByEmail(email);
+    const workflowLink = user 
+      ? `https://www.legendholding.com/workflow?id=${user.id}`
+      : 'https://www.legendholding.com/workflow';
+
     const emailResponse = await resend.emails.send({
       from: fromEmail,
       to: [email],
@@ -450,7 +457,7 @@ export async function sendWorkflowRejectionEmail(data: {
                 <div class="divider"></div>
 
                 <div style="text-align: center; margin: 30px 0;">
-                  <a href="https://www.legendholding.com/workflow" class="action-button" style="color: white; text-decoration: none;">
+                  <a href="${workflowLink}" class="action-button" style="color: white; text-decoration: none;">
                     Resubmit Annual Plan
                   </a>
                 </div>
