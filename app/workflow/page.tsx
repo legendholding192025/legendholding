@@ -186,7 +186,7 @@ function WorkflowForm() {
             if (f.file === file && f.uploadProgress < 90) {
               // Gradually increase progress up to 90%
               const increment = Math.random() * 15 + 5 // Random increment between 5-20%
-              return { ...f, uploadProgress: Math.min(90, f.uploadProgress + increment) }
+              return { ...f, uploadProgress: Math.round(Math.min(90, f.uploadProgress + increment)) }
             }
             return f
           }))
@@ -675,6 +675,12 @@ function WorkflowForm() {
                                       <p className="text-xs text-gray-500">
                                         {formatFileSize(fileData.fileSize)}
                                       </p>
+                                      {fileData.isUploading && (
+                                        <>
+                                          <span className="text-xs text-blue-600">•</span>
+                                          <span className="text-xs text-blue-600">{Math.round(fileData.uploadProgress)}%</span>
+                                        </>
+                                      )}
                                       {fileData.fileUrl && !fileData.isUploading && (
                                         <>
                                           <span className="text-xs text-green-600">•</span>
