@@ -675,12 +675,6 @@ function WorkflowForm() {
                                       <p className="text-xs text-gray-500">
                                         {formatFileSize(fileData.fileSize)}
                                       </p>
-                                      {fileData.isUploading && (
-                                        <>
-                                          <span className="text-xs text-blue-600">•</span>
-                                          <span className="text-xs text-blue-600">{fileData.uploadProgress}%</span>
-                                        </>
-                                      )}
                                       {fileData.fileUrl && !fileData.isUploading && (
                                         <>
                                           <span className="text-xs text-green-600">•</span>
