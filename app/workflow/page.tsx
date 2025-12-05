@@ -512,7 +512,7 @@ function WorkflowForm() {
                     <div className="w-20 h-20 mx-auto mb-6 bg-gray-100 rounded-full flex items-center justify-center">
                       <FileText className="w-10 h-10 text-gray-400" />
                     </div>
-                    <h2 className="text-2xl font-bold text-gray-900 mb-3">
+                    <h2 className="text-2xl font-bold text-[#2B1C48] mb-3">
                       Personalized Link Required
                     </h2>
                     <p className="text-gray-600 mb-6 leading-relaxed">
@@ -553,11 +553,11 @@ function WorkflowForm() {
                       className="bg-blue-50 border border-blue-200 rounded-lg p-4"
                     >
                       <p className="text-sm font-semibold text-[#5D376E] mb-2">Submitting as:</p>
-                      <p className="text-gray-700"><strong>Name:</strong> {userInfo.name}</p>
+                      <p className="text-[#2B1C48]"><strong>Name:</strong> {userInfo.name}</p>
                       {userInfo.department && (
-                        <p className="text-gray-700"><strong>Department:</strong> {userInfo.department}</p>
+                        <p className="text-[#2B1C48]"><strong>Department:</strong> {userInfo.department}</p>
                       )}
-                      <p className="text-gray-700"><strong>Email:</strong> {userInfo.email}</p>
+                      <p className="text-[#2B1C48]"><strong>Email:</strong> {userInfo.email}</p>
                     </motion.div>
                   )}
 
@@ -642,7 +642,7 @@ function WorkflowForm() {
                           className={`cursor-pointer flex flex-col items-center ${uploadedFiles.some(f => f.isUploading) ? 'opacity-50 cursor-not-allowed' : ''}`}
                         >
                           <Upload className="w-10 h-10 text-[#EE8900] mb-2" />
-                          <span className="text-gray-700 font-medium mb-1">
+                          <span className="text-[#2B1C48] font-medium mb-1">
                             {uploadedFiles.some(f => f.isUploading) ? 'Uploading files...' : 'Click to upload multiple files'}
                           </span>
                           <span className="text-sm text-gray-500">
@@ -668,7 +668,7 @@ function WorkflowForm() {
                                     )}
                                   </div>
                                   <div className="min-w-0 flex-1">
-                                    <p className="text-sm font-medium text-gray-900 truncate">
+                                    <p className="text-sm font-medium text-[#2B1C48] truncate">
                                       {fileData.fileName}
                                     </p>
                                     <div className="flex items-center gap-2">
@@ -752,7 +752,7 @@ function WorkflowForm() {
                       <CheckCircle className="w-10 h-10 text-green-600" />
                     </div>
                   </div>
-                  <h3 className="text-3xl font-semibold text-gray-900 mb-3">Document Submitted Successfully!</h3>
+                  <h3 className="text-3xl font-semibold text-[#2B1C48] mb-3">Document Submitted Successfully!</h3>
                   <p className="text-lg text-gray-600 mb-8">
                     Your document has been received and will be processed shortly.
                   </p>
@@ -770,7 +770,7 @@ function WorkflowForm() {
             {hasValidId && (
               <div className="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-6">
                 <h3 className="text-lg font-semibold text-[#5D376E] mb-3">Important Information</h3>
-                <ul className="space-y-2 text-gray-700">
+                <ul className="space-y-2 text-[#2B1C48]">
                   <li className="flex items-start gap-2">
                     <span className="text-[#EE8900] mt-1">•</span>
                     <span>All submitted documents are securely stored and encrypted</span>
@@ -812,7 +812,7 @@ function WorkflowForm() {
                         <div className="flex items-start justify-between gap-4">
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-3 mb-2">
-                              <h3 className="text-lg font-semibold text-gray-900 truncate flex-1">
+                              <h3 className="text-lg font-semibold text-[#2B1C48] truncate flex-1">
                                 {submission.subject}
                               </h3>
                               <div className="flex-shrink-0">
@@ -875,23 +875,23 @@ function WorkflowForm() {
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="text-sm font-semibold text-gray-700">Subject</label>
-                  <p className="mt-1 text-gray-900">{selectedSubmission.subject}</p>
+                  <label className="text-sm font-semibold text-[#2B1C48]">Subject</label>
+                  <p className="mt-1 text-[#2B1C48]">{selectedSubmission.subject}</p>
                 </div>
                 <div>
-                  <label className="text-sm font-semibold text-gray-700">Status</label>
+                  <label className="text-sm font-semibold text-[#2B1C48]">Status</label>
                   <div className="mt-1">{getStatusBadge(selectedSubmission.status)}</div>
                 </div>
               </div>
               
               <div>
-                <label className="text-sm font-semibold text-gray-700">Comments</label>
-                <p className="mt-1 text-gray-900 whitespace-pre-wrap">{selectedSubmission.message}</p>
+                <label className="text-sm font-semibold text-[#2B1C48]">Comments</label>
+                <p className="mt-1 text-[#2B1C48] whitespace-pre-wrap">{selectedSubmission.message}</p>
               </div>
               
               {selectedSubmission.files && selectedSubmission.files.length > 0 && (
                 <div>
-                  <label className="text-sm font-semibold text-gray-700">
+                  <label className="text-sm font-semibold text-[#2B1C48]">
                     Attached Files ({selectedSubmission.files.length})
                   </label>
                   <div className="mt-2 space-y-2">

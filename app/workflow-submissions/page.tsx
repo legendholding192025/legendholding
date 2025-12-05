@@ -450,26 +450,26 @@ export default function WorkflowSubmissionsPage() {
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="text-sm font-semibold text-gray-700">Name</label>
-                  <p className="mt-1 text-gray-900">{selectedSubmission.name}</p>
+                  <label className="text-sm font-semibold text-[#2B1C48]">Name</label>
+                  <p className="mt-1 text-[#2B1C48]">{selectedSubmission.name}</p>
                 </div>
                 <div>
-                  <label className="text-sm font-semibold text-gray-700">Email</label>
-                  <p className="mt-1 text-gray-900">{selectedSubmission.email}</p>
+                  <label className="text-sm font-semibold text-[#2B1C48]">Email</label>
+                  <p className="mt-1 text-[#2B1C48]">{selectedSubmission.email}</p>
                 </div>
               </div>
               
               <div>
-                <label className="text-sm font-semibold text-gray-700">Subject</label>
-                <p className="mt-1 text-gray-900">{selectedSubmission.subject}</p>
+                <label className="text-sm font-semibold text-[#2B1C48]">Subject</label>
+                <p className="mt-1 text-[#2B1C48]">{selectedSubmission.subject}</p>
               </div>
               <div>
-                <label className="text-sm font-semibold text-gray-700">Message</label>
-                <p className="mt-1 text-gray-900 whitespace-pre-wrap">{selectedSubmission.message}</p>
+                <label className="text-sm font-semibold text-[#2B1C48]">Message</label>
+                <p className="mt-1 text-[#2B1C48] whitespace-pre-wrap">{selectedSubmission.message}</p>
               </div>
               {selectedSubmission.files && selectedSubmission.files.length > 0 && (
                 <div>
-                  <label className="text-sm font-semibold text-gray-700">
+                  <label className="text-sm font-semibold text-[#2B1C48]">
                     Attached Files ({selectedSubmission.files.length})
                   </label>
                   <div className="mt-2 space-y-2">
@@ -499,7 +499,7 @@ export default function WorkflowSubmissionsPage() {
                 </div>
               )}
               <div>
-                <label className="text-sm font-semibold text-gray-700">Status</label>
+                <label className="text-sm font-semibold text-[#2B1C48]">Status</label>
                 <div className="mt-1 space-y-2">
                   {getStatusBadge(selectedSubmission.status)}
                   {selectedSubmission.finance_reviewed_at && (

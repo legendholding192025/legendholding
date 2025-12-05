@@ -202,7 +202,7 @@ export default function FinanceReviewPage() {
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm text-gray-600 mb-1">Total Submissions</p>
-                      <p className="text-3xl font-bold text-gray-900">{submissions.length}</p>
+                      <p className="text-3xl font-bold text-[#2B1C48]">{submissions.length}</p>
                     </div>
                     <FileText className="h-12 w-12 text-gray-400" />
                   </div>
@@ -256,11 +256,11 @@ export default function FinanceReviewPage() {
                               <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                                 <div className="flex-1">
                                   <div className="mb-2">
-                                    <h3 className="text-xl font-semibold text-gray-900 mb-1">
+                                    <h3 className="text-xl font-semibold text-[#2B1C48] mb-1">
                                       {submission.subject}
                                     </h3>
                                     <div className="flex items-center gap-4 text-sm text-gray-500">
-                                      <span className="font-medium text-gray-700">{submission.name}</span>
+                                      <span className="font-medium text-[#2B1C48]">{submission.name}</span>
                                       <div className="flex items-center gap-2">
                                         <Calendar className="h-4 w-4" />
                                         <span>{new Date(submission.created_at).toLocaleDateString()}</span>
@@ -310,11 +310,11 @@ export default function FinanceReviewPage() {
                               <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                                 <div className="flex-1">
                                   <div className="mb-2">
-                                    <h3 className="text-lg font-semibold text-gray-900 mb-1">
+                                    <h3 className="text-lg font-semibold text-[#2B1C48] mb-1">
                                       {submission.subject}
                                     </h3>
                                     <div className="flex items-center gap-4 text-sm text-gray-500">
-                                      <span className="font-medium text-gray-700">{submission.name}</span>
+                                      <span className="font-medium text-[#2B1C48]">{submission.name}</span>
                                       <div className="flex items-center gap-2">
                                         <Calendar className="h-4 w-4" />
                                         <span>{new Date(submission.created_at).toLocaleDateString()}</span>
@@ -354,7 +354,7 @@ export default function FinanceReviewPage() {
                     <CardContent className="py-12">
                       <div className="text-center">
                         <FileText className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-                        <h3 className="text-xl font-semibold text-gray-900 mb-2">No Submissions Yet</h3>
+                        <h3 className="text-xl font-semibold text-[#2B1C48] mb-2">No Submissions Yet</h3>
                         <p className="text-gray-600">There are no workflow submissions to review at this time.</p>
                       </div>
                     </CardContent>
@@ -380,23 +380,23 @@ export default function FinanceReviewPage() {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-semibold text-[#5D376E] mb-2">Name</label>
-                  <p className="text-gray-900 text-lg">{selectedSubmission.name}</p>
+                  <p className="text-[#2B1C48] text-lg">{selectedSubmission.name}</p>
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-[#5D376E] mb-2">Email</label>
-                  <p className="text-gray-900 text-lg">{selectedSubmission.email}</p>
+                  <p className="text-[#2B1C48] text-lg">{selectedSubmission.email}</p>
                 </div>
               </div>
 
               <div>
                 <label className="block text-sm font-semibold text-[#5D376E] mb-2">Subject</label>
-                <p className="text-gray-900 text-lg">{selectedSubmission.subject}</p>
+                <p className="text-[#2B1C48] text-lg">{selectedSubmission.subject}</p>
               </div>
               
               <div>
                 <label className="block text-sm font-semibold text-[#5D376E] mb-2">Message</label>
                 <div className="bg-gray-50 p-4 rounded-lg">
-                  <p className="text-gray-900 whitespace-pre-wrap">{selectedSubmission.message}</p>
+                  <p className="text-[#2B1C48] whitespace-pre-wrap">{selectedSubmission.message}</p>
                 </div>
               </div>
               
@@ -413,7 +413,7 @@ export default function FinanceReviewPage() {
                             <FileText className="h-6 w-6 text-[#EE8900]" />
                           </div>
                           <div className="min-w-0 flex-1">
-                            <p className="font-medium text-gray-900 truncate">{file.fileName}</p>
+                            <p className="font-medium text-[#2B1C48] truncate">{file.fileName}</p>
                             <p className="text-sm text-gray-500">
                               {formatFileSize(file.fileSize)}
                             </p>
