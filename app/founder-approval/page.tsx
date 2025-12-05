@@ -101,20 +101,27 @@ export default function FounderApprovalPage() {
   }
 
   const handleUpdateStatus = async (id: string, action: 'approve' | 'reject') => {
-    // For approval, require both signatures
-    if (action === 'approve') {
-      if (!submitterSignature) {
-        toast.error("Please provide the submitter's signature before approving")
-        return
-      }
-      if (!founderSignature) {
-        toast.error("Please provide your signature before approving")
-        return
+    // For approval, require both signatures only if submitter is Waseem
+    if (action === 'approve' && selectedSubmission) {
+      const isWaseem = selectedSubmission.name === 'Waseem Khalayleh' || 
+                       selectedSubmission.email === 'waseem.k@legendholding.com'
+      
+      if (isWaseem) {
+        if (!submitterSignature) {
+          toast.error("Please provide the submitter's signature before approving")
+          return
+        }
+        if (!founderSignature) {
+          toast.error("Please provide your signature before approving")
+          return
+        }
       }
     }
 
     try {
       const status = action === 'approve' ? 'approved' : 'founder_rejected'
+      const isWaseem = selectedSubmission?.name === 'Waseem Khalayleh' || 
+                       selectedSubmission?.email === 'waseem.k@legendholding.com'
       
       const response = await fetch('/api/workflow', {
         method: 'PATCH',
@@ -126,8 +133,8 @@ export default function FounderApprovalPage() {
           status, 
           reviewer: 'founder',
           comment: reviewComment,
-          submitterSignature: action === 'approve' ? submitterSignature : null,
-          founderSignature: action === 'approve' ? founderSignature : null
+          submitterSignature: (action === 'approve' && isWaseem) ? submitterSignature : null,
+          founderSignature: (action === 'approve' && isWaseem) ? founderSignature : null
         }),
       })
 
@@ -610,36 +617,45 @@ export default function FounderApprovalPage() {
                     />
                   </div>
                   
-                  <div>
-                    <label className="block text-sm font-semibold text-[#5D376E] mb-2">
-                      Waseem's Signature <span className="text-red-600">*</span>
-                    </label>
-                    <SignaturePad 
-                      onSignatureChange={setSubmitterSignature} 
-                      signature={submitterSignature} 
-                    />
-                    <p className="text-xs text-gray-500 mt-1">
-                      The submitter's signature is required to approve this submission
-                    </p>
-                  </div>
+                  {/* Only show signature pads if submitter is Waseem */}
+                  {(selectedSubmission.name === 'Waseem Khalayleh' || selectedSubmission.email === 'waseem.k@legendholding.com') && (
+                    <>
+                      <div>
+                        <label className="block text-sm font-semibold text-[#5D376E] mb-2">
+                          {selectedSubmission.name}'s Signature <span className="text-red-600">*</span>
+                        </label>
+                        <SignaturePad 
+                          onSignatureChange={setSubmitterSignature} 
+                          signature={submitterSignature} 
+                        />
+                        <p className="text-xs text-gray-500 mt-1">
+                          The submitter's signature is required to approve this submission
+                        </p>
+                      </div>
 
-                  <div>
-                    <label className="block text-sm font-semibold text-[#5D376E] mb-2">
-                      Founder Signature <span className="text-red-600">*</span>
-                    </label>
-                    <SignaturePad 
-                      onSignatureChange={setFounderSignature} 
-                      signature={founderSignature} 
-                    />
-                    <p className="text-xs text-gray-500 mt-1">
-                      Your signature is required to approve this submission
-                    </p>
-                  </div>
+                      <div>
+                        <label className="block text-sm font-semibold text-[#5D376E] mb-2">
+                          Founder Signature <span className="text-red-600">*</span>
+                        </label>
+                        <SignaturePad 
+                          onSignatureChange={setFounderSignature} 
+                          signature={founderSignature} 
+                        />
+                        <p className="text-xs text-gray-500 mt-1">
+                          Your signature is required to approve this submission
+                        </p>
+                      </div>
+                    </>
+                  )}
 
                   <div className="flex gap-3">
                     <Button
                       onClick={() => handleUpdateStatus(selectedSubmission.id, 'approve')}
-                      disabled={!submitterSignature || !founderSignature}
+                      disabled={
+                        (selectedSubmission.name === 'Waseem Khalayleh' || selectedSubmission.email === 'waseem.k@legendholding.com')
+                          ? (!submitterSignature || !founderSignature)
+                          : false
+                      }
                       className="flex-1 bg-green-600 hover:bg-green-700 text-lg py-6 disabled:bg-gray-400 disabled:cursor-not-allowed"
                     >
                       <CheckCircle className="h-5 w-5 mr-2" />
