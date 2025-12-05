@@ -82,7 +82,7 @@ export async function sendWorkflowApprovalEmail(data: {
     const emailResponse = await resend.emails.send({
       from: fromEmail,
       to: [email],
-      subject: `Workflow Submission Approved: ${subject}`,
+      subject: `Annual Budget Plan Approved: ${subject}`,
       html: `
         <!DOCTYPE html>
         <html>
