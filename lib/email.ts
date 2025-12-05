@@ -281,7 +281,7 @@ export async function sendWorkflowRejectionEmail(data: {
     const emailResponse = await resend.emails.send({
       from: fromEmail,
       to: [email],
-      subject: `Workflow Submission Update: ${subject}`,
+      subject: `Annual Budget Plan Update: ${subject}`,
       html: `
         <!DOCTYPE html>
         <html>
