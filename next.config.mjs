@@ -12,6 +12,7 @@ const nextConfig = {
       { protocol: 'https', hostname: 'res.cloudinary.com' },
       { protocol: 'https', hostname: 'cdn.legendholding.com' },
     ],
+    qualities: [60, 70, 75, 80],
   },
   // Increase body size limit for API routes (accounting for base64 encoding overhead)
   experimental: {
