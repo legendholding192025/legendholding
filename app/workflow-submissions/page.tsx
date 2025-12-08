@@ -134,62 +134,6 @@ export default function WorkflowSubmissionsPage() {
     }
   }
 
-  const handleDownloadFile = async (file: FileData) => {
-    try {
-      // Try direct URL first
-      if (file.fileUrl && file.fileUrl.startsWith('http')) {
-        const response = await fetch(file.fileUrl);
-        if (response.ok) {
-          const blob = await response.blob();
-          const url = window.URL.createObjectURL(blob);
-          const link = document.createElement('a');
-          link.href = url;
-          link.download = file.fileName;
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-          window.URL.revokeObjectURL(url);
-          toast.success("File downloaded successfully");
-          return;
-        }
-      }
-      
-      // If direct URL fails, try to extract path and use Supabase storage
-      const supabase = createClientComponentClient();
-      let filePath = file.fileUrl;
-      
-      // Extract path from full URL if needed
-      if (filePath.includes('/workflow-documents/')) {
-        filePath = filePath.split('/workflow-documents/')[1];
-      } else if (filePath.startsWith('workflow/')) {
-        // Already a path
-      } else {
-        // Try to get from stored path
-        filePath = filePath.replace(/^.*\/workflow\//, 'workflow/');
-      }
-      
-      const { data, error } = await supabase.storage
-        .from('workflow-documents')
-        .download(filePath);
-      
-      if (error) {
-        throw error;
-      }
-      
-      const url = window.URL.createObjectURL(data);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = file.fileName;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(url);
-      toast.success("File downloaded successfully");
-    } catch (error: any) {
-      console.error("Error downloading file:", error);
-      toast.error(error.message || "Failed to download file");
-    }
-  }
 
   const exportToExcel = () => {
     try {
@@ -484,15 +428,6 @@ export default function WorkflowSubmissionsPage() {
                             </p>
                           </div>
                         </div>
-                        <Button
-                          onClick={() => handleDownloadFile(file)}
-                          variant="outline"
-                          size="sm"
-                          className="ml-3 flex-shrink-0"
-                        >
-                          <Download className="h-4 w-4 mr-2" />
-                          Download
-                        </Button>
                       </div>
                     ))}
                   </div>

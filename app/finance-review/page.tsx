@@ -8,9 +8,7 @@ import {
   XCircle,
   FileText,
   Calendar,
-  Download,
-  ChevronLeft,
-  Loader2
+  ChevronLeft
 } from "lucide-react"
 import { toast } from "sonner"
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
@@ -54,7 +52,6 @@ export default function FinanceReviewPage() {
   const [selectedSubmission, setSelectedSubmission] = useState<WorkflowSubmission | null>(null)
   const [isViewDialogOpen, setIsViewDialogOpen] = useState(false)
   const [reviewComment, setReviewComment] = useState("")
-  const [downloadingFileIndex, setDownloadingFileIndex] = useState<number | null>(null)
 
   useEffect(() => {
     fetchSubmissions()
@@ -419,82 +416,6 @@ export default function FinanceReviewPage() {
                             </p>
                           </div>
                         </div>
-                        <Button
-                          onClick={async () => {
-                            setDownloadingFileIndex(index);
-                            try {
-                              // Try direct URL first
-                              if (file.fileUrl && file.fileUrl.startsWith('http')) {
-                                const response = await fetch(file.fileUrl);
-                                if (response.ok) {
-                                  const blob = await response.blob();
-                                  const url = window.URL.createObjectURL(blob);
-                                  const link = document.createElement('a');
-                                  link.href = url;
-                                  link.download = file.fileName;
-                                  document.body.appendChild(link);
-                                  link.click();
-                                  document.body.removeChild(link);
-                                  window.URL.revokeObjectURL(url);
-                                  toast.success("File downloaded successfully");
-                                  setDownloadingFileIndex(null);
-                                  return;
-                                }
-                              }
-                              
-                              // If direct URL fails, try to extract path and use Supabase storage
-                              const supabase = createClientComponentClient();
-                              let filePath = file.fileUrl;
-                              
-                              // Extract path from full URL if needed
-                              if (filePath.includes('/workflow-documents/')) {
-                                filePath = filePath.split('/workflow-documents/')[1];
-                              } else if (filePath.startsWith('workflow/')) {
-                                // Already a path
-                              } else {
-                                // Try to get from stored path
-                                filePath = filePath.replace(/^.*\/workflow\//, 'workflow/');
-                              }
-                              
-                              const { data, error } = await supabase.storage
-                                .from('workflow-documents')
-                                .download(filePath);
-                              
-                              if (error) {
-                                throw error;
-                              }
-                              
-                              const url = window.URL.createObjectURL(data);
-                              const link = document.createElement('a');
-                              link.href = url;
-                              link.download = file.fileName;
-                              document.body.appendChild(link);
-                              link.click();
-                              document.body.removeChild(link);
-                              window.URL.revokeObjectURL(url);
-                              toast.success("File downloaded successfully");
-                            } catch (error: any) {
-                              console.error("Error downloading file:", error);
-                              toast.error(error.message || "Failed to download file");
-                            } finally {
-                              setDownloadingFileIndex(null);
-                            }
-                          }}
-                          disabled={downloadingFileIndex === index}
-                          className="bg-[#F08900] hover:bg-[#d67a00] disabled:bg-gray-400 disabled:cursor-not-allowed ml-3 flex-shrink-0"
-                        >
-                          {downloadingFileIndex === index ? (
-                            <>
-                              <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                              Downloading...
-                            </>
-                          ) : (
-                            <>
-                              <Download className="h-4 w-4 mr-2" />
-                              Download
-                            </>
-                          )}
-                        </Button>
                       </div>
                     ))}
                   </div>
