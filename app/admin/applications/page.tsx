@@ -56,11 +56,14 @@ export default function ApplicationsPage() {
   const [applications, setApplications] = useState<JobApplication[]>([])
   const [jobs, setJobs] = useState<Job[]>([])
   const [loading, setLoading] = useState(true)
+  const [loadingMore, setLoadingMore] = useState(false)
   const [searchTerm, setSearchTerm] = useState("")
   const [statusFilter, setStatusFilter] = useState<string>("all")
   const [jobFilter, setJobFilter] = useState<string>("all")
   const [viewMode, setViewMode] = useState<"table" | "grouped">("table")
-  const [pageSize] = useState(100) // Limit initial load
+  const [pageSize] = useState(100) // Limit per load
+  const [hasMore, setHasMore] = useState(false)
+  const [totalCount, setTotalCount] = useState(0)
   const supabase = createClientComponentClient()
 
   useEffect(() => {
@@ -68,7 +71,7 @@ export default function ApplicationsPage() {
     fetchJobs()
   }, [])
 
-  const fetchApplications = async () => {
+  const fetchApplications = async (offset: number = 0) => {
     try {
       // Get current user and role first
       const { data: { user } } = await supabase.auth.getUser()
@@ -89,6 +92,32 @@ export default function ApplicationsPage() {
         return
       }
 
+      // Get total count first
+      let countQuery = supabase
+        .from('job_applications')
+        .select('*', { count: 'exact', head: true })
+
+      // Apply same filters for count
+      if (roleData?.role === 'admin') {
+        const { data: userJobs } = await supabase
+          .from('jobs')
+          .select('id')
+          .eq('created_by', user?.id)
+        
+        const userJobIds = userJobs?.map(job => job.id) || []
+        if (userJobIds.length > 0) {
+          countQuery = countQuery.in('job_id', userJobIds)
+        } else {
+          setApplications([])
+          setTotalCount(0)
+          setHasMore(false)
+          return
+        }
+      }
+
+      const { count } = await countQuery
+      setTotalCount(count || 0)
+
       // The RLS policies will automatically filter applications based on user role
       // Super admins will see all applications, regular admins will see only applications for their jobs
       let query = supabase
@@ -106,7 +135,7 @@ export default function ApplicationsPage() {
           job:jobs(id, title, department)
         `)
         .order('created_at', { ascending: false })
-        .limit(pageSize)
+        .range(offset, offset + pageSize - 1)
 
       // WORKAROUND: Explicitly filter applications based on user role since RLS is not working
       if (roleData?.role === 'admin') {
@@ -123,6 +152,7 @@ export default function ApplicationsPage() {
           // If admin has no jobs, they should see no applications
           // Return empty array instead of using invalid UUID
           setApplications([])
+          setHasMore(false)
           return
         }
       }
@@ -134,10 +164,18 @@ export default function ApplicationsPage() {
 
       if (!applicationsData) {
         setApplications([])
+        setHasMore(false)
         return
       }
 
-      setApplications(applicationsData)
+      if (offset === 0) {
+        setApplications(applicationsData)
+      } else {
+        setApplications(prev => [...prev, ...applicationsData])
+      }
+      
+      // Check if there are more records
+      setHasMore((offset + applicationsData.length) < (count || 0))
     } catch (error: any) {
       console.error('Error fetching applications:', error)
       console.error('Error details:', JSON.stringify(error, null, 2))
@@ -176,6 +214,18 @@ export default function ApplicationsPage() {
       toast.error(`Failed to load applications: ${error instanceof Error ? error.message : 'Unknown error'}`)
     } finally {
       setLoading(false)
+    }
+  }
+
+  const loadMoreApplications = async () => {
+    setLoadingMore(true)
+    try {
+      await fetchApplications(applications.length)
+    } catch (error) {
+      console.error('Error loading more applications:', error)
+      toast.error('Failed to load more applications')
+    } finally {
+      setLoadingMore(false)
     }
   }
 
@@ -564,12 +614,13 @@ export default function ApplicationsPage() {
 
   const getApplicationStats = () => {
     const stats = {
-      total: filteredApplications.length,
-      pending: filteredApplications.filter(app => app.status === 'pending').length,
-      reviewed: filteredApplications.filter(app => app.status === 'reviewed').length,
-      shortlisted: filteredApplications.filter(app => app.status === 'shortlisted').length,
-      rejected: filteredApplications.filter(app => app.status === 'rejected').length,
-      hired: filteredApplications.filter(app => app.status === 'hired').length,
+      total: totalCount, // Use actual total from database
+      loaded: applications.length, // Number currently loaded
+      pending: applications.filter(app => app.status === 'pending').length,
+      reviewed: applications.filter(app => app.status === 'reviewed').length,
+      shortlisted: applications.filter(app => app.status === 'shortlisted').length,
+      rejected: applications.filter(app => app.status === 'rejected').length,
+      hired: applications.filter(app => app.status === 'hired').length,
     }
     return stats
   }
@@ -761,6 +812,11 @@ export default function ApplicationsPage() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{stats.total}</div>
+              {stats.loaded < stats.total && (
+                <div className="text-xs text-gray-500 mt-1">
+                  {stats.loaded} loaded
+                </div>
+              )}
             </CardContent>
           </Card>
           <Card>
@@ -835,6 +891,20 @@ export default function ApplicationsPage() {
                 )}
               </TableBody>
             </Table>
+            
+            {/* Load More Button */}
+            {hasMore && (
+              <div className="mt-6 text-center">
+                <Button
+                  onClick={loadMoreApplications}
+                  disabled={loadingMore}
+                  variant="outline"
+                  size="lg"
+                >
+                  {loadingMore ? 'Loading...' : `Load More (${applications.length} of ${totalCount})`}
+                </Button>
+              </div>
+            )}
           </div>
         ) : (
           <div className="space-y-6">
@@ -930,6 +1000,20 @@ export default function ApplicationsPage() {
                   </div>
                 </CardContent>
               </Card>
+            )}
+            
+            {/* Load More Button for Grouped View */}
+            {hasMore && Object.keys(groupedApplications).length > 0 && (
+              <div className="mt-6 text-center">
+                <Button
+                  onClick={loadMoreApplications}
+                  disabled={loadingMore}
+                  variant="outline"
+                  size="lg"
+                >
+                  {loadingMore ? 'Loading...' : `Load More (${applications.length} of ${totalCount})`}
+                </Button>
+              </div>
             )}
           </div>
         )}
