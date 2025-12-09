@@ -27,7 +27,7 @@ import {
 } from "@/components/ui/table"
 import { toast } from "sonner"
 import { Edit2, Trash2, Plus } from "lucide-react"
-import { Editor } from '@tinymce/tinymce-react'
+// TinyMCE removed - using simple textarea with bold support
 
 interface NewsArticleImage {
   id: string
@@ -89,58 +89,10 @@ export default function NewsManagement() {
   const articlesPerPage = 10
   const router = useRouter()
   const supabase = createClientComponentClient()
-  const [tinymceSrc, setTinymceSrc] = useState<string>("")
-  const [editorReady, setEditorReady] = useState<boolean>(false)
-  const [showFallback, setShowFallback] = useState<boolean>(false)
 
   useEffect(() => {
     fetchArticles()
   }, [currentPage])
-
-  useEffect(() => {
-    // Use TinyMCE 6 CDN to ensure compatibility with @tinymce/tinymce-react@6
-    setTinymceSrc('https://cdn.jsdelivr.net/npm/tinymce@6.8.5/tinymce.min.js')
-  }, [])
-
-  useEffect(() => {
-    // If editor doesn't initialize within 3s, show textarea fallback
-    if (!editorReady && (isAddDialogOpen || editingArticle !== null)) {
-      const timer = setTimeout(() => {
-        if (!editorReady) setShowFallback(true)
-      }, 3000)
-      return () => clearTimeout(timer)
-    } else {
-      setShowFallback(false)
-    }
-  }, [editorReady, isAddDialogOpen, editingArticle])
-
-  // TinyMCE configuration
-  const editorConfig = {
-    height: 500,
-    menubar: true,
-    plugins: [
-      'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
-      'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
-      'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount'
-    ],
-    toolbar: 'undo redo | blocks | ' +
-      'bold italic forecolor | alignleft aligncenter ' +
-      'alignright alignjustify | bullist numlist outdent indent | ' +
-      'removeformat | image media | help',
-    content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
-    promotion: false,
-    branding: false,
-    setup: function(editor: any) {
-      editor.on('init', function() {
-        editor.getContainer().style.visibility = 'visible';
-      });
-    }
-  }
-
-  // Handle editor content change
-  const handleEditorChange = (content: string) => {
-    setFormData(prev => ({ ...prev, content }))
-  }
 
   const handleSignOut = async () => {
     try {
@@ -807,49 +759,20 @@ export default function NewsManagement() {
                         )}
                       </div>
                       
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        <div className="space-y-2">
-                          <Label className="text-sm font-medium">
-                            Image Upload <span className="text-red-500">*</span>
-                          </Label>
-                          <ImageUpload
-                            value={image.image_url}
-                            onChange={(url) => {
-                              const newImages = [...formData.images]
-                              newImages[index].image_url = url
-                              setFormData({ ...formData, images: newImages })
-                            }}
-                            placeholder={`Upload ${image.image_type} image`}
-                            showPreview={true}
-                            maxSize={10}
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label className="text-sm font-medium">Alt Text</Label>
-                          <Input
-                            placeholder="Alt text for accessibility"
-                            className="border-gray-300 focus:border-[#5E366D] focus:ring-[#5E366D]"
-                            value={image.alt_text}
-                            onChange={(e) => {
-                              const newImages = [...formData.images]
-                              newImages[index].alt_text = e.target.value
-                              setFormData({ ...formData, images: newImages })
-                            }}
-                          />
-                        </div>
-                      </div>
-                      
                       <div className="space-y-2">
-                        <Label className="text-sm font-medium">Caption</Label>
-                        <Input
-                          placeholder="Image caption (optional)"
-                          className="border-gray-300 focus:border-[#5E366D] focus:ring-[#5E366D]"
-                          value={image.caption}
-                          onChange={(e) => {
+                        <Label className="text-sm font-medium">
+                          Image Upload <span className="text-red-500">*</span>
+                        </Label>
+                        <ImageUpload
+                          value={image.image_url}
+                          onChange={(url) => {
                             const newImages = [...formData.images]
-                            newImages[index].caption = e.target.value
+                            newImages[index].image_url = url
                             setFormData({ ...formData, images: newImages })
                           }}
+                          placeholder={`Upload ${image.image_type} image`}
+                          showPreview={true}
+                          maxSize={10}
                         />
                       </div>
                     </div>
@@ -881,30 +804,54 @@ export default function NewsManagement() {
                 <Label htmlFor="content" className="font-semibold">
                   Content <span className="text-red-500">*</span>
                 </Label>
-                <div className="border rounded-md overflow-hidden">
-                  {showFallback || !tinymceSrc ? (
-                    <Textarea
-                      placeholder="Enter content"
-                      className="min-h-[200px]"
-                      value={formData.content}
-                      onChange={(e) => setFormData(prev => ({ ...prev, content: e.target.value }))}
-                    />
-                  ) : (
-                    <Editor
-                      id="content"
-                      init={editorConfig}
-                      value={formData.content}
-                      onEditorChange={handleEditorChange}
-                      onInit={() => {
-                        setEditorReady(true)
-                        setShowFallback(false)
+                <div className="space-y-2">
+                  {/* Simple formatting toolbar */}
+                  <div className="flex gap-2 p-2 bg-gray-50 border rounded-md">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        const textarea = document.getElementById('content-textarea') as HTMLTextAreaElement
+                        if (textarea) {
+                          const start = textarea.selectionStart
+                          const end = textarea.selectionEnd
+                          const selectedText = textarea.value.substring(start, end)
+                          const beforeText = textarea.value.substring(0, start)
+                          const afterText = textarea.value.substring(end)
+                          
+                          if (selectedText) {
+                            // Wrap selected text with <strong> tags
+                            const newText = beforeText + '<strong>' + selectedText + '</strong>' + afterText
+                            setFormData(prev => ({ ...prev, content: newText }))
+                            
+                            // Restore focus and selection
+                            setTimeout(() => {
+                              textarea.focus()
+                              textarea.setSelectionRange(start + 8, end + 8)
+                            }, 0)
+                          }
+                        }
                       }}
-                      tinymceScriptSrc={tinymceSrc}
-                    />
-                  )}
+                      className="font-bold"
+                    >
+                      <strong>B</strong>
+                    </Button>
+                    <span className="text-sm text-gray-500 flex items-center ml-2">
+                      Select text and click <strong className="mx-1">B</strong> to make it bold
+                    </span>
+                  </div>
+                  
+                  <Textarea
+                    id="content-textarea"
+                    placeholder="Enter content. Use the B button to make text bold. Line breaks will be preserved."
+                    className="min-h-[300px] font-mono text-sm"
+                    value={formData.content}
+                    onChange={(e) => setFormData(prev => ({ ...prev, content: e.target.value }))}
+                  />
                 </div>
                 <p className="text-sm text-gray-500">
-                  Use the toolbar above to format your content, add images, and more.
+                  Line breaks will be preserved as you type. Select text and click <strong>B</strong> to make it bold.
                 </p>
               </div>
 

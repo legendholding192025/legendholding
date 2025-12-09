@@ -52,6 +52,21 @@ interface NewsArticle {
   images?: NewsArticleImage[]
 }
 
+// Utility function to process article content
+// Handles both old TinyMCE HTML content and new plain text content
+const processArticleContent = (content: string): string => {
+  // Check if content already has HTML tags (old TinyMCE content)
+  const hasHtmlTags = /<\/?[a-z][\s\S]*>/i.test(content)
+  
+  if (hasHtmlTags) {
+    // Old content with HTML - use as is
+    return content
+  } else {
+    // New plain text content - convert line breaks to <br>
+    return content.replace(/\n/g, '<br>')
+  }
+}
+
 const FacebookIcon = ({ size = 20, className = "" }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -469,7 +484,9 @@ export default function NewsArticlePage() {
                 {/* Content */}
                 <div 
                   className="prose prose-lg max-w-none prose-headings:text-[rgb(43,28,72)] prose-h2:text-2xl prose-h3:text-xl prose-h4:text-lg prose-p:text-[rgb(93,55,110)] prose-headings:font-semibold prose-headings:mb-4 prose-p:mb-4"
-                  dangerouslySetInnerHTML={{ __html: article.content }}
+                  dangerouslySetInnerHTML={{ 
+                    __html: processArticleContent(article.content)
+                  }}
                 />
 
 
