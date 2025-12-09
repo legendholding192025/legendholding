@@ -60,6 +60,7 @@ export default function ApplicationsPage() {
   const [statusFilter, setStatusFilter] = useState<string>("all")
   const [jobFilter, setJobFilter] = useState<string>("all")
   const [viewMode, setViewMode] = useState<"table" | "grouped">("table")
+  const [pageSize] = useState(100) // Limit initial load
   const supabase = createClientComponentClient()
 
   useEffect(() => {
@@ -93,10 +94,19 @@ export default function ApplicationsPage() {
       let query = supabase
         .from('job_applications')
         .select(`
-          *,
+          id,
+          job_id,
+          full_name,
+          email,
+          phone,
+          resume_url,
+          cover_letter,
+          status,
+          created_at,
           job:jobs(id, title, department)
         `)
         .order('created_at', { ascending: false })
+        .limit(pageSize)
 
       // WORKAROUND: Explicitly filter applications based on user role since RLS is not working
       if (roleData?.role === 'admin') {
@@ -128,9 +138,41 @@ export default function ApplicationsPage() {
       }
 
       setApplications(applicationsData)
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error fetching applications:', error)
       console.error('Error details:', JSON.stringify(error, null, 2))
+      
+      // Handle specific timeout error
+      if (error?.code === '57014' || error?.message?.includes('timeout')) {
+        toast.error('Query timeout - Loading most recent applications only')
+        // Try a more limited query as fallback
+        try {
+          const { data: limitedData } = await supabase
+            .from('job_applications')
+            .select(`
+              id,
+              job_id,
+              full_name,
+              email,
+              phone,
+              resume_url,
+              cover_letter,
+              status,
+              created_at,
+              job:jobs(id, title, department)
+            `)
+            .order('created_at', { ascending: false })
+            .limit(50)
+          
+          if (limitedData) {
+            setApplications(limitedData)
+            return
+          }
+        } catch (fallbackError) {
+          console.error('Fallback query also failed:', fallbackError)
+        }
+      }
+      
       toast.error(`Failed to load applications: ${error instanceof Error ? error.message : 'Unknown error'}`)
     } finally {
       setLoading(false)

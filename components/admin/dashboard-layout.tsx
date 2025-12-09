@@ -150,15 +150,16 @@ export function AdminDashboardLayout({ children, onSignOut }: AdminDashboardLayo
                     
                     return (
                       <SidebarMenuItem key={item.href} className="mb-2">
-                        <Link href={item.href} passHref legacyBehavior>
-                          <SidebarMenuButton
-                            data-active={isActive}
-                            className="w-full px-4 py-2.5 justify-start gap-3 rounded-lg hover:bg-primary/5 hover:text-primary data-[active=true]:bg-primary/10 data-[active=true]:text-primary group transition-colors"
-                          >
+                        <SidebarMenuButton
+                          asChild
+                          data-active={isActive}
+                          className="w-full px-4 py-2.5 justify-start gap-3 rounded-lg hover:bg-primary/5 hover:text-primary data-[active=true]:bg-primary/10 data-[active=true]:text-primary group transition-colors"
+                        >
+                          <Link href={item.href}>
                             <item.icon className="h-5 w-5 transition-colors group-hover:text-primary shrink-0" />
                             <span className="font-medium">{item.title}</span>
-                          </SidebarMenuButton>
-                        </Link>
+                          </Link>
+                        </SidebarMenuButton>
                       </SidebarMenuItem>
                     )
                   })}
@@ -179,15 +180,16 @@ export function AdminDashboardLayout({ children, onSignOut }: AdminDashboardLayo
                     
                     return (
                       <SidebarMenuItem key={item.href} className="mb-2">
-                        <Link href={item.href} passHref legacyBehavior>
-                          <SidebarMenuButton
-                            data-active={isActive}
-                            className="w-full px-4 py-2.5 justify-start gap-3 rounded-lg hover:bg-gray-100 group transition-colors data-[active=true]:bg-gray-200 data-[active=true]:text-gray-900"
-                          >
+                        <SidebarMenuButton
+                          asChild
+                          data-active={isActive}
+                          className="w-full px-4 py-2.5 justify-start gap-3 rounded-lg hover:bg-gray-100 group transition-colors data-[active=true]:bg-gray-200 data-[active=true]:text-gray-900"
+                        >
+                          <Link href={item.href}>
                             <item.icon className="h-5 w-5 text-gray-500 transition-colors group-hover:text-gray-900 shrink-0" />
                             <span>{item.title}</span>
-                          </SidebarMenuButton>
-                        </Link>
+                          </Link>
+                        </SidebarMenuButton>
                       </SidebarMenuItem>
                     )
                   })}
