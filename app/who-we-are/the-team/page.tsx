@@ -135,7 +135,7 @@ export default function LeadershipTeam() {
       name: "Xiaolong Ma",
       role: "Branch Manager - KSA",
       company: "Legend Motors",
-      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1761054605/Mou-new_eh2vsp.png"
+      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1765351058/5_copy55_ccgw0y.png"
     }
   ];
 
