@@ -234,6 +234,46 @@ export default function LeadershipTeam() {
     ]
   };
 
+  // Spotlight key leaders so search engines pick them up reliably
+  const keyLeadersData = [
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      name: "Kai Zheng",
+      jobTitle: "Founder & Chairman",
+      worksFor: {
+        "@type": "Organization",
+        name: "Legend Holding Group",
+        url: "https://legendholding.com"
+      },
+      url: `${pageUrl}#${toSlug('Kai Zheng-Founder & Chairman')}`,
+      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1761054607/image_5_xtngrn.jpg",
+      sameAs: [
+        "https://legendholding.com",
+        "https://www.linkedin.com",
+        "https://www.crunchbase.com"
+      ]
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      name: "Mira Wu",
+      jobTitle: "Co-Founder & Vice Chairman",
+      worksFor: {
+        "@type": "Organization",
+        name: "Legend Holding Group",
+        url: "https://legendholding.com"
+      },
+      url: `${pageUrl}#${toSlug('Mira Wu-Co-Founder & Vice Chairman')}`,
+      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1761054550/10_copy_xhh1bh.jpg",
+      sameAs: [
+        "https://legendholding.com",
+        "https://www.linkedin.com",
+        "https://www.crunchbase.com"
+      ]
+    }
+  ];
+
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationData) }} />
