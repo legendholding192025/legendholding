@@ -279,6 +279,9 @@ export default function LeadershipTeam() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationData) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageData) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListData) }} />
+      {keyLeadersData.map((leaderData, index) => (
+        <script key={`leader-${index}`} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(leaderData) }} />
+      ))}
       <Header />
       <main className="pt-20">
         <PageBanner 
