@@ -198,11 +198,10 @@ export function TeamDisplay({ teamData, boardData, chinaData = [] }: TeamDisplay
                   }
                 }}
               >
-                <div className="relative mb-4 mx-auto rounded-xl w-full aspect-[5/6] overflow-hidden bg-gray-100 flex-shrink-0">
+                <div className="relative mb-4 mx-auto rounded-xl w-full aspect-[5/6] overflow-hidden bg-white flex-shrink-0">
                   {/* Loading placeholder */}
                   {!loadedImages.has(`board-${index}`) && (
-                    <div className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 animate-pulse">
-                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer"></div>
+                    <div className="absolute inset-0 z-10 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 animate-pulse">
                       <div className="absolute inset-0 flex items-center justify-center">
                         <div className="text-gray-400 text-sm">Loading...</div>
                       </div>
@@ -210,12 +209,12 @@ export function TeamDisplay({ teamData, boardData, chinaData = [] }: TeamDisplay
                   )}
                   
                   {/* Optimized image */}
-                  <div className={`absolute inset-0 ${getImageHeight(director.name)}`}>
+                  <div className={`absolute inset-0 z-0 ${getImageHeight(director.name)}`}>
                     <Image
                       src={optimizeImageUrl(director.image, getImageWidth(), getImageQuality(index))}
                       alt={`${director.name} - ${director.role} at ${director.company}`}
                       fill
-                      className={`object-cover ${getObjectPosition(director.name)} transition-opacity duration-500 ${
+                      className={`object-cover ${getObjectPosition(director.name)} ${
                         loadedImages.has(`board-${index}`) ? 'opacity-100' : 'opacity-0'
                       }`}
                     loading={index < 3 ? 'eager' : 'lazy'}
@@ -281,11 +280,10 @@ export function TeamDisplay({ teamData, boardData, chinaData = [] }: TeamDisplay
                 }
               }}
             >
-              <div className="relative mb-4 mx-auto rounded-xl w-full aspect-[5/6] overflow-hidden bg-gray-100 flex-shrink-0">
+              <div className="relative mb-4 mx-auto rounded-xl w-full aspect-[5/6] overflow-hidden bg-white flex-shrink-0">
                 {/* Loading placeholder */}
                 {!loadedImages.has(index) && (
-                  <div className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 animate-pulse">
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer"></div>
+                  <div className="absolute inset-0 z-10 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 animate-pulse">
                     <div className="absolute inset-0 flex items-center justify-center">
                       <div className="text-gray-400 text-sm">Loading...</div>
                     </div>
@@ -293,12 +291,12 @@ export function TeamDisplay({ teamData, boardData, chinaData = [] }: TeamDisplay
                 )}
                 
                 {/* Optimized image */}
-                <div className={`absolute inset-0 ${getImageHeight(leader.name)}`}>
+                <div className={`absolute inset-0 z-0 ${getImageHeight(leader.name)}`}>
                   <Image
                     src={optimizeImageUrl(leader.image, getImageWidth(), getImageQuality(index))}
                     alt={`${leader.name} - ${leader.role} at ${leader.company}`}
                     fill
-                    className={`object-cover ${getObjectPosition(leader.name)} transition-opacity duration-500 ${
+                    className={`object-cover ${getObjectPosition(leader.name)} ${
                       loadedImages.has(index) ? 'opacity-100' : 'opacity-0'
                     }`}
                   loading={index < 3 ? 'eager' : 'lazy'}
@@ -365,11 +363,10 @@ export function TeamDisplay({ teamData, boardData, chinaData = [] }: TeamDisplay
                     }
                   }}
                 >
-                  <div className="relative mb-4 mx-auto rounded-xl w-full aspect-[5/6] overflow-hidden bg-gray-100 flex-shrink-0">
+                  <div className="relative mb-4 mx-auto rounded-xl w-full aspect-[5/6] overflow-hidden bg-white flex-shrink-0">
                     {/* Loading placeholder */}
                     {!loadedImages.has(`china-${index}`) && (
-                      <div className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 animate-pulse">
-                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer"></div>
+                      <div className="absolute inset-0 z-10 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 animate-pulse">
                         <div className="absolute inset-0 flex items-center justify-center">
                           <div className="text-gray-400 text-sm">Loading...</div>
                         </div>
@@ -377,12 +374,12 @@ export function TeamDisplay({ teamData, boardData, chinaData = [] }: TeamDisplay
                     )}
                     
                     {/* Optimized image */}
-                    <div className={`absolute inset-0 ${getImageHeight(member.name)}`}>
+                    <div className={`absolute inset-0 z-0 ${getImageHeight(member.name)}`}>
                       <Image
                         src={optimizeImageUrl(member.image, getImageWidth(), getImageQuality(index))}
                         alt={`${member.name} - ${member.role} at ${member.company}`}
                         fill
-                        className={`object-cover ${getObjectPosition(member.name)} transition-opacity duration-500 ${
+                        className={`object-cover ${getObjectPosition(member.name)} ${
                           loadedImages.has(`china-${index}`) ? 'opacity-100' : 'opacity-0'
                         }`}
                       loading={index < 3 ? 'eager' : 'lazy'}
