@@ -7,11 +7,11 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Leadership Team | Legend Holding Group | Board of Directors & Management',
-  description: 'Meet the leadership team of Legend Holding Group. Our board includes Kai Zheng (Founder & Chairman), Mira Wu (Co-Founder & Vice Chairman), Cannon Wang (VP Dealership & Strategy), Nagaraj Ponnada (General Manager), Rejeesh Raveendran (Group Finance Director), and Sonam Lama (Group HR Director). Our management team features Jade Li (Managing Director at Zul Energy), George Hua (Head of Commercial Vehicles), Tamer Khalil (Head of After Sales), Mohamed Baz (Head of Motorcycles), Waseem Khalayleh (Brand Manager), Xiaolong Ma (Branch Manager - KSA), Sun Bo (Business Development Manager), and Pawan Rathi (General Manager at Legend Rent a Car).',
-  keywords: 'Kai Zheng, Mira Wu, Cannon Wang, Nagaraj Ponnada, Rejeesh Raveendran, Sonam Lama, Jade Li, George Hua, Tamer Khalil, Mohamed Baz, Waseem Khalayleh, Xiaolong Ma, Sun Bo, Pawan Rathi, Legend Holding Group leadership, board of directors, management team, Founder, Chairman, Vice Chairman, General Manager, UAE business leaders, automotive executives, energy sector leaders, technology directors, Zul Energy, Legend Commercial Vehicles, Legend Motors, Legend Motorcycles, Legend Rent a Car',
+  description: 'Meet the leadership team of Legend Holding Group. Our board includes Kai Zheng (Founder & Chairman), Mira Wu (Co-Founder & Vice Chairman), Cannon Wang (VP Dealership & Strategy), Nagaraj Ponnada (General Manager), Rejeesh Raveendran (Group Finance Director), and Sonam Lama (Group HR Director). Our management team features Jade Li (Managing Director at Zul Energy), George Hua (Head of Commercial Vehicles), Tamer Khalil (Head of After Sales), Mohamed Baz (Head of Motorcycles), Shameel Wohadally (Head of Internal Audit), Waseem Khalayleh (Brand Manager), Xiaolong Ma (Branch Manager - KSA), Sun Bo (Business Development Manager), and Pawan Rathi (General Manager at Legend Rent a Car).',
+  keywords: 'Kai Zheng, Mira Wu, Cannon Wang, Nagaraj Ponnada, Rejeesh Raveendran, Sonam Lama, Jade Li, George Hua, Tamer Khalil, Mohamed Baz, Shameel Wohadally, Waseem Khalayleh, Xiaolong Ma, Sun Bo, Pawan Rathi, Legend Holding Group leadership, board of directors, management team, Founder, Chairman, Vice Chairman, General Manager, UAE business leaders, automotive executives, energy sector leaders, technology directors, internal audit, Zul Energy, Legend Commercial Vehicles, Legend Motors, Legend Motorcycles, Legend Rent a Car',
   openGraph: {
     title: 'Leadership Team | Legend Holding Group',
-    description: 'Meet the leadership team of Legend Holding Group. Our board includes Kai Zheng (Founder & Chairman), Mira Wu (Co-Founder & Vice Chairman), Cannon Wang, Nagaraj Ponnada, Rejeesh Raveendran, and Sonam Lama. Management team: Jade Li, George Hua, Tamer Khalil, Mohamed Baz, Waseem Khalayleh, Xiaolong Ma, Sun Bo, and Pawan Rathi.',
+    description: 'Meet the leadership team of Legend Holding Group. Our board includes Kai Zheng (Founder & Chairman), Mira Wu (Co-Founder & Vice Chairman), Cannon Wang, Nagaraj Ponnada, Rejeesh Raveendran, and Sonam Lama. Management team: Jade Li, George Hua, Tamer Khalil, Mohamed Baz, Shameel Wohadally, Waseem Khalayleh, Xiaolong Ma, Sun Bo, and Pawan Rathi.',
     type: 'website',
     url: 'https://legendholding.com/who-we-are/the-team',
     images: [
@@ -114,7 +114,7 @@ export default function LeadershipTeam() {
       name: "Sun Bo",
       role: "Business Development Manager",
       company: "Legend Holding Group",
-      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1761054580/sun_bo-new_wzmjs1.png"
+      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1766139126/02_3_whojcm.png"
     },
     {
       name: "Pawan Rathi",
@@ -127,6 +127,12 @@ export default function LeadershipTeam() {
       role: "Head of Motorcycles",
       company: "Legend Motorcycles",
       image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1765196419/Mohammed_Baz_z7qv1o.png"
+    },
+    {
+      name: "Shameel Wohadally",
+      role: "Head of Internal Audit",
+      company: "Legend Holding Group",
+      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1766139337/01_4_z9oao2.png"
     }
   ];
 
@@ -297,10 +303,10 @@ export default function LeadershipTeam() {
             Meet the executive leadership team of Legend Holding Group, a diversified UAE holding company. 
             Our board of directors includes Kai Zheng (Founder & Chairman), Mira Wu (Co-Founder & Vice Chairman), 
             Cannon Wang (VP Dealership & Strategy), Nagaraj Ponnada (General Manager), Rejeesh Raveendran (Group Finance Director), 
-            and Sonam Lama (Group HR Director). Our management team features Jade Li (Managing Director of Zul Energy), 
+            and Sonam Lama (Group HR Director).             Our management team features Jade Li (Managing Director of Zul Energy), 
             George Hua (Head of Commercial Vehicles), Tamer Khalil (Head of After Sales), Mohamed Baz (Head of Motorcycles), 
-            Waseem Khalayleh (Brand Manager), Xiaolong Ma (Branch Manager - KSA), Sun Bo (Business Development Manager), 
-            and Pawan Rathi (General Manager at Legend Rent a Car). 
+            Shameel Wohadally (Head of Internal Audit), Waseem Khalayleh (Brand Manager), Xiaolong Ma (Branch Manager - KSA), 
+            Sun Bo (Business Development Manager), and Pawan Rathi (General Manager at Legend Rent a Car).
             These experienced leaders drive innovation across automotive, energy, technology, and mobility sectors in the Middle East and Africa.
           </p>
           
@@ -313,7 +319,7 @@ export default function LeadershipTeam() {
           <p>
             Our senior management team includes Jade Li, Managing Director of Zul Energy division, George Hua who heads Commercial Vehicles operations at Legend Commercial Vehicles, 
             Tamer Khalil leading After Sales services at Legend World Automobile Service, Mohamed Baz heading Motorcycles operations at Legend Motorcycles, 
-            Waseem Khalayleh serving as Brand Manager of Legend Holding Group with over 15 years of experience across Automotive, Technology, and Media industries, Xiaolong Ma serving as Branch Manager for Legend Motors KSA operations, 
+            Shameel Wohadally leading Internal Audit at Legend Holding Group, Waseem Khalayleh serving as Brand Manager of Legend Holding Group with over 15 years of experience across Automotive, Technology, and Media industries, Xiaolong Ma serving as Branch Manager for Legend Motors KSA operations, 
             Sun Bo leading Business Development initiatives at Legend Holding Group, and Pawan Rathi as General Manager of Legend Rent a Car.
           </p>
           
