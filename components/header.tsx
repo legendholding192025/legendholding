@@ -180,12 +180,6 @@ const menuItems: MenuItem[] = [
             description: "Robotics company specialized in cutting-edge technology and AI-driven innovations."
           },
           { 
-            title: "Legend Technical Services",
-            url: "/our-businesses/legend-technical-services",
-            image: "https://cdn.legendholding.com/images/cloudinary/cloudinary_683da2fc6fd9b2.48641261_20250602_131124.jpg",
-            description: "World-class facilities management and technical solutions."
-          },
-          { 
             title: "Zul Energy",
             url: "/our-businesses/zul-energy",
             image: "https://cdn.legendholding.com/images/cloudinary/cloudinary_683da403178ef3.07284478_20250602_131547.jpg",
@@ -207,6 +201,10 @@ const menuItems: MenuItem[] = [
     title: "Contact Us",
     url: "/contact",
   },
+  // {
+  //   title: "Customer Care",
+  //   url: "/customer-care",
+  // },
 ]
 
 export function Header({ hideHeader = false }: { hideHeader?: boolean }) {
