@@ -146,7 +146,7 @@ export default function LeadershipTeam() {
     {
       name: "Turki Altalhi",
       role: "HR & Admin Manager",
-      company: "Legend Motors",
+      company: "Legend Holding Group",
       image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1766219042/turki_KSA_aupdzs.png"
     }
   ];
@@ -326,7 +326,7 @@ export default function LeadershipTeam() {
             Our senior management team includes Jade Li, Managing Director of Zul Energy division, George Hua who heads Commercial Vehicles operations at Legend Commercial Vehicles, 
             Tamer Khalil leading After Sales services at Legend World Automobile Service, Mohamed Baz heading Motorcycles operations at Legend Motorcycles, 
             Shameel Wohadally leading Internal Audit at Legend Holding Group, Waseem Khalayleh serving as Brand Manager of Legend Holding Group with over 15 years of experience across Automotive, Technology, and Media industries, Xiaolong Ma serving as Branch Manager for Legend Motors KSA operations, 
-            Turki Altalhi managing HR and Administration for Legend Motors in Saudi Arabia, Sun Bo leading Business Development initiatives at Legend Holding Group, and Pawan Rathi as General Manager of Legend Rent a Car.
+            Turki Altalhi managing HR and Administration for Legend Holding Group in Saudi Arabia, Sun Bo leading Business Development initiatives at Legend Holding Group, and Pawan Rathi as General Manager of Legend Rent a Car.
           </p>
           
           <h2>Complete Team Directory</h2>
@@ -381,7 +381,7 @@ export default function LeadershipTeam() {
           <h2>Company Divisions and Leadership</h2>
           <p>
             Legend Holding Group operates multiple divisions including Zul Energy led by Jade Li, Legend Commercial Vehicles managed by George Hua, 
-            Legend World Automobile Service under Tamer Khalil, Legend Motorcycles headed by Mohamed Baz, Legend Motors in KSA with Xiaolong Ma as Branch Manager and Turki Altalhi as HR & Admin Manager, 
+            Legend World Automobile Service under Tamer Khalil, Legend Motorcycles headed by Mohamed Baz, Legend Holding Group in KSA with Xiaolong Ma as Branch Manager and Turki Altalhi as HR & Admin Manager, 
             Legend Rent a Car managed by Pawan Rathi, and various other subsidiaries. Each division is led by experienced professionals who bring expertise in automotive, energy, 
             technology, and business development sectors. Our leadership team drives innovation and excellence across all business units.
           </p>
