@@ -139,14 +139,14 @@ export default function LeadershipTeam() {
   const teamData = [
     {
       name: "Xiaolong Ma",
-      role: "Branch Manager - KSA",
-      company: "Legend Holding Group",
+      role: "Branch Manager",
+      company: "Legend Holding Group - KSA",
       image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1765351058/5_copy55_ccgw0y.png"
     },
     {
       name: "Turki Altalhi",
       role: "HR & Admin Manager",
-      company: "Legend Holding Group",
+      company: "Legend Holding Group - KSA",
       image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1766219042/turki_KSA_aupdzs.png"
     }
   ];
