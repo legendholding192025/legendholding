@@ -205,7 +205,7 @@ export function Footer() {
             </h3>
             <div className="flex items-center gap-5 mb-4">
               <Link
-                href="https://www.facebook.com/share/1XndETdEkF/"
+                href="https://www.facebook.com/profile.php?id=61575784209535"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-white/80 hover:text-white transition-all duration-300"
