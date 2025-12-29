@@ -32,7 +32,7 @@ export default function PrivacyPolicyPage() {
             <div className="max-w-4xl mx-auto">
               {/* Last Updated */}
               <div className="text-sm text-gray-500 mb-8">
-                Last Updated: June 3, 2024
+                Last Updated: December 29, 2025
               </div>
 
               <h1 className="text-3xl sm:text-4xl font-bold text-[#2B1C48] mb-8">Privacy Policy</h1>
@@ -52,6 +52,7 @@ export default function PrivacyPolicyPage() {
                   <li>Contact us for support</li>
                   <li>Apply for employment</li>
                   <li>Engage with our services</li>
+                  <li>Customer Care to resolve any matters</li>
                 </ul>
 
                 <h2 className="text-2xl font-semibold text-[#2B1C48] mb-4">How We Use Your Information</h2>
@@ -65,6 +66,7 @@ export default function PrivacyPolicyPage() {
                   <li>To gather analysis or valuable information to improve our services</li>
                   <li>To monitor the usage of our services</li>
                   <li>To detect, prevent and address technical issues</li>
+                  <li>Tracking and improving our services as per customer experience.</li>
                 </ul>
 
                 <h2 className="text-2xl font-semibold text-[#2B1C48] mb-4">Data Security</h2>

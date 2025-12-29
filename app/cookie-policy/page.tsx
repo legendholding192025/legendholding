@@ -47,7 +47,7 @@ export default function CookiePolicyPage() {
             <div className="max-w-4xl mx-auto">
               {/* Last Updated */}
               <div className="text-sm text-gray-500 mb-8">
-                Last Updated: June 3, 2024
+                Last Updated: December 29, 2025
               </div>
 
               <h1 className="text-3xl sm:text-4xl font-bold text-[#2B1C48] mb-8">Cookie Policy</h1>
@@ -98,16 +98,10 @@ export default function CookiePolicyPage() {
                               <td className="border p-2">Stores user's cookie consent preferences</td>
                             </tr>
                             <tr>
-                              <td className="border p-2">_cf_bm</td>
-                              <td className="border p-2">Cloudflare</td>
-                              <td className="border p-2">30 minutes</td>
-                              <td className="border p-2">Bot protection and security</td>
-                            </tr>
-                            <tr>
-                              <td className="border p-2">cf_clearance</td>
-                              <td className="border p-2">Cloudflare</td>
-                              <td className="border p-2">365 days</td>
-                              <td className="border p-2">Security and access control</td>
+                              <td className="border p-2">cloudinary</td>
+                              <td className="border p-2">Cloudinary</td>
+                              <td className="border p-2">Session</td>
+                              <td className="border p-2">Image delivery and CDN optimization</td>
                             </tr>
                           </tbody>
                         </table>
@@ -159,6 +153,18 @@ export default function CookiePolicyPage() {
                               <td className="border p-2">Google Analytics</td>
                               <td className="border p-2">1 minute</td>
                               <td className="border p-2">Controls request rate</td>
+                            </tr>
+                            <tr>
+                              <td className="border p-2">_gtag</td>
+                              <td className="border p-2">Google Tag Manager</td>
+                              <td className="border p-2">Session</td>
+                              <td className="border p-2">Tag management and tracking</td>
+                            </tr>
+                            <tr>
+                              <td className="border p-2">_gtm</td>
+                              <td className="border p-2">Google Tag Manager</td>
+                              <td className="border p-2">Session</td>
+                              <td className="border p-2">Tag management configuration</td>
                             </tr>
                           </tbody>
                         </table>
