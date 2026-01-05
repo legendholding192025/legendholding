@@ -54,7 +54,7 @@ export default function LeadershipTeam() {
       name: "Mira Wu",
       role: "Co-Founder & Vice Chairman",
       company: "Legend Holding Group",
-      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1761054550/10_copy_xhh1bh.jpg"
+      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1767593928/10_copy_2122_mssssq.png"
     },
     {
       name: "Cannon Wang",
