@@ -57,6 +57,12 @@ export default function LeadershipTeam() {
       image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1767593928/10_copy_2122_mssssq.png"
     },
     {
+      name: "Jonathan Stretton",
+      role: "Chief Operating Officer",
+      company: "Legend Holding Group",
+      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1767682094/Jonathan_r7nqeh.png"
+    },
+    {
       name: "Cannon Wang",
       role: "VP Dealership & Strategy of LHG",
       company: "Legend Holding Group",
@@ -132,7 +138,7 @@ export default function LeadershipTeam() {
       name: "Shameel Wohadally",
       role: "Head of Internal Audit",
       company: "Legend Holding Group",
-      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1766139337/01_4_z9oao2.png"
+      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1767681875/Shameel_jpzrrw.png"
     }
   ];
 
