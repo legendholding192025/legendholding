@@ -139,6 +139,12 @@ export default function LeadershipTeam() {
       role: "Head of Internal Audit",
       company: "Legend Holding Group",
       image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1767681875/Shameel_jpzrrw.png"
+    },
+    {
+      name: "Adrees Khan",
+      role: "Corporate Tax Manager",
+      company: "Legend Holding Group",
+      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1767787617/Adrees_nz1qnp.png"
     }
   ];
 
