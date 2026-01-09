@@ -138,7 +138,7 @@ export default function LeadershipTeam() {
       name: "Shameel Wohadally",
       role: "Head of Internal Audit",
       company: "Legend Holding Group",
-      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1767681875/Shameel_jpzrrw.png"
+      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1767940725/Shameel_1_ylaowu.png"
     },
     {
       name: "Adrees Khan",
