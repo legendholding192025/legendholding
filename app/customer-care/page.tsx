@@ -4,8 +4,14 @@ import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import Image from "next/image"
 import { useState } from "react"
-import { toast } from "sonner"
-import { Phone, Mail } from "lucide-react"
+import { Phone, Mail, CheckCircle, XCircle } from "lucide-react"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
 
 export default function CustomerCarePage() {
   const [formData, setFormData] = useState({
@@ -19,21 +25,23 @@ export default function CustomerCarePage() {
 
   const companies = [
     "Legend Motors",
-    "Legend Motors Trading",
-    "Legend Motors Dealership",
+    "212",
+    "Kaiyi",
+    "Skywell",
     "Legend Commercial Vehicles",
     "Legend AutoHub",
-    "Legend Motorcycles",
+    "Legend Motorcycles - Lifan",
     "Legend Rent a Car",
     "Legend Auto Services",
-    "Legend Global Media",
     "Legend Travel and Tourism",
     "Legend Green Energy Solutions",
     "Legend X",
-    "Legend Technical Services",
     "Zul Energy",
   ]
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [showSuccessModal, setShowSuccessModal] = useState(false)
+  const [showErrorModal, setShowErrorModal] = useState(false)
+  const [errorMessage, setErrorMessage] = useState("")
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target
@@ -48,11 +56,19 @@ export default function CustomerCarePage() {
     setIsSubmitting(true)
 
     try {
-      // Here you would typically send the form data to your API
-      // For now, we'll just show a success message
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-      
-      toast.success("Your complaint has been submitted successfully. We will review it shortly.")
+      const response = await fetch('/api/customer-care', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to submit complaint')
+      }
       
       // Reset form
       setFormData({
@@ -63,9 +79,13 @@ export default function CustomerCarePage() {
         subject: "",
         message: "",
       })
+
+      // Show success modal
+      setShowSuccessModal(true)
     } catch (error: any) {
       console.error("Error submitting form:", error)
-      toast.error(error.message || "Failed to submit form. Please try again later.")
+      setErrorMessage(error.message || "Failed to submit form. Please try again later.")
+      setShowErrorModal(true)
     } finally {
       setIsSubmitting(false)
     }
@@ -93,7 +113,7 @@ export default function CustomerCarePage() {
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="relative inline-block">
                 {/* Top Right Shape */}
-                <div className="absolute -top-6 -right-6 z-10">
+                <div className="absolute -top-8 -right-8 z-10">
                   <Image
                     src="/icons/shape.svg"
                     alt=""
@@ -130,64 +150,41 @@ export default function CustomerCarePage() {
             <div className="mb-8">
               <h2 className="text-3xl md:text-4xl font-bold text-[#5D376E] mb-2">Important Notice</h2>
               <div className="w-24 h-1 bg-[#EE8900] rounded-full mb-4"></div>
+              <div className="text-xl text-[#2B1C48] leading-8 font-normal" style={{ fontFamily: 'var(--body-font)' }}>
+                At Legend Holding Group, we position ourselves close to our customers to ensure the highest levels of satisfaction across all our subsidiaries. To support this commitment, we have established a dedicated channel for escalating any challenges that require Holding-level involvement.
+              </div>
             </div>
 
             {/* What should be reported */}
             <div className="mb-8">
               <h3 className="text-lg md:text-xl font-semibold text-[#EE8900] mb-4" style={{ fontFamily: 'var(--body-font)' }}>WHAT SHOULD BE REPORTED?</h3>
-              <div className="text-xl text-[#2B1C48] mb-4 ml-6 leading-8 font-normal" style={{ fontFamily: 'var(--body-font)' }}>Following incidents are examples of matters that should be reported:</div>
+              <div className="text-xl text-[#2B1C48] mb-4 leading-8 font-normal" style={{ fontFamily: 'var(--body-font)' }}>The following are examples of matters that should be escalated:</div>
               <ol className="list-decimal list-outside space-y-3 text-xl text-[#2B1C48] ml-6 leading-8 font-normal" style={{ fontFamily: 'var(--body-font)' }}>
-                <li>Violation of any applicable laws, rules or regulations;</li>
-                <li>Violation of AWR Code of Business Conduct and Ethics;</li>
-                <li>Misrepresentation or a false statement by or to a director, officer or employee respecting information included in the financial records, statements or reports;</li>
-                <li>Fraud or deliberate error in the preparation, evaluation, or review of financial or non-financial information;</li>
-                <li>Fraudulent or corrupt practices, including the offering or accepting bribes or otherwise gaining advantage from a relationship or association with AWR;</li>
-                <li>Coercion, harassment or discrimination by, or affecting, any member of the Corporation;</li>
-                <li>Safety, health and environment situations or issues;</li>
-                <li>Deficiencies or non-compliance with corporate policies and controls;</li>
-                <li>Privacy violation, data leakage and misappropriation of company assets;</li>
-                <li>Any incident that may expose AWR to a financial, reputational or safety risks;</li>
-                <li>ANYTHING that doesn't sound right to you.</li>
+                <li>Customer issues that were not resolved at the subsidiary level and require intervention from Legend Holding Group.</li>
+                <li>Any incident that negatively impacted the customer experience, from the beginning to the end of the customer journey.</li>
+                <li>Unresolved issues faced by customers while dealing with any Legend subsidiary, including products, services, or aftersales.</li>
               </ol>
             </div>
 
             {/* Who will receive */}
             <div className="mb-8">
-              <h3 className="text-lg md:text-xl font-semibold text-[#EE8900] mb-3" style={{ fontFamily: 'var(--body-font)' }}>WHO WILL RECEIVE AND ADMINISTER THE REPORTED COMPLIANT?</h3>
-              <div className="text-xl text-[#2B1C48] leading-8 font-normal" style={{ fontFamily: 'var(--body-font)' }}>
-                Integrity hot line is administrated by the Group Compliance Function, where validation of all reported cases falls under the Compliance Function responsibility. Upon receipt and assessment, the Compliance Function may delegate such responsibility to other departments like Group Internal Audit, Group Legal, Group HR when deemed necessary.
+              <h3 className="text-lg md:text-xl font-semibold text-[#EE8900] mb-3" style={{ fontFamily: 'var(--body-font)' }}>WHO WILL RECEIVE AND ADMINISTER THE REPORTED COMPLAINT?</h3>
+              <div className="text-xl text-[#2B1C48] mb-4 leading-8 font-normal" style={{ fontFamily: 'var(--body-font)' }}>
+                Our Customer Care Hotline is administered directly by the Holding team. The process follows these steps:
               </div>
+              <ol className="list-decimal list-outside space-y-3 text-xl text-[#2B1C48] ml-6 leading-8 font-normal" style={{ fontFamily: 'var(--body-font)' }}>
+                <li>The Holding team receives and validates all reported cases.</li>
+                <li>After assessment, the matter is escalated to the relevant business unit for immediate action.</li>
+                <li>The Holding team will discuss the issue internally, ensure it reaches the correct management level, and monitor the turnaround time.</li>
+                <li>We ensure the matter is resolved promptly and that a high customer satisfaction rate is achieved.</li>
+              </ol>
             </div>
 
-            {/* Can I choose to report anonymously */}
+            {/* How to reach out */}
             <div className="mb-8">
-              <h3 className="text-lg md:text-xl font-semibold text-[#EE8900] mb-3" style={{ fontFamily: 'var(--body-font)' }}>CAN I CHOOSE TO REPORT ANONYMOUSLY?</h3>
-              <div className="text-xl text-[#2B1C48] leading-8 font-normal" style={{ fontFamily: 'var(--body-font)' }}>
-                Although the Group encourages you to supply contact information while submitting your request as that may help in validating facts and obtaining more information when needed, you may choose to report ANONYMOUSLY. However, the Group Compliance Function are dedicated to keeping your identity and involvement confidential and will always work to maintain your confidentiality.
-              </div>
-            </div>
-
-            {/* Will I be able to know */}
-            <div className="mb-8">
-              <h3 className="text-lg md:text-xl font-semibold text-[#EE8900] mb-3" style={{ fontFamily: 'var(--body-font)' }}>WILL I BE ABLE TO KNOW THE INVESTIGATION RESULT?</h3>
-              <div className="text-xl text-[#2B1C48] leading-8 font-normal" style={{ fontFamily: 'var(--body-font)' }}>
-                In most cases you will be updated with the investigation conclusion, having said that the company preserves its' right to classify particular cases as confidential (or legally privileged) when deemed necessary.
-              </div>
-            </div>
-
-            {/* How can I learn more */}
-            <div className="mb-8">
-              <h3 className="text-lg md:text-xl font-semibold text-[#EE8900] mb-3" style={{ fontFamily: 'var(--body-font)' }}>HOW CAN I LEARN MORE ABOUT THE INVESTIGATION PROCESS?</h3>
-              <div className="text-xl text-[#2B1C48] leading-8 font-normal" style={{ fontFamily: 'var(--body-font)' }}>
-                Kindly refer to the group investigation policy.
-              </div>
-            </div>
-
-            {/* Who to reach out */}
-            <div className="mb-8">
-              <h3 className="text-lg md:text-xl font-semibold text-[#EE8900] mb-3" style={{ fontFamily: 'var(--body-font)' }}>WHO TO REACH OUT IN CASE I HAVE MORE QUESTIONS ABOUT THE INTEGRITY HOTLINE?</h3>
-              <div className="text-xl text-[#2B1C48] leading-8 font-normal" style={{ fontFamily: 'var(--body-font)' }}>
-                Please refer to the Group Compliance Function.
+              <h3 className="text-lg md:text-xl font-semibold text-[#EE8900] mb-3" style={{ fontFamily: 'var(--body-font)' }}>HOW TO REACH OUT IF YOU HAVE QUESTIONS ABOUT THE CUSTOMER CARE HOTLINE?</h3>
+              <div className="text-xl text-[#2B1C48] leading-8 font-normal flex items-center gap-2" style={{ fontFamily: 'var(--body-font)' }}>
+                <span>📞</span> <span>04 234 0738</span>
               </div>
             </div>
 
@@ -210,14 +207,14 @@ export default function CustomerCarePage() {
                   </div>
                 </div>
               </div>
-              <div className="absolute right-[-100px] top-[45%] -translate-y-1/2 z-20 md:block hidden">
+              <div className="absolute right-[-100px] top-[40%] -translate-y-1/2 z-20 md:block hidden">
                 <Image
-                  src="https://res.cloudinary.com/dzfhqvxnf/image/upload/v1766237702/LUMO_dapjqs.svg"
+                  src="https://res.cloudinary.com/dzfhqvxnf/image/upload/v1766384043/LUMO_foe_web_ddphop.svg"
                   alt="LUMO"
-                  width={330}
-                  height={340}
+                  width={300}
+                  height={310}
                   className="w-auto h-auto"
-                  style={{ width: '330px', height: '340px' }}
+                  style={{ width: '300px', height: '310px' }}
                 />
               </div>
             </div>
@@ -287,11 +284,11 @@ export default function CustomerCarePage() {
                         value={formData.company}
                         onChange={handleChange}
                         required
-                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#EE8900] focus:border-transparent transition-all duration-200 bg-white"
+                        className={`w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#EE8900] focus:border-transparent transition-all duration-200 bg-white ${!formData.company ? 'text-gray-400' : 'text-gray-900'}`}
                       >
-                        <option value="">Select a company</option>
+                        <option value="" className="text-gray-400">Select a company</option>
                         {companies.map((company) => (
-                          <option key={company} value={company}>
+                          <option key={company} value={company} className="text-gray-900">
                             {company}
                           </option>
                         ))}
@@ -352,6 +349,60 @@ export default function CustomerCarePage() {
         </section>
       </main>
       <Footer />
+
+      {/* Success Modal */}
+      <Dialog open={showSuccessModal} onOpenChange={setShowSuccessModal}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <div className="flex items-center justify-center mb-4">
+              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
+                <CheckCircle className="w-10 h-10 text-green-600" />
+              </div>
+            </div>
+            <DialogTitle className="text-center text-xl font-semibold text-gray-900">
+              Complaint Submitted Successfully
+            </DialogTitle>
+            <DialogDescription className="text-center text-gray-600 mt-2">
+              Your complaint has been submitted successfully. We will review it shortly and get back to you.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex justify-center mt-6">
+            <button
+              onClick={() => setShowSuccessModal(false)}
+              className="px-6 py-2 bg-[#F08900] hover:bg-[#d67a00] text-white rounded-lg transition-colors font-medium"
+            >
+              Close
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Error Modal */}
+      <Dialog open={showErrorModal} onOpenChange={setShowErrorModal}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <div className="flex items-center justify-center mb-4">
+              <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center">
+                <XCircle className="w-10 h-10 text-red-600" />
+              </div>
+            </div>
+            <DialogTitle className="text-center text-xl font-semibold text-gray-900">
+              Submission Failed
+            </DialogTitle>
+            <DialogDescription className="text-center text-gray-600 mt-2">
+              {errorMessage}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex justify-center mt-6">
+            <button
+              onClick={() => setShowErrorModal(false)}
+              className="px-6 py-2 bg-[#F08900] hover:bg-[#d67a00] text-white rounded-lg transition-colors font-medium"
+            >
+              Close
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </>
   )
 }

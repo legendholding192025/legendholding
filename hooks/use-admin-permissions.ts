@@ -14,6 +14,7 @@ export interface UserRole {
     applications?: boolean
     newsletters?: boolean
     settings?: boolean
+    customer_care?: boolean
   }
   created_at?: string
   updated_at?: string
@@ -79,7 +80,8 @@ export function useAdminPermissions(): AdminPermissions {
           jobs: true,
           applications: true,
           newsletters: true,
-          settings: true
+          settings: true,
+          customer_care: true
         } : {
           dashboard: true,  // Allow dashboard access for all users
           submissions: false,
@@ -87,7 +89,8 @@ export function useAdminPermissions(): AdminPermissions {
           jobs: true,
           applications: true,
           newsletters: false,
-          settings: false
+          settings: false,
+          customer_care: false
         },
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString()
@@ -231,7 +234,8 @@ export function useAdminPermissions(): AdminPermissions {
       '/admin/jobs': 'jobs',
       '/admin/applications': 'applications',
       '/admin/newsletters': 'newsletters',
-      '/admin/settings': 'settings'
+      '/admin/settings': 'settings',
+      '/admin/customer-care': 'customer_care'
     }
 
     const permission = pathPermissions[path]

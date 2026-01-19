@@ -16,7 +16,8 @@ import {
   PanelLeftClose,
   PanelLeftOpen,
   ClipboardList,
-  Shield
+  Shield,
+  Headphones
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -82,6 +83,13 @@ const menuItems = [
     icon: Mail,
     href: "/admin/newsletters",
     permission: "newsletters" as const,
+    superAdminOnly: true
+  },
+  {
+    title: "Customer Care",
+    icon: Headphones,
+    href: "/admin/customer-care",
+    permission: "customer_care" as const,
     superAdminOnly: true
   }
 ]
