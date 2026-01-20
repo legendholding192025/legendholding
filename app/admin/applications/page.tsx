@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
 import { format } from "date-fns"
 import {
@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Eye, Trash2, Download, Search, Filter } from "lucide-react"
+import { Eye, Trash2, Download, Search } from "lucide-react"
 import { toast } from "sonner"
 import Link from "next/link"
 import { Input } from "@/components/ui/input"
@@ -24,7 +24,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { useRouter } from "next/navigation"
 import { AdminDashboardLayout } from "@/components/admin/dashboard-layout"
@@ -57,6 +56,7 @@ export default function ApplicationsPage() {
   const [jobs, setJobs] = useState<Job[]>([])
   const [loading, setLoading] = useState(true)
   const [loadingMore, setLoadingMore] = useState(false)
+  const [filtering, setFiltering] = useState(false) // Loading state for filter changes
   const [searchTerm, setSearchTerm] = useState("")
   const [statusFilter, setStatusFilter] = useState<string>("all")
   const [jobFilter, setJobFilter] = useState<string>("all")
@@ -64,12 +64,43 @@ export default function ApplicationsPage() {
   const [pageSize] = useState(100) // Limit per load
   const [hasMore, setHasMore] = useState(false)
   const [totalCount, setTotalCount] = useState(0)
+  const [filteredCount, setFilteredCount] = useState(0) // Count with job/status filters applied
+  const [statusCounts, setStatusCounts] = useState({
+    pending: 0,
+    reviewed: 0,
+    shortlisted: 0,
+    rejected: 0,
+    hired: 0
+  }) // Status counts from database
+  const userJobIdsCache = useRef<string[] | null>(null) // Cache user job IDs
   const supabase = createClientComponentClient()
 
   useEffect(() => {
     fetchApplications()
     fetchJobs()
   }, [])
+
+  // Refetch applications when filters change (skip initial mount)
+  const isInitialMount = useRef(true)
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false
+      return
+    }
+    // Clear previous data immediately to avoid showing stale data
+    setApplications([])
+    setFilteredCount(0)
+    setStatusCounts({
+      pending: 0,
+      reviewed: 0,
+      shortlisted: 0,
+      rejected: 0,
+      hired: 0
+    })
+    setFiltering(true) // Show loading state for filter changes
+    fetchApplications(0) // Reset to first page when filters change
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [jobFilter, statusFilter])
 
   const fetchApplications = async (offset: number = 0) => {
     try {
@@ -78,48 +109,76 @@ export default function ApplicationsPage() {
       
       if (!user) {
         toast.error('User not authenticated')
+        setLoading(false)
+        setFiltering(false)
         return
       }
 
-      const { data: roleData } = await supabase
+      const { data: roleData, error: roleError } = await supabase
         .from('user_roles')
         .select('role')
         .eq('user_id', user?.id)
         .single()
 
-      if (!roleData) {
+      if (roleError || !roleData) {
+        console.error('Error fetching user role:', roleError)
         toast.error('Unable to determine user role')
+        setLoading(false)
+        setFiltering(false)
         return
       }
 
-      // Get total count first
-      let countQuery = supabase
-        .from('job_applications')
-        .select('*', { count: 'exact', head: true })
-
-      // Apply same filters for count
+      // Get user job IDs (cached for performance)
+      let userJobIds: string[] | null = null
       if (roleData?.role === 'admin') {
-        const { data: userJobs } = await supabase
-          .from('jobs')
-          .select('id')
-          .eq('created_by', user?.id)
-        
-        const userJobIds = userJobs?.map(job => job.id) || []
-        if (userJobIds.length > 0) {
-          countQuery = countQuery.in('job_id', userJobIds)
+        if (userJobIdsCache.current === null) {
+          const { data: userJobs } = await supabase
+            .from('jobs')
+            .select('id')
+            .eq('created_by', user?.id)
+          userJobIds = userJobs?.map(job => job.id) || []
+          userJobIdsCache.current = userJobIds
         } else {
+          userJobIds = userJobIdsCache.current
+        }
+        
+        if (userJobIds.length === 0) {
           setApplications([])
           setTotalCount(0)
+          setFilteredCount(0)
+          setStatusCounts({ pending: 0, reviewed: 0, shortlisted: 0, rejected: 0, hired: 0 })
           setHasMore(false)
+          setLoading(false)
+          setFiltering(false)
           return
         }
       }
 
-      const { count } = await countQuery
-      setTotalCount(count || 0)
+      // Determine if filters are active
+      const isFiltered = jobFilter !== "all" || statusFilter !== "all"
+      
+      // Only fetch the count we need (optimize: don't fetch both)
+      let countQuery = supabase
+        .from('job_applications')
+        .select('id', { count: 'exact', head: true }) // Use 'id' instead of '*' for faster count
 
-      // The RLS policies will automatically filter applications based on user role
-      // Super admins will see all applications, regular admins will see only applications for their jobs
+      // Apply role-based filter
+      if (userJobIds && userJobIds.length > 0) {
+        countQuery = countQuery.in('job_id', userJobIds)
+      }
+
+      // Apply filters to count query
+      if (jobFilter !== "all") {
+        countQuery = countQuery.eq('job_id', jobFilter)
+      }
+      if (statusFilter !== "all") {
+        countQuery = countQuery.eq('status', statusFilter)
+      }
+
+      // Fetch count and data in parallel for better performance
+      const countPromise = countQuery
+      
+      // Build data query
       let query = supabase
         .from('job_applications')
         .select(`
@@ -137,55 +196,138 @@ export default function ApplicationsPage() {
         .order('created_at', { ascending: false })
         .range(offset, offset + pageSize - 1)
 
-      // WORKAROUND: Explicitly filter applications based on user role since RLS is not working
-      if (roleData?.role === 'admin') {
-        // Regular admins can only see applications for jobs they created
-        const { data: userJobs } = await supabase
-          .from('jobs')
-          .select('id')
-          .eq('created_by', user?.id)
-        
-        const userJobIds = userJobs?.map(job => job.id) || []
-        if (userJobIds.length > 0) {
-          query = query.in('job_id', userJobIds)
-        } else {
-          // If admin has no jobs, they should see no applications
-          // Return empty array instead of using invalid UUID
-          setApplications([])
-          setHasMore(false)
-          return
-        }
+      // Apply role-based filter to data query
+      if (userJobIds && userJobIds.length > 0) {
+        query = query.in('job_id', userJobIds)
       }
-      // Super admins see all applications (no additional filter needed)
 
-      const { data: applicationsData, error: applicationsError } = await query
+      // Apply job filter
+      if (jobFilter !== "all") {
+        query = query.eq('job_id', jobFilter)
+      }
 
-      if (applicationsError) throw applicationsError
+      // Apply status filter
+      if (statusFilter !== "all") {
+        query = query.eq('status', statusFilter)
+      }
+
+      // Execute main queries first (count and data) - these are critical
+      const [countRes, applicationsDataRes] = await Promise.all([countPromise, query])
+
+      // Check for errors in the main queries
+      if (countRes.error) {
+        console.error('Count query error:', countRes.error)
+        throw countRes.error
+      }
+
+      const currentCount = countRes.count || 0
+      const { data: applicationsData, error: applicationsError } = applicationsDataRes
+      
+      if (applicationsError) {
+        console.error('Applications query error:', applicationsError)
+        throw applicationsError
+      }
+
+      // Fetch status counts separately (only when offset is 0) - non-blocking
+      if (offset === 0) {
+        // Fetch status counts in background to avoid blocking the main data load
+        const fetchStatusCounts = async () => {
+          try {
+            const statusPromises = ['pending', 'reviewed', 'shortlisted', 'rejected', 'hired'].map(status => {
+              let statusQuery = supabase
+                .from('job_applications')
+                .select('id', { count: 'exact', head: true })
+                .eq('status', status)
+              
+              // Apply role-based filter
+              if (userJobIds && userJobIds.length > 0) {
+                statusQuery = statusQuery.in('job_id', userJobIds)
+              }
+              
+              // Apply job filter if active
+              if (jobFilter !== "all") {
+                statusQuery = statusQuery.eq('job_id', jobFilter)
+              }
+              
+              return statusQuery
+            })
+
+            const statusResults = await Promise.all(statusPromises)
+            
+            setStatusCounts({
+              pending: statusResults[0]?.count || 0,
+              reviewed: statusResults[1]?.count || 0,
+              shortlisted: statusResults[2]?.count || 0,
+              rejected: statusResults[3]?.count || 0,
+              hired: statusResults[4]?.count || 0
+            })
+          } catch (err) {
+            console.error('Error fetching status counts:', err)
+            // Don't throw - status counts are non-critical
+          }
+        }
+        
+        // Fire and don't wait - let it run in background
+        fetchStatusCounts()
+      }
+      
+      // Store counts based on filter state
+      if (isFiltered) {
+        setFilteredCount(currentCount)
+        // Only fetch total count if we don't have it yet (on initial load)
+        if (totalCount === 0 && offset === 0) {
+          // Fetch total count in background (non-blocking)
+          const fetchTotalCount = async () => {
+            try {
+              const totalCountQuery = userJobIds && userJobIds.length > 0
+                ? supabase.from('job_applications').select('id', { count: 'exact', head: true }).in('job_id', userJobIds)
+                : supabase.from('job_applications').select('id', { count: 'exact', head: true })
+              const { count } = await totalCountQuery
+              setTotalCount(count || 0)
+            } catch (err) {
+              console.error('Error fetching total count:', err)
+            }
+          }
+          fetchTotalCount()
+        }
+      } else {
+        // No filters active - this is the total count
+        setTotalCount(currentCount)
+        setFilteredCount(currentCount)
+      }
 
       if (!applicationsData) {
         setApplications([])
         setHasMore(false)
+        setFiltering(false)
         return
       }
 
+      // Transform data to match JobApplication type
+      const transformedData: JobApplication[] = applicationsData.map((app: any) => ({
+        ...app,
+        job: Array.isArray(app.job) ? app.job[0] : app.job
+      }))
+
       if (offset === 0) {
-        setApplications(applicationsData)
+        setApplications(transformedData)
       } else {
-        setApplications(prev => [...prev, ...applicationsData])
+        setApplications(prev => [...prev, ...transformedData])
       }
       
-      // Check if there are more records
-      setHasMore((offset + applicationsData.length) < (count || 0))
+      // Check if there are more records (use current count)
+      setHasMore((offset + applicationsData.length) < currentCount)
+      setFiltering(false) // Clear filtering state
     } catch (error: any) {
-      console.error('Error fetching applications:', error)
-      console.error('Error details:', JSON.stringify(error, null, 2))
+      const errorMessage = error?.message || error?.code || 'Unknown error'
+      console.error('Error fetching applications:', errorMessage, error)
       
       // Handle specific timeout error
-      if (error?.code === '57014' || error?.message?.includes('timeout')) {
+      if (error?.code === '57014' || errorMessage?.includes('timeout') || errorMessage?.includes('canceling statement')) {
         toast.error('Query timeout - Loading most recent applications only')
         // Try a more limited query as fallback
         try {
-          const { data: limitedData } = await supabase
+          const { data: limitedData, error: fallbackError } = await supabase
             .from('job_applications')
             .select(`
               id,
@@ -202,18 +344,44 @@ export default function ApplicationsPage() {
             .order('created_at', { ascending: false })
             .limit(50)
           
+          if (fallbackError) {
+            console.error('Fallback query error:', fallbackError)
+            throw fallbackError
+          }
+          
           if (limitedData) {
-            setApplications(limitedData)
+            // Transform data to match JobApplication type
+            const transformedLimitedData: JobApplication[] = limitedData.map((app: any) => ({
+              ...app,
+              job: Array.isArray(app.job) ? app.job[0] : app.job
+            }))
+            setApplications(transformedLimitedData)
+            // Calculate status counts from limited data as fallback
+            setStatusCounts({
+              pending: transformedLimitedData.filter(app => app.status === 'pending').length,
+              reviewed: transformedLimitedData.filter(app => app.status === 'reviewed').length,
+              shortlisted: transformedLimitedData.filter(app => app.status === 'shortlisted').length,
+              rejected: transformedLimitedData.filter(app => app.status === 'rejected').length,
+              hired: transformedLimitedData.filter(app => app.status === 'hired').length
+            })
+            setTotalCount(transformedLimitedData.length)
+            setFilteredCount(transformedLimitedData.length)
+            toast.success('Loaded recent applications')
             return
           }
-        } catch (fallbackError) {
-          console.error('Fallback query also failed:', fallbackError)
+        } catch (fallbackError: any) {
+          console.error('Fallback query also failed:', fallbackError?.message || fallbackError)
         }
       }
       
-      toast.error(`Failed to load applications: ${error instanceof Error ? error.message : 'Unknown error'}`)
+      // Show user-friendly error message
+      const displayMessage = errorMessage === 'Unknown error' 
+        ? 'Failed to load applications. Please try again.'
+        : `Failed to load applications: ${errorMessage}`
+      toast.error(displayMessage)
     } finally {
       setLoading(false)
+      setFiltering(false)
     }
   }
 
@@ -296,7 +464,25 @@ export default function ApplicationsPage() {
 
       if (error) throw error
 
+      // Update local state
+      const deletedApp = applications.find(app => app.id === id)
       setApplications(applications.filter(app => app.id !== id))
+      
+      // Update counts
+      setTotalCount(prev => Math.max(0, prev - 1))
+      setFilteredCount(prev => Math.max(0, prev - 1))
+      
+      // Update status counts if we know the deleted app's status
+      if (deletedApp) {
+        const status = deletedApp.status as keyof typeof statusCounts
+        if (status in statusCounts) {
+          setStatusCounts(prev => ({
+            ...prev,
+            [status]: Math.max(0, prev[status] - 1)
+          }))
+        }
+      }
+      
       toast.success('Application deleted successfully')
     } catch (error) {
       console.error('Error deleting application:', error)
@@ -613,14 +799,19 @@ export default function ApplicationsPage() {
   }, {} as Record<string, { job: Job, applications: JobApplication[] }>)
 
   const getApplicationStats = () => {
+    // When filters are active, use filteredCount from database; otherwise use totalCount
+    const isFiltered = jobFilter !== "all" || statusFilter !== "all"
+    
+    // Use status counts from database (not from loaded applications)
+    // These counts reflect the total in the database, not just the visible 100
     const stats = {
-      total: totalCount, // Use actual total from database
-      loaded: applications.length, // Number currently loaded
-      pending: applications.filter(app => app.status === 'pending').length,
-      reviewed: applications.filter(app => app.status === 'reviewed').length,
-      shortlisted: applications.filter(app => app.status === 'shortlisted').length,
-      rejected: applications.filter(app => app.status === 'rejected').length,
-      hired: applications.filter(app => app.status === 'hired').length,
+      total: isFiltered ? filteredCount : totalCount, // Use filtered count from DB when filters are active
+      loaded: applications.length, // Number currently loaded from database
+      pending: statusCounts.pending,
+      reviewed: statusCounts.reviewed,
+      shortlisted: statusCounts.shortlisted,
+      rejected: statusCounts.rejected,
+      hired: statusCounts.hired,
     }
     return stats
   }
@@ -811,11 +1002,21 @@ export default function ApplicationsPage() {
               <CardTitle className="text-sm font-medium">Total</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{stats.total}</div>
-              {stats.loaded < stats.total && (
-                <div className="text-xs text-gray-500 mt-1">
-                  {stats.loaded} loaded
+              {filtering ? (
+                <div className="flex items-center gap-1 h-8">
+                  <div className="w-2 h-2 rounded-full bg-gray-900 animate-bounce" style={{ animationDelay: '0ms', animationDuration: '1.4s' }}></div>
+                  <div className="w-2 h-2 rounded-full bg-gray-900 animate-bounce" style={{ animationDelay: '200ms', animationDuration: '1.4s' }}></div>
+                  <div className="w-2 h-2 rounded-full bg-gray-900 animate-bounce" style={{ animationDelay: '400ms', animationDuration: '1.4s' }}></div>
                 </div>
+              ) : (
+                <>
+                  <div className="text-2xl font-bold">{stats.total}</div>
+                  {stats.loaded < stats.total && (
+                    <div className="text-xs text-gray-500 mt-1">
+                      {stats.loaded} loaded
+                    </div>
+                  )}
+                </>
               )}
             </CardContent>
           </Card>
@@ -824,7 +1025,15 @@ export default function ApplicationsPage() {
               <CardTitle className="text-sm font-medium">Pending</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-yellow-600">{stats.pending}</div>
+              {filtering ? (
+                <div className="flex items-center gap-1 h-8">
+                  <div className="w-2 h-2 rounded-full bg-yellow-600 animate-bounce" style={{ animationDelay: '0ms', animationDuration: '1.4s' }}></div>
+                  <div className="w-2 h-2 rounded-full bg-yellow-600 animate-bounce" style={{ animationDelay: '200ms', animationDuration: '1.4s' }}></div>
+                  <div className="w-2 h-2 rounded-full bg-yellow-600 animate-bounce" style={{ animationDelay: '400ms', animationDuration: '1.4s' }}></div>
+                </div>
+              ) : (
+                <div className="text-2xl font-bold text-yellow-600">{stats.pending}</div>
+              )}
             </CardContent>
           </Card>
           <Card>
@@ -832,7 +1041,15 @@ export default function ApplicationsPage() {
               <CardTitle className="text-sm font-medium">Reviewed</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-blue-600">{stats.reviewed}</div>
+              {filtering ? (
+                <div className="flex items-center gap-1 h-8">
+                  <div className="w-2 h-2 rounded-full bg-blue-600 animate-bounce" style={{ animationDelay: '0ms', animationDuration: '1.4s' }}></div>
+                  <div className="w-2 h-2 rounded-full bg-blue-600 animate-bounce" style={{ animationDelay: '200ms', animationDuration: '1.4s' }}></div>
+                  <div className="w-2 h-2 rounded-full bg-blue-600 animate-bounce" style={{ animationDelay: '400ms', animationDuration: '1.4s' }}></div>
+                </div>
+              ) : (
+                <div className="text-2xl font-bold text-blue-600">{stats.reviewed}</div>
+              )}
             </CardContent>
           </Card>
           <Card>
@@ -840,7 +1057,15 @@ export default function ApplicationsPage() {
               <CardTitle className="text-sm font-medium">Shortlisted</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-green-600">{stats.shortlisted}</div>
+              {filtering ? (
+                <div className="flex items-center gap-1 h-8">
+                  <div className="w-2 h-2 rounded-full bg-green-600 animate-bounce" style={{ animationDelay: '0ms', animationDuration: '1.4s' }}></div>
+                  <div className="w-2 h-2 rounded-full bg-green-600 animate-bounce" style={{ animationDelay: '200ms', animationDuration: '1.4s' }}></div>
+                  <div className="w-2 h-2 rounded-full bg-green-600 animate-bounce" style={{ animationDelay: '400ms', animationDuration: '1.4s' }}></div>
+                </div>
+              ) : (
+                <div className="text-2xl font-bold text-green-600">{stats.shortlisted}</div>
+              )}
             </CardContent>
           </Card>
           <Card>
@@ -848,7 +1073,15 @@ export default function ApplicationsPage() {
               <CardTitle className="text-sm font-medium">Rejected</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-red-600">{stats.rejected}</div>
+              {filtering ? (
+                <div className="flex items-center gap-1 h-8">
+                  <div className="w-2 h-2 rounded-full bg-red-600 animate-bounce" style={{ animationDelay: '0ms', animationDuration: '1.4s' }}></div>
+                  <div className="w-2 h-2 rounded-full bg-red-600 animate-bounce" style={{ animationDelay: '200ms', animationDuration: '1.4s' }}></div>
+                  <div className="w-2 h-2 rounded-full bg-red-600 animate-bounce" style={{ animationDelay: '400ms', animationDuration: '1.4s' }}></div>
+                </div>
+              ) : (
+                <div className="text-2xl font-bold text-red-600">{stats.rejected}</div>
+              )}
             </CardContent>
           </Card>
           <Card>
@@ -856,7 +1089,15 @@ export default function ApplicationsPage() {
               <CardTitle className="text-sm font-medium">Hired</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-purple-600">{stats.hired}</div>
+              {filtering ? (
+                <div className="flex items-center gap-1 h-8">
+                  <div className="w-2 h-2 rounded-full bg-purple-600 animate-bounce" style={{ animationDelay: '0ms', animationDuration: '1.4s' }}></div>
+                  <div className="w-2 h-2 rounded-full bg-purple-600 animate-bounce" style={{ animationDelay: '200ms', animationDuration: '1.4s' }}></div>
+                  <div className="w-2 h-2 rounded-full bg-purple-600 animate-bounce" style={{ animationDelay: '400ms', animationDuration: '1.4s' }}></div>
+                </div>
+              ) : (
+                <div className="text-2xl font-bold text-purple-600">{stats.hired}</div>
+              )}
             </CardContent>
           </Card>
         </div>
@@ -880,12 +1121,19 @@ export default function ApplicationsPage() {
                 {filteredApplications.length === 0 && (
                   <TableRow>
                     <TableCell colSpan={7} className="text-center py-8">
-                      <div className="text-gray-500">
-                        <p>No applications found</p>
-                        {userRole?.role === 'admin' && jobs.length === 0 && (
-                          <p className="text-sm mt-2">You haven't created any jobs yet. Create a job post to start receiving applications.</p>
-                        )}
-                      </div>
+                      {loading || filtering ? (
+                        <div className="flex flex-col items-center justify-center gap-2">
+                          <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#2B1C48] border-t-transparent"></div>
+                          <p className="text-sm text-gray-500">Loading applications...</p>
+                        </div>
+                      ) : (
+                        <div className="text-gray-500">
+                          <p>No applications found</p>
+                          {userRole?.role === 'admin' && jobs.length === 0 && (
+                            <p className="text-sm mt-2">You haven't created any jobs yet. Create a job post to start receiving applications.</p>
+                          )}
+                        </div>
+                      )}
                     </TableCell>
                   </TableRow>
                 )}
@@ -901,7 +1149,7 @@ export default function ApplicationsPage() {
                   variant="outline"
                   size="lg"
                 >
-                  {loadingMore ? 'Loading...' : `Load More (${applications.length} of ${totalCount})`}
+                  {loadingMore ? 'Loading...' : `Load More (${applications.length} of ${jobFilter !== "all" || statusFilter !== "all" ? filteredCount : totalCount})`}
                 </Button>
               </div>
             )}
@@ -992,12 +1240,19 @@ export default function ApplicationsPage() {
             {Object.keys(groupedApplications).length === 0 && (
               <Card>
                 <CardContent className="text-center py-8">
-                  <div className="text-gray-500">
-                    <p>No applications found</p>
-                    {userRole?.role === 'admin' && jobs.length === 0 && (
-                      <p className="text-sm mt-2">You haven't created any jobs yet. Create a job post to start receiving applications.</p>
-                    )}
-                  </div>
+                  {loading || filtering ? (
+                    <div className="flex flex-col items-center justify-center gap-2">
+                      <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#2B1C48] border-t-transparent"></div>
+                      <p className="text-sm text-gray-500">Loading applications...</p>
+                    </div>
+                  ) : (
+                    <div className="text-gray-500">
+                      <p>No applications found</p>
+                      {userRole?.role === 'admin' && jobs.length === 0 && (
+                        <p className="text-sm mt-2">You haven't created any jobs yet. Create a job post to start receiving applications.</p>
+                      )}
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             )}
@@ -1011,7 +1266,7 @@ export default function ApplicationsPage() {
                   variant="outline"
                   size="lg"
                 >
-                  {loadingMore ? 'Loading...' : `Load More (${applications.length} of ${totalCount})`}
+                  {loadingMore ? 'Loading...' : `Load More (${applications.length} of ${jobFilter !== "all" || statusFilter !== "all" ? filteredCount : totalCount})`}
                 </Button>
               </div>
             )}
