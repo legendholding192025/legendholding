@@ -61,7 +61,7 @@ export default function ApplicationsPage() {
   const [statusFilter, setStatusFilter] = useState<string>("all")
   const [jobFilter, setJobFilter] = useState<string>("all")
   const [viewMode, setViewMode] = useState<"table" | "grouped">("table")
-  const [pageSize] = useState(100) // Limit per load
+  const [pageSize] = useState(50) // Reduced limit for faster load
   const [hasMore, setHasMore] = useState(false)
   const [totalCount, setTotalCount] = useState(0)
   const [filteredCount, setFilteredCount] = useState(0) // Count with job/status filters applied
@@ -72,6 +72,7 @@ export default function ApplicationsPage() {
     rejected: 0,
     hired: 0
   }) // Status counts from database
+  const [statusCountsLoading, setStatusCountsLoading] = useState(true) // Track if status counts are being loaded
   const userJobIdsCache = useRef<string[] | null>(null) // Cache user job IDs
   const supabase = createClientComponentClient()
 
@@ -97,6 +98,7 @@ export default function ApplicationsPage() {
       rejected: 0,
       hired: 0
     })
+    setStatusCountsLoading(true) // Show loading for status counts
     setFiltering(true) // Show loading state for filter changes
     fetchApplications(0) // Reset to first page when filters change
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -157,28 +159,7 @@ export default function ApplicationsPage() {
       // Determine if filters are active
       const isFiltered = jobFilter !== "all" || statusFilter !== "all"
       
-      // Only fetch the count we need (optimize: don't fetch both)
-      let countQuery = supabase
-        .from('job_applications')
-        .select('id', { count: 'exact', head: true }) // Use 'id' instead of '*' for faster count
-
-      // Apply role-based filter
-      if (userJobIds && userJobIds.length > 0) {
-        countQuery = countQuery.in('job_id', userJobIds)
-      }
-
-      // Apply filters to count query
-      if (jobFilter !== "all") {
-        countQuery = countQuery.eq('job_id', jobFilter)
-      }
-      if (statusFilter !== "all") {
-        countQuery = countQuery.eq('status', statusFilter)
-      }
-
-      // Fetch count and data in parallel for better performance
-      const countPromise = countQuery
-      
-      // Build data query
+      // Build data query - PRIORITY: Load data first for fast display
       let query = supabase
         .from('job_applications')
         .select(`
@@ -194,7 +175,7 @@ export default function ApplicationsPage() {
           job:jobs(id, title, department)
         `)
         .order('created_at', { ascending: false })
-        .range(offset, offset + pageSize - 1)
+        .limit(pageSize) // Use limit instead of range for simpler query
 
       // Apply role-based filter to data query
       if (userJobIds && userJobIds.length > 0) {
@@ -211,49 +192,103 @@ export default function ApplicationsPage() {
         query = query.eq('status', statusFilter)
       }
 
-      // Execute main queries first (count and data) - these are critical
-      const [countRes, applicationsDataRes] = await Promise.all([countPromise, query])
-
-      // Check for errors in the main queries
-      if (countRes.error) {
-        console.error('Count query error:', countRes.error)
-        throw countRes.error
-      }
-
-      const currentCount = countRes.count || 0
-      const { data: applicationsData, error: applicationsError } = applicationsDataRes
+      // Execute data query first (priority - show data ASAP)
+      const { data: applicationsData, error: applicationsError } = await query
       
       if (applicationsError) {
         console.error('Applications query error:', applicationsError)
         throw applicationsError
       }
 
-      // Fetch status counts separately (only when offset is 0) - non-blocking
-      if (offset === 0) {
-        // Fetch status counts in background to avoid blocking the main data load
-        const fetchStatusCounts = async () => {
-          try {
+      // Set data immediately for fast display
+      if (applicationsData) {
+        const transformedData: JobApplication[] = applicationsData.map((app: any) => ({
+          ...app,
+          job: Array.isArray(app.job) ? app.job[0] : app.job
+        }))
+
+        if (offset === 0) {
+          setApplications(transformedData)
+        } else {
+          setApplications(prev => [...prev, ...transformedData])
+        }
+        
+        // Clear filtering state immediately after data loads
+        setFiltering(false)
+        
+        // If we're not fetching status counts (offset > 0), set loading to false
+        if (offset > 0) {
+          setStatusCountsLoading(false)
+        }
+      }
+
+      // Fetch counts and status counts in background (non-blocking) - for accurate totals
+      const fetchCountInBackground = async () => {
+        try {
+          // Fetch total count
+          let countQuery = supabase
+            .from('job_applications')
+            .select('id', { count: 'exact', head: true })
+
+          if (userJobIds && userJobIds.length > 0) {
+            countQuery = countQuery.in('job_id', userJobIds)
+          }
+          if (jobFilter !== "all") {
+            countQuery = countQuery.eq('job_id', jobFilter)
+          }
+          if (statusFilter !== "all") {
+            countQuery = countQuery.eq('status', statusFilter)
+          }
+
+          // Always fetch accurate status counts on initial load (offset === 0)
+          // This ensures we show correct counts even if we only loaded 50 applications
+          const shouldFetchStatusCounts = offset === 0
+          
+          const queries: Promise<any>[] = [countQuery]
+          
+          if (shouldFetchStatusCounts) {
+            // Fetch all status counts in parallel
             const statusPromises = ['pending', 'reviewed', 'shortlisted', 'rejected', 'hired'].map(status => {
               let statusQuery = supabase
                 .from('job_applications')
                 .select('id', { count: 'exact', head: true })
                 .eq('status', status)
               
-              // Apply role-based filter
               if (userJobIds && userJobIds.length > 0) {
                 statusQuery = statusQuery.in('job_id', userJobIds)
               }
-              
-              // Apply job filter if active
               if (jobFilter !== "all") {
                 statusQuery = statusQuery.eq('job_id', jobFilter)
               }
               
               return statusQuery
             })
+            queries.push(...statusPromises)
+          }
 
-            const statusResults = await Promise.all(statusPromises)
-            
+          const results = await Promise.all(queries)
+          const countRes = results[0]
+          const statusResults = shouldFetchStatusCounts ? results.slice(1) : []
+
+          if (countRes.error) {
+            console.error('Count query error:', countRes.error)
+            return
+          }
+
+          const currentCount = countRes.count || 0
+          
+          if (isFiltered) {
+            setFilteredCount(currentCount)
+          } else {
+            setTotalCount(currentCount)
+            setFilteredCount(currentCount)
+          }
+          
+          // Update hasMore based on actual count
+          setHasMore((applicationsData?.length || 0) < currentCount)
+          
+          // Update status counts with accurate database counts
+          if (shouldFetchStatusCounts && statusResults.length > 0) {
             setStatusCounts({
               pending: statusResults[0]?.count || 0,
               reviewed: statusResults[1]?.count || 0,
@@ -261,63 +296,38 @@ export default function ApplicationsPage() {
               rejected: statusResults[3]?.count || 0,
               hired: statusResults[4]?.count || 0
             })
+          }
+          // Always set loading to false after attempting to fetch (whether successful or not)
+          if (shouldFetchStatusCounts) {
+            setStatusCountsLoading(false)
+          }
+        } catch (err) {
+          console.error('Error fetching counts:', err)
+          // Set loading to false even on error
+          if (offset === 0) {
+            setStatusCountsLoading(false)
+          }
+        }
+      }
+      
+      // Start background count fetch
+      fetchCountInBackground()
+
+      // Fetch total count in background if filtered and we don't have it
+      if (isFiltered && totalCount === 0 && offset === 0) {
+        const fetchTotalCount = async () => {
+          try {
+            const totalCountQuery = userJobIds && userJobIds.length > 0
+              ? supabase.from('job_applications').select('id', { count: 'exact', head: true }).in('job_id', userJobIds)
+              : supabase.from('job_applications').select('id', { count: 'exact', head: true })
+            const { count } = await totalCountQuery
+            setTotalCount(count || 0)
           } catch (err) {
-            console.error('Error fetching status counts:', err)
-            // Don't throw - status counts are non-critical
+            console.error('Error fetching total count:', err)
           }
         }
-        
-        // Fire and don't wait - let it run in background
-        fetchStatusCounts()
+        fetchTotalCount()
       }
-      
-      // Store counts based on filter state
-      if (isFiltered) {
-        setFilteredCount(currentCount)
-        // Only fetch total count if we don't have it yet (on initial load)
-        if (totalCount === 0 && offset === 0) {
-          // Fetch total count in background (non-blocking)
-          const fetchTotalCount = async () => {
-            try {
-              const totalCountQuery = userJobIds && userJobIds.length > 0
-                ? supabase.from('job_applications').select('id', { count: 'exact', head: true }).in('job_id', userJobIds)
-                : supabase.from('job_applications').select('id', { count: 'exact', head: true })
-              const { count } = await totalCountQuery
-              setTotalCount(count || 0)
-            } catch (err) {
-              console.error('Error fetching total count:', err)
-            }
-          }
-          fetchTotalCount()
-        }
-      } else {
-        // No filters active - this is the total count
-        setTotalCount(currentCount)
-        setFilteredCount(currentCount)
-      }
-
-      if (!applicationsData) {
-        setApplications([])
-        setHasMore(false)
-        setFiltering(false)
-        return
-      }
-
-      // Transform data to match JobApplication type
-      const transformedData: JobApplication[] = applicationsData.map((app: any) => ({
-        ...app,
-        job: Array.isArray(app.job) ? app.job[0] : app.job
-      }))
-
-      if (offset === 0) {
-        setApplications(transformedData)
-      } else {
-        setApplications(prev => [...prev, ...transformedData])
-      }
-      
-      // Check if there are more records (use current count)
-      setHasMore((offset + applicationsData.length) < currentCount)
-      setFiltering(false) // Clear filtering state
     } catch (error: any) {
       const errorMessage = error?.message || error?.code || 'Unknown error'
       console.error('Error fetching applications:', errorMessage, error)
@@ -1025,7 +1035,7 @@ export default function ApplicationsPage() {
               <CardTitle className="text-sm font-medium">Pending</CardTitle>
             </CardHeader>
             <CardContent>
-              {filtering ? (
+              {filtering || (statusCountsLoading && stats.pending === 0) ? (
                 <div className="flex items-center gap-1 h-8">
                   <div className="w-2 h-2 rounded-full bg-yellow-600 animate-bounce" style={{ animationDelay: '0ms', animationDuration: '1.4s' }}></div>
                   <div className="w-2 h-2 rounded-full bg-yellow-600 animate-bounce" style={{ animationDelay: '200ms', animationDuration: '1.4s' }}></div>
@@ -1041,7 +1051,7 @@ export default function ApplicationsPage() {
               <CardTitle className="text-sm font-medium">Reviewed</CardTitle>
             </CardHeader>
             <CardContent>
-              {filtering ? (
+              {filtering || (statusCountsLoading && stats.reviewed === 0) ? (
                 <div className="flex items-center gap-1 h-8">
                   <div className="w-2 h-2 rounded-full bg-blue-600 animate-bounce" style={{ animationDelay: '0ms', animationDuration: '1.4s' }}></div>
                   <div className="w-2 h-2 rounded-full bg-blue-600 animate-bounce" style={{ animationDelay: '200ms', animationDuration: '1.4s' }}></div>
@@ -1057,7 +1067,7 @@ export default function ApplicationsPage() {
               <CardTitle className="text-sm font-medium">Shortlisted</CardTitle>
             </CardHeader>
             <CardContent>
-              {filtering ? (
+              {filtering || (statusCountsLoading && stats.shortlisted === 0) ? (
                 <div className="flex items-center gap-1 h-8">
                   <div className="w-2 h-2 rounded-full bg-green-600 animate-bounce" style={{ animationDelay: '0ms', animationDuration: '1.4s' }}></div>
                   <div className="w-2 h-2 rounded-full bg-green-600 animate-bounce" style={{ animationDelay: '200ms', animationDuration: '1.4s' }}></div>
@@ -1073,7 +1083,7 @@ export default function ApplicationsPage() {
               <CardTitle className="text-sm font-medium">Rejected</CardTitle>
             </CardHeader>
             <CardContent>
-              {filtering ? (
+              {filtering || (statusCountsLoading && stats.rejected === 0) ? (
                 <div className="flex items-center gap-1 h-8">
                   <div className="w-2 h-2 rounded-full bg-red-600 animate-bounce" style={{ animationDelay: '0ms', animationDuration: '1.4s' }}></div>
                   <div className="w-2 h-2 rounded-full bg-red-600 animate-bounce" style={{ animationDelay: '200ms', animationDuration: '1.4s' }}></div>
@@ -1089,7 +1099,7 @@ export default function ApplicationsPage() {
               <CardTitle className="text-sm font-medium">Hired</CardTitle>
             </CardHeader>
             <CardContent>
-              {filtering ? (
+              {filtering || (statusCountsLoading && stats.hired === 0) ? (
                 <div className="flex items-center gap-1 h-8">
                   <div className="w-2 h-2 rounded-full bg-purple-600 animate-bounce" style={{ animationDelay: '0ms', animationDuration: '1.4s' }}></div>
                   <div className="w-2 h-2 rounded-full bg-purple-600 animate-bounce" style={{ animationDelay: '200ms', animationDuration: '1.4s' }}></div>
