@@ -74,6 +74,7 @@ export default function ApplicationsPage() {
   }) // Status counts from database
   const [statusCountsLoading, setStatusCountsLoading] = useState(true) // Track if status counts are being loaded
   const userJobIdsCache = useRef<string[] | null>(null) // Cache user job IDs
+  const userRoleCache = useRef<{ userId: string; role: string } | null>(null) // Cache user role
   const supabase = createClientComponentClient()
 
   useEffect(() => {
@@ -106,7 +107,7 @@ export default function ApplicationsPage() {
 
   const fetchApplications = async (offset: number = 0) => {
     try {
-      // Get current user and role first
+      // Get current user (cached in session)
       const { data: { user } } = await supabase.auth.getUser()
       
       if (!user) {
@@ -116,28 +117,36 @@ export default function ApplicationsPage() {
         return
       }
 
-      const { data: roleData, error: roleError } = await supabase
-        .from('user_roles')
-        .select('role')
-        .eq('user_id', user?.id)
-        .single()
+      // Get user role (cached for performance)
+      let userRole: string
+      if (userRoleCache.current && userRoleCache.current.userId === user.id) {
+        userRole = userRoleCache.current.role
+      } else {
+        const { data: roleData, error: roleError } = await supabase
+          .from('user_roles')
+          .select('role')
+          .eq('user_id', user.id)
+          .single()
 
-      if (roleError || !roleData) {
-        console.error('Error fetching user role:', roleError)
-        toast.error('Unable to determine user role')
-        setLoading(false)
-        setFiltering(false)
-        return
+        if (roleError || !roleData) {
+          console.error('Error fetching user role:', roleError)
+          toast.error('Unable to determine user role')
+          setLoading(false)
+          setFiltering(false)
+          return
+        }
+        userRole = roleData.role
+        userRoleCache.current = { userId: user.id, role: userRole }
       }
 
-      // Get user job IDs (cached for performance)
+      // Get user job IDs (cached for performance) - only for admin role
       let userJobIds: string[] | null = null
-      if (roleData?.role === 'admin') {
+      if (userRole === 'admin') {
         if (userJobIdsCache.current === null) {
           const { data: userJobs } = await supabase
             .from('jobs')
             .select('id')
-            .eq('created_by', user?.id)
+            .eq('created_by', user.id)
           userJobIds = userJobs?.map(job => job.id) || []
           userJobIdsCache.current = userJobIds
         } else {
@@ -152,6 +161,7 @@ export default function ApplicationsPage() {
           setHasMore(false)
           setLoading(false)
           setFiltering(false)
+          setStatusCountsLoading(false)
           return
         }
       }
@@ -159,7 +169,7 @@ export default function ApplicationsPage() {
       // Determine if filters are active
       const isFiltered = jobFilter !== "all" || statusFilter !== "all"
       
-      // Build data query - PRIORITY: Load data first for fast display
+      // Build data query with count - OPTIMIZED: Get data + count in single request
       let query = supabase
         .from('job_applications')
         .select(`
@@ -173,11 +183,11 @@ export default function ApplicationsPage() {
           status,
           created_at,
           job:jobs(id, title, department)
-        `)
+        `, { count: 'exact' }) // Include count in same query
         .order('created_at', { ascending: false })
-        .range(offset, offset + pageSize - 1) // Use range for proper pagination
+        .range(offset, offset + pageSize - 1)
 
-      // Apply role-based filter to data query
+      // Apply role-based filter
       if (userJobIds && userJobIds.length > 0) {
         query = query.in('job_id', userJobIds)
       }
@@ -192,8 +202,8 @@ export default function ApplicationsPage() {
         query = query.eq('status', statusFilter)
       }
 
-      // Execute data query first (priority - show data ASAP)
-      const { data: applicationsData, error: applicationsError } = await query
+      // Execute query - gets data AND count in single request
+      const { data: applicationsData, error: applicationsError, count: queryCount } = await query
       
       if (applicationsError) {
         console.error('Applications query error:', applicationsError)
@@ -213,48 +223,38 @@ export default function ApplicationsPage() {
           setApplications(prev => [...prev, ...transformedData])
         }
         
-        // Set hasMore immediately based on current batch size
-        // If we got less than a full page, we've reached the end
+        // Set count and hasMore immediately from query result
+        const currentCount = queryCount || 0
         const currentBatchSize = transformedData.length
-        if (currentBatchSize < pageSize) {
-          setHasMore(false) // Reached the end
+        const totalLoaded = offset + currentBatchSize
+        
+        if (isFiltered) {
+          setFilteredCount(currentCount)
+        } else {
+          setTotalCount(currentCount)
+          setFilteredCount(currentCount)
         }
         
-        // Clear filtering state immediately after data loads
+        // hasMore: got full page AND more items exist
+        setHasMore(currentBatchSize === pageSize && totalLoaded < currentCount)
+        
+        // Clear filtering state immediately
         setFiltering(false)
         
-        // If we're not fetching status counts (offset > 0), set loading to false
+        // For load more (offset > 0), we're done
         if (offset > 0) {
           setStatusCountsLoading(false)
+          setLoading(false)
+          return
         }
       }
 
-      // Fetch counts and status counts in background (non-blocking) - for accurate totals
-      const fetchCountInBackground = async () => {
-        try {
-          // Fetch total count
-          let countQuery = supabase
-            .from('job_applications')
-            .select('id', { count: 'exact', head: true })
-
-          if (userJobIds && userJobIds.length > 0) {
-            countQuery = countQuery.in('job_id', userJobIds)
-          }
-          if (jobFilter !== "all") {
-            countQuery = countQuery.eq('job_id', jobFilter)
-          }
-          if (statusFilter !== "all") {
-            countQuery = countQuery.eq('status', statusFilter)
-          }
-
-          // Always fetch accurate status counts on initial load (offset === 0)
-          // This ensures we show correct counts even if we only loaded 50 applications
-          const shouldFetchStatusCounts = offset === 0
-          
-          const queries: Promise<any>[] = [countQuery]
-          
-          if (shouldFetchStatusCounts) {
-            // Fetch all status counts in parallel
+      // Only fetch status counts on initial load (offset === 0) - in background
+      if (offset === 0) {
+        // Fire and forget - don't await
+        const fetchStatusCounts = async () => {
+          try {
+            // Single query to get all status counts using RPC or parallel optimized queries
             const statusPromises = ['pending', 'reviewed', 'shortlisted', 'rejected', 'hired'].map(status => {
               let statusQuery = supabase
                 .from('job_applications')
@@ -270,37 +270,9 @@ export default function ApplicationsPage() {
               
               return statusQuery
             })
-            queries.push(...statusPromises)
-          }
 
-          const results = await Promise.all(queries)
-          const countRes = results[0]
-          const statusResults = shouldFetchStatusCounts ? results.slice(1) : []
-
-          if (countRes.error) {
-            console.error('Count query error:', countRes.error)
-            return
-          }
-
-          const currentCount = countRes.count || 0
-          
-          if (isFiltered) {
-            setFilteredCount(currentCount)
-          } else {
-            setTotalCount(currentCount)
-            setFilteredCount(currentCount)
-          }
-          
-          // Update hasMore based on total loaded count vs total count
-          // Calculate total loaded: offset (already loaded) + current batch size
-          const currentBatchSize = applicationsData?.length || 0
-          const totalLoaded = offset + currentBatchSize
-          // hasMore is true if: we got a full page (might be more) AND total loaded < total count
-          // OR if we got less than a full page, we've reached the end (hasMore = false)
-          setHasMore(currentBatchSize === pageSize && totalLoaded < currentCount)
-          
-          // Update status counts with accurate database counts
-          if (shouldFetchStatusCounts && statusResults.length > 0) {
+            const statusResults = await Promise.all(statusPromises)
+            
             setStatusCounts({
               pending: statusResults[0]?.count || 0,
               reviewed: statusResults[1]?.count || 0,
@@ -308,37 +280,32 @@ export default function ApplicationsPage() {
               rejected: statusResults[3]?.count || 0,
               hired: statusResults[4]?.count || 0
             })
-          }
-          // Always set loading to false after attempting to fetch (whether successful or not)
-          if (shouldFetchStatusCounts) {
             setStatusCountsLoading(false)
-          }
-        } catch (err) {
-          console.error('Error fetching counts:', err)
-          // Set loading to false even on error
-          if (offset === 0) {
-            setStatusCountsLoading(false)
-          }
-        }
-      }
-      
-      // Start background count fetch
-      fetchCountInBackground()
-
-      // Fetch total count in background if filtered and we don't have it
-      if (isFiltered && totalCount === 0 && offset === 0) {
-        const fetchTotalCount = async () => {
-          try {
-            const totalCountQuery = userJobIds && userJobIds.length > 0
-              ? supabase.from('job_applications').select('id', { count: 'exact', head: true }).in('job_id', userJobIds)
-              : supabase.from('job_applications').select('id', { count: 'exact', head: true })
-            const { count } = await totalCountQuery
-            setTotalCount(count || 0)
           } catch (err) {
-            console.error('Error fetching total count:', err)
+            console.error('Error fetching status counts:', err)
+            setStatusCountsLoading(false)
           }
         }
-        fetchTotalCount()
+        
+        // Start background fetch (non-blocking)
+        fetchStatusCounts()
+        
+        // Fetch total count in background if filtered
+        if (isFiltered && totalCount === 0) {
+          const fetchTotalCount = async () => {
+            try {
+              let totalQuery = supabase.from('job_applications').select('id', { count: 'exact', head: true })
+              if (userJobIds && userJobIds.length > 0) {
+                totalQuery = totalQuery.in('job_id', userJobIds)
+              }
+              const { count } = await totalQuery
+              setTotalCount(count || 0)
+            } catch (err) {
+              console.error('Error fetching total count:', err)
+            }
+          }
+          fetchTotalCount()
+        }
       }
     } catch (error: any) {
       const errorMessage = error?.message || error?.code || 'Unknown error'
@@ -388,6 +355,8 @@ export default function ApplicationsPage() {
             })
             setTotalCount(transformedLimitedData.length)
             setFilteredCount(transformedLimitedData.length)
+            setHasMore(false)
+            setStatusCountsLoading(false)
             toast.success('Loaded recent applications')
             return
           }
@@ -421,39 +390,43 @@ export default function ApplicationsPage() {
 
   const fetchJobs = async () => {
     try {
-      // Get current user and role first
+      // Get current user
       const { data: { user } } = await supabase.auth.getUser()
-      const { data: roleData } = await supabase
-        .from('user_roles')
-        .select('role')
-        .eq('user_id', user?.id)
-        .single()
+      if (!user) return
 
-      // The RLS policies will automatically filter jobs based on user role
-      // Super admins will see all jobs, regular admins will see only their own
+      // Use cached role if available, otherwise fetch
+      let userRole: string | null = null
+      if (userRoleCache.current && userRoleCache.current.userId === user.id) {
+        userRole = userRoleCache.current.role
+      } else {
+        const { data: roleData } = await supabase
+          .from('user_roles')
+          .select('role')
+          .eq('user_id', user.id)
+          .single()
+        userRole = roleData?.role || null
+        if (roleData) {
+          userRoleCache.current = { userId: user.id, role: roleData.role }
+        }
+      }
+
+      // Build query
       let query = supabase
         .from('jobs')
         .select('id, title, department')
         .eq('status', 'active')
         .order('title', { ascending: true })
 
-      // WORKAROUND: Explicitly filter jobs based on user role since RLS is not working
-      if (roleData?.role === 'admin') {
-        // Regular admins can only see jobs they created
-        query = query.eq('created_by', user?.id)
+      // Filter jobs based on user role
+      if (userRole === 'admin') {
+        query = query.eq('created_by', user.id)
       }
-      // Super admins see all jobs (no additional filter needed)
 
       const { data: jobsData, error: jobsError } = await query
-
       if (jobsError) throw jobsError
-
-      if (jobsData) {
-        setJobs(jobsData)
-      }
+      if (jobsData) setJobs(jobsData)
     } catch (error) {
       console.error('Error fetching jobs:', error)
-      console.error('Error details:', JSON.stringify(error, null, 2))
     }
   }
 
