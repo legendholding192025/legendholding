@@ -499,12 +499,12 @@ export default function JobsManagement() {
               </div>
             </div>
             <div>
-              <Label htmlFor="description">Job Description (optional - each line will become a bullet point)</Label>
+              <Label htmlFor="description">Job Description (optional - each line will become a paragraph)</Label>
               <Textarea
                 id="description"
                 value={descriptionText}
                 onChange={(e) => setDescriptionText(e.target.value)}
-                placeholder="Enter each description point on a new line&#10;For example:&#10;• Lead development of new features&#10;• Collaborate with cross-functional teams&#10;• Maintain code quality and standards"
+                placeholder="Enter each description paragraph on a new line&#10;For example:&#10;Lead development of new features and innovative solutions.&#10;Collaborate with cross-functional teams to deliver high-quality products.&#10;Maintain code quality and standards throughout the development process."
                 className="h-32"
               />
             </div>

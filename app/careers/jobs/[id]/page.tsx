@@ -264,14 +264,13 @@ export default function JobDetails() {
                 {Array.isArray(job.description) && job.description.length > 0 && (
                   <section>
                     <h2 className="text-xl sm:text-2xl font-semibold text-gray-900 mb-3 sm:mb-4">Job Description</h2>
-                    <ul className="space-y-2 sm:space-y-3">
+                    <div className="space-y-2 sm:space-y-3">
                       {job.description.map((description, index) => (
-                        <li key={index} className="flex gap-2 sm:gap-3 text-gray-600 text-sm sm:text-base">
-                          <span className="flex-shrink-0 w-1.5 h-1.5 rounded-full bg-[#EE8900] mt-2"></span>
+                        <div key={index} className="flex gap-2 sm:gap-3 text-gray-600 text-sm sm:text-base">
                           <span className="break-words">{description}</span>
-                        </li>
+                        </div>
                       ))}
-                    </ul>
+                    </div>
                   </section>
                 )}
 

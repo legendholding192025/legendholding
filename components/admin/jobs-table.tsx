@@ -320,7 +320,7 @@ export function JobsTable({ jobs = [], loading, onDelete, onUpdate }: JobsTableP
                 </div>
               </div>
               <div>
-                <Label htmlFor="edit-description">Job Description (each line will become a bullet point)</Label>
+                <Label htmlFor="edit-description">Job Description (each line will become a paragraph)</Label>
                 <Textarea
                   id="edit-description"
                   value={Array.isArray(editingJob.description) ? editingJob.description.join('\n') : ''}
@@ -335,7 +335,7 @@ export function JobsTable({ jobs = [], loading, onDelete, onUpdate }: JobsTableP
                     )
                   }
                   className="h-32"
-                  placeholder="Enter each description point on a new line"
+                  placeholder="Enter each description paragraph on a new line"
                 />
               </div>
               <div>

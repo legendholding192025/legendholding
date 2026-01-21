@@ -3,9 +3,12 @@ import { NextResponse } from 'next/server'
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    // Await params in Next.js 15
+    const { id } = await params
+
     // Check if service role key is available
     if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
       console.error('SUPABASE_SERVICE_ROLE_KEY environment variable is not set')
@@ -33,7 +36,7 @@ export async function GET(
     const { data: job, error } = await supabaseAdmin
       .from('jobs')
       .select('*')
-      .eq('id', params.id)
+      .eq('id', id)
       .eq('status', 'active')
       .single()
 

@@ -345,11 +345,11 @@ const JobDetails = () => {
                   {Array.isArray(job.description) && job.description.length > 0 && (
                     <>
                       <h2 className="text-xl font-semibold mb-4">Job Description</h2>
-                      <ul className="list-disc pl-5">
+                      <div>
                         {job.description.map((desc, index) => (
-                          <li key={index} className="break-words">{desc}</li>
+                          <p key={index} className="break-words">{desc}</p>
                         ))}
-                      </ul>
+                      </div>
                     </>
                   )}
 
