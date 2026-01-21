@@ -175,7 +175,7 @@ export default function ApplicationsPage() {
           job:jobs(id, title, department)
         `)
         .order('created_at', { ascending: false })
-        .limit(pageSize) // Use limit instead of range for simpler query
+        .range(offset, offset + pageSize - 1) // Use range for proper pagination
 
       // Apply role-based filter to data query
       if (userJobIds && userJobIds.length > 0) {
@@ -211,6 +211,13 @@ export default function ApplicationsPage() {
           setApplications(transformedData)
         } else {
           setApplications(prev => [...prev, ...transformedData])
+        }
+        
+        // Set hasMore immediately based on current batch size
+        // If we got less than a full page, we've reached the end
+        const currentBatchSize = transformedData.length
+        if (currentBatchSize < pageSize) {
+          setHasMore(false) // Reached the end
         }
         
         // Clear filtering state immediately after data loads
@@ -284,8 +291,13 @@ export default function ApplicationsPage() {
             setFilteredCount(currentCount)
           }
           
-          // Update hasMore based on actual count
-          setHasMore((applicationsData?.length || 0) < currentCount)
+          // Update hasMore based on total loaded count vs total count
+          // Calculate total loaded: offset (already loaded) + current batch size
+          const currentBatchSize = applicationsData?.length || 0
+          const totalLoaded = offset + currentBatchSize
+          // hasMore is true if: we got a full page (might be more) AND total loaded < total count
+          // OR if we got less than a full page, we've reached the end (hasMore = false)
+          setHasMore(currentBatchSize === pageSize && totalLoaded < currentCount)
           
           // Update status counts with accurate database counts
           if (shouldFetchStatusCounts && statusResults.length > 0) {
