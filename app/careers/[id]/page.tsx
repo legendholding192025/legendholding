@@ -169,12 +169,32 @@ const ApplicationForm = ({ isOpen, onClose, jobId, jobTitle }: ApplicationFormPr
             <Input
               id="cv"
               type="file"
-              onChange={(e) => e.target.files && e.target.files[0] && setCvFile(e.target.files[0])}
+              onChange={(e) => {
+                const file = e.target.files?.[0]
+                if (file) {
+                  // Validate file type
+                  const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document']
+                  if (!allowedTypes.includes(file.type)) {
+                    toast.error("Please upload a PDF, DOC, or DOCX file")
+                    e.target.value = ""
+                    return
+                  }
+                  
+                  // Validate file size (2MB limit)
+                  if (file.size > 2 * 1024 * 1024) {
+                    toast.error("File size must be less than 2MB")
+                    e.target.value = ""
+                    return
+                  }
+                  
+                  setCvFile(file)
+                }
+              }}
               accept=".pdf,.doc,.docx"
               required
             />
             <p className="text-sm text-gray-500 mt-1">
-              Accepted formats: PDF, DOC, DOCX
+              Accepted formats: PDF, DOC, DOCX (Max 2MB)
             </p>
           </div>
           <div>

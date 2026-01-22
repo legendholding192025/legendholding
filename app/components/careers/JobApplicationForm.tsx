@@ -82,9 +82,9 @@ export function JobApplicationForm({ jobId, jobTitle, company, isOpen, onClose }
         return
       }
       
-      // Validate file size (5MB limit)
-      if (file.size > 5 * 1024 * 1024) {
-        toast.error("File size must be less than 5MB")
+      // Validate file size (2MB limit)
+      if (file.size > 2 * 1024 * 1024) {
+        toast.error("File size must be less than 2MB")
         e.target.value = ""
         return
       }
@@ -129,8 +129,8 @@ export function JobApplicationForm({ jobId, jobTitle, company, isOpen, onClose }
 
         // Strategy 1: Convert to base64 and store in database (primary method)
         try {
-          // Check file size - limit to 5MB for base64 conversion
-          if (resumeFile.size > 5 * 1024 * 1024) {
+          // Check file size - limit to 2MB for base64 conversion
+          if (resumeFile.size > 2 * 1024 * 1024) {
             throw new Error('File too large for base64 conversion')
           }
           
@@ -302,7 +302,7 @@ export function JobApplicationForm({ jobId, jobTitle, company, isOpen, onClose }
         if (error instanceof Error) {
           // Provide more specific error messages
           if (error.message.includes('File too large for base64 conversion')) {
-            toast.error("File is too large. Please use a smaller file (under 5MB) or try again.")
+            toast.error("File is too large. Please use a smaller file (under 2MB) or try again.")
           } else if (error.message.includes('File read timeout')) {
             toast.error("File processing took too long. Please try with a smaller file.")
           } else if (error.message.includes('Failed to upload resume')) {
@@ -447,7 +447,7 @@ export function JobApplicationForm({ jobId, jobTitle, company, isOpen, onClose }
                   accept=".pdf,.doc,.docx"
                 />
                 <p className="text-xs sm:text-sm text-gray-500 mt-1.5">
-                  Accepted formats: PDF, DOC, DOCX (Max 5MB)
+                  Accepted formats: PDF, DOC, DOCX (Max 2MB)
                 </p>
               </div>
 
