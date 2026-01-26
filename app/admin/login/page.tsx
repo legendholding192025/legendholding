@@ -16,15 +16,12 @@ export default function AdminLogin() {
   const [loading, setLoading] = useState(false)
   const [isRedirecting, setIsRedirecting] = useState(false)
 
-  console.log('Login page loaded')
-
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
     setError('')
 
     try {
-      console.log('Attempting login with email:', email)
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -48,14 +45,8 @@ export default function AdminLogin() {
         }
         return
       }
-
-      console.log('Login successful:', data)
       
       if (data.user) {
-        // Remove manual localStorage setting - let Supabase handle it
-        // localStorage.setItem('supabase.auth.token', JSON.stringify(data.session))
-        
-        console.log('Redirecting to dashboard...')
         setIsRedirecting(true)
         
         // Add a brief delay to show success state
@@ -65,7 +56,7 @@ export default function AdminLogin() {
         }, 500)
       }
     } catch (error: any) {
-      console.error('Login error details:', error)
+      console.error('Login error:', error)
       setError('An unexpected error occurred. Please try again.')
     } finally {
       setLoading(false)

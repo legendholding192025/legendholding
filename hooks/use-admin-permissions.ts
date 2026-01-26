@@ -59,12 +59,9 @@ export function useAdminPermissions(): AdminPermissions {
       }
       
       if (!user) {
-        console.log('No user found')
         setUserRole(null)
         return
       }
-
-      console.log('Current user:', user.email, user.id)
 
       // Create fallback role based on email
       const isSuperAdmin = user.email === 'waseem.k@legendholding.com' || user.email === 'sonam.lama@legendholding.com'
@@ -104,16 +101,10 @@ export function useAdminPermissions(): AdminPermissions {
           .eq('user_id', user.id)
           .single()
 
-        console.log('Role query result:', { roleData, roleError })
-
         if (roleError) {
-          console.log('Database role lookup failed, trying to add missing user:', roleError.message)
-          
           // Try to call the function to add missing users
           try {
-            console.log('Calling add_missing_user_roles function...')
-            const { data: functionResult } = await supabase.rpc('add_missing_user_roles')
-            console.log('add_missing_user_roles result:', functionResult)
+            await supabase.rpc('add_missing_user_roles')
             
             // Try to fetch the user role again
             const { data: retryRoleData, error: retryError } = await supabase
@@ -123,15 +114,11 @@ export function useAdminPermissions(): AdminPermissions {
               .single()
             
             if (retryRoleData && !retryError) {
-              console.log('Successfully fetched user role after adding:', retryRoleData)
               setUserRole(retryRoleData)
             } else {
-              console.log('Still no role data after retry, using fallback')
               setUserRole(fallbackRole)
             }
           } catch (functionError) {
-            console.log('Function call failed, trying manual insert:', functionError)
-            
             // Fallback to manual insert
             try {
               const { data: insertData, error: insertError } = await supabase
@@ -141,26 +128,21 @@ export function useAdminPermissions(): AdminPermissions {
                 .single()
 
               if (insertError) {
-                console.log('Failed to insert role, using fallback:', insertError.message)
                 setUserRole(fallbackRole)
               } else {
-                console.log('Successfully created user role via manual insert:', insertData)
                 setUserRole(insertData)
               }
             } catch (insertCatchError) {
-              console.log('Manual insert error, using fallback:', insertCatchError)
               setUserRole(fallbackRole)
             }
           }
         } else if (roleData) {
-          console.log('Found user role in database:', roleData)
           setUserRole(roleData)
         } else {
-          console.log('No role data found, using fallback')
           setUserRole(fallbackRole)
         }
       } catch (dbError) {
-        console.log('Database error, using fallback:', dbError)
+        console.error('Database error in fetchUserRole:', dbError)
         setUserRole(fallbackRole)
       }
       
@@ -198,10 +180,8 @@ export function useAdminPermissions(): AdminPermissions {
             updated_at: new Date().toISOString()
           }
           
-          console.log('Setting fallback role from outer catch block:', fallbackRole)
           setUserRole(fallbackRole)
         } else {
-          console.log('No user found in outer catch block')
           setUserRole(null)
         }
       } catch (finalError) {
