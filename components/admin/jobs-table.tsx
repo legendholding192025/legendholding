@@ -3,7 +3,7 @@
 import * as React from "react"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
-import { Eye, Trash2, Edit2, ChevronLeft, ChevronRight } from "lucide-react"
+import { Eye, Trash2, Edit2, ChevronLeft, ChevronRight, UserPlus } from "lucide-react"
 import { useState } from "react"
 import {
   Dialog,
@@ -31,10 +31,21 @@ interface Job {
   status: 'active' | 'inactive'
   company: string
   created_by?: string
+  assigned_to?: string
   created_by_user?: {
     email: string
     role: string
   }
+  assigned_to_user?: {
+    email: string
+    role: string
+  }
+}
+
+interface AdminUser {
+  user_id: string
+  email: string
+  role: string
 }
 
 interface JobsTableProps {
@@ -42,13 +53,19 @@ interface JobsTableProps {
   loading: boolean
   onDelete: (id: string) => Promise<void>
   onUpdate: (id: string, data: Partial<Job>) => Promise<void>
+  onAssign?: (jobId: string, adminId: string | null) => Promise<void>
+  isSuperAdmin?: boolean
+  adminUsers?: AdminUser[]
 }
 
-export function JobsTable({ jobs = [], loading, onDelete, onUpdate }: JobsTableProps) {
+export function JobsTable({ jobs = [], loading, onDelete, onUpdate, onAssign, isSuperAdmin = false, adminUsers = [] }: JobsTableProps) {
   const [currentPage, setCurrentPage] = useState(1)
   const [editingJob, setEditingJob] = useState<Job | null>(null)
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null)
   const [isDeleting, setIsDeleting] = useState(false)
+  const [assigningJob, setAssigningJob] = useState<Job | null>(null)
+  const [selectedAdmin, setSelectedAdmin] = useState<string>("")
+  const [isAssigning, setIsAssigning] = useState(false)
   const itemsPerPage = 10
   const totalPages = Math.ceil((jobs?.length || 0) / itemsPerPage)
   
@@ -106,6 +123,28 @@ export function JobsTable({ jobs = [], loading, onDelete, onUpdate }: JobsTableP
     }
   }
 
+  const handleAssign = async () => {
+    if (!assigningJob || !onAssign || !selectedAdmin) return
+    try {
+      setIsAssigning(true)
+      const adminId = selectedAdmin === "unassign" ? null : selectedAdmin
+      await onAssign(assigningJob.id, adminId)
+      setAssigningJob(null)
+      setSelectedAdmin("")
+      toast.success(adminId ? "Job assigned successfully" : "Job unassigned successfully")
+    } catch (error) {
+      console.error('Error assigning job:', error)
+      toast.error("Failed to assign job")
+    } finally {
+      setIsAssigning(false)
+    }
+  }
+
+  const openAssignDialog = (job: Job) => {
+    setAssigningJob(job)
+    setSelectedAdmin(job.assigned_to || "")
+  }
+
   if (loading) {
     return (
       <div className="flex items-center justify-center p-8">
@@ -139,7 +178,8 @@ export function JobsTable({ jobs = [], loading, onDelete, onUpdate }: JobsTableP
               <TableHead>Type</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Created By</TableHead>
-              <TableHead className="w-[120px]">Actions</TableHead>
+              {isSuperAdmin && <TableHead>Assigned To</TableHead>}
+              <TableHead className="w-[150px]">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -174,8 +214,24 @@ export function JobsTable({ jobs = [], loading, onDelete, onUpdate }: JobsTableP
                     </span>
                   </div>
                 </TableCell>
+                {isSuperAdmin && (
+                  <TableCell>
+                    {job?.assigned_to_user ? (
+                      <div className="flex flex-col">
+                        <span className="text-sm font-medium">
+                          {job.assigned_to_user.email}
+                        </span>
+                        <span className="text-xs px-2 py-1 rounded-full inline-block w-fit bg-green-100 text-green-700">
+                          Assigned
+                        </span>
+                      </div>
+                    ) : (
+                      <span className="text-sm text-gray-400">Not assigned</span>
+                    )}
+                  </TableCell>
+                )}
                 <TableCell>
-                  <div className="flex space-x-2">
+                  <div className="flex space-x-1">
                     <Button
                       variant="ghost"
                       size="icon"
@@ -184,6 +240,17 @@ export function JobsTable({ jobs = [], loading, onDelete, onUpdate }: JobsTableP
                     >
                       <Edit2 className="h-4 w-4" />
                     </Button>
+                    {isSuperAdmin && onAssign && (
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => job && openAssignDialog(job)}
+                        title="Assign to Admin"
+                        className="text-blue-500 hover:text-blue-700"
+                      >
+                        <UserPlus className="h-4 w-4" />
+                      </Button>
+                    )}
                     <Button
                       variant="ghost"
                       size="icon"
@@ -422,6 +489,62 @@ export function JobsTable({ jobs = [], loading, onDelete, onUpdate }: JobsTableP
               disabled={isDeleting}
             >
               {isDeleting ? "Deleting..." : "Delete"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Assign Job Dialog */}
+      <Dialog open={!!assigningJob} onOpenChange={(open) => !open && setAssigningJob(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Assign Job to Admin</DialogTitle>
+            <DialogDescription>
+              Select an admin user to assign this job to. The assigned admin will be able to manage this job and view its applications.
+            </DialogDescription>
+          </DialogHeader>
+          {assigningJob && (
+            <div className="py-4">
+              <div className="mb-4 p-3 bg-gray-50 rounded-md">
+                <p className="text-sm font-medium text-gray-700">Job: {assigningJob.title}</p>
+                <p className="text-xs text-gray-500">Company: {assigningJob.company}</p>
+              </div>
+              <Label htmlFor="admin-select" className="mb-2 block">Select Admin</Label>
+              <select
+                id="admin-select"
+                value={selectedAdmin}
+                onChange={(e) => setSelectedAdmin(e.target.value)}
+                className="w-full px-3 py-2 border rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-primary/50"
+              >
+                <option value="">-- Select an admin to assign --</option>
+                {assigningJob.assigned_to && (
+                  <option value="unassign">-- Unassign (remove assignment) --</option>
+                )}
+                {adminUsers
+                  .filter(admin => admin.role === 'admin' && admin.email.toLowerCase() !== 'admin@legendx.com')
+                  .map((admin) => (
+                    <option key={admin.user_id} value={admin.user_id}>
+                      {admin.email}
+                    </option>
+                  ))}
+              </select>
+              {assigningJob.assigned_to_user && (
+                <p className="mt-2 text-xs text-gray-500">
+                  Currently assigned to: {assigningJob.assigned_to_user.email}
+                </p>
+              )}
+            </div>
+          )}
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setAssigningJob(null)}>
+              Cancel
+            </Button>
+            <Button
+              onClick={handleAssign}
+              disabled={isAssigning || !selectedAdmin}
+              className="bg-secondary hover:bg-secondary/90"
+            >
+              {isAssigning ? "Assigning..." : "Assign Job"}
             </Button>
           </DialogFooter>
         </DialogContent>

@@ -35,10 +35,21 @@ interface Job {
   status: 'active' | 'inactive'
   company: string
   created_by?: string
+  assigned_to?: string
   created_by_user?: {
     email: string
     role: string
   }
+  assigned_to_user?: {
+    email: string
+    role: string
+  }
+}
+
+interface AdminUser {
+  user_id: string
+  email: string
+  role: string
 }
 
 // Helper function to convert description text to bullet points for display
@@ -55,11 +66,12 @@ const convertBulletPointsToText = (bulletPoints: string[]): string => {
 export default function JobsManagement() {
   const router = useRouter()
   const supabase = createClientComponentClient()
-  const { userRole, isLoading: permissionsLoading, hasPermission } = useAdminPermissions()
+  const { userRole, isLoading: permissionsLoading, hasPermission, isSuperAdmin } = useAdminPermissions()
   const [jobs, setJobs] = useState<Job[]>([])
   const [loading, setLoading] = useState(true)
   const [isAddingJob, setIsAddingJob] = useState(false)
   const [isSubmittingJob, setIsSubmittingJob] = useState(false)
+  const [adminUsers, setAdminUsers] = useState<AdminUser[]>([])
   const [newJob, setNewJob] = useState<Omit<Job, 'id' | 'created_at'>>({
     title: "",
     department: "",
@@ -78,6 +90,28 @@ export default function JobsManagement() {
   useEffect(() => {
     fetchJobs()
   }, [])
+
+  useEffect(() => {
+    // Fetch admin users only when we know the user is a super admin
+    if (!permissionsLoading && isSuperAdmin) {
+      fetchAdminUsers()
+    }
+  }, [permissionsLoading, isSuperAdmin])
+
+  const fetchAdminUsers = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('user_roles')
+        .select('user_id, email, role')
+        .in('role', ['admin', 'super_admin'])
+        .order('email')
+      
+      if (error) throw error
+      setAdminUsers(data || [])
+    } catch (error) {
+      console.error('Error fetching admin users:', error)
+    }
+  }
 
   const fetchJobs = async () => {
     try {
@@ -100,8 +134,83 @@ export default function JobsManagement() {
       
       // WORKAROUND: Explicitly filter jobs based on user role since RLS is not working
       if (roleData?.role === 'admin') {
-        // Regular admins can only see jobs they created
-        query = query.eq('created_by', user?.id)
+        // Regular admins can see jobs they created OR are assigned to
+        // Need to make two queries and combine results
+        const { data: createdJobs, error: createdError } = await supabase
+          .from('jobs')
+          .select('*')
+          .eq('created_by', user?.id)
+          .order('created_at', { ascending: false })
+        
+        const { data: assignedJobs, error: assignedError } = await supabase
+          .from('jobs')
+          .select('*')
+          .eq('assigned_to', user?.id)
+          .order('created_at', { ascending: false })
+        
+        if (createdError) throw createdError
+        if (assignedError) throw assignedError
+        
+        // Combine and deduplicate
+        const allJobs = [...(createdJobs || []), ...(assignedJobs || [])]
+        const uniqueJobs = allJobs.filter((job, index, self) =>
+          index === self.findIndex((j) => j.id === job.id)
+        )
+        
+        // Fetch user info for each job
+        const jobsWithUsers = await Promise.all(
+          uniqueJobs.map(async (job) => {
+            let jobWithUsers = { ...job }
+            
+            if (job.created_by) {
+              try {
+                const { data: userRoleData } = await supabase
+                  .from('user_roles')
+                  .select('email, role')
+                  .eq('user_id', job.created_by)
+                  .single()
+                
+                if (userRoleData) {
+                  jobWithUsers.created_by_user = userRoleData
+                } else {
+                  jobWithUsers.created_by_user = {
+                    email: `User ${job.created_by.substring(0, 8)}...`,
+                    role: 'admin'
+                  }
+                }
+              } catch (error) {
+                jobWithUsers.created_by_user = {
+                  email: `User ${job.created_by.substring(0, 8)}...`,
+                  role: 'admin'
+                }
+              }
+            }
+            
+            if (job.assigned_to) {
+              try {
+                const { data: assignedUserData } = await supabase
+                  .from('user_roles')
+                  .select('email, role')
+                  .eq('user_id', job.assigned_to)
+                  .single()
+                
+                if (assignedUserData) {
+                  jobWithUsers.assigned_to_user = assignedUserData
+                }
+              } catch (error) {
+                // Silently handle
+              }
+            }
+            
+            return jobWithUsers
+          })
+        )
+        
+        // Sort by created_at descending
+        jobsWithUsers.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+        setJobs(jobsWithUsers)
+        setLoading(false)
+        return
       }
       // Super admins see all jobs (no additional filter needed)
       
@@ -112,9 +221,11 @@ export default function JobsManagement() {
       // Fetch user information for each job
       const jobsWithUsers = await Promise.all(
         (jobsData || []).map(async (job) => {
+          let jobWithUsers = { ...job }
+          
+          // Fetch created_by user info
           if (job.created_by) {
             try {
-              // First try to get from user_roles table
               const { data: userRoleData } = await supabase
                 .from('user_roles')
                 .select('email, role')
@@ -122,53 +233,39 @@ export default function JobsManagement() {
                 .single()
               
               if (userRoleData) {
-                return {
-                  ...job,
-                  created_by_user: userRoleData
-                }
-              }
-              
-              // If not found in user_roles, call the function to add missing users
-              try {
-                await supabase.rpc('add_missing_user_roles')
-                
-                // Try again after adding missing users
-                const { data: retryUserData } = await supabase
-                  .from('user_roles')
-                  .select('email, role')
-                  .eq('user_id', job.created_by)
-                  .single()
-                
-                if (retryUserData) {
-                  return {
-                    ...job,
-                    created_by_user: retryUserData
-                  }
-                }
-              } catch (functionError) {
-                console.log('Could not auto-add missing user roles:', functionError)
-              }
-              
-              // Final fallback - show user ID if available
-              return {
-                ...job,
-                created_by_user: {
+                jobWithUsers.created_by_user = userRoleData
+              } else {
+                jobWithUsers.created_by_user = {
                   email: `User ${job.created_by.substring(0, 8)}...`,
                   role: 'admin'
                 }
               }
             } catch (error) {
-              console.error('Error fetching user data for job:', job.id, error)
-              return {
-                ...job,
-                created_by_user: {
-                  email: `User ${job.created_by.substring(0, 8)}...`,
-                  role: 'admin'
-                }
+              jobWithUsers.created_by_user = {
+                email: `User ${job.created_by.substring(0, 8)}...`,
+                role: 'admin'
               }
             }
           }
-          return job
+          
+          // Fetch assigned_to user info
+          if (job.assigned_to) {
+            try {
+              const { data: assignedUserData } = await supabase
+                .from('user_roles')
+                .select('email, role')
+                .eq('user_id', job.assigned_to)
+                .single()
+              
+              if (assignedUserData) {
+                jobWithUsers.assigned_to_user = assignedUserData
+              }
+            } catch (error) {
+              // Silently handle - assigned_to_user will be undefined
+            }
+          }
+          
+          return jobWithUsers
         })
       )
       
@@ -245,8 +342,6 @@ export default function JobsManagement() {
         company: newJob.company ?? '',
         created_by: user.id
       }
-
-      console.log('jobData to insert:', jobData)
 
       const { data, error } = await supabase
         .from('jobs')
@@ -344,6 +439,47 @@ export default function JobsManagement() {
     }
   }
 
+  const handleAssignJob = async (jobId: string, adminId: string | null) => {
+    try {
+      const { error } = await supabase
+        .from('jobs')
+        .update({ assigned_to: adminId })
+        .eq('id', jobId)
+
+      if (error) throw error
+
+      // Update local state with assigned user info
+      if (adminId) {
+        const assignedUser = adminUsers.find(u => u.user_id === adminId)
+        setJobs(prev =>
+          prev.map(job =>
+            job.id === jobId
+              ? {
+                  ...job,
+                  assigned_to: adminId,
+                  assigned_to_user: assignedUser
+                    ? { email: assignedUser.email, role: assignedUser.role }
+                    : undefined
+                }
+              : job
+          )
+        )
+      } else {
+        // Unassigning
+        setJobs(prev =>
+          prev.map(job =>
+            job.id === jobId
+              ? { ...job, assigned_to: undefined, assigned_to_user: undefined }
+              : job
+          )
+        )
+      }
+    } catch (error) {
+      console.error('Error assigning job:', error)
+      throw error
+    }
+  }
+
   const handleSignOut = async () => {
     try {
       const { error } = await supabase.auth.signOut()
@@ -417,6 +553,9 @@ export default function JobsManagement() {
           loading={loading}
           onDelete={handleDeleteJob}
           onUpdate={handleUpdateJob}
+          onAssign={isSuperAdmin ? handleAssignJob : undefined}
+          isSuperAdmin={isSuperAdmin}
+          adminUsers={adminUsers}
         />
       </div>
 

@@ -73,7 +73,6 @@ export default function ApplicationsPage() {
     hired: 0
   }) // Status counts from database
   const [statusCountsLoading, setStatusCountsLoading] = useState(true) // Track if status counts are being loaded
-  const userJobIdsCache = useRef<string[] | null>(null) // Cache user job IDs
   const userRoleCache = useRef<{ userId: string; role: string } | null>(null) // Cache user role
   const supabase = createClientComponentClient()
 
@@ -139,19 +138,27 @@ export default function ApplicationsPage() {
         userRoleCache.current = { userId: user.id, role: userRole }
       }
 
-      // Get user job IDs (cached for performance) - only for admin role
+      // Get user job IDs - only for admin role
+      // Include jobs created by user OR assigned to user
+      // Always fetch fresh data to handle assignment changes
       let userJobIds: string[] | null = null
       if (userRole === 'admin') {
-        if (userJobIdsCache.current === null) {
-          const { data: userJobs } = await supabase
-            .from('jobs')
-            .select('id')
-            .eq('created_by', user.id)
-          userJobIds = userJobs?.map(job => job.id) || []
-          userJobIdsCache.current = userJobIds
-        } else {
-          userJobIds = userJobIdsCache.current
-        }
+        // Get jobs created by user
+        const { data: createdJobs } = await supabase
+          .from('jobs')
+          .select('id')
+          .eq('created_by', user.id)
+        
+        // Get jobs assigned to user
+        const { data: assignedJobs } = await supabase
+          .from('jobs')
+          .select('id')
+          .eq('assigned_to', user.id)
+        
+        // Combine and deduplicate
+        const createdIds = createdJobs?.map(job => job.id) || []
+        const assignedIds = assignedJobs?.map(job => job.id) || []
+        userJobIds = [...new Set([...createdIds, ...assignedIds])]
         
         if (userJobIds.length === 0) {
           setApplications([])
@@ -410,21 +417,39 @@ export default function ApplicationsPage() {
         }
       }
 
-      // Build query
-      let query = supabase
-        .from('jobs')
-        .select('id, title, department')
-        .eq('status', 'active')
-        .order('title', { ascending: true })
-
-      // Filter jobs based on user role
-      if (userRole === 'admin') {
-        query = query.eq('created_by', user.id)
+      // For super admin, get all active jobs
+      if (userRole === 'super_admin') {
+        const { data: jobsData, error: jobsError } = await supabase
+          .from('jobs')
+          .select('id, title, department')
+          .eq('status', 'active')
+          .order('title', { ascending: true })
+        
+        if (jobsError) throw jobsError
+        if (jobsData) setJobs(jobsData)
+      } else {
+        // For admin, get jobs created by OR assigned to user
+        const { data: createdJobs } = await supabase
+          .from('jobs')
+          .select('id, title, department')
+          .eq('status', 'active')
+          .eq('created_by', user.id)
+          .order('title', { ascending: true })
+        
+        const { data: assignedJobs } = await supabase
+          .from('jobs')
+          .select('id, title, department')
+          .eq('status', 'active')
+          .eq('assigned_to', user.id)
+          .order('title', { ascending: true })
+        
+        // Combine and deduplicate by id
+        const allJobs = [...(createdJobs || []), ...(assignedJobs || [])]
+        const uniqueJobs = allJobs.filter((job, index, self) =>
+          index === self.findIndex((j) => j.id === job.id)
+        )
+        setJobs(uniqueJobs.sort((a, b) => a.title.localeCompare(b.title)))
       }
-
-      const { data: jobsData, error: jobsError } = await query
-      if (jobsError) throw jobsError
-      if (jobsData) setJobs(jobsData)
     } catch (error) {
       console.error('Error fetching jobs:', error)
     }
