@@ -4,7 +4,7 @@ export const metadata = generatePageMetadata({
   title: 'Job Opening',
   description: 'Explore career opportunities at Legend Holding Group. Join our dynamic team and contribute to innovation across the Middle East.',
   keywords: 'Legend Holding Group jobs, career opportunities, UAE employment, Middle East careers',
-  imageUrl: 'https://res.cloudinary.com/dzfhqvxnf/image/upload/w_1200,h_630,c_fit,f_auto,q_auto,b_white/LHG_yp2g8y.png',
+  imageUrl: 'https://www.legendholding.com/images/url_logo.png',
 });
 
 export default function JobDetailsLayout({
