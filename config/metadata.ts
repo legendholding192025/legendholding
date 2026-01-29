@@ -9,7 +9,7 @@ interface PageMetadata {
 
 export const defaultMetadata: Metadata = {
   title: {
-    default: 'Legend Holding Group | Investment Company UAE',
+    default: 'Legend Holding Group',
     template: '%s | Legend Holding Group'
   },
   description: 'Legend Holding Group is a diversified UAE holding company leading innovation in automotive, energy, tourism, and smart mobility across the Middle East & Africa. Discover our comprehensive business solutions.',

@@ -125,10 +125,15 @@ export const trackEvent = (eventName: string, parameters?: Record<string, any>) 
   }
 };
 
-// Page view tracking
+// Path prefixes that should not be tracked (backend/admin pages)
+const ANALYTICS_EXCLUDED_PATH_PREFIXES = ['/admin', '/api'];
+
+// Page view tracking (skips backend/admin paths)
 export const trackPageView = (pageName: string, pagePath?: string) => {
   const currentPath = pagePath || (typeof window !== 'undefined' ? window.location.pathname : '');
-  
+  const isExcluded = ANALYTICS_EXCLUDED_PATH_PREFIXES.some((prefix) => currentPath === prefix || currentPath.startsWith(prefix + '/'));
+  if (isExcluded) return;
+
   // Use standard PageView for Meta Pixel, custom event for others
   if (typeof window !== 'undefined') {
     // Google Analytics

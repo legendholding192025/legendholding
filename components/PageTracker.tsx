@@ -13,6 +13,9 @@ export default function PageTracker({ pageName }: PageTrackerProps) {
   const searchParams = useSearchParams();
 
   useEffect(() => {
+    // Don't track backend/admin pages
+    if (pathname.startsWith('/admin') || pathname.startsWith('/api')) return;
+
     // Get the page name based on the current path
     const getPageNameFromPath = (path: string): string => {
       // Remove leading slash and split path
@@ -69,6 +72,10 @@ export default function PageTracker({ pageName }: PageTrackerProps) {
 
       if (pathSegments[0] === 'careers' && pathSegments[1] && pathSegments[1] !== 'jobs' && pathSegments[1] !== 'thank-you') {
         return PAGE_NAMES.CAREERS_JOB_DETAIL;
+      }
+      // Job detail page: use document title (job name) for fav bar and analytics
+      if (pathSegments[0] === 'careers' && pathSegments[1] === 'jobs' && pathSegments[2]) {
+        return document.title || PAGE_NAMES.CAREERS_JOB_DETAIL;
       }
 
       if (pathSegments[0] === 'admin' && pathSegments[1] === 'applications' && pathSegments[2]) {
