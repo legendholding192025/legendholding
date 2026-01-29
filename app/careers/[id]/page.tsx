@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react"
 import { useParams, useRouter } from "next/navigation"
+import { toJobSlug } from "@/lib/job-slug"
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
 import { Button } from "@/components/ui/button"
 import {
@@ -252,7 +253,9 @@ const JobDetails = () => {
       }
 
       const job = await response.json()
-      setJob(job)
+      // Redirect to slug URL so the address bar shows job name
+      router.replace(`/careers/jobs/${toJobSlug(job.title, job.id)}`)
+      return
     } catch (error) {
       console.error('Error fetching job:', error)
       toast.error("Failed to load job details")

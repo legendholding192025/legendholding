@@ -2,6 +2,7 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Briefcase, MapPin, Clock, ChevronRight, Building2 } from "lucide-react"
 import { useRouter } from "next/navigation"
+import { toJobSlug } from "@/lib/job-slug"
 
 interface Job {
   id: string
@@ -120,7 +121,7 @@ export function JobListings({
                   </div>
                   <div>
                     <Button
-                      onClick={() => router.push(`/careers/jobs/${job.id}`)}
+                      onClick={() => router.push(`/careers/jobs/${toJobSlug(job.title, job.id)}`)}
                       className="flex items-center gap-2 bg-[#EE8900] hover:bg-[#EE8900]/90 text-white border-0 font-medium px-6 text-base"
                     >
                       Apply Now

@@ -11,6 +11,7 @@ import Link from "next/link"
 import { useParams } from "next/navigation"
 import { JobApplicationForm } from "@/app/components/careers/JobApplicationForm"
 import { format } from "date-fns"
+import { parseJobSlug, toJobSlug } from "@/lib/job-slug"
 
 interface Job {
   id: string
@@ -37,7 +38,8 @@ const convertDescriptionToBulletPoints = (description: string | null | undefined
 
 export default function JobDetails() {
   const params = useParams()
-  const jobId = params?.id as string
+  const slug = params?.slug as string
+  const jobId = slug ? parseJobSlug(slug) : ''
   const [job, setJob] = useState<Job | null>(null)
   const [loading, setLoading] = useState(true)
   const [isApplicationModalOpen, setIsApplicationModalOpen] = useState(false)
@@ -343,7 +345,7 @@ export default function JobDetails() {
                     {similarJobs.map((similarJob) => (
                       <Link 
                         key={similarJob.id}
-                        href={`/careers/jobs/${similarJob.id}`}
+                        href={`/careers/jobs/${toJobSlug(similarJob.title, similarJob.id)}`}
                         className="block p-3 sm:p-4 rounded-lg border border-gray-100 hover:border-[#5E366D] transition-colors"
                       >
                         <h3 className="font-medium text-gray-900 mb-2 text-sm sm:text-base">{similarJob.title}</h3>
@@ -386,4 +388,4 @@ export default function JobDetails() {
       )}
     </>
   )
-} 
+}

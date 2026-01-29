@@ -1,10 +1,12 @@
 import { createClient } from '@supabase/supabase-js';
 import { generatePageMetadata } from '@/config/metadata';
+import { parseJobSlug } from '@/lib/job-slug';
 
 export async function generateMetadata(props: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ slug: string }>;
 }): Promise<ReturnType<typeof generatePageMetadata>> {
-  const { id } = await props.params;
+  const { slug } = await props.params;
+  const id = parseJobSlug(slug);
 
   if (
     !process.env.NEXT_PUBLIC_SUPABASE_URL ||

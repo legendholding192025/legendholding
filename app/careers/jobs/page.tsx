@@ -8,6 +8,7 @@ import { Search, Briefcase, MapPin, Clock, Building2, ChevronDown, X } from "luc
 import { Button } from "@/components/ui/button"
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
+import { toJobSlug } from "@/lib/job-slug"
 
 interface Job {
   id: string
@@ -316,7 +317,7 @@ export default function JobsPage() {
                     </div>
                     <div className="flex items-center gap-4">
                       <Button
-                        onClick={() => router.push(`/careers/jobs/${job.id}`)}
+                        onClick={() => router.push(`/careers/jobs/${toJobSlug(job.title, job.id)}`)}
                         className="bg-[#EE8900] hover:bg-[#EE8900]/90 text-white"
                       >
                         View Details
