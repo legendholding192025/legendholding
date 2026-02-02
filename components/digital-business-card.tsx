@@ -88,7 +88,7 @@ END:VCARD`;
     <div className="min-h-screen min-h-[100dvh] flex items-center justify-center p-0 md:p-4 bg-transparent">
       <div className="w-full max-w-md min-h-screen min-h-[100dvh] md:min-h-0 flex flex-col">
         {/* Card Container - full viewport on mobile, rounded card on desktop */}
-        <div className="relative bg-[#2B1C48] flex-1 min-h-screen min-h-[100dvh] md:min-h-0 w-full rounded-none md:rounded-3xl overflow-visible shadow-2xl flex flex-col">
+        <div className="relative bg-[#2B1C48] flex-1 min-h-screen min-h-[100dvh] md:min-h-0 w-full rounded-none md:rounded-3xl overflow-hidden shadow-2xl flex flex-col">
           {/* Logo - top right corner (same as header) */}
           <div className="absolute top-0 right-0 z-30 p-5 pointer-events-none">
             <Image
@@ -101,7 +101,7 @@ END:VCARD`;
           </div>
 
           {/* Scrollable middle: image + content - fills space so Powered by stays at bottom */}
-          <div className="flex-1 min-h-0 flex flex-col overflow-visible">
+          <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
           {/* Profile Photo - slightly taller than square */}
           <div className="relative aspect-[4/5] w-full block overflow-hidden leading-[0] shrink-0">
             <Image
@@ -124,15 +124,15 @@ END:VCARD`;
 
           {/* Content - 1px overlap so no seam; gradient above blends image into this */}
           <div className="relative px-6 pt-4 pb-4 -mt-px border-0 bg-[#2B1C48] z-10 overflow-visible flex-1 min-h-0">
-            {/* Background SVG - positioned at bottom-right of content area */}
+            {/* Background SVG - positioned at bottom-right, inside card */}
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/bg.svg"
               alt=""
               width={840}
               height={855}
-              className="absolute right-0 z-0 pointer-events-none"
-              style={{ opacity: 0.35, bottom: '-100px' }}
+              className="absolute bottom-0 right-0 z-0 pointer-events-none"
+              style={{ opacity: 0.35 }}
             />
 
             {/* Content on top of background */}
