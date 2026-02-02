@@ -89,6 +89,16 @@ END:VCARD`;
       <div className="w-full max-w-md min-h-screen min-h-[100dvh] md:min-h-0 flex flex-col">
         {/* Card Container - full viewport on mobile, rounded card on desktop */}
         <div className="relative bg-[#2B1C48] flex-1 min-h-screen min-h-[100dvh] md:min-h-0 w-full rounded-none md:rounded-3xl overflow-hidden shadow-2xl flex flex-col">
+          {/* Background SVG - behind content and footer, bottom-right of card */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/bg.svg"
+            alt=""
+            width={840}
+            height={855}
+            className="absolute bottom-0 right-0 z-0 pointer-events-none"
+            style={{ opacity: 0.35 }}
+          />
           {/* Logo - top right corner (same as header) */}
           <div className="absolute top-0 right-0 z-30 p-5 pointer-events-none">
             <Image
@@ -101,7 +111,7 @@ END:VCARD`;
           </div>
 
           {/* Scrollable middle: image + content - fills space so Powered by stays at bottom */}
-          <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
+          <div className="relative z-10 flex-1 min-h-0 flex flex-col overflow-hidden">
           {/* Profile Photo - slightly taller than square */}
           <div className="relative aspect-[4/5] w-full block overflow-hidden leading-[0] shrink-0">
             <Image
@@ -123,19 +133,8 @@ END:VCARD`;
           </div>
 
           {/* Content - 1px overlap so no seam; gradient above blends image into this */}
-          <div className="relative px-6 pt-4 pb-4 -mt-px border-0 bg-[#2B1C48] z-10 overflow-visible flex-1 min-h-0">
-            {/* Background SVG - positioned at bottom-right, inside card */}
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/bg.svg"
-              alt=""
-              width={840}
-              height={855}
-              className="absolute bottom-0 right-0 z-0 pointer-events-none"
-              style={{ opacity: 0.35 }}
-            />
-
-            {/* Content on top of background */}
+          <div className="relative px-6 pt-4 pb-4 -mt-px border-0 flex-1 min-h-0">
+            {/* Content */}
             <div className="relative z-10">
             {/* Name & Title */}
             <div className="text-center mb-4">
@@ -237,7 +236,7 @@ END:VCARD`;
           </div>
           </div>
 
-          <p className="text-center text-white/70 text-xs py-2 pb-3 flex-shrink-0">
+          <p className="relative z-10 text-center text-white/70 text-xs py-2 pb-3 flex-shrink-0">
             Powered by Legend Holding Group
           </p>
         </div>
