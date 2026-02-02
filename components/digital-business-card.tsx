@@ -85,10 +85,10 @@ END:VCARD`;
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-transparent">
-      <div className="w-full max-w-md">
-        {/* Card Container */}
-        <div className="relative bg-[#2B1C48] rounded-3xl overflow-hidden shadow-2xl">
+    <div className="min-h-screen min-h-[100dvh] flex items-center justify-center p-0 md:p-4 bg-transparent">
+      <div className="w-full max-w-md min-h-screen min-h-[100dvh] md:min-h-0 flex flex-col">
+        {/* Card Container - full viewport on mobile, rounded card on desktop */}
+        <div className="relative bg-[#2B1C48] flex-1 min-h-screen min-h-[100dvh] md:min-h-0 w-full rounded-none md:rounded-3xl overflow-hidden shadow-2xl flex flex-col">
           {/* Logo - top right corner (same as header) */}
           <div className="absolute top-0 right-0 z-30 p-5 pointer-events-none">
             <Image
@@ -100,8 +100,10 @@ END:VCARD`;
             />
           </div>
 
+          {/* Scrollable middle: image + content - fills space so Powered by stays at bottom */}
+          <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
           {/* Profile Photo - slightly taller than square */}
-          <div className="relative aspect-[4/5] w-full block overflow-hidden leading-[0]">
+          <div className="relative aspect-[4/5] w-full block overflow-hidden leading-[0] shrink-0">
             <Image
               src={member.photo || "/placeholder.svg"}
               alt={member.name}
@@ -121,9 +123,9 @@ END:VCARD`;
           </div>
 
           {/* Content - 1px overlap so no seam; gradient above blends image into this */}
-          <div className="relative px-6 pt-4 pb-8 -mt-px border-0 bg-[#2B1C48] z-10 overflow-hidden">
-            {/* Background SVG - behind content, bottom right corner only */}
-            <div className="absolute bottom-0 right-0 z-0 h-[95%] w-[95%] overflow-hidden pointer-events-none">
+          <div className="relative px-6 pt-4 pb-4 -mt-px border-0 bg-[#2B1C48] z-10 overflow-hidden flex-1 min-h-0">
+            {/* Background SVG - smaller on mobile, doesn't touch bottom */}
+            <div className="absolute bottom-6 right-0 md:bottom-0 z-0 h-[50%] w-[55%] md:h-[95%] md:w-[95%] overflow-hidden pointer-events-none">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="/bg.svg"
@@ -138,7 +140,7 @@ END:VCARD`;
             {/* Content on top of background */}
             <div className="relative z-10">
             {/* Name & Title */}
-            <div className="text-center mb-6">
+            <div className="text-center mb-4">
               <h1 className="text-2xl font-bold text-white mb-1">
                 {member.name}
               </h1>
@@ -157,8 +159,8 @@ END:VCARD`;
             </div>
 
             {/* Divider with logo */}
-            <div className="flex items-center gap-4 mb-8">
-              <div className="flex-1 h-px bg-[#5D376E]" />
+            <div className="flex items-center gap-4 mb-4">
+              <div className="flex-1 h-px bg-white" />
               <div className="relative w-6 h-6 shrink-0 flex items-center justify-center">
                 <Image
                   src="/icon-white.svg"
@@ -168,11 +170,11 @@ END:VCARD`;
                   className="object-contain"
                 />
               </div>
-              <div className="flex-1 h-px bg-[#5D376E]" />
+              <div className="flex-1 h-px bg-white" />
             </div>
 
             {/* Contact Info - Website only */}
-            <div className="space-y-3 mb-8">
+            <div className="space-y-3 mb-4">
               {member.website && (
                 <a
                   href={member.website.startsWith("http") ? member.website : `https://${member.website}`}
@@ -196,7 +198,7 @@ END:VCARD`;
             </div>
 
             {/* WhatsApp, LinkedIn & Web icons */}
-            <div className="flex justify-center gap-4 mb-8">
+            <div className="flex justify-center gap-4 mb-4">
               <a
                 href={member.whatsapp ? `https://wa.me/${member.whatsapp.replace(/\D/g, "")}` : "https://wa.me/9714XXXXXXX"}
                 target="_blank"
@@ -235,15 +237,12 @@ END:VCARD`;
             </div>
             </div>
           </div>
+          </div>
 
-          {/* Bottom Accent */}
-          <div className="h-1 bg-[#EE8900]" />
+          <p className="text-center text-white/70 text-xs py-2 pb-3 flex-shrink-0">
+            Powered by Legend Holding Group
+          </p>
         </div>
-
-        {/* Footer Branding */}
-        <p className="text-center text-[#5D376E] text-xs mt-6">
-          Powered by {member.company}
-        </p>
       </div>
     </div>
   );

@@ -9,7 +9,7 @@ export default function ProfileLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen bg-[#2B1C48] md:bg-[#2B1C48]">
+    <div className="min-h-screen min-h-[100dvh] bg-transparent md:bg-[#2B1C48]">
       {children}
     </div>
   );
