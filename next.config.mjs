@@ -11,6 +11,7 @@ const nextConfig = {
     remotePatterns: [
       { protocol: 'https', hostname: 'res.cloudinary.com' },
       { protocol: 'https', hostname: 'cdn.legendholding.com' },
+      { protocol: 'https', hostname: 'placehold.co' },
     ],
     qualities: [60, 70, 75, 80, 85, 90],
   },
