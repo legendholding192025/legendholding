@@ -18,7 +18,6 @@ export async function generateMetadata(props: {
         'Explore career opportunities at Legend Holding Group. Join our dynamic team and contribute to innovation across the Middle East.',
       keywords:
         'Legend Holding Group jobs, career opportunities, UAE employment, Middle East careers',
-      imageUrl: 'https://res.cloudinary.com/dzfhqvxnf/image/upload/v1769687716/icon_job_cgk6cp.png',
     });
   }
 
@@ -44,7 +43,6 @@ export async function generateMetadata(props: {
       'Explore career opportunities at Legend Holding Group. Join our dynamic team and contribute to innovation across the Middle East.',
     keywords:
       'Legend Holding Group jobs, career opportunities, UAE employment, Middle East careers',
-    imageUrl: 'https://res.cloudinary.com/dzfhqvxnf/image/upload/v1769687716/icon_job_cgk6cp.png',
   });
 }
 

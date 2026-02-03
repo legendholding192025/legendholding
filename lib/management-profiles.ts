@@ -19,7 +19,7 @@ export const MANAGEMENT_PROFILES: (TeamMember & { slug: string })[] = [
     name: "Mira Wu",
     designation: "Co-Founder & Vice Chairman",
     company: "Legend Holding Group",
-    photo: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1770029369/10_copy_21222_oiysll.png",
+    photo: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1770108401/%D9%84%D8%A7%D9%89_nqk2ki.png",
   },
   {
     slug: "jonathan-stretton",

@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     url: 'https://legendholding.com/who-we-are/the-team',
     images: [
       {
-        url: 'https://res.cloudinary.com/dzfhqvxnf/image/upload/v1761119956/cdn_684c1882b54a16.04269006_20250613_122434_vwphxo.jpg',
+        url: 'https://res.cloudinary.com/dzfhqvxnf/image/upload/v1769687716/icon_job_cgk6cp.png',
         width: 1200,
         height: 630,
         alt: 'Legend Holding Group Leadership Team'
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Leadership Team | Legend Holding Group',
     description: 'Meet the leadership team of Legend Holding Group. Learn about our board of directors and management team.',
-    images: ['https://res.cloudinary.com/dzfhqvxnf/image/upload/v1761119956/cdn_684c1882b54a16.04269006_20250613_122434_vwphxo.jpg']
+    images: ['https://res.cloudinary.com/dzfhqvxnf/image/upload/v1769687716/icon_job_cgk6cp.png']
   },
   alternates: {
     canonical: 'https://legendholding.com/who-we-are/the-team'

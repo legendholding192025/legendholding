@@ -23,7 +23,7 @@ export async function generateMetadata({
     openGraph: {
       title: `${member.name} | ${member.designation}`,
       description: `${member.company} - ${member.designation}`,
-      images: member.photo ? [{ url: member.photo, alt: member.name }] : [],
+      images: [{ url: 'https://res.cloudinary.com/dzfhqvxnf/image/upload/v1769687716/icon_job_cgk6cp.png', width: 1200, height: 630, alt: member.name }],
     },
     robots: "index, follow",
   };

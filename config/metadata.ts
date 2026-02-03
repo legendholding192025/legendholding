@@ -21,7 +21,7 @@ export const defaultMetadata: Metadata = {
     siteName: 'Legend Holding Group',
     images: [
       {
-        url: 'https://cdn.legendholding.com/images/cdn_684c0cb0b68659.28788609_20250613_113408.jpg',
+        url: 'https://res.cloudinary.com/dzfhqvxnf/image/upload/v1769687716/icon_job_cgk6cp.png',
         width: 1200,
         height: 630,
         alt: 'Legend Holding Group - Global Diversified Holding Company',

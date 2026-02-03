@@ -4,7 +4,6 @@ export const metadata = generatePageMetadata({
   title: 'Privacy Policy',
   description: 'Legend Holding Group\'s Privacy Policy outlines how we collect, use, and protect your personal information. Learn about our commitment to data privacy and security across all our business operations.',
   keywords: 'Legend Holding Group privacy policy, data protection, personal information, UAE privacy, Middle East data security, business privacy, customer data protection',
-  imageUrl: 'https://cdn.legendholding.com/images/cdn_684c0cb0b68659.28788609_20250613_113408.jpg?v=2',
 });
 
 export default function PrivacyPolicyLayout({
