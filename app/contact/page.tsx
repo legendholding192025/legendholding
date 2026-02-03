@@ -106,7 +106,7 @@ export default function ContactPage() {
     {
       icon: <Mail className="w-6 h-6" />,
       title: "Email",
-      details: ["info@legendholding.com"],
+      details: ["hello@legendholding.com"],
       color: "text-[#EE8900]"
     },
     {

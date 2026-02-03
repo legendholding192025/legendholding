@@ -190,8 +190,8 @@ export function Footer() {
               </li>
               <li className="flex items-center">
                 <Mail size={20} className="text-secondary flex-shrink-0 mr-3" />
-                <Link href="mailto:info@legendholding.com" className="text-white/80 hover:text-white transition-colors">
-                  info@legendholding.com
+                <Link href="mailto:hello@legendholding.com" className="text-white/80 hover:text-white transition-colors">
+                  hello@legendholding.com
                 </Link>
               </li>
             </ul>
