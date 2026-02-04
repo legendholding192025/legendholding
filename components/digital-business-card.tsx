@@ -103,16 +103,6 @@ END:VCARD`;
       <div className="w-full max-w-md min-h-screen min-h-[100dvh] md:min-h-0 flex flex-col">
         {/* Card Container - full viewport on mobile, rounded card on desktop */}
         <div className="relative bg-[#2B1C48] flex-1 min-h-screen min-h-[100dvh] md:min-h-0 w-full rounded-none md:rounded-3xl overflow-hidden shadow-2xl flex flex-col">
-          {/* Background SVG - behind content and footer, bottom-right of card */}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/bg.svg"
-            alt=""
-            width={840}
-            height={855}
-            className="absolute bottom-0 right-0 z-0 pointer-events-none"
-            style={{ opacity: 0.35 }}
-          />
           {/* Logo - top right corner (same as header) */}
           <div className="absolute top-0 right-0 z-30 p-5 pointer-events-none">
             <Image
@@ -146,8 +136,18 @@ END:VCARD`;
             />
           </div>
 
-          {/* Content - overlap to remove seam */}
-          <div className="relative px-6 pt-4 pb-4 -mt-2 bg-[#2B1C48] flex-1 min-h-0">
+          {/* Content - overlap to remove seam; SVG only in this section, bottom-right */}
+          <div className="relative px-6 pt-4 pb-4 -mt-2 bg-[#2B1C48] flex-1 min-h-0 overflow-hidden">
+            {/* Background SVG - bottom-right of content section only (does not go into footer) */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/bg.svg"
+              alt=""
+              width={840}
+              height={855}
+              className="absolute bottom-0 right-0 z-0 pointer-events-none"
+              style={{ opacity: 0.35 }}
+            />
             {/* Content */}
             <div className="relative z-10">
             {/* Name & Title */}
