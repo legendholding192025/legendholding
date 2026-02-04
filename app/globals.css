@@ -487,3 +487,12 @@ header.-translate-y-full {
     width: 100%;
   }
 }
+
+/* Save Contact button - download icon bounce */
+@keyframes download-icon-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(3px); }
+}
+.animate-download-icon {
+  animation: download-icon-bounce 1.2s ease-in-out infinite;
+}
