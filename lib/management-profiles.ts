@@ -2,9 +2,12 @@ import type { TeamMember } from "@/components/digital-business-card";
 
 /**
  * Management profiles for QR-code business cards.
- * Add email, phone, linkedin, whatsapp, location, website as needed for each person.
  * Slug is used in URL: /profile/[slug]
- * Replace each "photo" dummy link with the original image URL when ready.
+ *
+ * Email: included in the saved vCard when user clicks "Save Contact". Leave "" for fallback (info@legendholding.com).
+ * WhatsApp: use full number with country code (e.g. "971501234567" or "+971 50 123 4567").
+ * LinkedIn: use full profile URL (e.g. "https://www.linkedin.com/in/username/").
+ * Leave empty string "" to use company fallback on the card.
  */
 export const MANAGEMENT_PROFILES: (TeamMember & { slug: string })[] = [
   {
@@ -13,6 +16,9 @@ export const MANAGEMENT_PROFILES: (TeamMember & { slug: string })[] = [
     designation: "Founder & Chairman",
     company: "Legend Holding Group",
     photo: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1770205702/KAI_u2nbdv.png",
+    email: "",
+    whatsapp: "",
+    linkedin: "",
   },
   {
     slug: "mira-wu",
@@ -20,6 +26,9 @@ export const MANAGEMENT_PROFILES: (TeamMember & { slug: string })[] = [
     designation: "Co-Founder & Vice Chairman",
     company: "Legend Holding Group",
     photo: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1770108401/%D9%84%D8%A7%D9%89_nqk2ki.png",
+    email: "",
+    whatsapp: "",
+    linkedin: "",
   },
   {
     slug: "cannon-wang",
@@ -27,6 +36,9 @@ export const MANAGEMENT_PROFILES: (TeamMember & { slug: string })[] = [
     designation: "VP Dealership & Strategy of LHG",
     company: "Legend Holding Group",
     photo: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1770205702/3_k6nv6n.png",
+    email: "",
+    whatsapp: "",
+    linkedin: "",
   },
   {
     slug: "jonathan-stretton",
@@ -34,6 +46,9 @@ export const MANAGEMENT_PROFILES: (TeamMember & { slug: string })[] = [
     designation: "Chief Operating Officer",
     company: "Legend Holding Group",
     photo: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1770205701/4_jqudjk.png",
+    email: "",
+    whatsapp: "",
+    linkedin: "",
   },
   {
     slug: "nagaraj-ponnada",
@@ -41,6 +56,9 @@ export const MANAGEMENT_PROFILES: (TeamMember & { slug: string })[] = [
     designation: "General Manager",
     company: "Legend Holding Group",
     photo: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1770205702/2_p7whcx.png",
+    email: "",
+    whatsapp: "",
+    linkedin: "",
   },
   {
     slug: "rejeesh-raveendran",
@@ -48,6 +66,9 @@ export const MANAGEMENT_PROFILES: (TeamMember & { slug: string })[] = [
     designation: "Group Finance Director",
     company: "Legend Holding Group",
     photo: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1770205701/1_twihoy.png",
+    email: "",
+    whatsapp: "",
+    linkedin: "",
   },
   {
     slug: "waseem-khalayleh",
@@ -55,6 +76,9 @@ export const MANAGEMENT_PROFILES: (TeamMember & { slug: string })[] = [
     designation: "Head of Brand",
     company: "Legend Holding Group",
     photo: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1770205703/5_ohvtkk.png",
+    email: "waseem.k@legendholding.com",
+    whatsapp: "971549964549",
+    linkedin: "https://www.linkedin.com/in/waseem-khalayleh-96b8a780/",
   },
 ];
 
