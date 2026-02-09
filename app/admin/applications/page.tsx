@@ -510,6 +510,33 @@ export default function ApplicationsPage() {
     }
   }
 
+  const handleStatusChange = async (applicationId: string, newStatus: string) => {
+    const app = applications.find(a => a.id === applicationId)
+    if (!app) return
+    const previousStatus = app.status as keyof typeof statusCounts
+    try {
+      const { error } = await supabase
+        .from('job_applications')
+        .update({ status: newStatus })
+        .eq('id', applicationId)
+
+      if (error) throw error
+
+      setApplications(prev =>
+        prev.map(a => (a.id === applicationId ? { ...a, status: newStatus } : a))
+      )
+      setStatusCounts(prev => ({
+        ...prev,
+        ...(previousStatus in prev && { [previousStatus]: Math.max(0, prev[previousStatus] - 1) }),
+        ...(newStatus in prev && { [newStatus]: prev[newStatus as keyof typeof prev] + 1 })
+      }))
+      toast.success('Status updated successfully')
+    } catch (error) {
+      console.error('Error updating status:', error)
+      toast.error('Failed to update status')
+    }
+  }
+
   const handleDownloadResume = async (url: string, fullName: string) => {
     try {
       let fileExt = 'pdf';
@@ -898,6 +925,21 @@ export default function ApplicationsPage() {
       </TableCell>
       <TableCell>
         <div className="flex items-center gap-2">
+          <Select
+            value={application.status}
+            onValueChange={(value) => handleStatusChange(application.id, value)}
+          >
+            <SelectTrigger className="w-[120px] h-8">
+              <SelectValue placeholder="Status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="pending">Pending</SelectItem>
+              <SelectItem value="reviewed">Reviewed</SelectItem>
+              <SelectItem value="shortlisted">Shortlisted</SelectItem>
+              <SelectItem value="rejected">Rejected</SelectItem>
+              <SelectItem value="hired">Hired</SelectItem>
+            </SelectContent>
+          </Select>
           <Link href={`/admin/applications/${application.id}`}>
             <Button variant="outline" size="sm">
               <Eye className="h-4 w-4" />
@@ -1236,6 +1278,21 @@ export default function ApplicationsPage() {
                           </TableCell>
                           <TableCell>
                             <div className="flex items-center gap-2">
+                              <Select
+                                value={application.status}
+                                onValueChange={(value) => handleStatusChange(application.id, value)}
+                              >
+                                <SelectTrigger className="w-[120px] h-8">
+                                  <SelectValue placeholder="Status" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="pending">Pending</SelectItem>
+                                  <SelectItem value="reviewed">Reviewed</SelectItem>
+                                  <SelectItem value="shortlisted">Shortlisted</SelectItem>
+                                  <SelectItem value="rejected">Rejected</SelectItem>
+                                  <SelectItem value="hired">Hired</SelectItem>
+                                </SelectContent>
+                              </Select>
                               <Link href={`/admin/applications/${application.id}`}>
                                 <Button variant="outline" size="sm">
                                   <Eye className="h-4 w-4" />
