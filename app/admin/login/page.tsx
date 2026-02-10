@@ -20,6 +20,7 @@ export default function AdminLogin() {
     e.preventDefault()
     setLoading(true)
     setError('')
+    let didSucceed = false
 
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
@@ -45,22 +46,22 @@ export default function AdminLogin() {
         }
         return
       }
-      
+
       if (data.user) {
+        didSucceed = true
         setIsRedirecting(true)
-        
-        // Add a brief delay to show success state
-        setTimeout(() => {
-          router.refresh()
-          router.push('/admin/dashboard')
-        }, 500)
+        // Keep loading visible until we navigate away
+        router.refresh()
+        router.push('/admin/dashboard')
       }
     } catch (error: any) {
       console.error('Login error:', error)
       setError('An unexpected error occurred. Please try again.')
     } finally {
-      setLoading(false)
-      setIsRedirecting(false)
+      if (!didSucceed) {
+        setLoading(false)
+        setIsRedirecting(false)
+      }
     }
   }
 
