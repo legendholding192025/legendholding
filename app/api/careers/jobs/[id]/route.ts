@@ -1,6 +1,9 @@
 import { createClient } from '@supabase/supabase-js'
 import { NextResponse } from 'next/server'
 
+// Simple UUID v4 format check to reject obviously invalid IDs early
+const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+
 export async function GET(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -8,6 +11,11 @@ export async function GET(
   try {
     // Await params in Next.js 15
     const { id } = await params
+
+    // Validate ID format before hitting the database
+    if (!id || !UUID_REGEX.test(id)) {
+      return NextResponse.json({ error: 'Job not found' }, { status: 404 })
+    }
 
     // Check if service role key is available
     if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
@@ -32,13 +40,14 @@ export async function GET(
       }
     )
 
-    // Use service role to get job by ID, bypassing RLS
+    // Use maybeSingle() instead of single() to avoid PGRST116 error when no rows match.
+    // single() throws an error when 0 rows are found; maybeSingle() returns null data instead.
     const { data: job, error } = await supabaseAdmin
       .from('jobs')
       .select('*')
       .eq('id', id)
       .eq('status', 'active')
-      .single()
+      .maybeSingle()
 
     if (error) {
       console.error('Error fetching job from database:', error)
@@ -53,7 +62,13 @@ export async function GET(
     }
 
     console.log(`Successfully fetched job: ${job.title}`)
-    return NextResponse.json(job)
+
+    // Return with cache headers to reduce redundant invocations
+    return NextResponse.json(job, {
+      headers: {
+        'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=300',
+      },
+    })
   } catch (error) {
     console.error('Error in careers job API:', error)
     return NextResponse.json({ 
