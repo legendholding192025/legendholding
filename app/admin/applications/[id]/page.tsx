@@ -17,6 +17,16 @@ import { toast } from "sonner"
 import Link from "next/link"
 import { format } from "date-fns"
 import { AdminDashboardLayout } from "@/components/admin/dashboard-layout"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
 
 interface Job {
   id: string
@@ -43,6 +53,7 @@ export default function ApplicationDetails() {
   const router = useRouter()
   const [application, setApplication] = useState<JobApplication | null>(null)
   const [loading, setLoading] = useState(true)
+  const [rejectDialogOpen, setRejectDialogOpen] = useState(false)
   const supabase = createClientComponentClient()
 
   useEffect(() => {
@@ -77,23 +88,49 @@ export default function ApplicationDetails() {
     }
   }
 
+  const applyStatusChange = async (newStatus: string) => {
+    if (!application) return
+    try {
+      const res = await fetch(`/api/admin/applications/${application.id}/status`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: newStatus })
+      })
+      const data = await res.json().catch(() => ({}))
+      if (!res.ok) {
+        if (data.emailLimitReached) {
+          toast.warning('Daily rejection email limit reached (50/day). Please try again tomorrow.')
+          return
+        }
+        throw new Error(data.error || 'Failed to update status')
+      }
+
+      setApplication({ ...application, status: newStatus })
+      if (newStatus === 'rejected' && data.emailSent === false) {
+        toast.success('Status updated to Rejected. Rejection email could not be sent.')
+      } else {
+        toast.success('Status updated successfully')
+      }
+    } catch (error) {
+      console.error('Error updating status:', error)
+      toast.error(error instanceof Error ? error.message : 'Failed to update status')
+    }
+  }
+
   const handleStatusChange = async (newStatus: string) => {
     if (!application) return
 
-    try {
-      const { error } = await supabase
-        .from('job_applications')
-        .update({ status: newStatus })
-        .eq('id', application.id)
-
-      if (error) throw error
-
-      setApplication({ ...application, status: newStatus })
-      toast.success('Status updated successfully')
-    } catch (error) {
-      console.error('Error updating status:', error)
-      toast.error('Failed to update status')
+    if (newStatus === 'rejected') {
+      setRejectDialogOpen(true)
+      return
     }
+
+    await applyStatusChange(newStatus)
+  }
+
+  const handleRejectConfirm = async () => {
+    setRejectDialogOpen(false)
+    await applyStatusChange('rejected')
   }
 
   const handleDelete = async () => {
@@ -464,6 +501,7 @@ export default function ApplicationDetails() {
                 <Select
                   value={application.status}
                   onValueChange={handleStatusChange}
+                  disabled={application.status === 'rejected'}
                 >
                   <SelectTrigger className="w-[180px]">
                     <SelectValue placeholder="Select status" />
@@ -531,6 +569,21 @@ export default function ApplicationDetails() {
           </div>
         </div>
       </div>
+
+      <AlertDialog open={rejectDialogOpen} onOpenChange={setRejectDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Reject application?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will set the status to Rejected and send a rejection email to the applicant. Do you want to continue?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleRejectConfirm}>Yes, reject and send email</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </AdminDashboardLayout>
   )
 } 

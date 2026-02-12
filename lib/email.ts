@@ -67,6 +67,60 @@ export async function sendContactFormEmail(data: {
   }
 }
 
+/** Send rejection email to job applicant when admin/super-admin sets status to Rejected. */
+export async function sendApplicationRejectionEmail(data: {
+  applicantFirstName: string;
+  applicantEmail: string;
+  positionTitle: string;
+}) {
+  try {
+    const { applicantFirstName, applicantEmail, positionTitle } = data;
+    const fromEmail = 'no-reply@legendholding.com';
+    const bannerUrl = 'https://res.cloudinary.com/dzfhqvxnf/image/upload/v1770727232/email-banner_i8poc9.png';
+
+    const emailResponse = await resend.emails.send({
+      from: fromEmail,
+      to: [applicantEmail],
+      subject: `Update on your application – Legend Holding Group`,
+      html: `
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <style>
+              body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; }
+              .container { max-width: 600px; margin: 0 auto; padding: 0; }
+              .banner { display: block; width: 100%; max-width: 600px; height: auto; }
+              .content { padding: 24px; background-color: #f9f9f9; }
+              .footer { text-align: center; padding: 20px; color: #666; font-size: 14px; }
+            </style>
+          </head>
+          <body>
+            <div class="container">
+              <a href="https://legendholding.com" target="_blank" rel="noopener noreferrer" style="display:block;text-decoration:none;"><img src="${bannerUrl}" alt="Legend Holding Group" class="banner" width="600" style="border:0;outline:none;" /></a>
+              <div class="content">
+                <p>Dear ${applicantFirstName},</p>
+                <p>Thank you for submitting your resume and for your interest in Legend Holding Group for the position of <strong>${positionTitle}</strong>.</p>
+                <p>After careful review of your qualifications and experience, we must unfortunately inform you that we are unable to offer you a position at this time.</p>
+                <p>However, given your skill set, we would like to keep your resume in our applicant database, should a position become available in the future. This database is accessible to recruitment and staffing teams within the Group.</p>
+                <p>Best Regards,<br>People and Culture Team</p>
+              </div>
+              <div class="footer">
+                <p>Legend Holding Group</p>
+              </div>
+            </div>
+          </body>
+        </html>
+      `,
+    });
+
+    return emailResponse;
+  } catch (error) {
+    console.error('Error sending application rejection email:', error);
+    throw error;
+  }
+}
 
 export async function sendWorkflowApprovalEmail(data: {
   name: string;

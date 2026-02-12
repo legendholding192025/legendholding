@@ -10,6 +10,16 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Eye, Calendar, User, Mail, Phone, FileText } from "lucide-react"
 import { toast } from "sonner"
 import Link from "next/link"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
 
 interface JobApplication {
   id: string
@@ -46,6 +56,8 @@ export function JobApplicationsDashboard({ onSignOut, showHeader = true }: JobAp
     rejected: 0,
     hired: 0
   })
+  const [rejectDialogOpen, setRejectDialogOpen] = useState(false)
+  const [rejectDialogPayload, setRejectDialogPayload] = useState<{ id: string } | null>(null)
 
   useEffect(() => {
     fetchApplications()
@@ -93,7 +105,7 @@ export function JobApplicationsDashboard({ onSignOut, showHeader = true }: JobAp
           `)
           .order('created_at', { ascending: false })
           .limit(50),
-        supabase.from('job_applications').select('id', { count: 'exact', head: true }),
+        supabase.from('job_applications').select('id', { count: 'exact', head: true }).neq('status', 'rejected'),
         supabase.from('job_applications').select('id', { count: 'exact', head: true }).eq('status', 'pending'),
         supabase.from('job_applications').select('id', { count: 'exact', head: true }).eq('status', 'reviewed'),
         supabase.from('job_applications').select('id', { count: 'exact', head: true }).eq('status', 'shortlisted'),
@@ -127,25 +139,53 @@ export function JobApplicationsDashboard({ onSignOut, showHeader = true }: JobAp
     }
   }
 
-  const handleStatusUpdate = async (id: string, status: JobApplication['status']) => {
+  const applyStatusUpdate = async (id: string, status: JobApplication['status']) => {
     try {
-      const { error } = await supabase
-        .from('job_applications')
-        .update({ status })
-        .eq('id', id)
-
-      if (error) throw error
+      const res = await fetch(`/api/admin/applications/${id}/status`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status })
+      })
+      const data = await res.json().catch(() => ({}))
+      if (!res.ok) {
+        if (data.emailLimitReached) {
+          toast.warning('Daily rejection email limit reached (50/day). Please try again tomorrow.')
+          return
+        }
+        throw new Error(data.error || 'Failed to update application')
+      }
 
       setApplications(prev =>
         prev.map(app =>
           app.id === id ? { ...app, status } : app
         )
       )
-      toast.success("Application status updated")
+      if (status === 'rejected' && data.emailSent === false) {
+        toast.success("Status updated to Rejected. Rejection email could not be sent.")
+      } else {
+        toast.success("Application status updated")
+      }
     } catch (error) {
       console.error('Error updating application:', error)
-      toast.error("Failed to update application")
+      toast.error(error instanceof Error ? error.message : "Failed to update application")
     }
+  }
+
+  const handleStatusUpdate = async (id: string, status: JobApplication['status']) => {
+    if (status === 'rejected') {
+      setRejectDialogPayload({ id })
+      setRejectDialogOpen(true)
+      return
+    }
+    await applyStatusUpdate(id, status)
+  }
+
+  const handleRejectConfirm = async () => {
+    if (!rejectDialogPayload) return
+    const { id } = rejectDialogPayload
+    setRejectDialogOpen(false)
+    setRejectDialogPayload(null)
+    await applyStatusUpdate(id, 'rejected')
   }
 
   const handleRefresh = async () => {
@@ -388,7 +428,11 @@ export function JobApplicationsDashboard({ onSignOut, showHeader = true }: JobAp
                     </TableHeader>
                     <TableBody>
                       {applications
-                        .filter(app => status === 'all' || (app.status || 'pending') === status)
+                        .filter(app => {
+                          const s = app.status || 'pending'
+                          if (status === 'all') return s !== 'rejected'
+                          return s === status
+                        })
                         .map((application) => (
                           <TableRow key={application.id}>
                             <TableCell>
@@ -442,6 +486,27 @@ export function JobApplicationsDashboard({ onSignOut, showHeader = true }: JobAp
           </Tabs>
         </CardContent>
       </Card>
+
+      <AlertDialog
+        open={rejectDialogOpen}
+        onOpenChange={(open) => {
+          setRejectDialogOpen(open)
+          if (!open) setRejectDialogPayload(null)
+        }}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Reject application?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will set the status to Rejected and send a rejection email to the applicant. Do you want to continue?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleRejectConfirm}>Yes, reject and send email</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 } 

@@ -29,6 +29,16 @@ import { useRouter } from "next/navigation"
 import { AdminDashboardLayout } from "@/components/admin/dashboard-layout"
 import { UnauthorizedAccess } from "@/components/admin/unauthorized-access"
 import { useAdminPermissions } from "@/hooks/use-admin-permissions"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
 
 interface Job {
   id: string
@@ -73,6 +83,12 @@ export default function ApplicationsPage() {
     hired: 0
   }) // Status counts from database
   const [statusCountsLoading, setStatusCountsLoading] = useState(true) // Track if status counts are being loaded
+  const [rejectDialogOpen, setRejectDialogOpen] = useState(false)
+  const [rejectDialogPayload, setRejectDialogPayload] = useState<{
+    applicationId: string
+    newStatus: string
+    previousStatus: string
+  } | null>(null)
   const userRoleCache = useRef<{ userId: string; role: string } | null>(null) // Cache user role
   const supabase = createClientComponentClient()
 
@@ -177,6 +193,7 @@ export default function ApplicationsPage() {
       const isFiltered = jobFilter !== "all" || statusFilter !== "all"
       
       // Build data query with count - OPTIMIZED: Get data + count in single request
+      // By default (All) exclude rejected from list; when Rejected filter is selected, show only rejected
       let query = supabase
         .from('job_applications')
         .select(`
@@ -204,8 +221,10 @@ export default function ApplicationsPage() {
         query = query.eq('job_id', jobFilter)
       }
 
-      // Apply status filter
-      if (statusFilter !== "all") {
+      // Apply status filter: default list excludes rejected; Rejected filter shows only rejected
+      if (statusFilter === "all") {
+        query = query.neq('status', 'rejected')
+      } else {
         query = query.eq('status', statusFilter)
       }
 
@@ -301,7 +320,7 @@ export default function ApplicationsPage() {
         if (isFiltered && totalCount === 0) {
           const fetchTotalCount = async () => {
             try {
-              let totalQuery = supabase.from('job_applications').select('id', { count: 'exact', head: true })
+              let totalQuery = supabase.from('job_applications').select('id', { count: 'exact', head: true }).neq('status', 'rejected')
               if (userJobIds && userJobIds.length > 0) {
                 totalQuery = totalQuery.in('job_id', userJobIds)
               }
@@ -337,6 +356,7 @@ export default function ApplicationsPage() {
               created_at,
               job:jobs(id, title, department)
             `)
+            .neq('status', 'rejected')
             .order('created_at', { ascending: false })
             .limit(50)
           
@@ -357,7 +377,7 @@ export default function ApplicationsPage() {
               pending: transformedLimitedData.filter(app => app.status === 'pending').length,
               reviewed: transformedLimitedData.filter(app => app.status === 'reviewed').length,
               shortlisted: transformedLimitedData.filter(app => app.status === 'shortlisted').length,
-              rejected: transformedLimitedData.filter(app => app.status === 'rejected').length,
+              rejected: 0,
               hired: transformedLimitedData.filter(app => app.status === 'hired').length
             })
             setTotalCount(transformedLimitedData.length)
@@ -510,31 +530,77 @@ export default function ApplicationsPage() {
     }
   }
 
+  const applyStatusChange = async (
+    applicationId: string,
+    newStatus: string,
+    previousStatus: keyof typeof statusCounts
+  ) => {
+    try {
+      const res = await fetch(`/api/admin/applications/${applicationId}/status`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: newStatus })
+      })
+      const data = await res.json().catch(() => ({}))
+      if (!res.ok) {
+        if (data.emailLimitReached) {
+          toast.warning('Daily rejection email limit reached (50/day). Please try again tomorrow.')
+          return
+        }
+        throw new Error(data.error || 'Failed to update status')
+      }
+
+      // When rejected, remove from list (default view excludes rejected) and update counts
+      if (newStatus === 'rejected') {
+        setApplications(prev => prev.filter(a => a.id !== applicationId))
+        setStatusCounts(prev => ({
+          ...prev,
+          ...(previousStatus in prev && { [previousStatus]: Math.max(0, prev[previousStatus] - 1) }),
+          rejected: (prev.rejected || 0) + 1
+        }))
+        setTotalCount(prev => Math.max(0, prev - 1))
+        setFilteredCount(prev => Math.max(0, prev - 1))
+      } else {
+        setApplications(prev =>
+          prev.map(a => (a.id === applicationId ? { ...a, status: newStatus } : a))
+        )
+        setStatusCounts(prev => ({
+          ...prev,
+          ...(previousStatus in prev && { [previousStatus]: Math.max(0, prev[previousStatus] - 1) }),
+          ...(newStatus in prev && { [newStatus]: prev[newStatus as keyof typeof prev] + 1 })
+        }))
+      }
+      if (newStatus === 'rejected' && data.emailSent === false) {
+        toast.success('Status updated to Rejected. Rejection email could not be sent.')
+      } else {
+        toast.success('Status updated successfully')
+      }
+    } catch (error) {
+      console.error('Error updating status:', error)
+      toast.error(error instanceof Error ? error.message : 'Failed to update status')
+    }
+  }
+
   const handleStatusChange = async (applicationId: string, newStatus: string) => {
     const app = applications.find(a => a.id === applicationId)
     if (!app) return
     const previousStatus = app.status as keyof typeof statusCounts
-    try {
-      const { error } = await supabase
-        .from('job_applications')
-        .update({ status: newStatus })
-        .eq('id', applicationId)
 
-      if (error) throw error
-
-      setApplications(prev =>
-        prev.map(a => (a.id === applicationId ? { ...a, status: newStatus } : a))
-      )
-      setStatusCounts(prev => ({
-        ...prev,
-        ...(previousStatus in prev && { [previousStatus]: Math.max(0, prev[previousStatus] - 1) }),
-        ...(newStatus in prev && { [newStatus]: prev[newStatus as keyof typeof prev] + 1 })
-      }))
-      toast.success('Status updated successfully')
-    } catch (error) {
-      console.error('Error updating status:', error)
-      toast.error('Failed to update status')
+    if (newStatus === 'rejected') {
+      setRejectDialogPayload({ applicationId, newStatus, previousStatus })
+      setRejectDialogOpen(true)
+      return
     }
+
+    await applyStatusChange(applicationId, newStatus, previousStatus)
+  }
+
+  const handleRejectConfirm = async () => {
+    if (!rejectDialogPayload) return
+    const { applicationId, newStatus, previousStatus } = rejectDialogPayload
+    setRejectDialogOpen(false)
+    setRejectDialogPayload(null)
+    await applyStatusChange(applicationId, newStatus, previousStatus as keyof typeof statusCounts)
   }
 
   const handleDownloadResume = async (url: string, fullName: string) => {
@@ -928,6 +994,7 @@ export default function ApplicationsPage() {
           <Select
             value={application.status}
             onValueChange={(value) => handleStatusChange(application.id, value)}
+            disabled={application.status === 'rejected'}
           >
             <SelectTrigger className="w-[120px] h-8">
               <SelectValue placeholder="Status" />
@@ -1281,6 +1348,7 @@ export default function ApplicationsPage() {
                               <Select
                                 value={application.status}
                                 onValueChange={(value) => handleStatusChange(application.id, value)}
+                                disabled={application.status === 'rejected'}
                               >
                                 <SelectTrigger className="w-[120px] h-8">
                                   <SelectValue placeholder="Status" />
@@ -1350,6 +1418,27 @@ export default function ApplicationsPage() {
           </div>
         )}
       </div>
+
+      <AlertDialog
+        open={rejectDialogOpen}
+        onOpenChange={(open) => {
+          setRejectDialogOpen(open)
+          if (!open) setRejectDialogPayload(null)
+        }}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Reject application?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will set the status to Rejected and send a rejection email to the applicant. Do you want to continue?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleRejectConfirm}>Yes, reject and send email</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </AdminDashboardLayout>
   )
 } 
