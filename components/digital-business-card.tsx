@@ -62,7 +62,7 @@ function escapeVCardValue(value: string): string {
 }
 
 export function DigitalBusinessCard({ member }: DigitalBusinessCardProps) {
-  const handleDownloadVCard = () => {
+  const handleDownloadVCard = async () => {
     const name = escapeVCardValue(member.name);
     const company = escapeVCardValue(member.company);
     const designation = escapeVCardValue(member.designation);
@@ -76,6 +76,33 @@ export function DigitalBusinessCard({ member }: DigitalBusinessCardProps) {
     const givenName = nameParts[0] || member.name;
     const familyName = nameParts.length > 1 ? nameParts.slice(1).join(" ") : "";
 
+    // Fetch photo and convert to base64 for vCard
+    let photoLine = "";
+    if (member.photo) {
+      try {
+        const response = await fetch(member.photo);
+        const blob = await response.blob();
+        const base64 = await new Promise<string>((resolve) => {
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            const result = reader.result as string;
+            // Remove data URL prefix (e.g. "data:image/png;base64,")
+            const base64Data = result.split(",")[1] || "";
+            resolve(base64Data);
+          };
+          reader.readAsDataURL(blob);
+        });
+        // Determine image type from blob
+        const imageType = blob.type.includes("png") ? "PNG" : "JPEG";
+        if (base64) {
+          photoLine = `PHOTO;ENCODING=b;TYPE=${imageType}:${base64}`;
+        }
+      } catch {
+        // If photo fetch fails, continue without photo
+        console.warn("Could not fetch photo for vCard");
+      }
+    }
+
     const vCard = `BEGIN:VCARD
 VERSION:3.0
 N:${escapeVCardValue(familyName)};${escapeVCardValue(givenName)};;;
@@ -84,14 +111,15 @@ ORG:${company}
 TITLE:${designation}
 TEL;TYPE=WORK,VOICE:${phone}
 EMAIL:${email}
+${photoLine}
 ${member.whatsapp ? `URL:https://wa.me/${member.whatsapp.replace(/\D/g, "")}` : ""}
 ${member.website ? `URL:${member.website}` : ""}
 ${location ? `ADR;TYPE=WORK:;;${location}` : ""}
 NOTE:${escapeVCardValue(member.company)} - ${designation}
 END:VCARD`;
 
-    const blob = new Blob([vCard], { type: "text/vcard;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
+    const vcardBlob = new Blob([vCard], { type: "text/vcard;charset=utf-8" });
+    const url = URL.createObjectURL(vcardBlob);
     const link = document.createElement("a");
     link.href = url;
     link.download = `${member.name.replace(/\s+/g, "_")}.vcf`;
