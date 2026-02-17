@@ -76,23 +76,19 @@ export function DigitalBusinessCard({ member }: DigitalBusinessCardProps) {
     const givenName = nameParts[0] || member.name;
     const familyName = nameParts.length > 1 ? nameParts.slice(1).join(" ") : "";
 
-    // Build vCard lines, then filter out empty ones
-    const vCardLines = [
-      "BEGIN:VCARD",
-      "VERSION:3.0",
-      `N:${escapeVCardValue(familyName)};${escapeVCardValue(givenName)};;;`,
-      `FN:${name}`,
-      `ORG:${company}`,
-      `TITLE:${designation}`,
-      `TEL;TYPE=CELL:${phone}`,
-      `EMAIL;TYPE=WORK:${email}`,
-      member.website ? `URL:${member.website.startsWith("http") ? member.website : `https://${member.website}`}` : "",
-      member.linkedin ? `X-SOCIALPROFILE;TYPE=linkedin:${member.linkedin}` : "",
-      location ? `ADR;TYPE=WORK:;;${location};;;;` : "",
-      `NOTE:${escapeVCardValue(member.company)} - ${designation}`,
-      "END:VCARD",
-    ].filter(line => line !== "");
-    const vCard = vCardLines.join("\n");
+    const vCard = `BEGIN:VCARD
+VERSION:3.0
+N:${escapeVCardValue(familyName)};${escapeVCardValue(givenName)};;;
+FN:${name}
+ORG:${company}
+TITLE:${designation}
+TEL;TYPE=WORK,VOICE:${phone}
+EMAIL:${email}
+${member.whatsapp ? `URL:https://wa.me/${member.whatsapp.replace(/\D/g, "")}` : ""}
+${member.website ? `URL:${member.website}` : ""}
+${location ? `ADR;TYPE=WORK:;;${location}` : ""}
+NOTE:${escapeVCardValue(member.company)} - ${designation}
+END:VCARD`;
 
     const blob = new Blob([vCard], { type: "text/vcard;charset=utf-8" });
     const url = URL.createObjectURL(blob);
