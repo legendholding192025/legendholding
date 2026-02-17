@@ -67,7 +67,8 @@ export function DigitalBusinessCard({ member }: DigitalBusinessCardProps) {
     const company = escapeVCardValue(member.company);
     const designation = escapeVCardValue(member.designation);
     const email = member.email || "info@legendholding.com";
-    const phone = member.phone || "+971 4 XXX XXXX";
+    const whatsappDigits = member.whatsapp?.replace(/\D/g, "") ?? "";
+    const phone = member.phone || (whatsappDigits ? `+${whatsappDigits}` : "+971 4 XXX XXXX");
     const location = member.location ? escapeVCardValue(member.location) : "";
 
     // N: Family name;Given name;;; (for better contact app compatibility)
@@ -75,19 +76,23 @@ export function DigitalBusinessCard({ member }: DigitalBusinessCardProps) {
     const givenName = nameParts[0] || member.name;
     const familyName = nameParts.length > 1 ? nameParts.slice(1).join(" ") : "";
 
-    const vCard = `BEGIN:VCARD
-VERSION:3.0
-N:${escapeVCardValue(familyName)};${escapeVCardValue(givenName)};;;
-FN:${name}
-ORG:${company}
-TITLE:${designation}
-TEL;TYPE=WORK,VOICE:${phone}
-EMAIL:${email}
-${member.whatsapp ? `URL:https://wa.me/${member.whatsapp.replace(/\D/g, "")}` : ""}
-${member.website ? `URL:${member.website}` : ""}
-${location ? `ADR;TYPE=WORK:;;${location}` : ""}
-NOTE:${escapeVCardValue(member.company)} - ${designation}
-END:VCARD`;
+    // Build vCard lines, then filter out empty ones
+    const vCardLines = [
+      "BEGIN:VCARD",
+      "VERSION:3.0",
+      `N:${escapeVCardValue(familyName)};${escapeVCardValue(givenName)};;;`,
+      `FN:${name}`,
+      `ORG:${company}`,
+      `TITLE:${designation}`,
+      `TEL;TYPE=CELL:${phone}`,
+      `EMAIL;TYPE=WORK:${email}`,
+      member.website ? `URL:${member.website.startsWith("http") ? member.website : `https://${member.website}`}` : "",
+      member.linkedin ? `X-SOCIALPROFILE;TYPE=linkedin:${member.linkedin}` : "",
+      location ? `ADR;TYPE=WORK:;;${location};;;;` : "",
+      `NOTE:${escapeVCardValue(member.company)} - ${designation}`,
+      "END:VCARD",
+    ].filter(line => line !== "");
+    const vCard = vCardLines.join("\n");
 
     const blob = new Blob([vCard], { type: "text/vcard;charset=utf-8" });
     const url = URL.createObjectURL(blob);
