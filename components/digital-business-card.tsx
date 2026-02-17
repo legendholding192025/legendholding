@@ -119,10 +119,34 @@ NOTE:${escapeVCardValue(member.company)} - ${designation}
 END:VCARD`;
 
     const vcardBlob = new Blob([vCard], { type: "text/vcard;charset=utf-8" });
+    const fileName = `${member.name.replace(/\s+/g, "_")}.vcf`;
+    const vcardFile = new File([vcardBlob], fileName, { type: "text/vcard" });
+
+    // On Android/mobile: try Web Share so user can pick "Contacts" / "Add to contact" instead of just downloading
+    if (typeof navigator !== "undefined" && navigator.share) {
+      try {
+        const sharePayload = {
+          files: [vcardFile],
+          title: `${member.name} - Contact`,
+          text: `${member.designation} at ${member.company}`,
+        };
+        const canShare = navigator.canShare?.(sharePayload) ?? true;
+        if (canShare) {
+          await navigator.share(sharePayload);
+          return;
+        }
+      } catch (err) {
+        const name = (err as Error)?.name;
+        if (name === "AbortError") return; // user cancelled
+        // NotAllowedError, TypeError, etc. -> fall back to download
+      }
+    }
+
+    // Fallback: download the vCard (desktop or when share not available)
     const url = URL.createObjectURL(vcardBlob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = `${member.name.replace(/\s+/g, "_")}.vcf`;
+    link.download = fileName;
     link.click();
     URL.revokeObjectURL(url);
   };
