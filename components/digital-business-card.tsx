@@ -118,31 +118,30 @@ ${location ? `ADR;TYPE=WORK:;;${location}` : ""}
 NOTE:${escapeVCardValue(member.company)} - ${designation}
 END:VCARD`;
 
-    const vcardBlob = new Blob([vCard], { type: "text/vcard;charset=utf-8" });
     const fileName = `${member.name.replace(/\s+/g, "_")}.vcf`;
-    const vcardFile = new File([vcardBlob], fileName, { type: "text/vcard" });
+    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
-    // On Android/mobile: try Web Share so user can pick "Contacts" / "Add to contact" instead of just downloading
-    if (typeof navigator !== "undefined" && navigator.share) {
-      try {
-        const sharePayload = {
-          files: [vcardFile],
-          title: `${member.name} - Contact`,
-          text: `${member.designation} at ${member.company}`,
-        };
-        const canShare = navigator.canShare?.(sharePayload) ?? true;
-        if (canShare) {
-          await navigator.share(sharePayload);
-          return;
-        }
-      } catch (err) {
-        const name = (err as Error)?.name;
-        if (name === "AbortError") return; // user cancelled
-        // NotAllowedError, TypeError, etc. -> fall back to download
+    // Method 1: Web Share API (works on modern Android & iOS)
+    try {
+      const shareBlob = new Blob([vCard], { type: "text/x-vcard" });
+      const vcardFile = new File([shareBlob], fileName, { type: "text/x-vcard" });
+      if (navigator.share && navigator.canShare?.({ files: [vcardFile] })) {
+        await navigator.share({ files: [vcardFile] });
+        return;
       }
+    } catch (err) {
+      if ((err as Error)?.name === "AbortError") return;
     }
 
-    // Fallback: download the vCard (desktop or when share not available)
+    // Method 2: On mobile, navigate to a data URI so Android/iOS opens Contacts
+    if (isMobile) {
+      const dataUri = "data:text/x-vcard;charset=utf-8," + encodeURIComponent(vCard);
+      window.location.href = dataUri;
+      return;
+    }
+
+    // Method 3: Desktop fallback - download the file
+    const vcardBlob = new Blob([vCard], { type: "text/x-vcard;charset=utf-8" });
     const url = URL.createObjectURL(vcardBlob);
     const link = document.createElement("a");
     link.href = url;
