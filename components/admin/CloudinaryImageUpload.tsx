@@ -13,6 +13,7 @@ interface CloudinaryImageUploadProps {
   placeholder?: string;
   className?: string;
   maxSize?: number;
+  allowPasteUrl?: boolean;
 }
 
 export function CloudinaryImageUpload({
@@ -21,6 +22,7 @@ export function CloudinaryImageUpload({
   placeholder = "Upload to Cloudinary or paste URL",
   className = "",
   maxSize = 10,
+  allowPasteUrl = true,
 }: CloudinaryImageUploadProps) {
   const [isUploading, setIsUploading] = useState(false);
   const [useUrl, setUseUrl] = useState(false);
@@ -46,8 +48,8 @@ export function CloudinaryImageUpload({
       const data = await response.json().catch(() => ({}));
       if (!response.ok) {
         if (response.status === 503) {
-          toast.error("Cloudinary not configured. Paste image URL instead.");
-          setUseUrl(true);
+          toast.error(allowPasteUrl ? "Cloudinary not configured. Paste image URL instead." : "Cloudinary not configured.");
+          if (allowPasteUrl) setUseUrl(true);
           return;
         }
         throw new Error(data.error || "Upload failed");
@@ -65,35 +67,41 @@ export function CloudinaryImageUpload({
     }
   };
 
+  const showUrlMode = allowPasteUrl && useUrl;
+
   return (
     <div className={className}>
-      {!useUrl ? (
+      {!showUrlMode ? (
         <div className="space-y-2">
-          <div
-            className="border-2 border-dashed rounded-lg p-6 text-center hover:bg-muted/50 transition-colors cursor-pointer"
-            onClick={() => fileInputRef.current?.click()}
-          >
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/*"
-              className="hidden"
-              onChange={(e) => {
-                const f = e.target.files?.[0];
-                if (f) handleFileSelect(f);
-                e.target.value = "";
-              }}
-            />
-            {isUploading ? (
-              <Loader2 className="h-10 w-10 mx-auto animate-spin text-muted-foreground" />
-            ) : (
-              <Upload className="h-10 w-10 mx-auto text-muted-foreground" />
-            )}
-            <p className="text-sm text-muted-foreground mt-2">{placeholder}</p>
-            <Button type="button" variant="link" size="sm" onClick={(e) => { e.stopPropagation(); setUseUrl(true); }}>
-              Or paste image URL
-            </Button>
-          </div>
+          {!value && (
+            <div
+              className="border-2 border-dashed rounded-lg p-6 text-center hover:bg-muted/50 transition-colors cursor-pointer"
+              onClick={() => fileInputRef.current?.click()}
+            >
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => {
+                  const f = e.target.files?.[0];
+                  if (f) handleFileSelect(f);
+                  e.target.value = "";
+                }}
+              />
+              {isUploading ? (
+                <Loader2 className="h-10 w-10 mx-auto animate-spin text-muted-foreground" />
+              ) : (
+                <Upload className="h-10 w-10 mx-auto text-muted-foreground" />
+              )}
+              <p className="text-sm text-muted-foreground mt-2">{placeholder}</p>
+              {allowPasteUrl && (
+                <Button type="button" variant="link" size="sm" onClick={(e) => { e.stopPropagation(); setUseUrl(true); }}>
+                  Or paste image URL
+                </Button>
+              )}
+            </div>
+          )}
           {value && (
             <div className="flex items-center gap-2">
               <img src={value} alt="Preview" className="h-20 w-20 object-cover rounded border" />

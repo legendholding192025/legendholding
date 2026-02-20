@@ -49,7 +49,7 @@ interface ManagementProfile {
   whatsapp: string;
   linkedin: string;
   website: string;
-  location: string;
+  location?: string;
   sort_order: number;
 }
 
@@ -62,7 +62,6 @@ const emptyForm = {
   whatsapp: "",
   linkedin: "",
   website: "",
-  location: "",
 };
 
 export default function ManagementProfilesPage() {
@@ -133,9 +132,13 @@ export default function ManagementProfilesPage() {
     router.push("/admin/login");
   };
 
+  const allFieldsFilled = () =>
+    [form.name, form.designation, form.company, form.photo, form.email, form.whatsapp, form.linkedin, form.website]
+      .every((v) => typeof v === "string" && v.trim() !== "");
+
   const handleAdd = async () => {
-    if (!form.name?.trim() || !form.designation?.trim() || !form.photo?.trim()) {
-      toast.error("Name, designation and photo are required");
+    if (!allFieldsFilled()) {
+      toast.error("All fields are required");
       return;
     }
     setSaving(true);
@@ -161,8 +164,8 @@ export default function ManagementProfilesPage() {
 
   const handleUpdate = async () => {
     if (!editing) return;
-    if (!form.name?.trim() || !form.designation?.trim() || !form.photo?.trim()) {
-      toast.error("Name, designation and photo are required");
+    if (!allFieldsFilled()) {
+      toast.error("All fields are required");
       return;
     }
     setSaving(true);
@@ -228,7 +231,6 @@ export default function ManagementProfilesPage() {
       whatsapp: p.whatsapp ?? "",
       linkedin: p.linkedin ?? "",
       website: p.website ?? "",
-      location: p.location ?? "",
     });
   };
 
@@ -396,11 +398,17 @@ function ProfileForm({
   return (
     <div className="grid gap-4 py-4">
       <div>
-        <Label>Photo *</Label>
-        <CloudinaryImageUpload value={form.photo} onChange={(url) => setForm((f) => ({ ...f, photo: url }))} />
+        <Label>Photo <span className="text-red-500">*</span></Label>
+        <CloudinaryImageUpload
+          value={form.photo}
+          onChange={(url) => setForm((f) => ({ ...f, photo: url }))}
+          maxSize={2}
+          placeholder="Upload image — max size 2 MB"
+          allowPasteUrl={false}
+        />
       </div>
       <div>
-        <Label>Name *</Label>
+        <Label>Name <span className="text-red-500">*</span></Label>
         <Input
           value={form.name}
           onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
@@ -408,7 +416,7 @@ function ProfileForm({
         />
       </div>
       <div>
-        <Label>Designation *</Label>
+        <Label>Designation <span className="text-red-500">*</span></Label>
         <Input
           value={form.designation}
           onChange={(e) => setForm((f) => ({ ...f, designation: e.target.value }))}
@@ -416,14 +424,14 @@ function ProfileForm({
         />
       </div>
       <div>
-        <Label>Company</Label>
+        <Label>Company <span className="text-red-500">*</span></Label>
         <Input
           value={form.company}
           onChange={(e) => setForm((f) => ({ ...f, company: e.target.value }))}
         />
       </div>
       <div>
-        <Label>Email</Label>
+        <Label>Email <span className="text-red-500">*</span></Label>
         <Input
           type="email"
           value={form.email}
@@ -432,7 +440,7 @@ function ProfileForm({
         />
       </div>
       <div>
-        <Label>WhatsApp (with country code)</Label>
+        <Label>WhatsApp (with country code) <span className="text-red-500">*</span></Label>
         <Input
           value={form.whatsapp}
           onChange={(e) => setForm((f) => ({ ...f, whatsapp: e.target.value }))}
@@ -440,7 +448,7 @@ function ProfileForm({
         />
       </div>
       <div>
-        <Label>LinkedIn URL</Label>
+        <Label>LinkedIn URL <span className="text-red-500">*</span></Label>
         <Input
           value={form.linkedin}
           onChange={(e) => setForm((f) => ({ ...f, linkedin: e.target.value }))}
@@ -448,18 +456,11 @@ function ProfileForm({
         />
       </div>
       <div>
-        <Label>Website</Label>
+        <Label>Website URL <span className="text-red-500">*</span></Label>
         <Input
           value={form.website}
           onChange={(e) => setForm((f) => ({ ...f, website: e.target.value }))}
           placeholder="https://..."
-        />
-      </div>
-      <div>
-        <Label>Location</Label>
-        <Input
-          value={form.location}
-          onChange={(e) => setForm((f) => ({ ...f, location: e.target.value }))}
         />
       </div>
     </div>

@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import {
-  MapPin,
   Globe,
   QrCode,
   Download,
@@ -106,7 +105,7 @@ export function DigitalBusinessCard({ member }: DigitalBusinessCardProps) {
     const email = member.email || "info@legendholding.com";
     const whatsappDigits = member.whatsapp?.replace(/\D/g, "") ?? "";
     const phone = member.phone || (whatsappDigits ? `+${whatsappDigits}` : "+971 4 XXX XXXX");
-    const location = member.location ? escapeVCardValue(member.location) : "";
+    const location = "";
 
     // N: Family name;Given name;;; (for better contact app compatibility)
     const nameParts = member.name.trim().split(/\s+/);
@@ -238,12 +237,6 @@ END:VCARD`;
               {member.company && (
                 <p className="text-white/70 text-lg">{member.company}</p>
               )}
-              {member.location && (
-                <p className="text-white/60 text-sm mt-2 flex items-center justify-center gap-1">
-                  <MapPin className="w-3 h-3" />
-                  {member.location}
-                </p>
-              )}
             </div>
 
             {/* Divider with logo */}
@@ -261,31 +254,7 @@ END:VCARD`;
               <div className="flex-1 h-px bg-white" />
             </div>
 
-            {/* Contact Info - Website only */}
-            <div className="space-y-3 mb-4">
-              {member.website && (
-                <a
-                  href={member.website.startsWith("http") ? member.website : `https://${member.website}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-4 p-3 rounded-xl bg-[#5D376E]/20 hover:bg-[#5D376E]/40 transition-colors"
-                >
-                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-white">
-                    <Globe className="h-5 w-5 text-[#EE8900]" />
-                  </div>
-                  <div className="flex min-h-11 flex-1 flex-col justify-center gap-0.5 overflow-hidden">
-                    <span className="text-xs font-medium uppercase tracking-wider text-white/50">
-                      Website
-                    </span>
-                    <span className="truncate text-sm text-white">
-                      {member.website.replace(/^https?:\/\//, "")}
-                    </span>
-                  </div>
-                </a>
-              )}
-            </div>
-
-            {/* WhatsApp, LinkedIn & Web icons - white rings */}
+            {/* WhatsApp, LinkedIn & Web (globe) icons - website from admin is 3rd icon only */}
             <div className="flex justify-center gap-6 mb-8">
               <a
                 href={member.whatsapp ? `https://wa.me/${member.whatsapp.replace(/\D/g, "")}` : "https://wa.me/9714XXXXXXX"}
