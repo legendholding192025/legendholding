@@ -201,10 +201,10 @@ const menuItems: MenuItem[] = [
     title: "Contact Us",
     url: "/contact",
   },
-  // {
-  //   title: "Customer Care",
-  //   url: "/customer-care",
-  // },
+  {
+    title: "Customer Care",
+    url: "/customer-care",
+  },
 ]
 
 export function Header({ hideHeader = false }: { hideHeader?: boolean }) {
