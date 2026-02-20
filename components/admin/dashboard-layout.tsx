@@ -1,7 +1,8 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { 
@@ -97,8 +98,8 @@ const menuItems = [
     title: "Digital Business Cards",
     icon: Contact,
     href: "/admin/management-profiles",
-    permission: "dashboard" as const,
-    superAdminOnly: true
+    permission: "management_profiles" as const,
+    superAdminOnly: false
   }
 ]
 
@@ -109,7 +110,18 @@ const systemMenuItems: typeof menuItems = [
 export function AdminDashboardLayout({ children, onSignOut }: AdminDashboardLayoutProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const pathname = usePathname()
-  const { userRole, isLoading, isSuperAdmin, hasPermission } = useAdminPermissions()
+  const router = useRouter()
+  const { userRole, isLoading, isSuperAdmin, isBusinessCardsOnlyAdmin, hasPermission } = useAdminPermissions()
+
+  // Business-cards-only admin: only allow /admin/management-profiles
+  useEffect(() => {
+    if (isLoading || !isBusinessCardsOnlyAdmin) return
+    if (pathname !== "/admin/management-profiles") {
+      router.replace("/admin/management-profiles")
+    }
+  }, [isLoading, isBusinessCardsOnlyAdmin, pathname, router])
+
+  const dashboardHref = isBusinessCardsOnlyAdmin ? "/admin/management-profiles" : "/admin/dashboard"
 
   return (
     <SidebarProvider defaultOpen>
@@ -130,7 +142,7 @@ export function AdminDashboardLayout({ children, onSignOut }: AdminDashboardLayo
         <Sidebar className="border-r border-gray-200 shrink-0">
           <SidebarHeader className="border-b border-gray-200 py-5 px-6">
             <div className="flex items-center justify-between">
-              <Link href="/admin/dashboard" className="flex items-center gap-2">
+              <Link href={dashboardHref} className="flex items-center gap-2">
                 <Image
                   src="/images/legend-logo.png"
                   alt="Legend Logo"

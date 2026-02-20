@@ -15,15 +15,39 @@ export interface UserRole {
     newsletters?: boolean
     settings?: boolean
     customer_care?: boolean
+    management_profiles?: boolean
   }
   created_at?: string
   updated_at?: string
+}
+
+export const BUSINESS_CARDS_ONLY_ADMIN_EMAIL = 'admin@legendholding.com'
+
+/** Override role so admin@legendholding.com only has Digital Business Cards access */
+function applyBusinessCardsOnlyOverride(roleData: UserRole, email: string | undefined): UserRole {
+  if (email !== BUSINESS_CARDS_ONLY_ADMIN_EMAIL) return roleData
+  if (roleData.role === 'super_admin') return roleData
+  return {
+    ...roleData,
+    permissions: {
+      dashboard: false,
+      submissions: false,
+      news: false,
+      jobs: false,
+      applications: false,
+      newsletters: false,
+      settings: false,
+      customer_care: false,
+      management_profiles: true
+    }
+  }
 }
 
 export interface AdminPermissions {
   userRole: UserRole | null
   isLoading: boolean
   isSuperAdmin: boolean
+  isBusinessCardsOnlyAdmin: boolean
   isAdmin: boolean
   hasPermission: (permission: keyof UserRole['permissions']) => boolean
   canAccess: (path: string) => boolean
@@ -65,12 +89,23 @@ export function useAdminPermissions(): AdminPermissions {
 
       // Create fallback role based on email
       const isSuperAdmin = user.email === 'waseem.k@legendholding.com' || user.email === 'sonam.lama@legendholding.com'
+      const isBusinessCardsOnly = user.email === BUSINESS_CARDS_ONLY_ADMIN_EMAIL
       const fallbackRole: UserRole = {
         id: 'fallback',
         user_id: user.id,
         email: user.email || '',
         role: isSuperAdmin ? 'super_admin' : 'admin',
-        permissions: isSuperAdmin ? {
+        permissions: isBusinessCardsOnly ? {
+          dashboard: false,
+          submissions: false,
+          news: false,
+          jobs: false,
+          applications: false,
+          newsletters: false,
+          settings: false,
+          customer_care: false,
+          management_profiles: true
+        } : isSuperAdmin ? {
           dashboard: true,
           submissions: true,
           news: true,
@@ -78,16 +113,18 @@ export function useAdminPermissions(): AdminPermissions {
           applications: true,
           newsletters: true,
           settings: true,
-          customer_care: true
+          customer_care: true,
+          management_profiles: true
         } : {
-          dashboard: true,  // Allow dashboard access for all users
+          dashboard: true,
           submissions: false,
           news: false,
           jobs: true,
           applications: true,
           newsletters: false,
           settings: false,
-          customer_care: false
+          customer_care: false,
+          management_profiles: false
         },
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString()
@@ -114,7 +151,7 @@ export function useAdminPermissions(): AdminPermissions {
               .single()
             
             if (retryRoleData && !retryError) {
-              setUserRole(retryRoleData)
+              setUserRole(applyBusinessCardsOnlyOverride(retryRoleData, user.email))
             } else {
               setUserRole(fallbackRole)
             }
@@ -130,14 +167,14 @@ export function useAdminPermissions(): AdminPermissions {
               if (insertError) {
                 setUserRole(fallbackRole)
               } else {
-                setUserRole(insertData)
+                setUserRole(applyBusinessCardsOnlyOverride(insertData, user.email))
               }
             } catch (insertCatchError) {
               setUserRole(fallbackRole)
             }
           }
         } else if (roleData) {
-          setUserRole(roleData)
+          setUserRole(applyBusinessCardsOnlyOverride(roleData, user.email))
         } else {
           setUserRole(fallbackRole)
         }
@@ -154,27 +191,42 @@ export function useAdminPermissions(): AdminPermissions {
         const { data: { user } } = await supabase.auth.getUser()
         if (user) {
           const isSuperAdmin = user.email === 'waseem.k@legendholding.com' || user.email === 'sonam.lama@legendholding.com'
+          const isBusinessCardsOnly = user.email === BUSINESS_CARDS_ONLY_ADMIN_EMAIL
           const fallbackRole: UserRole = {
             id: 'fallback',
             user_id: user.id,
             email: user.email || '',
             role: isSuperAdmin ? 'super_admin' : 'admin',
-            permissions: isSuperAdmin ? {
+            permissions: isBusinessCardsOnly ? {
+              dashboard: false,
+              submissions: false,
+              news: false,
+              jobs: false,
+              applications: false,
+              newsletters: false,
+              settings: false,
+              customer_care: false,
+              management_profiles: true
+            } : isSuperAdmin ? {
               dashboard: true,
               submissions: true,
               news: true,
               jobs: true,
               applications: true,
               newsletters: true,
-              settings: true
+              settings: true,
+              customer_care: true,
+              management_profiles: true
             } : {
-              dashboard: true,  // Allow dashboard access for all users
+              dashboard: true,
               submissions: false,
               news: false,
               jobs: true,
               applications: true,
               newsletters: false,
-              settings: false
+              settings: false,
+              customer_care: false,
+              management_profiles: false
             },
             created_at: new Date().toISOString(),
             updated_at: new Date().toISOString()
@@ -194,6 +246,7 @@ export function useAdminPermissions(): AdminPermissions {
   }
 
   const isSuperAdmin = userRole?.role === 'super_admin'
+  const isBusinessCardsOnlyAdmin = !isSuperAdmin && userRole?.email === BUSINESS_CARDS_ONLY_ADMIN_EMAIL
   const isAdmin = userRole?.role === 'admin' || isSuperAdmin
 
   const hasPermission = (permission: keyof UserRole['permissions']): boolean => {
@@ -215,7 +268,8 @@ export function useAdminPermissions(): AdminPermissions {
       '/admin/applications': 'applications',
       '/admin/newsletters': 'newsletters',
       '/admin/settings': 'settings',
-      '/admin/customer-care': 'customer_care'
+      '/admin/customer-care': 'customer_care',
+      '/admin/management-profiles': 'management_profiles'
     }
 
     const permission = pathPermissions[path]
@@ -226,6 +280,7 @@ export function useAdminPermissions(): AdminPermissions {
     userRole,
     isLoading,
     isSuperAdmin,
+    isBusinessCardsOnlyAdmin,
     isAdmin,
     hasPermission,
     canAccess

@@ -3,7 +3,10 @@ import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
-async function requireSuperAdmin() {
+const BUSINESS_CARDS_ONLY_ADMIN_EMAIL = "admin@legendholding.com";
+
+/** Allow super_admin or admin@legendholding.com (Digital Business Cards only). */
+async function requireManagementProfilesAccess() {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
   if (!supabaseUrl || !serviceKey) {
@@ -14,6 +17,12 @@ async function requireSuperAdmin() {
   const { data: { session } } = await supabaseAuth.auth.getSession();
   if (!session?.user) {
     return { error: NextResponse.json({ error: "Unauthorized" }, { status: 401 }), supabase: null };
+  }
+  if (session.user.email === BUSINESS_CARDS_ONLY_ADMIN_EMAIL) {
+    const supabase = createClient(supabaseUrl, serviceKey, {
+      auth: { autoRefreshToken: false, persistSession: false },
+    });
+    return { error: null, supabase };
   }
   const supabase = createClient(supabaseUrl, serviceKey, {
     auth: { autoRefreshToken: false, persistSession: false },
@@ -38,7 +47,7 @@ function slugFromName(name: string): string {
 }
 
 export async function GET() {
-  const { error, supabase } = await requireSuperAdmin();
+  const { error, supabase } = await requireManagementProfilesAccess();
   if (error) return error;
   const { data, err } = await supabase!
     .from("management_profiles")
@@ -49,7 +58,7 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
-  const { error, supabase } = await requireSuperAdmin();
+  const { error, supabase } = await requireManagementProfilesAccess();
   if (error) return error;
   const body = await request.json().catch(() => ({}));
   const {

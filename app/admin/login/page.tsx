@@ -52,7 +52,9 @@ export default function AdminLogin() {
         setIsRedirecting(true)
         // Keep loading visible until we navigate away
         router.refresh()
-        router.push('/admin/dashboard')
+        // Business-cards-only admin goes straight to management profiles
+        const isBusinessCardsOnly = data.user.email === 'admin@legendholding.com'
+        router.push(isBusinessCardsOnly ? '/admin/management-profiles' : '/admin/dashboard')
       }
     } catch (error: any) {
       console.error('Login error:', error)
