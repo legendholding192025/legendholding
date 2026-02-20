@@ -16,12 +16,13 @@ declare global {
 export default function CookieConsent() {
   const pathname = usePathname()
   const isSocialProfilePage = pathname === "/social-profile"
+  const isManagementProfilePage = pathname?.startsWith("/profile/")
 
   const [privacyAccepted, setPrivacyAccepted] = useState(true) // Start with true to prevent flash
   const [isLoaded, setIsLoaded] = useState(false)
 
   useEffect(() => {
-    if (isSocialProfilePage) {
+    if (isSocialProfilePage || isManagementProfilePage) {
       setPrivacyAccepted(true)
       setIsLoaded(false)
       return
@@ -53,7 +54,7 @@ export default function CookieConsent() {
         }
       }, 100)
     }
-  }, [isSocialProfilePage])
+  }, [isSocialProfilePage, isManagementProfilePage])
 
   const handlePrivacyAccept = () => {
     try {
@@ -66,7 +67,7 @@ export default function CookieConsent() {
     }
   }
 
-  if (isSocialProfilePage) {
+  if (isSocialProfilePage || isManagementProfilePage) {
     return null
   }
 

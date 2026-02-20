@@ -93,13 +93,13 @@ const menuItems = [
     permission: "customer_care" as const,
     superAdminOnly: true
   },
-  // {
-  //   title: "Digital Business Cards",
-  //   icon: Contact,
-  //   href: "/admin/management-profiles",
-  //   permission: "dashboard" as const,
-  //   superAdminOnly: true
-  // }
+  {
+    title: "Digital Business Cards",
+    icon: Contact,
+    href: "/admin/management-profiles",
+    permission: "dashboard" as const,
+    superAdminOnly: true
+  }
 ]
 
 const systemMenuItems: typeof menuItems = [
@@ -230,7 +230,7 @@ export function AdminDashboardLayout({ children, onSignOut }: AdminDashboardLayo
           {/* Persistent Sidebar Toggle */}
           <SidebarToggleButton />
           <div className="h-full">
-            <DashboardHeader onSignOut={onSignOut} />
+            <DashboardHeader />
             <div className="p-6">
               {children}
             </div>

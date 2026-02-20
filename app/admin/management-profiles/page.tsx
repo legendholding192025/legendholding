@@ -99,13 +99,18 @@ export default function ManagementProfilesPage() {
     fetchProfiles();
   }, []);
 
-  // Generate QR code when dialog opens
+  // Generate QR code when dialog opens (use public site URL so scan opens live profile)
   useEffect(() => {
     if (!qrProfile || typeof window === "undefined") {
       setQrDataUrl(null);
       return;
     }
-    const profileUrl = `${window.location.origin}/profile/${qrProfile.slug}`;
+    // Use public site URL so scanned QR opens e.g. https://www.legendholding.com/profile/mira-wu
+    const baseUrl = (
+      process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ||
+      "https://www.legendholding.com"
+    );
+    const profileUrl = `${baseUrl}/profile/${qrProfile.slug}`;
     let cancelled = false;
     import("qrcode").then((QRCode) => {
       QRCode.default.toDataURL(profileUrl, { width: 320, margin: 2 }).then((url: string) => {

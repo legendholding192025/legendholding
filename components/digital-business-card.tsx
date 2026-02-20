@@ -1,10 +1,19 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import {
   MapPin,
   Globe,
+  QrCode,
+  Download,
 } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 /** New LinkedIn logo (2021+) - rounded square with "in" */
 function LinkedInIcon({ className = "w-6 h-6" }: { className?: string }) {
@@ -62,6 +71,34 @@ function escapeVCardValue(value: string): string {
 }
 
 export function DigitalBusinessCard({ member }: DigitalBusinessCardProps) {
+  const [qrOpen, setQrOpen] = useState(false);
+  const [qrDataUrl, setQrDataUrl] = useState<string | null>(null);
+
+  // Generate QR for production profile URL when dialog opens (so scan always opens live site)
+  useEffect(() => {
+    if (!qrOpen || typeof window === "undefined") {
+      setQrDataUrl(null);
+      return;
+    }
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "https://www.legendholding.com";
+    const profileUrl = baseUrl + window.location.pathname;
+    let cancelled = false;
+    import("qrcode").then((QRCode) => {
+      QRCode.default.toDataURL(profileUrl, { width: 320, margin: 2 }).then((url: string) => {
+        if (!cancelled) setQrDataUrl(url);
+      }).catch(() => { if (!cancelled) setQrDataUrl(null); });
+    }).catch(() => {});
+    return () => { cancelled = true; };
+  }, [qrOpen]);
+
+  const handleDownloadQr = () => {
+    if (!qrDataUrl) return;
+    const link = document.createElement("a");
+    link.href = qrDataUrl;
+    link.download = `qr-${member.name.replace(/\s+/g, "-")}.png`;
+    link.click();
+  };
+
   const handleDownloadVCard = async () => {
     const name = escapeVCardValue(member.name);
     const company = escapeVCardValue(member.company);
@@ -276,8 +313,17 @@ END:VCARD`;
               </a>
             </div>
 
-            {/* Save Contact button - same width as the 3 icons above (3×w-12 + 2×gap-6) */}
-            <div className="flex justify-center pt-4">
+            {/* QR (share) + Save Contact */}
+            <div className="flex justify-center items-center gap-3 pt-4">
+              <Button
+                type="button"
+                onClick={() => setQrOpen(true)}
+                className="h-12 w-12 rounded-2xl bg-white hover:bg-white/90 text-black shrink-0 p-0 flex items-center justify-center border-0"
+                title="Show QR code to refer someone"
+                aria-label="Show QR code"
+              >
+                <QrCode className="h-9 w-9" />
+              </Button>
               <Button
                 onClick={handleDownloadVCard}
                 className="w-44 bg-[#EE8900] hover:bg-[#EE8900]/90 text-white font-semibold h-12 rounded-2xl"
@@ -286,6 +332,38 @@ END:VCARD`;
                 Save Contact
               </Button>
             </div>
+
+            {/* QR code dialog - for referring someone */}
+            <Dialog open={qrOpen} onOpenChange={setQrOpen}>
+              <DialogContent className="sm:max-w-sm bg-[#2B1C48] border-[#5D376E] text-white">
+                <DialogHeader>
+                  <DialogTitle className="text-white">Share this card</DialogTitle>
+                </DialogHeader>
+                <div className="flex flex-col items-center gap-4 py-2">
+                  {qrDataUrl ? (
+                    <>
+                      <img src={qrDataUrl} alt="QR code" className="w-64 h-64 rounded-lg bg-white p-2" />
+                      <p className="text-white/70 text-sm text-center">
+                        Someone can scan this to open {member.name}&apos;s card
+                      </p>
+                      <Button
+                        type="button"
+                        onClick={handleDownloadQr}
+                        variant="secondary"
+                        className="bg-white text-[#2B1C48] hover:bg-white/90"
+                      >
+                        <Download className="h-4 w-4 mr-2" />
+                        Download QR
+                      </Button>
+                    </>
+                  ) : (
+                    <div className="w-64 h-64 flex items-center justify-center rounded-lg bg-white/10 text-white/70">
+                      Loading…
+                    </div>
+                  )}
+                </div>
+              </DialogContent>
+            </Dialog>
             </div>
           </div>
           </div>
