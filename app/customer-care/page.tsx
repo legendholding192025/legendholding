@@ -183,39 +183,19 @@ export default function CustomerCarePage() {
             {/* How to reach out */}
             <div className="mb-8">
               <h3 className="text-lg md:text-xl font-semibold text-[#EE8900] mb-3" style={{ fontFamily: 'var(--body-font)' }}>HOW TO REACH OUT IF YOU HAVE QUESTIONS ABOUT THE CUSTOMER CARE HOTLINE?</h3>
-              <div className="text-xl text-[#2B1C48] leading-8 font-normal flex items-center gap-2" style={{ fontFamily: 'var(--body-font)' }}>
-                <span>📞</span> <span>04 234 0738</span>
-              </div>
-            </div>
-
-            {/* Other ways to raise a complaint */}
-            <div className="mt-12 mb-8 relative">
-              <div className="bg-[#2B1C48] rounded-lg p-6 md:p-8 min-h-[240px] relative z-10">
-                <h3 className="text-lg md:text-xl font-semibold text-white mb-4" style={{ fontFamily: 'var(--body-font)' }}>Other ways to raise a complaint or report an incident</h3>
-                <div className="space-y-3">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-[#EE8900] flex items-center justify-center flex-shrink-0">
-                      <Phone className="w-5 h-5 text-white" />
-                    </div>
-                    <div className="text-xl text-white leading-8 font-normal" style={{ fontFamily: 'var(--body-font)' }}>Call: +971 4 123 123</div>
+              <div className="space-y-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-[#EE8900] flex items-center justify-center flex-shrink-0">
+                    <Phone className="w-5 h-5 text-white" />
                   </div>
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-[#EE8900] flex items-center justify-center flex-shrink-0">
-                      <Mail className="w-5 h-5 text-white" />
-                    </div>
-                    <div className="text-xl text-white leading-8 font-normal" style={{ fontFamily: 'var(--body-font)' }}>Letter Confidential Email on: info@legendholding.com</div>
-                  </div>
+                  <div className="text-xl text-[#2B1C48] leading-8 font-normal" style={{ fontFamily: 'var(--body-font)' }}>Call: +971 4 234 0738</div>
                 </div>
-              </div>
-              <div className="absolute right-[-100px] top-[40%] -translate-y-1/2 z-20 md:block hidden">
-                <Image
-                  src="https://res.cloudinary.com/dzfhqvxnf/image/upload/v1766384043/LUMO_foe_web_ddphop.svg"
-                  alt="LUMO"
-                  width={300}
-                  height={310}
-                  className="w-auto h-auto"
-                  style={{ width: '300px', height: '310px' }}
-                />
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-[#EE8900] flex items-center justify-center flex-shrink-0">
+                    <Mail className="w-5 h-5 text-white" />
+                  </div>
+                  <div className="text-xl text-[#2B1C48] leading-8 font-normal" style={{ fontFamily: 'var(--body-font)' }}>Letter Confidential Email: hello@legendholding.com</div>
+                </div>
               </div>
             </div>
               </div>
