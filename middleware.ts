@@ -57,6 +57,7 @@ export const config = {
     '/admin/newsletters', 
     '/admin/settings',
     '/admin/customer-care',
+    '/admin/management-profiles',
     '/company/dashboard'
   ],
 } 

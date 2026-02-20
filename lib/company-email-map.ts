@@ -1,8 +1,8 @@
 // Company email mapping for customer care complaints
 // Must match exactly with company names in the form dropdown
 export const COMPANY_EMAIL_MAP: Record<string, string> = {
-  "Legend Motors": "support@legendmotorsglobal.com",
-  "212": "support@212uae.com",
+  "Legend Motors": "support@legendmotorsuae.com",
+  "212": "info@212uae.com",
   "Kaiyi": "sales@kaiyi.ae",
   "Skywell": "skywell@legendmotorsuae.com",
   "Legend Commercial Vehicles": "commercial.sales@legendmotorsuae.com",

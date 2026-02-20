@@ -1,0 +1,462 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { AdminDashboardLayout } from "@/components/admin/dashboard-layout";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { CloudinaryImageUpload } from "@/components/admin/CloudinaryImageUpload";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { toast } from "sonner";
+import { Edit2, Trash2, Plus, ExternalLink, QrCode, Download } from "lucide-react";
+
+interface ManagementProfile {
+  id: string;
+  slug: string;
+  name: string;
+  designation: string;
+  company: string;
+  photo: string;
+  email: string;
+  whatsapp: string;
+  linkedin: string;
+  website: string;
+  location: string;
+  sort_order: number;
+}
+
+const emptyForm = {
+  name: "",
+  designation: "",
+  company: "Legend Holding Group",
+  photo: "",
+  email: "",
+  whatsapp: "",
+  linkedin: "",
+  website: "",
+  location: "",
+};
+
+export default function ManagementProfilesPage() {
+  const [profiles, setProfiles] = useState<ManagementProfile[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [isAddOpen, setIsAddOpen] = useState(false);
+  const [editing, setEditing] = useState<ManagementProfile | null>(null);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [qrProfile, setQrProfile] = useState<ManagementProfile | null>(null);
+  const [qrDataUrl, setQrDataUrl] = useState<string | null>(null);
+  const [form, setForm] = useState(emptyForm);
+  const [saving, setSaving] = useState(false);
+  const router = useRouter();
+  const supabase = createClientComponentClient();
+
+  const fetchProfiles = async () => {
+    try {
+      const res = await fetch("/api/admin/management-profiles", { credentials: "include" });
+      if (res.status === 401 || res.status === 403) {
+        router.push("/admin/login");
+        return;
+      }
+      const data = await res.json();
+      if (Array.isArray(data)) setProfiles(data);
+      else setProfiles([]);
+    } catch {
+      setProfiles([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchProfiles();
+  }, []);
+
+  // Generate QR code when dialog opens
+  useEffect(() => {
+    if (!qrProfile || typeof window === "undefined") {
+      setQrDataUrl(null);
+      return;
+    }
+    const profileUrl = `${window.location.origin}/profile/${qrProfile.slug}`;
+    let cancelled = false;
+    import("qrcode").then((QRCode) => {
+      QRCode.default.toDataURL(profileUrl, { width: 320, margin: 2 }).then((url: string) => {
+        if (!cancelled) setQrDataUrl(url);
+      }).catch(() => {
+        if (!cancelled) {
+          setQrDataUrl(null);
+          toast.error("Failed to generate QR code");
+        }
+      });
+    }).catch(() => {
+      if (!cancelled) toast.error("QR code library failed to load");
+    });
+    return () => { cancelled = true; };
+  }, [qrProfile]);
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    router.refresh();
+    router.push("/admin/login");
+  };
+
+  const handleAdd = async () => {
+    if (!form.name?.trim() || !form.designation?.trim() || !form.photo?.trim()) {
+      toast.error("Name, designation and photo are required");
+      return;
+    }
+    setSaving(true);
+    try {
+      const res = await fetch("/api/admin/management-profiles", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(form),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to add");
+      toast.success("Profile added");
+      setIsAddOpen(false);
+      setForm(emptyForm);
+      fetchProfiles();
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Failed to add");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleUpdate = async () => {
+    if (!editing) return;
+    if (!form.name?.trim() || !form.designation?.trim() || !form.photo?.trim()) {
+      toast.error("Name, designation and photo are required");
+      return;
+    }
+    setSaving(true);
+    try {
+      const res = await fetch(`/api/admin/management-profiles/${editing.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(form),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to update");
+      toast.success("Profile updated");
+      setEditing(null);
+      setForm(emptyForm);
+      fetchProfiles();
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Failed to update");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!deleteId) return;
+    setSaving(true);
+    try {
+      const res = await fetch(`/api/admin/management-profiles/${deleteId}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || "Failed to delete");
+      }
+      toast.success("Profile deleted");
+      setDeleteId(null);
+      fetchProfiles();
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Failed to delete");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleDownloadQr = () => {
+    if (!qrDataUrl || !qrProfile) return;
+    const link = document.createElement("a");
+    link.href = qrDataUrl;
+    link.download = `qr-${qrProfile.slug}.png`;
+    link.click();
+    toast.success("QR code downloaded");
+  };
+
+  const openEdit = (p: ManagementProfile) => {
+    setEditing(p);
+    setForm({
+      name: p.name,
+      designation: p.designation,
+      company: p.company,
+      photo: p.photo,
+      email: p.email ?? "",
+      whatsapp: p.whatsapp ?? "",
+      linkedin: p.linkedin ?? "",
+      website: p.website ?? "",
+      location: p.location ?? "",
+    });
+  };
+
+  return (
+    <AdminDashboardLayout onSignOut={handleSignOut}>
+      <div className="p-6">
+        <div className="flex items-center justify-between mb-6">
+          <h1 className="text-2xl font-bold">Digital Business Cards</h1>
+          <Button onClick={() => { setForm(emptyForm); setIsAddOpen(true); }}>
+            <Plus className="h-4 w-4 mr-2" />
+            Add person
+          </Button>
+        </div>
+        <p className="text-muted-foreground text-sm mb-4">
+          Manage profiles for QR-code business cards. Profile pages: /profile/[slug]
+        </p>
+
+        {loading ? (
+          <p className="text-muted-foreground">Loading...</p>
+        ) : (
+          <div className="border rounded-lg overflow-hidden">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-14">Photo</TableHead>
+                  <TableHead>Name</TableHead>
+                  <TableHead>Designation</TableHead>
+                  <TableHead>Slug</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {profiles.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={5} className="text-center text-muted-foreground py-8">
+                      No profiles yet. Add one to get started.
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  profiles.map((p) => (
+                    <TableRow key={p.id}>
+                      <TableCell>
+                        <img src={p.photo} alt="" className="h-12 w-12 object-cover rounded" />
+                      </TableCell>
+                      <TableCell className="font-medium">{p.name}</TableCell>
+                      <TableCell>{p.designation}</TableCell>
+                      <TableCell>
+                        <Link
+                          href={`/profile/${p.slug}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-primary hover:underline flex items-center gap-1"
+                        >
+                          /profile/{p.slug}
+                          <ExternalLink className="h-3 w-3" />
+                        </Link>
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <Button variant="ghost" size="icon" onClick={() => setQrProfile(p)} title="Generate QR code">
+                          <QrCode className="h-4 w-4" />
+                        </Button>
+                        <Button variant="ghost" size="icon" onClick={() => openEdit(p)} title="Edit">
+                          <Edit2 className="h-4 w-4" />
+                        </Button>
+                        <Button variant="ghost" size="icon" onClick={() => setDeleteId(p.id)} title="Delete">
+                          <Trash2 className="h-4 w-4 text-destructive" />
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </div>
+        )}
+      </div>
+
+      {/* Add dialog */}
+      <Dialog open={isAddOpen} onOpenChange={setIsAddOpen}>
+        <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Add person</DialogTitle>
+            <DialogDescription>New profile for digital business card.</DialogDescription>
+          </DialogHeader>
+          <ProfileForm form={form} setForm={setForm} />
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsAddOpen(false)}>Cancel</Button>
+            <Button onClick={handleAdd} disabled={saving}>{saving ? "Saving..." : "Add"}</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Edit dialog */}
+      <Dialog open={!!editing} onOpenChange={(open) => !open && setEditing(null)}>
+        <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Edit person</DialogTitle>
+            <DialogDescription>Update profile.</DialogDescription>
+          </DialogHeader>
+          <ProfileForm form={form} setForm={setForm} />
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setEditing(null)}>Cancel</Button>
+            <Button onClick={handleUpdate} disabled={saving}>{saving ? "Saving..." : "Save"}</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* QR code dialog */}
+      <Dialog open={!!qrProfile} onOpenChange={(open) => !open && setQrProfile(null)}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>QR Code</DialogTitle>
+            <DialogDescription>
+              {qrProfile && (
+                <>Scan to open {qrProfile.name}&apos;s digital business card: /profile/{qrProfile.slug}</>
+              )}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex flex-col items-center gap-4 py-4">
+            {qrDataUrl ? (
+              <>
+                <img src={qrDataUrl} alt="QR Code" className="w-64 h-64 border rounded-lg bg-white p-2" />
+                <Button onClick={handleDownloadQr} className="w-full">
+                  <Download className="h-4 w-4 mr-2" />
+                  Download as PNG
+                </Button>
+              </>
+            ) : (
+              <div className="w-64 h-64 flex items-center justify-center border rounded-lg bg-muted/50 text-muted-foreground">
+                Generating…
+              </div>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete confirm */}
+      <AlertDialog open={!!deleteId} onOpenChange={(open) => !open && setDeleteId(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete profile?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will remove the person from digital business cards. The profile page will no longer work.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDelete} className="bg-destructive text-destructive-foreground">
+              {saving ? "Deleting..." : "Delete"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </AdminDashboardLayout>
+  );
+}
+
+function ProfileForm({
+  form,
+  setForm,
+}: {
+  form: typeof emptyForm;
+  setForm: React.Dispatch<React.SetStateAction<typeof emptyForm>>;
+}) {
+  return (
+    <div className="grid gap-4 py-4">
+      <div>
+        <Label>Photo *</Label>
+        <CloudinaryImageUpload value={form.photo} onChange={(url) => setForm((f) => ({ ...f, photo: url }))} />
+      </div>
+      <div>
+        <Label>Name *</Label>
+        <Input
+          value={form.name}
+          onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
+          placeholder="e.g. Kai Zheng"
+        />
+      </div>
+      <div>
+        <Label>Designation *</Label>
+        <Input
+          value={form.designation}
+          onChange={(e) => setForm((f) => ({ ...f, designation: e.target.value }))}
+          placeholder="e.g. Founder & Chairman"
+        />
+      </div>
+      <div>
+        <Label>Company</Label>
+        <Input
+          value={form.company}
+          onChange={(e) => setForm((f) => ({ ...f, company: e.target.value }))}
+        />
+      </div>
+      <div>
+        <Label>Email</Label>
+        <Input
+          type="email"
+          value={form.email}
+          onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
+          placeholder="Used in Save Contact vCard"
+        />
+      </div>
+      <div>
+        <Label>WhatsApp (with country code)</Label>
+        <Input
+          value={form.whatsapp}
+          onChange={(e) => setForm((f) => ({ ...f, whatsapp: e.target.value }))}
+          placeholder="e.g. 971501234567"
+        />
+      </div>
+      <div>
+        <Label>LinkedIn URL</Label>
+        <Input
+          value={form.linkedin}
+          onChange={(e) => setForm((f) => ({ ...f, linkedin: e.target.value }))}
+          placeholder="https://www.linkedin.com/in/..."
+        />
+      </div>
+      <div>
+        <Label>Website</Label>
+        <Input
+          value={form.website}
+          onChange={(e) => setForm((f) => ({ ...f, website: e.target.value }))}
+          placeholder="https://..."
+        />
+      </div>
+      <div>
+        <Label>Location</Label>
+        <Input
+          value={form.location}
+          onChange={(e) => setForm((f) => ({ ...f, location: e.target.value }))}
+        />
+      </div>
+    </div>
+  );
+}

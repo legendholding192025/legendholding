@@ -17,7 +17,8 @@ import {
   PanelLeftOpen,
   ClipboardList,
   Shield,
-  Headphones
+  Headphones,
+  Contact
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -91,7 +92,14 @@ const menuItems = [
     href: "/admin/customer-care",
     permission: "customer_care" as const,
     superAdminOnly: true
-  }
+  },
+  // {
+  //   title: "Digital Business Cards",
+  //   icon: Contact,
+  //   href: "/admin/management-profiles",
+  //   permission: "dashboard" as const,
+  //   superAdminOnly: true
+  // }
 ]
 
 const systemMenuItems: typeof menuItems = [

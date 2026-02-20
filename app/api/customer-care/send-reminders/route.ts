@@ -30,11 +30,13 @@ export async function GET(request: Request) {
     const now = new Date();
     const fortyEightHoursAgo = new Date(now.getTime() - 48 * 60 * 60 * 1000);
     const threeDaysAgo = new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000);
+    const sixDaysInMs = 6 * 24 * 60 * 60 * 1000;
 
     // Find complaints that need reminders
     // 1. Status is 'sent' and created_at is more than 48 hours ago (not reviewed)
     // 2. Status is 'reviewed' and reviewed_at is more than 48 hours ago (reviewed but not replied)
     // 3. Created more than 3 days ago and not resolved (escalation to business head)
+    // 4. last_escalation_sent_at (business head email) was 6+ days ago and still not resolved → escalate to complaints@legendholding.com
     
     // Get complaints with status 'sent' that are older than 48 hours
     const { data: sentComplaints, error: sentError } = await supabase
@@ -53,15 +55,26 @@ export async function GET(request: Request) {
       .lt('reviewed_at', fortyEightHoursAgo.toISOString())
       .eq('resolved', false);
 
-    // Get complaints that are 3+ days old and not resolved (for business head escalation)
+    // Get complaints that are 3+ days old, not resolved, and not yet escalated to business head
     const { data: escalatedComplaints, error: escalatedError } = await supabase
       .from('customer_care_complaints')
       .select('*')
       .lt('created_at', threeDaysAgo.toISOString())
-      .eq('resolved', false);
+      .eq('resolved', false)
+      .is('last_escalation_sent_at', null);
 
-    if (sentError || reviewedError || escalatedError) {
-      console.error('Error fetching complaints:', sentError || reviewedError || escalatedError);
+    // Get complaints where business head was emailed 6+ days ago and still not resolved (escalate to holding)
+    const sixDaysAgo = new Date(now.getTime() - sixDaysInMs);
+    const { data: holdingEscalationComplaints, error: holdingError } = await supabase
+      .from('customer_care_complaints')
+      .select('*')
+      .not('last_escalation_sent_at', 'is', null)
+      .lt('last_escalation_sent_at', sixDaysAgo.toISOString())
+      .eq('resolved', false)
+      .is('holding_escalation_sent_at', null);
+
+    if (sentError || reviewedError || escalatedError || holdingError) {
+      console.error('Error fetching complaints:', sentError || reviewedError || escalatedError || holdingError);
       return NextResponse.json(
         { error: 'Failed to fetch complaints' },
         { status: 500 }
@@ -71,11 +84,13 @@ export async function GET(request: Request) {
     // Combine reminder lists (48-hour reminders)
     const reminderComplaints = [...(sentComplaints || []), ...(reviewedComplaints || [])];
     
-    // Separate escalated complaints (3-day escalation)
+    // Separate escalated complaints (3-day escalation to business head)
     const escalatedComplaintsList = escalatedComplaints || [];
+    const holdingEscalationList = holdingEscalationComplaints || [];
 
     const remindersSent = [];
     const escalationsSent = [];
+    const holdingEscalationsSent = [];
     const errors = [];
 
     // Process 48-hour reminders
@@ -431,14 +446,115 @@ export async function GET(request: Request) {
       }
     }
 
+    // Process 6-day escalation to complaints@legendholding.com (after business head was notified)
+    const holdingInboxEmail = 'complaints@legendholding.com';
+    for (const complaint of holdingEscalationList) {
+      try {
+        const twentyFourHoursAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+        if (complaint.holding_escalation_sent_at && new Date(complaint.holding_escalation_sent_at) > twentyFourHoursAgo) {
+          continue;
+        }
+
+        const emailSubject = `Holding Escalation: Unresolved complaint after 6 days - ${complaint.company}`;
+        const emailHtml = `
+          <!DOCTYPE html>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+          <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          </head>
+          <body style="margin: 0; padding: 0; background-color: #f5f5f5; font-family: Arial, Helvetica, sans-serif;">
+            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #f5f5f5;">
+              <tr>
+                <td align="center" style="padding: 20px 0;">
+                  <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="600" style="background-color: #ffffff; max-width: 600px;">
+                    
+                    <!-- Header -->
+                    <tr>
+                      <td style="background-color: #991b1b; padding: 40px 30px; text-align: center;">
+                        <h1 style="margin: 0; padding: 0; font-size: 28px; font-weight: bold; color: #ffffff; font-family: Arial, Helvetica, sans-serif;">Holding Escalation</h1>
+                        <p style="margin: 10px 0 0 0; padding: 0; font-size: 16px; color: #fecaca; font-family: Arial, Helvetica, sans-serif;">Complaint still unresolved 6 days after business head notification</p>
+                      </td>
+                    </tr>
+                    
+                    <!-- Content -->
+                    <tr>
+                      <td style="padding: 40px 30px; background-color: #ffffff;">
+                        <p style="margin: 0 0 25px 0; padding: 0; font-size: 16px; color: #4b5563; line-height: 1.6; font-family: Arial, Helvetica, sans-serif;">
+                          This complaint was escalated to the business head of <strong>${complaint.company}</strong> and remains unresolved 6 days after that notification.
+                        </p>
+                        
+                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; margin: 25px 0;">
+                          <tr>
+                            <td style="padding: 20px;">
+                              <p style="margin: 0 0 10px 0; padding: 0; font-size: 14px; color: #6b7280; font-family: Arial, Helvetica, sans-serif;"><strong>Company:</strong> ${complaint.company}</p>
+                              <p style="margin: 0 0 10px 0; padding: 0; font-size: 14px; color: #6b7280; font-family: Arial, Helvetica, sans-serif;"><strong>Customer:</strong> ${complaint.name}</p>
+                              <p style="margin: 0 0 10px 0; padding: 0; font-size: 14px; color: #6b7280; font-family: Arial, Helvetica, sans-serif;"><strong>Email:</strong> ${complaint.email}</p>
+                              <p style="margin: 0 0 10px 0; padding: 0; font-size: 14px; color: #6b7280; font-family: Arial, Helvetica, sans-serif;"><strong>Phone:</strong> ${complaint.phone}</p>
+                              <p style="margin: 0 0 10px 0; padding: 0; font-size: 14px; color: #6b7280; font-family: Arial, Helvetica, sans-serif;"><strong>Subject:</strong> ${complaint.subject}</p>
+                              <p style="margin: 0 0 10px 0; padding: 0; font-size: 14px; color: #6b7280; font-family: Arial, Helvetica, sans-serif;"><strong>Message:</strong> ${complaint.message}</p>
+                              <p style="margin: 0 0 10px 0; padding: 0; font-size: 14px; color: #6b7280; font-family: Arial, Helvetica, sans-serif;"><strong>Submitted:</strong> ${new Date(complaint.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</p>
+                              <p style="margin: 0 0 10px 0; padding: 0; font-size: 14px; color: #6b7280; font-family: Arial, Helvetica, sans-serif;"><strong>Business head notified:</strong> ${complaint.last_escalation_sent_at ? new Date(complaint.last_escalation_sent_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'N/A'}</p>
+                              <p style="margin: 0; padding: 0; font-size: 14px; color: #6b7280; font-family: Arial, Helvetica, sans-serif;"><strong>Status:</strong> ${complaint.status}</p>
+                            </td>
+                          </tr>
+                        </table>
+                        
+                        <p style="margin: 25px 0 0 0; padding: 0; font-size: 16px; color: #4b5563; line-height: 1.6; font-family: Arial, Helvetica, sans-serif;">
+                          Holding-level follow-up is required.
+                        </p>
+                      </td>
+                    </tr>
+                    
+                    <!-- Footer -->
+                    <tr>
+                      <td style="background-color: #f3f4f6; padding: 30px; text-align: center; border-top: 1px solid #e5e7eb;">
+                        <p style="margin: 0; padding: 0; font-size: 12px; color: #9ca3af; line-height: 1.8; font-family: Arial, Helvetica, sans-serif;">© ${new Date().getFullYear()} Legend Holding Group. All rights reserved.</p>
+                      </td>
+                    </tr>
+                    
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </body>
+          </html>
+        `;
+
+        const emailResponse = await resend.emails.send({
+          from: 'complaints@legendholding.com',
+          to: [holdingInboxEmail],
+          subject: emailSubject,
+          html: emailHtml,
+        });
+
+        if (emailResponse.error) {
+          console.error(`Error sending holding escalation for complaint ${complaint.id}:`, emailResponse.error);
+          errors.push({ complaintId: complaint.id, error: emailResponse.error, type: 'holding_escalation' });
+        } else {
+          holdingEscalationsSent.push(complaint.id);
+          console.log(`Holding escalation sent for complaint ${complaint.id} to ${holdingInboxEmail}`);
+          await supabase
+            .from('customer_care_complaints')
+            .update({ holding_escalation_sent_at: now.toISOString() })
+            .eq('id', complaint.id);
+        }
+      } catch (error: any) {
+        console.error(`Error processing holding escalation for complaint ${complaint.id}:`, error);
+        errors.push({ complaintId: complaint.id, error: error.message, type: 'holding_escalation' });
+      }
+    }
+
     return NextResponse.json({
       message: 'Reminder and escalation check completed',
       remindersSent: remindersSent.length,
       escalationsSent: escalationsSent.length,
+      holdingEscalationsSent: holdingEscalationsSent.length,
       errors: errors.length,
       details: {
         reminders: remindersSent,
         escalations: escalationsSent,
+        holdingEscalations: holdingEscalationsSent,
         errors: errors
       }
     });
