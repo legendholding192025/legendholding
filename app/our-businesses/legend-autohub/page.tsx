@@ -57,9 +57,10 @@ export default function AutoHubPage() {
                     </p>
 
                     {/* CTA Button */}
-                    {/* <div className="mt-6">
+                    <div className="mt-6">
                       <button
                         className="inline-flex items-center justify-center gap-2 text-white font-semibold bg-[#F08900] hover:bg-[#d67a00] transition-colors duration-300 cursor-pointer rounded-lg px-6 py-2"
+                        onClick={() => window.open("https://legendautohub.ae/", "_blank")}
                       >
                         <span>Visit Website</span>
                         <ChevronRight
@@ -68,7 +69,7 @@ export default function AutoHubPage() {
                           }`}
                         />
                       </button>
-                    </div> */}
+                    </div>
                   </div>
                 </div>
               </div>
