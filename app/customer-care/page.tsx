@@ -3,7 +3,7 @@
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import Image from "next/image"
-import { useState } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Phone, Mail, CheckCircle, XCircle } from "lucide-react"
 import {
   Dialog,
@@ -22,6 +22,8 @@ export default function CustomerCarePage() {
     subject: "",
     message: "",
   })
+  const [honeypot, setHoneypot] = useState("")
+  const formLoadedAt = useRef(Date.now())
 
   const companies = [
     "Legend Motors",
@@ -61,7 +63,11 @@ export default function CustomerCarePage() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          _hp: honeypot,
+          _ts: formLoadedAt.current,
+        }),
       })
 
       const data = await response.json()
@@ -70,7 +76,6 @@ export default function CustomerCarePage() {
         throw new Error(data.error || 'Failed to submit complaint')
       }
       
-      // Reset form
       setFormData({
         name: "",
         email: "",
@@ -79,8 +84,9 @@ export default function CustomerCarePage() {
         subject: "",
         message: "",
       })
+      setHoneypot("")
+      formLoadedAt.current = Date.now()
 
-      // Show success modal
       setShowSuccessModal(true)
     } catch (error: any) {
       console.error("Error submitting form:", error)
@@ -210,6 +216,18 @@ export default function CustomerCarePage() {
                   </div>
 
                   <form onSubmit={handleSubmit} className="space-y-4">
+                    <div className="absolute opacity-0 top-0 left-0 h-0 w-0 -z-10" aria-hidden="true" tabIndex={-1}>
+                      <label htmlFor="website_url">Website</label>
+                      <input
+                        type="text"
+                        id="website_url"
+                        name="website_url"
+                        value={honeypot}
+                        onChange={(e) => setHoneypot(e.target.value)}
+                        autoComplete="off"
+                        tabIndex={-1}
+                      />
+                    </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
                         Name <span className="text-red-500">*</span>

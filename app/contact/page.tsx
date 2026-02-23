@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState } from "react"
+import { useState, useRef } from "react"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { motion } from "framer-motion"
@@ -35,6 +35,8 @@ export default function ContactPage() {
 
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [formStep, setFormStep] = useState(0)
+  const [honeypot, setHoneypot] = useState("")
+  const formLoadedAt = useRef(Date.now())
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -48,7 +50,11 @@ export default function ContactPage() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          _hp: honeypot,
+          _ts: formLoadedAt.current,
+        }),
       })
 
       const data = await response.json()
@@ -58,7 +64,6 @@ export default function ContactPage() {
         throw new Error(data.error || 'Failed to submit form')
       }
 
-      // Clear form and show success message
       setFormData({
         name: "",
         email: "",
@@ -66,6 +71,8 @@ export default function ContactPage() {
         subject: "",
         message: "",
       })
+      setHoneypot("")
+      formLoadedAt.current = Date.now()
       
       toast.success("Thank you for submitting your form, We will contact you shortly.")
       setFormStep(1)
@@ -93,6 +100,8 @@ export default function ContactPage() {
       subject: "",
       message: "",
     })
+    setHoneypot("")
+    formLoadedAt.current = Date.now()
     setFormStep(0)
   }
 
@@ -207,6 +216,18 @@ export default function ContactPage() {
 
                 {formStep === 0 ? (
                   <form onSubmit={handleSubmit} className="space-y-3 flex-grow">
+                    <div className="absolute opacity-0 top-0 left-0 h-0 w-0 -z-10" aria-hidden="true" tabIndex={-1}>
+                      <label htmlFor="contact_website_url">Website</label>
+                      <input
+                        type="text"
+                        id="contact_website_url"
+                        name="website_url"
+                        value={honeypot}
+                        onChange={(e) => setHoneypot(e.target.value)}
+                        autoComplete="off"
+                        tabIndex={-1}
+                      />
+                    </div>
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
                       whileInView={{ opacity: 1, y: 0 }}
