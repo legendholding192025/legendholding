@@ -49,7 +49,7 @@ export function AboutUsSection() {
           <div className="w-full max-w-2xl">
             <div className="relative w-full h-56 md:h-64 lg:h-72 xl:h-80 mt-6">
               <img
-                src="/lumo.svg"
+                src="https://cdn.legendholding.com/images/cdn_699c2ba3ea9849.52274664_20260223_102747.webp"
                 alt="About Us Illustration"
                 className="w-full h-full object-contain object-center select-none pointer-events-none"
               />
