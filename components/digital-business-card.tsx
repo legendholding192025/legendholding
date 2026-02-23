@@ -73,7 +73,7 @@ export function DigitalBusinessCard({ member }: DigitalBusinessCardProps) {
   const [qrOpen, setQrOpen] = useState(false);
   const [qrDataUrl, setQrDataUrl] = useState<string | null>(null);
 
-  // Generate QR for production profile URL when dialog opens (so scan always opens live site)
+  // Generate QR with logo for production profile URL when dialog opens (so scan always opens live site)
   useEffect(() => {
     if (!qrOpen || typeof window === "undefined") {
       setQrDataUrl(null);
@@ -82,8 +82,8 @@ export function DigitalBusinessCard({ member }: DigitalBusinessCardProps) {
     const baseUrl = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "https://www.legendholding.com";
     const profileUrl = baseUrl + window.location.pathname;
     let cancelled = false;
-    import("qrcode").then((QRCode) => {
-      QRCode.default.toDataURL(profileUrl, { width: 320, margin: 2 }).then((url: string) => {
+    import("@/lib/qr-with-logo").then(({ generateQRWithLogo }) => {
+      generateQRWithLogo(profileUrl, { width: 320, margin: 2 }).then((url: string) => {
         if (!cancelled) setQrDataUrl(url);
       }).catch(() => { if (!cancelled) setQrDataUrl(null); });
     }).catch(() => {});
