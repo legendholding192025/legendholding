@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/table"
 import { toast } from "sonner"
 import { Edit2, Trash2, Plus } from "lucide-react"
+import { getNextArticleSlug } from "@/lib/news-slug"
 // TinyMCE removed - using simple textarea with bold support
 
 interface NewsArticleImage {
@@ -42,6 +43,7 @@ interface NewsArticleImage {
 
 interface NewsArticle {
   id: string
+  slug?: string | null
   created_at: string
   publication_date: string
   title: string
@@ -206,9 +208,14 @@ export default function NewsManagement() {
       // Convert minutes to read_time format
       const read_time = `${formData.read_time_minutes} ${formData.read_time_minutes === 1 ? 'Minute' : 'Minutes'}`
       
+      // Next article number: article-1, article-2, ...
+      const { data: existingSlugs } = await supabase.from("news_articles").select("slug")
+      const slug = getNextArticleSlug((existingSlugs || []).map((r) => r.slug))
+      
       // Prepare article data (excluding images)
       const articleData = {
         title: formData.title,
+        slug,
         excerpt: formData.excerpt,
         content: formData.content,
         image_url: formData.images[0]?.image_url || "", // Keep first image for backward compatibility
@@ -310,9 +317,17 @@ export default function NewsManagement() {
       // Convert minutes to read_time format
       const read_time = `${formData.read_time_minutes} ${formData.read_time_minutes === 1 ? 'Minute' : 'Minutes'}`
       
+      // Keep existing slug (article-1, article-2) or assign next number if missing (legacy row)
+      let slug = editingArticle.slug?.trim() || null
+      if (!slug) {
+        const { data: existingSlugs } = await supabase.from("news_articles").select("slug")
+        slug = getNextArticleSlug((existingSlugs || []).map((r) => r.slug))
+      }
+      
       // Prepare article data (excluding images)
       const articleData = {
         title: formData.title,
+        slug,
         excerpt: formData.excerpt,
         content: formData.content,
         image_url: formData.images[0]?.image_url || "", // Keep first image for backward compatibility

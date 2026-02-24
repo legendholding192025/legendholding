@@ -6,6 +6,7 @@ import Link from "next/link"
 import { ArrowRight, Calendar, ChevronLeft, ChevronRight, Clock } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { supabase } from "@/lib/supabaseClient"
+import { getNewsArticleSlug } from "@/lib/news-slug"
 
 interface NewsArticleImage {
   id: string
@@ -20,6 +21,7 @@ interface NewsArticleImage {
 
 type NewsItem = {
   id: string
+  slug?: string | null
   title: string
   created_at: string
   publication_date: string
@@ -204,7 +206,7 @@ export function Newsroom() {
           {newsItems.map((news) => (
             <Link
               key={news.id}
-              href={`/news/${news.id}`}
+              href={`/news/${getNewsArticleSlug(news)}`}
               className="bg-[rgb(234,226,214)]/20 rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex flex-col h-full group relative"
             >
               <div 

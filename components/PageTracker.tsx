@@ -65,7 +65,7 @@ export default function PageTracker({ pageName }: PageTrackerProps) {
         return pathToPageName[path];
       }
 
-      // Check for dynamic routes (like news/[id], careers/[id], etc.)
+      // Check for dynamic routes (like news/[slug], careers/[id], etc.)
       if (pathSegments[0] === 'news' && pathSegments[1]) {
         return PAGE_NAMES.NEWS_ARTICLE;
       }

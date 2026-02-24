@@ -43,6 +43,7 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar"
 import { toast } from "sonner"
+import { getNewsArticleSlug } from "@/lib/news-slug"
 
 interface NewsArticleImage {
   id: string
@@ -57,6 +58,7 @@ interface NewsArticleImage {
 
 interface NewsArticle {
   id: string
+  slug?: string | null
   created_at: string
   publication_date: string
   title: string
@@ -268,7 +270,7 @@ export function NewsPage() {
     e.preventDefault()
     e.stopPropagation()
     try {
-      const shareUrl = `${window.location.origin}/news/${article.id}`
+      const shareUrl = `${window.location.origin}/news/${getNewsArticleSlug(article)}`
       if (navigator.share) {
         await navigator.share({
           title: article.title,
@@ -281,7 +283,7 @@ export function NewsPage() {
       }
     } catch (err) {
       try {
-        const fallbackUrl = `${window.location.origin}/news/${article.id}`
+        const fallbackUrl = `${window.location.origin}/news/${getNewsArticleSlug(article)}`
         await navigator.clipboard.writeText(fallbackUrl)
         toast.success("Link copied to clipboard")
       } catch {
@@ -368,7 +370,7 @@ export function NewsPage() {
                 {/* Featured News */}
                 {featuredArticle ? (
                   <Link
-                    href={`/news/${featuredArticle.id}`}
+                    href={`/news/${getNewsArticleSlug(featuredArticle)}`}
                     className="relative overflow-hidden rounded-xl bg-white shadow-md hover:shadow-xl transition-all duration-300 block group"
                   >
                     <div className="relative h-[300px] w-full md:h-[400px]">
@@ -494,7 +496,7 @@ export function NewsPage() {
                               })()}
                             </div>
                             <div className="flex-1 min-w-0">
-                              <Link href={`/news/${article.id}`}>
+                              <Link href={`/news/${getNewsArticleSlug(article)}`}>
                                 <h4 className="font-medium leading-tight mb-2 line-clamp-2 hover:text-[#5E366D] transition-colors">
                                   {article.title}
                                 </h4>
@@ -503,7 +505,7 @@ export function NewsPage() {
                                 {new Date(article.publication_date).toLocaleDateString()} • {article.read_time}
                               </p>
                               <Link 
-                                href={`/news/${article.id}`}
+                                href={`/news/${getNewsArticleSlug(article)}`}
                                 className="inline-flex items-center text-sm font-medium text-[#5E366D] hover:text-[#3d2147] transition-colors"
                               >
                                 Read More
@@ -544,7 +546,7 @@ export function NewsPage() {
                       {mobileArticles.map((article) => (
                         <Link
                           key={article.id}
-                          href={`/news/${article.id}`}
+                          href={`/news/${getNewsArticleSlug(article)}`}
                           className="bg-[rgb(234,226,214)]/20 rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex flex-col h-full group relative block"
                         >
                           <div 
@@ -633,7 +635,7 @@ export function NewsPage() {
                             style={{ width: `${100 / articlesPerPage}%` }}
                           >
                             <Link
-                              href={`/news/${article.id}`}
+                              href={`/news/${getNewsArticleSlug(article)}`}
                               className="bg-[rgb(234,226,214)]/20 rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex flex-col h-full group relative block"
                             >
                               <div 

@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { supabase } from '@/lib/supabase';
 import { generatePageMetadata } from '@/config/metadata';
+import { isNewsIdParam } from '@/lib/news-slug';
 
 interface NewsArticle {
   id: string
@@ -16,17 +17,24 @@ interface NewsArticle {
 }
 
 export async function generateMetadata(
-  props: { params: Promise<{ id: string }> }
+  props: { params: Promise<{ slug: string }> }
 ): Promise<Metadata> {
-  const { id } = await props.params;
-  
+  const { slug } = await props.params;
+  if (!slug) {
+    return generatePageMetadata({
+      title: 'News Article | Legend Holding Group',
+      description: 'Legend Holding Group news and updates.',
+      keywords: 'Legend Holding Group, news, article',
+    });
+  }
+
   try {
-    const { data: article } = await supabase
+    const isId = isNewsIdParam(slug);
+    const baseQuery = supabase
       .from('news_articles')
       .select('title, excerpt, image_url, category, author, seo_title, seo_description, seo_keywords, seo_image_url')
-      .eq('id', id)
-      .eq('published', true)
-      .single();
+      .eq('published', true);
+    const { data: article } = await (isId ? baseQuery.eq('id', slug) : baseQuery.eq('slug', slug)).maybeSingle();
 
     if (!article) {
       return generatePageMetadata({
@@ -36,7 +44,6 @@ export async function generateMetadata(
       });
     }
 
-    // Use SEO fields if available, otherwise fall back to default fields
     const seoTitle = article.seo_title || article.title;
     const seoDescription = article.seo_description || article.excerpt;
     const seoKeywords = article.seo_keywords || `Legend Holding Group, ${article.category}, news, article, ${article.author}`;
@@ -50,7 +57,6 @@ export async function generateMetadata(
     });
   } catch (error) {
     console.error('Error generating metadata for article:', error);
-    
     return generatePageMetadata({
       title: 'News Article',
       description: 'Legend Holding Group news and updates.',
@@ -65,4 +71,4 @@ export default function NewsArticleLayout({
   children: React.ReactNode;
 }) {
   return children;
-} 
+}

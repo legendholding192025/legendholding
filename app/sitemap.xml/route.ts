@@ -1,4 +1,6 @@
 import { NextResponse } from 'next/server'
+import { supabase } from '@/lib/supabase'
+import { getNewsArticleSlug } from '@/lib/news-slug'
 
 export async function GET() {
   const baseUrl = 'https://legendholding.com'
@@ -31,15 +33,42 @@ export async function GET() {
     '/our-businesses/zul-energy',
   ]
 
+  // Dynamic: published news articles (article-1, article-2, ...)
+  let newsPages: { path: string; lastmod?: string }[] = []
+  try {
+    const { data: articles } = await supabase
+      .from('news_articles')
+      .select('id, slug, publication_date')
+      .eq('published', true)
+    if (articles?.length) {
+      newsPages = articles.map((a) => ({
+        path: `/news/${getNewsArticleSlug(a)}`,
+        lastmod: a.publication_date ? new Date(a.publication_date).toISOString().split('T')[0] : undefined,
+      }))
+    }
+  } catch {
+    // Sitemap still works without news entries
+  }
+
+  const allUrls = [
+    ...staticPages.map((page) => ({ path: page, lastmod: new Date().toISOString().split('T')[0], static: true })),
+    ...newsPages.map(({ path, lastmod }) => ({ path, lastmod: lastmod || new Date().toISOString().split('T')[0], static: false })),
+  ]
+
   // Generate XML sitemap
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${staticPages.map(page => `  <url>
-    <loc>${baseUrl}${page}</loc>
-    <lastmod>${new Date().toISOString().split('T')[0]}</lastmod>
-    <changefreq>${page === '' ? 'weekly' : page.includes('/our-businesses/') ? 'monthly' : 'monthly'}</changefreq>
-    <priority>${page === '' ? '1.0' : page.includes('/our-businesses/') ? '0.8' : '0.7'}</priority>
-  </url>`).join('\n')}
+${allUrls.map(({ path, lastmod }) => {
+    const loc = `${baseUrl}${path}`
+    const changefreq = path === '' ? 'weekly' : path.startsWith('/our-businesses/') ? 'monthly' : path.startsWith('/news/') ? 'weekly' : 'monthly'
+    const priority = path === '' ? '1.0' : path.startsWith('/our-businesses/') ? '0.8' : path.startsWith('/news/') ? '0.7' : '0.7'
+    return `  <url>
+    <loc>${loc}</loc>
+    <lastmod>${lastmod}</lastmod>
+    <changefreq>${changefreq}</changefreq>
+    <priority>${priority}</priority>
+  </url>`
+  }).join('\n')}
 </urlset>`
 
   return new NextResponse(sitemap, {

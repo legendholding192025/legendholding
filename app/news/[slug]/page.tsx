@@ -20,6 +20,7 @@ import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { toast } from "sonner"
 import { cn } from "@/lib/utils"
+import { isNewsIdParam, getNewsArticleSlug } from "@/lib/news-slug"
 
 interface NewsArticleImage {
   id: string
@@ -34,6 +35,7 @@ interface NewsArticleImage {
 
 interface NewsArticle {
   id: string
+  slug?: string | null
   created_at: string
   publication_date: string
   title: string
@@ -296,10 +298,10 @@ export default function NewsArticlePage() {
   }
 
   useEffect(() => {
-    if (params?.id) {
+    if (params?.slug) {
       fetchArticle()
     }
-  }, [params?.id])
+  }, [params?.slug])
 
   const fetchLatestArticles = async (excludeId?: string) => {
     try {
@@ -324,17 +326,27 @@ export default function NewsArticlePage() {
   }
 
   const fetchArticle = async () => {
-    if (!params?.id) return
+    if (!params?.slug) return
+    const slugParam = params.slug as string
+    const isId = isNewsIdParam(slugParam)
 
     try {
-      // Fetch the current article
+      // Fetch the current article by slug or legacy id (maybeSingle = no throw when 0 rows)
       const { data: articleData, error: articleError } = await supabase
         .from("news_articles")
         .select("*")
-        .eq("id", params.id)
-        .single()
+        .eq(isId ? "id" : "slug", slugParam)
+        .maybeSingle()
 
-      if (articleError) throw articleError
+      if (articleError) {
+        console.error("Error fetching article:", articleError.message || articleError.code, articleError)
+        throw articleError
+      }
+      if (!articleData) {
+        setArticle(null)
+        setLoading(false)
+        return
+      }
 
       // Fetch images for the article
       let imagesData = []
@@ -552,7 +564,7 @@ export default function NewsArticlePage() {
                     {relatedArticles.map((relatedArticle) => (
                       <Link
                         key={relatedArticle.id}
-                        href={`/news/${relatedArticle.id}`}
+                        href={`/news/${getNewsArticleSlug(relatedArticle)}`}
                         className="group overflow-hidden rounded-xl bg-white shadow-md transition-transform hover:-translate-y-1"
                       >
                         <div className="relative h-48 w-full">
@@ -594,7 +606,7 @@ export default function NewsArticlePage() {
                   {latestArticles.map((latestArticle) => (
                     <Link
                       key={latestArticle.id}
-                      href={`/news/${latestArticle.id}`}
+                      href={`/news/${getNewsArticleSlug(latestArticle)}`}
                       className="block py-4 first:pt-0 last:pb-0 group"
                     >
                       <div className="flex gap-4">
@@ -691,4 +703,4 @@ export default function NewsArticlePage() {
       <Footer />
     </>
   )
-} 
+}
