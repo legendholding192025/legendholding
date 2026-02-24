@@ -340,7 +340,7 @@ export default function AboutUsPage() {
 
                   <div className="space-y-6">
                     <p className="text-lg md:text-xl text-white font-effra leading-relaxed">
-                      Legend Holding Group is a diversified enterprise headquartered in Dubai, operating across the Middle East and African region. With a strong focus on sustainability and innovation, the group manages a growing portfolio of companies in automotive, trading, energy, Travel and Tourism and mobility services.
+                    Legend Holding Group is a diversified enterprise headquartered in Dubai, operating globally. With a strong focus on sustainability and innovation, the group manages a growing portfolio of companies in automotive, trading, energy, Travel and Tourism, Investments, Technology and mobility services. Its subsidiaries include Legend Rent a Car, Legend Motors, Legend Travel and Tourism, Legend Rent a Car, Zul Energy by Legend holding, Lifan motorcycles and exclusive importer of 212, Kaiyi, as well as Legend Green Energy Solutions.
                     </p>
                     <p className="text-lg md:text-xl text-white font-effra leading-relaxed">
                       Rooted in Loyalty, Excellence, and Progress, we lead with innovation and technology to seamlessly connect the physical and digital worlds.

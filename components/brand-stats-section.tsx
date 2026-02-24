@@ -45,27 +45,30 @@ export function BrandStatsSection() {
     {
       icon: <Settings className="h-8 w-8" />,
       value: 20,
-      suffix: "+",
+      prefix: "+",
+      suffix: "",
       label: "Brand",
       color: "bg-[#2B1C48]",
     },
     {
       icon: <Users className="h-8 w-8" />,
-      value: 1,
-      suffix: " Million+",
-      label: "Customers a year",
+      value: 100,
+      prefix: "+ ",
+      suffix: "k",
+      label: "Customers annually",
       color: "bg-[#5D376E]",
     },
     {
       icon: <MapPin className="h-8 w-8" />,
-      value: 10,
-      suffix: "+",
-      label: "Countries",
+      value: 100,
+      prefix: "+",
+      suffix: "",
+      label: "countries",
       color: "bg-[#EE8900]",
     },
     {
       icon: <TrendingUp className="h-8 w-8" />,
-      value: 1,
+      value: 2,
       suffix: "B USD",
       label: "Sales Turnover",
       color: "bg-[#EE8900]/80",
@@ -126,7 +129,7 @@ export function BrandStatsSection() {
 
                       {/* Value */}
                       <div className="text-xl font-bold mb-0.5 text-center leading-tight">
-                        {isInView ? <Counter value={stat.value} suffix={stat.suffix} /> : <span>0{stat.suffix}</span>}
+                        {stat.prefix ?? ""}{isInView ? <Counter value={stat.value} suffix={stat.suffix} /> : <span>0{stat.suffix}</span>}
                       </div>
 
                       {/* Label */}
