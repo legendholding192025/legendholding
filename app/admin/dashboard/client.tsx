@@ -24,16 +24,18 @@ interface ContactSubmission {
 
 export function DashboardClient() {
   const supabase = createClientComponentClient()
-  const { userRole, isLoading: permissionsLoading, hasPermission } = useAdminPermissions()
+  const { userRole, isLoading: permissionsLoading, isSuperAdmin, hasPermission } = useAdminPermissions()
   const [submissions, setSubmissions] = useState<ContactSubmission[]>([])
   const [jobApplicationsCount, setJobApplicationsCount] = useState<number>(0)
   const [newsArticlesCount, setNewsArticlesCount] = useState<number>(0)
 
   useEffect(() => {
-    fetchSubmissions()
     fetchJobApplicationsCount()
-    fetchNewsArticlesCount()
-  }, [])
+    if (isSuperAdmin) {
+      fetchSubmissions()
+      fetchNewsArticlesCount()
+    }
+  }, [isSuperAdmin])
 
 
 
@@ -134,7 +136,9 @@ export function DashboardClient() {
                     Welcome to Legend Holding Website Dashboard
                   </h1>
                   <p className="text-muted-foreground mt-2 max-w-xl">
-                    Quick overview of contact submissions, job applications, and news articles. Use the sidebar to manage each area.
+                    {isSuperAdmin
+                      ? "Quick overview of contact submissions, job applications, and news articles. Use the sidebar to manage each area."
+                      : "Quick overview of job applications. Use the sidebar to manage your assigned jobs."}
                   </p>
                 </div>
               </div>
@@ -148,6 +152,7 @@ export function DashboardClient() {
               submissions={submissions}
               jobApplicationsCount={jobApplicationsCount}
               newsArticlesCount={newsArticlesCount}
+              isSuperAdmin={isSuperAdmin}
             />
           </section>
         </>

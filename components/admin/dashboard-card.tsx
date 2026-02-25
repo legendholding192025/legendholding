@@ -6,17 +6,19 @@ interface DashboardCardsProps {
   submissions: any[]
   jobApplicationsCount?: number
   newsArticlesCount?: number
+  isSuperAdmin?: boolean
 }
 
-export function DashboardCards({ submissions, jobApplicationsCount = 0, newsArticlesCount = 0 }: DashboardCardsProps) {
-  const cards = [
+export function DashboardCards({ submissions, jobApplicationsCount = 0, newsArticlesCount = 0, isSuperAdmin = false }: DashboardCardsProps) {
+  const allCards = [
     {
       title: "Contact Submissions",
       value: submissions.length,
       icon: MessageSquare,
       color: "blue" as const,
       description: "View and manage contact form submissions",
-      href: "/admin/submissions"
+      href: "/admin/submissions",
+      superAdminOnly: true
     },
     {
       title: "Job Applications",
@@ -24,7 +26,8 @@ export function DashboardCards({ submissions, jobApplicationsCount = 0, newsArti
       icon: FileText,
       color: "green" as const,
       description: "Review and process job applications",
-      href: "/admin/applications"
+      href: "/admin/applications",
+      superAdminOnly: false
     },
     {
       title: "News Articles",
@@ -32,9 +35,12 @@ export function DashboardCards({ submissions, jobApplicationsCount = 0, newsArti
       icon: Newspaper,
       color: "purple" as const,
       description: "Manage published news articles",
-      href: "/admin/news"
+      href: "/admin/news",
+      superAdminOnly: true
     }
   ]
+
+  const cards = allCards.filter(card => !card.superAdminOnly || isSuperAdmin)
 
   const styles = {
     blue: {
@@ -58,7 +64,7 @@ export function DashboardCards({ submissions, jobApplicationsCount = 0, newsArti
   }
 
   return (
-    <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 min-w-0">
+    <div className={`grid gap-6 grid-cols-1 min-w-0 ${cards.length === 1 ? 'sm:grid-cols-1 max-w-md' : cards.length === 2 ? 'sm:grid-cols-2' : 'sm:grid-cols-2 lg:grid-cols-3'}`}>
       {cards.map((card, index) => {
         const s = styles[card.color]
         return (
