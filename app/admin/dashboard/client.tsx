@@ -1,19 +1,14 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import Image from "next/image"
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
-import { useRouter } from "next/navigation"
 import { AdminDashboardLayout } from "@/components/admin/dashboard-layout"
-import { SubmissionsTable } from "@/components/admin/submission-table"
 import { DashboardCards } from "@/components/admin/dashboard-card"
-import { JobApplicationsDashboard } from "@/components/admin/job-applications-dashboard"
 import { UnauthorizedAccess } from "@/components/admin/unauthorized-access"
 import { useAdminPermissions } from "@/hooks/use-admin-permissions"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Card } from "@/components/ui/card"
-import { MessageSquare } from "lucide-react"
+import { Skeleton } from "@/components/ui/skeleton"
 import { toast } from "sonner"
-import Link from "next/link"
 
 interface ContactSubmission {
   id: string
@@ -28,16 +23,16 @@ interface ContactSubmission {
 }
 
 export function DashboardClient() {
-  const router = useRouter()
   const supabase = createClientComponentClient()
   const { userRole, isLoading: permissionsLoading, hasPermission } = useAdminPermissions()
   const [submissions, setSubmissions] = useState<ContactSubmission[]>([])
   const [jobApplicationsCount, setJobApplicationsCount] = useState<number>(0)
-  const [loading, setLoading] = useState(true)
+  const [newsArticlesCount, setNewsArticlesCount] = useState<number>(0)
 
   useEffect(() => {
     fetchSubmissions()
     fetchJobApplicationsCount()
+    fetchNewsArticlesCount()
   }, [])
 
 
@@ -55,8 +50,6 @@ export function DashboardClient() {
     } catch (error) {
       console.error("Error fetching submissions:", error)
       toast.error("Failed to fetch submissions")
-    } finally {
-      setLoading(false)
     }
   }
 
@@ -73,50 +66,16 @@ export function DashboardClient() {
     }
   }
 
-  const handleDelete = async (id: string) => {
+  const fetchNewsArticlesCount = async () => {
     try {
-      setLoading(true)
-      const { error } = await supabase
-        .from("contact_submissions")
-        .delete()
-        .eq('id', id)
+      const { count, error } = await supabase
+        .from('news_articles')
+        .select('id', { count: 'exact', head: true })
 
       if (error) throw error
-
-      setSubmissions(prev => prev.filter(submission => submission.id !== id))
-      toast.success("Submission deleted successfully")
+      setNewsArticlesCount(count || 0)
     } catch (error) {
-      console.error("Error:", error)
-      toast.error("Failed to delete submission")
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const handleUpdate = async (id: string, data: Partial<ContactSubmission>) => {
-    try {
-      setLoading(true)
-      const { error } = await supabase
-        .from("contact_submissions")
-        .update(data)
-        .eq('id', id)
-
-      if (error) throw error
-
-      const { data: newData, error: fetchError } = await supabase
-        .from("contact_submissions")
-        .select("*")
-        .order("created_at", { ascending: false })
-
-      if (fetchError) throw fetchError
-
-      setSubmissions(newData || [])
-      toast.success("Submission updated successfully")
-    } catch (error) {
-      console.error("Error:", error)
-      toast.error("Failed to update submission")
-    } finally {
-      setLoading(false)
+      console.error('Error fetching news articles count:', error)
     }
   }
 
@@ -144,95 +103,82 @@ export function DashboardClient() {
     }
   }
 
-  // Check if user has dashboard permission
-  if (permissionsLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto"></div>
-          <p className="mt-2 text-sm text-gray-600">Loading permissions...</p>
-        </div>
-      </div>
-    )
-  }
-
-  if (!hasPermission('dashboard')) {
-    return (
-      <UnauthorizedAccess 
-        requiredPermission="dashboard"
-        currentUserRole={userRole?.role}
-      />
-    )
-  }
-
-  // Show different dashboards based on user role
-  if (userRole?.role === 'super_admin') {
-    // Super Admin Dashboard - Full access with job applications
-    return (
-      <AdminDashboardLayout onSignOut={handleSignOut}>
-        <div className="p-8">
-          {/* Contact Submissions Section */}
-          <div className="mb-12">
-            <h2 className="text-xl font-semibold mb-6">Submissions</h2>
-            <div className="mt-8">
-              <DashboardCards submissions={submissions} jobApplicationsCount={jobApplicationsCount} />
+  // Content area: same wrapper for loading, unauthorized, or dashboard to avoid layout shift
+  const contentWrapper = (
+    <div className="min-h-[calc(100vh-4rem)] p-6 md:p-8 lg:p-10 max-w-[1400px] mx-auto">
+      {permissionsLoading ? (
+        <DashboardSkeleton />
+      ) : !hasPermission("dashboard") ? (
+        <UnauthorizedAccess
+          requiredPermission="dashboard"
+          currentUserRole={userRole?.role}
+        />
+      ) : (
+        <>
+          {/* Welcome header with logo */}
+          <header className="mb-10">
+            <div className="rounded-2xl bg-gradient-to-br from-muted/60 to-muted/30 dark:from-muted/40 dark:to-muted/20 border border-border/50 px-6 py-8 md:px-8 md:py-10 flex items-center justify-center">
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-8 text-center sm:text-left">
+                <div className="flex-shrink-0">
+                  <Image
+                    src="/images/legend-logo.png"
+                    alt="Legend Holding Group"
+                    width={180}
+                    height={63}
+                    priority
+                    className="h-14 w-auto sm:h-16 object-contain"
+                  />
+                </div>
+                <div className="min-w-0">
+                  <h1 className="text-2xl md:text-3xl font-bold text-foreground tracking-tight">
+                    Welcome to Legend Holding Website Dashboard
+                  </h1>
+                  <p className="text-muted-foreground mt-2 max-w-xl">
+                    Quick overview of contact submissions, job applications, and news articles. Use the sidebar to manage each area.
+                  </p>
+                </div>
+              </div>
             </div>
+          </header>
 
+          {/* Overview cards */}
+          <section className="space-y-1">
+            <h2 className="text-sm font-medium uppercase tracking-wider text-muted-foreground mb-5">Overview</h2>
+            <DashboardCards
+              submissions={submissions}
+              jobApplicationsCount={jobApplicationsCount}
+              newsArticlesCount={newsArticlesCount}
+            />
+          </section>
+        </>
+      )}
+    </div>
+  )
 
+  return <AdminDashboardLayout onSignOut={handleSignOut}>{contentWrapper}</AdminDashboardLayout>
+}
 
-            <div className="mt-8">
-              <Card>
-                <Tabs defaultValue="all" className="w-full">
-                  <TabsList className="w-full justify-start border-b rounded-none px-6">
-                    <TabsTrigger value="all">All Submissions</TabsTrigger>
-                    <TabsTrigger value="unresolved">Unresolved</TabsTrigger>
-                    <TabsTrigger value="resolved">Resolved</TabsTrigger>
-                  </TabsList>
-                  <TabsContent value="all" className="p-6">
-                    <SubmissionsTable 
-                      submissions={submissions}
-                      loading={loading}
-                      onDelete={handleDelete}
-                      onUpdate={handleUpdate}
-                    />
-                  </TabsContent>
-                  <TabsContent value="unresolved" className="p-6">
-                    <SubmissionsTable 
-                      submissions={submissions.filter(s => !s.resolved)}
-                      loading={loading}
-                      onDelete={handleDelete}
-                      onUpdate={handleUpdate}
-                    />
-                  </TabsContent>
-                  <TabsContent value="resolved" className="p-6">
-                    <SubmissionsTable 
-                      submissions={submissions.filter(s => s.resolved)}
-                      loading={loading}
-                      onDelete={handleDelete}
-                      onUpdate={handleUpdate}
-                    />
-                  </TabsContent>
-                </Tabs>
-              </Card>
-            </div>
-          </div>
-
-          {/* Job Applications Section */}
-          <div className="mb-12">
-            <h2 className="text-xl font-semibold mb-6">Job Applications</h2>
-            <JobApplicationsDashboard onSignOut={handleSignOut} showHeader={false} />
+function DashboardSkeleton() {
+  return (
+    <>
+      <header className="mb-10">
+        <div className="rounded-2xl border border-border/50 px-6 py-8 md:px-8 md:py-10 flex flex-col sm:flex-row items-center gap-6 sm:gap-8">
+          <Skeleton className="h-14 w-24 sm:h-16 sm:w-28 shrink-0 rounded-lg" />
+          <div className="flex-1 min-w-0 space-y-2">
+            <Skeleton className="h-8 w-full max-w-md" />
+            <Skeleton className="h-4 w-full max-w-xl" />
+            <Skeleton className="h-4 w-3/4 max-w-lg" />
           </div>
         </div>
-      </AdminDashboardLayout>
-    )
-  } else {
-    // Regular Admin Dashboard - Job Applications only
-    return (
-      <AdminDashboardLayout onSignOut={handleSignOut}>
-        <div className="p-8">
-          <JobApplicationsDashboard onSignOut={handleSignOut} showHeader={true} />
+      </header>
+      <section className="space-y-1">
+        <Skeleton className="h-4 w-20 mb-5" />
+        <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+          {[1, 2, 3].map((i) => (
+            <Skeleton key={i} className="h-[180px] rounded-xl" />
+          ))}
         </div>
-      </AdminDashboardLayout>
-    )
-  }
+      </section>
+    </>
+  )
 } 

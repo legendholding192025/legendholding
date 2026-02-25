@@ -21,6 +21,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { UnauthorizedAccess } from "@/components/admin/unauthorized-access"
 import { useAdminPermissions } from "@/hooks/use-admin-permissions"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 interface Job {
   id: string
@@ -86,6 +87,7 @@ export default function JobsManagement() {
   const [requirementsText, setRequirementsText] = useState("")
   const [responsibilitiesText, setResponsibilitiesText] = useState("")
   const [descriptionText, setDescriptionText] = useState("")
+  const [jobStatusTab, setJobStatusTab] = useState<'active' | 'inactive'>('active')
 
   useEffect(() => {
     fetchJobs()
@@ -548,15 +550,38 @@ export default function JobsManagement() {
           </Button>
         </div>
 
-        <JobsTable
-          jobs={jobs}
-          loading={loading}
-          onDelete={handleDeleteJob}
-          onUpdate={handleUpdateJob}
-          onAssign={isSuperAdmin ? handleAssignJob : undefined}
-          isSuperAdmin={isSuperAdmin}
-          adminUsers={adminUsers}
-        />
+        <Tabs value={jobStatusTab} onValueChange={(v) => setJobStatusTab(v as 'active' | 'inactive')} className="space-y-4">
+          <TabsList>
+            <TabsTrigger value="active">
+              Active ({jobs.filter(j => j.status === 'active').length})
+            </TabsTrigger>
+            <TabsTrigger value="inactive">
+              Inactive ({jobs.filter(j => j.status === 'inactive').length})
+            </TabsTrigger>
+          </TabsList>
+          <TabsContent value="active">
+            <JobsTable
+              jobs={jobs.filter(j => j.status === 'active')}
+              loading={loading}
+              onDelete={handleDeleteJob}
+              onUpdate={handleUpdateJob}
+              onAssign={isSuperAdmin ? handleAssignJob : undefined}
+              isSuperAdmin={isSuperAdmin}
+              adminUsers={adminUsers}
+            />
+          </TabsContent>
+          <TabsContent value="inactive">
+            <JobsTable
+              jobs={jobs.filter(j => j.status === 'inactive')}
+              loading={loading}
+              onDelete={handleDeleteJob}
+              onUpdate={handleUpdateJob}
+              onAssign={isSuperAdmin ? handleAssignJob : undefined}
+              isSuperAdmin={isSuperAdmin}
+              adminUsers={adminUsers}
+            />
+          </TabsContent>
+        </Tabs>
       </div>
 
       {/* Add Job Dialog */}

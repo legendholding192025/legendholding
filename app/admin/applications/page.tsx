@@ -44,6 +44,7 @@ interface Job {
   id: string
   title: string
   department: string
+  status?: 'active' | 'inactive'
 }
 
 interface JobApplication {
@@ -69,7 +70,7 @@ export default function ApplicationsPage() {
   const [filtering, setFiltering] = useState(false) // Loading state for filter changes
   const [searchTerm, setSearchTerm] = useState("")
   const [statusFilter, setStatusFilter] = useState<string>("all")
-  const [jobFilter, setJobFilter] = useState<string>("all")
+  const [jobFilter, setJobFilter] = useState<string>("active")
   const [viewMode, setViewMode] = useState<"table" | "grouped">("table")
   const [pageSize] = useState(50) // Reduced limit for faster load
   const [hasMore, setHasMore] = useState(false)
@@ -89,13 +90,15 @@ export default function ApplicationsPage() {
     newStatus: string
     previousStatus: string
   } | null>(null)
-  const userRoleCache = useRef<{ userId: string; role: string } | null>(null) // Cache user role
+  const userRoleCache = useRef<{ userId: string; role: string } | null>(null)
+  const fetchIdRef = useRef(0) // Incremented on each fetch to discard stale results
   const supabase = createClientComponentClient()
 
   useEffect(() => {
     fetchApplications()
     fetchJobs()
   }, [])
+
 
   // Refetch applications when filters change (skip initial mount)
   const isInitialMount = useRef(true)
@@ -121,6 +124,9 @@ export default function ApplicationsPage() {
   }, [jobFilter, statusFilter])
 
   const fetchApplications = async (offset: number = 0) => {
+    // Each call gets an ID; if a newer call starts, this one stops updating state
+    const currentFetchId = ++fetchIdRef.current
+
     try {
       // Get current user (cached in session)
       const { data: { user } } = await supabase.auth.getUser()
@@ -154,24 +160,42 @@ export default function ApplicationsPage() {
         userRoleCache.current = { userId: user.id, role: userRole }
       }
 
-      // Get user job IDs - only for admin role
-      // Include jobs created by user OR assigned to user
-      // Always fetch fresh data to handle assignment changes
+      // Get user job IDs - filter by job dropdown (active / inactive / specific job)
+      const isSpecificJob = jobFilter !== 'active' && jobFilter !== 'inactive'
       let userJobIds: string[] | null = null
-      if (userRole === 'admin') {
-        // Get jobs created by user
+
+      if (isSpecificJob) {
+        userJobIds = [jobFilter]
+      } else if (userRole === 'super_admin') {
+        const { data: jobsByStatus } = await supabase
+          .from('jobs')
+          .select('id')
+          .eq('status', jobFilter)
+        userJobIds = jobsByStatus?.map(j => j.id) || []
+        if (userJobIds.length === 0) {
+          setApplications([])
+          setTotalCount(0)
+          setFilteredCount(0)
+          setStatusCounts({ pending: 0, reviewed: 0, shortlisted: 0, rejected: 0, hired: 0 })
+          setHasMore(false)
+          setLoading(false)
+          setFiltering(false)
+          setStatusCountsLoading(false)
+          return
+        }
+      } else if (userRole === 'admin') {
         const { data: createdJobs } = await supabase
           .from('jobs')
           .select('id')
           .eq('created_by', user.id)
+          .eq('status', jobFilter)
         
-        // Get jobs assigned to user
         const { data: assignedJobs } = await supabase
           .from('jobs')
           .select('id')
           .eq('assigned_to', user.id)
+          .eq('status', jobFilter)
         
-        // Combine and deduplicate
         const createdIds = createdJobs?.map(job => job.id) || []
         const assignedIds = assignedJobs?.map(job => job.id) || []
         userJobIds = [...new Set([...createdIds, ...assignedIds])]
@@ -190,11 +214,10 @@ export default function ApplicationsPage() {
       }
 
       // Determine if filters are active
-      const isFiltered = jobFilter !== "all" || statusFilter !== "all"
-      
-      // Build data query with count - OPTIMIZED: Get data + count in single request
-      // By default (All) exclude rejected from list; when Rejected filter is selected, show only rejected
-      let query = supabase
+      const isFiltered = isSpecificJob || statusFilter !== "all"
+
+      // STEP 1: Fetch data WITHOUT count (fast — no full table scan)
+      let dataQuery = supabase
         .from('job_applications')
         .select(`
           id,
@@ -207,34 +230,31 @@ export default function ApplicationsPage() {
           status,
           created_at,
           job:jobs(id, title, department)
-        `, { count: 'exact' }) // Include count in same query
+        `)
         .order('created_at', { ascending: false })
         .range(offset, offset + pageSize - 1)
 
-      // Apply role-based filter
       if (userJobIds && userJobIds.length > 0) {
-        query = query.in('job_id', userJobIds)
+        dataQuery = dataQuery.in('job_id', userJobIds)
       }
-
-      // Apply job filter
-      if (jobFilter !== "all") {
-        query = query.eq('job_id', jobFilter)
+      if (isSpecificJob) {
+        dataQuery = dataQuery.eq('job_id', jobFilter)
       }
-
-      // Apply status filter: default list excludes rejected; Rejected filter shows only rejected
       if (statusFilter === "all") {
-        query = query.neq('status', 'rejected')
+        dataQuery = dataQuery.neq('status', 'rejected')
       } else {
-        query = query.eq('status', statusFilter)
+        dataQuery = dataQuery.eq('status', statusFilter)
       }
 
-      // Execute query - gets data AND count in single request
-      const { data: applicationsData, error: applicationsError, count: queryCount } = await query
-      
+      const { data: applicationsData, error: applicationsError } = await dataQuery
+
       if (applicationsError) {
         console.error('Applications query error:', applicationsError)
         throw applicationsError
       }
+
+      // Discard result if a newer fetch was started while this one was in-flight
+      if (currentFetchId !== fetchIdRef.current) return
 
       // Set data immediately for fast display
       if (applicationsData) {
@@ -248,26 +268,14 @@ export default function ApplicationsPage() {
         } else {
           setApplications(prev => [...prev, ...transformedData])
         }
-        
-        // Set count and hasMore immediately from query result
-        const currentCount = queryCount || 0
-        const currentBatchSize = transformedData.length
-        const totalLoaded = offset + currentBatchSize
-        
-        if (isFiltered) {
-          setFilteredCount(currentCount)
-        } else {
-          setTotalCount(currentCount)
-          setFilteredCount(currentCount)
-        }
-        
-        // hasMore: got full page AND more items exist
-        setHasMore(currentBatchSize === pageSize && totalLoaded < currentCount)
-        
-        // Clear filtering state immediately
+
+        // Estimate hasMore from batch size (will be corrected when count arrives)
+        setHasMore(transformedData.length === pageSize)
+
+        // Clear filtering state immediately — data is visible
         setFiltering(false)
-        
-        // For load more (offset > 0), we're done
+
+        // For load-more (offset > 0), we only needed the data
         if (offset > 0) {
           setStatusCountsLoading(false)
           setLoading(false)
@@ -275,30 +283,57 @@ export default function ApplicationsPage() {
         }
       }
 
-      // Only fetch status counts on initial load (offset === 0) - in background
+      // STEP 2 (background, non-blocking): Fetch count + status counts in parallel
       if (offset === 0) {
-        // Fire and forget - don't await
-        const fetchStatusCounts = async () => {
+        const fetchCounts = async () => {
           try {
-            // Single query to get all status counts using RPC or parallel optimized queries
-            const statusPromises = ['pending', 'reviewed', 'shortlisted', 'rejected', 'hired'].map(status => {
-              let statusQuery = supabase
+            // Build a lightweight count query (head: true, no join)
+            let countQuery = supabase
+              .from('job_applications')
+              .select('id', { count: 'exact', head: true })
+
+            if (userJobIds && userJobIds.length > 0) {
+              countQuery = countQuery.in('job_id', userJobIds)
+            }
+            if (isSpecificJob) {
+              countQuery = countQuery.eq('job_id', jobFilter)
+            }
+            if (statusFilter === "all") {
+              countQuery = countQuery.neq('status', 'rejected')
+            } else {
+              countQuery = countQuery.eq('status', statusFilter)
+            }
+
+            // Status count queries (also head-only, no join)
+            const statusNames = ['pending', 'reviewed', 'shortlisted', 'rejected', 'hired'] as const
+            const statusPromises = statusNames.map(status => {
+              let sq = supabase
                 .from('job_applications')
                 .select('id', { count: 'exact', head: true })
                 .eq('status', status)
-              
               if (userJobIds && userJobIds.length > 0) {
-                statusQuery = statusQuery.in('job_id', userJobIds)
+                sq = sq.in('job_id', userJobIds)
               }
-              if (jobFilter !== "all") {
-                statusQuery = statusQuery.eq('job_id', jobFilter)
+              if (isSpecificJob) {
+                sq = sq.eq('job_id', jobFilter)
               }
-              
-              return statusQuery
+              return sq
             })
 
-            const statusResults = await Promise.all(statusPromises)
-            
+            // Fire count + all status counts in parallel
+            const [countResult, ...statusResults] = await Promise.all([countQuery, ...statusPromises])
+
+            const currentCount = countResult?.count || 0
+            const loadedSoFar = applicationsData?.length || 0
+
+            if (isFiltered) {
+              setFilteredCount(currentCount)
+            } else {
+              setTotalCount(currentCount)
+              setFilteredCount(currentCount)
+            }
+            setHasMore(loadedSoFar === pageSize && loadedSoFar < currentCount)
+
             setStatusCounts({
               pending: statusResults[0]?.count || 0,
               reviewed: statusResults[1]?.count || 0,
@@ -308,23 +343,23 @@ export default function ApplicationsPage() {
             })
             setStatusCountsLoading(false)
           } catch (err) {
-            console.error('Error fetching status counts:', err)
+            console.error('Error fetching counts:', err)
             setStatusCountsLoading(false)
           }
         }
-        
-        // Start background fetch (non-blocking)
-        fetchStatusCounts()
-        
-        // Fetch total count in background if filtered
+
+        // Non-blocking
+        fetchCounts()
+
+        // If filtered, also get unfiltered total in background
         if (isFiltered && totalCount === 0) {
           const fetchTotalCount = async () => {
             try {
-              let totalQuery = supabase.from('job_applications').select('id', { count: 'exact', head: true }).neq('status', 'rejected')
+              let tq = supabase.from('job_applications').select('id', { count: 'exact', head: true }).neq('status', 'rejected')
               if (userJobIds && userJobIds.length > 0) {
-                totalQuery = totalQuery.in('job_id', userJobIds)
+                tq = tq.in('job_id', userJobIds)
               }
-              const { count } = await totalQuery
+              const { count } = await tq
               setTotalCount(count || 0)
             } catch (err) {
               console.error('Error fetching total count:', err)
@@ -340,25 +375,14 @@ export default function ApplicationsPage() {
       // Handle specific timeout error
       if (error?.code === '57014' || errorMessage?.includes('timeout') || errorMessage?.includes('canceling statement')) {
         toast.error('Query timeout - Loading most recent applications only')
-        // Try a more limited query as fallback
+        // Fallback: simple query without join, then enrich with job data
         try {
           const { data: limitedData, error: fallbackError } = await supabase
             .from('job_applications')
-            .select(`
-              id,
-              job_id,
-              full_name,
-              email,
-              phone,
-              resume_url,
-              cover_letter,
-              status,
-              created_at,
-              job:jobs(id, title, department)
-            `)
+            .select('id, job_id, full_name, email, phone, resume_url, cover_letter, status, created_at')
             .neq('status', 'rejected')
             .order('created_at', { ascending: false })
-            .limit(50)
+            .limit(25)
           
           if (fallbackError) {
             console.error('Fallback query error:', fallbackError)
@@ -366,10 +390,16 @@ export default function ApplicationsPage() {
           }
           
           if (limitedData) {
-            // Transform data to match JobApplication type
+            // Enrich with job info from already-loaded jobs or fetch minimal job data
+            const jobIds = [...new Set(limitedData.map(a => a.job_id))]
+            const { data: jobsData } = await supabase
+              .from('jobs')
+              .select('id, title, department')
+              .in('id', jobIds)
+            const jobMap = new Map((jobsData || []).map(j => [j.id, j]))
             const transformedLimitedData: JobApplication[] = limitedData.map((app: any) => ({
               ...app,
-              job: Array.isArray(app.job) ? app.job[0] : app.job
+              job: jobMap.get(app.job_id) || undefined
             }))
             setApplications(transformedLimitedData)
             // Calculate status counts from limited data as fallback
@@ -437,33 +467,28 @@ export default function ApplicationsPage() {
         }
       }
 
-      // For super admin, get all active jobs
+      // Fetch both active and inactive jobs (for dropdown)
       if (userRole === 'super_admin') {
         const { data: jobsData, error: jobsError } = await supabase
           .from('jobs')
-          .select('id, title, department')
-          .eq('status', 'active')
+          .select('id, title, department, status')
           .order('title', { ascending: true })
         
         if (jobsError) throw jobsError
         if (jobsData) setJobs(jobsData)
       } else {
-        // For admin, get jobs created by OR assigned to user
         const { data: createdJobs } = await supabase
           .from('jobs')
-          .select('id, title, department')
-          .eq('status', 'active')
+          .select('id, title, department, status')
           .eq('created_by', user.id)
           .order('title', { ascending: true })
         
         const { data: assignedJobs } = await supabase
           .from('jobs')
-          .select('id, title, department')
-          .eq('status', 'active')
+          .select('id, title, department, status')
           .eq('assigned_to', user.id)
           .order('title', { ascending: true })
         
-        // Combine and deduplicate by id
         const allJobs = [...(createdJobs || []), ...(assignedJobs || [])]
         const uniqueJobs = allJobs.filter((job, index, self) =>
           index === self.findIndex((j) => j.id === job.id)
@@ -890,7 +915,7 @@ export default function ApplicationsPage() {
       application.job?.department?.toLowerCase().includes(searchTerm.toLowerCase())
 
     const matchesStatus = statusFilter === "all" || application.status === statusFilter
-    const matchesJob = jobFilter === "all" || application.job_id === jobFilter
+    const matchesJob = jobFilter === "active" || jobFilter === "inactive" || application.job_id === jobFilter
 
     return matchesSearch && matchesStatus && matchesJob
   })
@@ -913,7 +938,7 @@ export default function ApplicationsPage() {
 
   const getApplicationStats = () => {
     // When filters are active, use filteredCount from database; otherwise use totalCount
-    const isFiltered = jobFilter !== "all" || statusFilter !== "all"
+    const isFiltered = (jobFilter !== "active" && jobFilter !== "inactive") || statusFilter !== "all"
     
     // Use status counts from database (not from loaded applications)
     // These counts reflect the total in the database, not just the visible 100
@@ -1083,13 +1108,32 @@ export default function ApplicationsPage() {
                 className="pl-8"
               />
             </div>
-            <Select value={jobFilter} onValueChange={setJobFilter}>
+            <Select
+              value={jobFilter === "active" || jobs.some(j => j.status === "active" && j.id === jobFilter) ? jobFilter : "active"}
+              onValueChange={(v) => setJobFilter(v)}
+            >
               <SelectTrigger className="w-[200px]">
-                <SelectValue placeholder="Filter by job" />
+                <SelectValue placeholder="All Active Jobs" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Jobs</SelectItem>
-                {jobs.map((job) => (
+                <SelectItem value="active">All Active Jobs</SelectItem>
+                {jobs.filter(j => j.status === "active").map((job) => (
+                  <SelectItem key={job.id} value={job.id}>
+                    {job.title}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Select
+              value={jobFilter === "inactive" || jobs.some(j => j.status === "inactive" && j.id === jobFilter) ? jobFilter : "inactive"}
+              onValueChange={(v) => setJobFilter(v)}
+            >
+              <SelectTrigger className="w-[200px]">
+                <SelectValue placeholder="All Inactive Jobs" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="inactive">All Inactive Jobs</SelectItem>
+                {jobs.filter(j => j.status === "inactive").map((job) => (
                   <SelectItem key={job.id} value={job.id}>
                     {job.title}
                   </SelectItem>
@@ -1278,7 +1322,7 @@ export default function ApplicationsPage() {
                   variant="outline"
                   size="lg"
                 >
-                  {loadingMore ? 'Loading...' : `Load More (${applications.length} of ${jobFilter !== "all" || statusFilter !== "all" ? filteredCount : totalCount})`}
+                  {loadingMore ? 'Loading...' : `Load More (${applications.length} of ${(jobFilter !== "active" && jobFilter !== "inactive") || statusFilter !== "all" ? filteredCount : totalCount})`}
                 </Button>
               </div>
             )}
@@ -1411,7 +1455,7 @@ export default function ApplicationsPage() {
                   variant="outline"
                   size="lg"
                 >
-                  {loadingMore ? 'Loading...' : `Load More (${applications.length} of ${jobFilter !== "all" || statusFilter !== "all" ? filteredCount : totalCount})`}
+                  {loadingMore ? 'Loading...' : `Load More (${applications.length} of ${(jobFilter !== "active" && jobFilter !== "inactive") || statusFilter !== "all" ? filteredCount : totalCount})`}
                 </Button>
               </div>
             )}

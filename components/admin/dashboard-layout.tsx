@@ -12,7 +12,6 @@ import {
   FileText, 
   LogOut,
   Menu,
-  Users,
   Mail,
   PanelLeftClose,
   PanelLeftOpen,
@@ -23,6 +22,7 @@ import {
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
+import { Skeleton } from "@/components/ui/skeleton"
 import { DashboardHeader } from "@/components/admin/dashboard-header"
 import { useAdminPermissions } from "@/hooks/use-admin-permissions"
 import {
@@ -33,7 +33,6 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
   SidebarProvider,
-  SidebarTrigger,
   SidebarSeparator,
   SidebarFooter,
   useSidebar
@@ -139,66 +138,75 @@ export function AdminDashboardLayout({ children, onSignOut }: AdminDashboardLayo
         </div>
 
         {/* Sidebar */}
-        <Sidebar className="border-r border-gray-200 shrink-0">
-          <SidebarHeader className="border-b border-gray-200 py-5 px-6">
-            <div className="flex items-center justify-between">
-              <Link href={dashboardHref} className="flex items-center gap-2">
+        <Sidebar className="border-r border-border shrink-0">
+          <SidebarHeader className="border-b border-border py-6 px-4">
+            <div className="flex flex-col items-center">
+              <Link href={dashboardHref} className="flex items-center justify-center w-full focus:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-lg">
                 <Image
                   src="/images/legend-logo.png"
-                  alt="Legend Logo"
-                  width={150}
-                  height={40}
-                  className="h-8 w-auto"
+                  alt="Legend Holding"
+                  width={200}
+                  height={70}
+                  className="h-11 w-auto object-contain"
                 />
               </Link>
-              <SidebarTrigger />
             </div>
-            {isSuperAdmin && (
-              <div className="mt-2 flex items-center gap-2 text-xs text-blue-600 bg-blue-50 px-2 py-1 rounded">
-                <Shield className="h-3 w-3" />
+            {isLoading ? (
+              <Skeleton className="mt-4 h-7 w-24 mx-auto rounded-lg" />
+            ) : isSuperAdmin ? (
+              <div className="mt-4 flex items-center justify-center gap-2 text-xs text-blue-600 dark:text-blue-400 bg-blue-500/10 dark:bg-blue-500/20 px-3 py-1.5 rounded-lg">
+                <Shield className="h-3.5 w-3.5 shrink-0" />
                 <span>Super Admin</span>
               </div>
-            )}
+            ) : null}
           </SidebarHeader>
           
-          <SidebarContent className="px-4 py-6">
+          <SidebarContent className="px-3 py-5">
             {/* Main Menu */}
-            <div className="space-y-6">
+            <div className="space-y-5">
               <div>
-                <h2 className="mb-4 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                <h2 className="mb-3 px-3 text-xs font-medium uppercase tracking-wider text-muted-foreground">
                   Menu
                 </h2>
-                <SidebarMenu>
-                  {menuItems.map((item) => {
-                    const isActive = pathname === item.href
-                    const hasAccess = hasPermission(item.permission)
-                    const isSuperAdminOnly = item.superAdminOnly && !isSuperAdmin
-                    
-                    if (!hasAccess || isSuperAdminOnly) return null
-                    
-                    return (
-                      <SidebarMenuItem key={item.href} className="mb-2">
-                        <SidebarMenuButton
-                          asChild
-                          data-active={isActive}
-                          className="w-full px-4 py-2.5 justify-start gap-3 rounded-lg hover:bg-primary/5 hover:text-primary data-[active=true]:bg-primary/10 data-[active=true]:text-primary group transition-colors"
-                        >
-                          <Link href={item.href}>
-                            <item.icon className="h-5 w-5 transition-colors group-hover:text-primary shrink-0" />
-                            <span className="font-medium">{item.title}</span>
-                          </Link>
-                        </SidebarMenuButton>
-                      </SidebarMenuItem>
-                    )
-                  })}
-                </SidebarMenu>
+                {isLoading ? (
+                  <div className="space-y-0.5">
+                    {[1, 2, 3, 4, 5, 6].map((i) => (
+                      <Skeleton key={i} className="mx-3 h-10 rounded-lg" />
+                    ))}
+                  </div>
+                ) : (
+                  <SidebarMenu className="space-y-0.5">
+                    {menuItems.map((item) => {
+                      const isActive = pathname === item.href
+                      const hasAccess = hasPermission(item.permission)
+                      const isSuperAdminOnly = item.superAdminOnly && !isSuperAdmin
+                      
+                      if (!hasAccess || isSuperAdminOnly) return null
+                      
+                      return (
+                        <SidebarMenuItem key={item.href}>
+                          <SidebarMenuButton
+                            asChild
+                            data-active={isActive}
+                            className="w-full px-3 py-2.5 justify-start gap-3 rounded-lg hover:bg-primary/5 hover:text-primary data-[active=true]:bg-primary/10 data-[active=true]:text-primary group transition-colors"
+                          >
+                            <Link href={item.href}>
+                              <item.icon className="h-5 w-5 transition-colors group-hover:text-primary shrink-0" />
+                              <span className="font-medium">{item.title}</span>
+                            </Link>
+                          </SidebarMenuButton>
+                        </SidebarMenuItem>
+                      )
+                    })}
+                  </SidebarMenu>
+                )}
               </div>
 
-              <SidebarSeparator className="mx-4" />
+              <SidebarSeparator className="mx-3" />
 
               {/* System Menu */}
               <div>
-                <SidebarMenu>
+                <SidebarMenu className="space-y-0.5">
                   {systemMenuItems.map((item) => {
                     const isActive = pathname === item.href
                     const hasAccess = hasPermission(item.permission)
@@ -207,14 +215,14 @@ export function AdminDashboardLayout({ children, onSignOut }: AdminDashboardLayo
                     if (!hasAccess || isSuperAdminOnly) return null
                     
                     return (
-                      <SidebarMenuItem key={item.href} className="mb-2">
+                      <SidebarMenuItem key={item.href}>
                         <SidebarMenuButton
                           asChild
                           data-active={isActive}
-                          className="w-full px-4 py-2.5 justify-start gap-3 rounded-lg hover:bg-gray-100 group transition-colors data-[active=true]:bg-gray-200 data-[active=true]:text-gray-900"
+                          className="w-full px-3 py-2.5 justify-start gap-3 rounded-lg hover:bg-muted group transition-colors data-[active=true]:bg-muted data-[active=true]:text-foreground"
                         >
                           <Link href={item.href}>
-                            <item.icon className="h-5 w-5 text-gray-500 transition-colors group-hover:text-gray-900 shrink-0" />
+                            <item.icon className="h-5 w-5 text-muted-foreground transition-colors group-hover:text-foreground shrink-0" />
                             <span>{item.title}</span>
                           </Link>
                         </SidebarMenuButton>
@@ -226,10 +234,10 @@ export function AdminDashboardLayout({ children, onSignOut }: AdminDashboardLayo
             </div>
           </SidebarContent>
 
-          <SidebarFooter className="border-t border-gray-200 p-6">
+          <SidebarFooter className="border-t border-border px-4 py-4">
             <SidebarMenuButton
               onClick={onSignOut}
-              className="w-full px-4 py-2.5 justify-start gap-3 rounded-lg text-red-500 hover:bg-red-50 hover:text-red-600 transition-colors"
+              className="w-full px-3 py-2.5 justify-start gap-3 rounded-lg text-destructive hover:bg-destructive/10 hover:text-destructive transition-colors"
             >
               <LogOut className="h-5 w-5 shrink-0" />
               <span>Sign Out</span>
@@ -263,18 +271,16 @@ function SidebarToggleButton() {
       size="icon"
       onClick={toggleSidebar}
       className={cn(
-        "fixed top-4 z-50 h-8 w-8 bg-white border-gray-200 shadow-sm transition-all duration-300",
-        isCollapsed ? "left-4 lg:left-4" : "left-4 lg:left-[calc(var(--sidebar-width)-3rem)]"
+        "fixed top-4 z-50 h-9 w-9 rounded-lg bg-background border-border shadow-sm hover:bg-muted transition-all duration-200",
+        isCollapsed ? "left-4 lg:left-4" : "left-4 lg:left-[calc(var(--sidebar-width)-2.5rem)]"
       )}
+      aria-label={isCollapsed ? "Show sidebar" : "Hide sidebar"}
     >
       {isCollapsed ? (
         <PanelLeftOpen className="h-4 w-4" />
       ) : (
         <PanelLeftClose className="h-4 w-4" />
       )}
-      <span className="sr-only">
-        {isCollapsed ? "Show sidebar" : "Hide sidebar"}
-      </span>
     </Button>
   )
 }
