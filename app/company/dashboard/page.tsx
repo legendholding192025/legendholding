@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import Image from 'next/image'
 import { LogOut, Mail, Phone, Calendar, AlertCircle, CheckCircle, Clock, Search, User, MessageSquare, Eye } from 'lucide-react'
 import { toast } from 'sonner'
@@ -33,7 +32,6 @@ type FilterStatus = 'all' | 'pending' | 'reviewed' | 'sent'
 
 export default function CompanyDashboard() {
   const router = useRouter()
-  const supabase = createClientComponentClient()
   const [company, setCompany] = useState<{ id: string; companyName: string } | null>(null)
   const [complaints, setComplaints] = useState<Complaint[]>([])
   const [loading, setLoading] = useState(true)
@@ -64,7 +62,7 @@ export default function CompanyDashboard() {
       }
 
       setCompany(data.company)
-      fetchComplaints(data.company.companyName)
+      fetchComplaints()
     } catch (error) {
       console.error('Auth check error:', error)
       router.push('/company/login')
@@ -73,27 +71,19 @@ export default function CompanyDashboard() {
     }
   }
 
-  const fetchComplaints = async (companyName: string) => {
+  const fetchComplaints = async () => {
     try {
       setLoading(true)
-      const { data, error } = await supabase
-        .from('customer_care_complaints')
-        .select('*')
-        .eq('company', companyName)
-        .order('created_at', { ascending: false })
+      const response = await fetch('/api/company/complaints', {
+        credentials: 'include',
+      })
 
-      if (error) throw error
+      if (!response.ok) {
+        throw new Error('Failed to fetch complaints')
+      }
 
-      // Only show complaints that have been sent to company (status is 'sent', 'reviewed', 'replied', or resolved)
-      // Exclude complaints with status 'pending' or null/undefined
-      const filteredData = (data || []).filter(complaint => 
-        complaint.status === 'sent' || 
-        complaint.status === 'reviewed' || 
-        complaint.status === 'replied' ||
-        complaint.resolved === true
-      )
-
-      setComplaints(filteredData)
+      const data = await response.json()
+      setComplaints(data.complaints || [])
     } catch (error: any) {
       console.error('Error fetching complaints:', error)
       toast.error('Failed to load complaints')
