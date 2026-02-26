@@ -268,7 +268,7 @@ export default function CompanyDashboard() {
               <div>
                 <p className="text-sm text-gray-600">Reviewed</p>
                 <p className="text-2xl font-bold text-blue-600 mt-1">
-                  {complaints.filter(c => c.status === 'reviewed' || c.status === 'sent').length}
+                  {complaints.filter(c => c.status === 'reviewed').length}
                 </p>
               </div>
               <CheckCircle className="h-8 w-8 text-blue-600" />
