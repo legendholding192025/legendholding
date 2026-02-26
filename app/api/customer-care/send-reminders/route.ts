@@ -320,6 +320,11 @@ export async function GET(request: Request) {
         } else {
           remindersSent.push(complaint.id);
           console.log(`Reminder sent for complaint ${complaint.id} to ${companyEmail}`);
+
+          await supabase
+            .from('customer_care_complaints')
+            .update({ last_reminder_sent_at: now.toISOString() })
+            .eq('id', complaint.id);
         }
       } catch (error: any) {
         console.error(`Error processing reminder for complaint ${complaint.id}:`, error);

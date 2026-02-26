@@ -1,7 +1,7 @@
 import * as React from "react"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
-import { Eye, Trash2, ChevronLeft, ChevronRight } from "lucide-react"
+import { Eye, Trash2, ChevronLeft, ChevronRight, Bell, AlertTriangle, Building2 } from "lucide-react"
 import { useState } from "react"
 import {
   Dialog,
@@ -29,6 +29,9 @@ interface CustomerCareComplaint {
   status?: string
   admin_comment?: string | null
   company_comment?: string | null
+  last_reminder_sent_at?: string | null
+  last_escalation_sent_at?: string | null
+  holding_escalation_sent_at?: string | null
 }
 
 interface CustomerCareTableProps {
@@ -396,6 +399,148 @@ export function CustomerCareTable({ complaints = [], loading, onDelete, onUpdate
                   </div>
                 </div>
               </div>
+
+              {/* Escalation Tracker */}
+              {(!editingComplaint.resolved) && (editingComplaint.last_reminder_sent_at || editingComplaint.last_escalation_sent_at || editingComplaint.holding_escalation_sent_at) ? (
+                <div className="grid gap-2">
+                  <Label>Escalation Tracker</Label>
+                  <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                    <div className="flex items-center gap-4">
+                      {/* Step: 48h Reminder */}
+                      <div className="flex flex-col items-center flex-1">
+                        <div className={`flex items-center justify-center w-10 h-10 rounded-full z-10 ${
+                          editingComplaint.last_reminder_sent_at
+                            ? 'bg-amber-100 border-2 border-amber-500'
+                            : 'bg-gray-100 border border-gray-300'
+                        }`}>
+                          <Bell className={`w-5 h-5 ${editingComplaint.last_reminder_sent_at ? 'text-amber-600' : 'text-gray-400'}`} />
+                        </div>
+                        <p className={`text-xs font-medium mt-2 text-center ${editingComplaint.last_reminder_sent_at ? 'text-amber-700' : 'text-gray-400'}`}>
+                          48h Reminder
+                        </p>
+                        {editingComplaint.last_reminder_sent_at && (
+                          <p className="text-[10px] text-amber-600 mt-0.5 text-center">
+                            {new Date(editingComplaint.last_reminder_sent_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                          </p>
+                        )}
+                      </div>
+
+                      {/* Connector */}
+                      <div className={`flex-1 h-0.5 ${editingComplaint.last_escalation_sent_at ? 'bg-orange-300' : 'bg-gray-200'}`}></div>
+
+                      {/* Step: Business Head */}
+                      <div className="flex flex-col items-center flex-1">
+                        <div className={`flex items-center justify-center w-10 h-10 rounded-full z-10 ${
+                          editingComplaint.last_escalation_sent_at
+                            ? 'bg-orange-100 border-2 border-orange-500'
+                            : 'bg-gray-100 border border-gray-300'
+                        }`}>
+                          <AlertTriangle className={`w-5 h-5 ${editingComplaint.last_escalation_sent_at ? 'text-orange-600' : 'text-gray-400'}`} />
+                        </div>
+                        <p className={`text-xs font-medium mt-2 text-center ${editingComplaint.last_escalation_sent_at ? 'text-orange-700' : 'text-gray-400'}`}>
+                          Business Head
+                        </p>
+                        {editingComplaint.last_escalation_sent_at && (
+                          <p className="text-[10px] text-orange-600 mt-0.5 text-center">
+                            {new Date(editingComplaint.last_escalation_sent_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                          </p>
+                        )}
+                      </div>
+
+                      {/* Connector */}
+                      <div className={`flex-1 h-0.5 ${editingComplaint.holding_escalation_sent_at ? 'bg-red-300' : 'bg-gray-200'}`}></div>
+
+                      {/* Step: Holding Escalation */}
+                      <div className="flex flex-col items-center flex-1">
+                        <div className={`flex items-center justify-center w-10 h-10 rounded-full z-10 ${
+                          editingComplaint.holding_escalation_sent_at
+                            ? 'bg-red-100 border-2 border-red-500'
+                            : 'bg-gray-100 border border-gray-300'
+                        }`}>
+                          <Building2 className={`w-5 h-5 ${editingComplaint.holding_escalation_sent_at ? 'text-red-600' : 'text-gray-400'}`} />
+                        </div>
+                        <p className={`text-xs font-medium mt-2 text-center ${editingComplaint.holding_escalation_sent_at ? 'text-red-700' : 'text-gray-400'}`}>
+                          Holding Escalation
+                        </p>
+                        {editingComplaint.holding_escalation_sent_at && (
+                          <p className="text-[10px] text-red-600 mt-0.5 text-center">
+                            {new Date(editingComplaint.holding_escalation_sent_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : editingComplaint.resolved && (editingComplaint.last_reminder_sent_at || editingComplaint.last_escalation_sent_at || editingComplaint.holding_escalation_sent_at) ? (
+                <div className="grid gap-2">
+                  <Label>Escalation History</Label>
+                  <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                    <div className="flex items-center gap-4">
+                      {/* Step: 48h Reminder */}
+                      <div className="flex flex-col items-center flex-1">
+                        <div className={`flex items-center justify-center w-10 h-10 rounded-full z-10 ${
+                          editingComplaint.last_reminder_sent_at
+                            ? 'bg-amber-50 border border-amber-300'
+                            : 'bg-gray-100 border border-gray-300'
+                        }`}>
+                          <Bell className={`w-5 h-5 ${editingComplaint.last_reminder_sent_at ? 'text-amber-500' : 'text-gray-400'}`} />
+                        </div>
+                        <p className={`text-xs font-medium mt-2 text-center ${editingComplaint.last_reminder_sent_at ? 'text-amber-600' : 'text-gray-400'}`}>
+                          48h Reminder
+                        </p>
+                        {editingComplaint.last_reminder_sent_at && (
+                          <p className="text-[10px] text-gray-500 mt-0.5 text-center">
+                            {new Date(editingComplaint.last_reminder_sent_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                          </p>
+                        )}
+                      </div>
+
+                      <div className={`flex-1 h-0.5 ${editingComplaint.last_escalation_sent_at ? 'bg-gray-300' : 'bg-gray-200'}`}></div>
+
+                      {/* Step: Business Head */}
+                      <div className="flex flex-col items-center flex-1">
+                        <div className={`flex items-center justify-center w-10 h-10 rounded-full z-10 ${
+                          editingComplaint.last_escalation_sent_at
+                            ? 'bg-orange-50 border border-orange-300'
+                            : 'bg-gray-100 border border-gray-300'
+                        }`}>
+                          <AlertTriangle className={`w-5 h-5 ${editingComplaint.last_escalation_sent_at ? 'text-orange-500' : 'text-gray-400'}`} />
+                        </div>
+                        <p className={`text-xs font-medium mt-2 text-center ${editingComplaint.last_escalation_sent_at ? 'text-orange-600' : 'text-gray-400'}`}>
+                          Business Head
+                        </p>
+                        {editingComplaint.last_escalation_sent_at && (
+                          <p className="text-[10px] text-gray-500 mt-0.5 text-center">
+                            {new Date(editingComplaint.last_escalation_sent_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                          </p>
+                        )}
+                      </div>
+
+                      <div className={`flex-1 h-0.5 ${editingComplaint.holding_escalation_sent_at ? 'bg-gray-300' : 'bg-gray-200'}`}></div>
+
+                      {/* Step: Holding Escalation */}
+                      <div className="flex flex-col items-center flex-1">
+                        <div className={`flex items-center justify-center w-10 h-10 rounded-full z-10 ${
+                          editingComplaint.holding_escalation_sent_at
+                            ? 'bg-red-50 border border-red-300'
+                            : 'bg-gray-100 border border-gray-300'
+                        }`}>
+                          <Building2 className={`w-5 h-5 ${editingComplaint.holding_escalation_sent_at ? 'text-red-500' : 'text-gray-400'}`} />
+                        </div>
+                        <p className={`text-xs font-medium mt-2 text-center ${editingComplaint.holding_escalation_sent_at ? 'text-red-600' : 'text-gray-400'}`}>
+                          Holding Escalation
+                        </p>
+                        {editingComplaint.holding_escalation_sent_at && (
+                          <p className="text-[10px] text-gray-500 mt-0.5 text-center">
+                            {new Date(editingComplaint.holding_escalation_sent_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : null}
+
               <div className="grid gap-2">
                 <Label htmlFor="name">Name</Label>
                 <Input
