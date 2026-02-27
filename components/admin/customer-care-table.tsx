@@ -29,6 +29,7 @@ interface CustomerCareComplaint {
   status?: string
   admin_comment?: string | null
   company_comment?: string | null
+  company_reply?: string | null
   last_reminder_sent_at?: string | null
   last_escalation_sent_at?: string | null
   holding_escalation_sent_at?: string | null
@@ -604,6 +605,18 @@ export function CustomerCareTable({ complaints = [], loading, onDelete, onUpdate
                   <div className="bg-orange-50 border-l-4 border-orange-400 rounded-lg p-4">
                     <p className="text-sm text-orange-700 leading-relaxed whitespace-pre-wrap">{editingComplaint.admin_comment}</p>
                   </div>
+                </div>
+              )}
+              {/* Company Reply - Show when company has replied */}
+              {editingComplaint.company_reply && (
+                <div className="grid gap-2">
+                  <Label>Company Reply to Customer</Label>
+                  <div className="bg-blue-50 border-l-4 border-blue-400 rounded-lg p-4">
+                    <p className="text-sm text-blue-700 leading-relaxed whitespace-pre-wrap">{editingComplaint.company_reply}</p>
+                  </div>
+                  <p className="text-xs text-gray-500">
+                    This reply was sent to the customer by {editingComplaint.company}.
+                  </p>
                 </div>
               )}
               {/* Company Comment - Show when complaint is resolved */}

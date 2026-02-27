@@ -25,6 +25,7 @@ interface Complaint {
   status?: string
   admin_comment?: string | null
   company_comment?: string | null
+  company_reply?: string | null
   resolved?: boolean
 }
 
@@ -474,6 +475,16 @@ export default function CompanyDashboard() {
                   </div>
                 )}
 
+                {/* Company Reply - Show when company has replied */}
+                {selectedComplaint.company_reply && (
+                  <div>
+                    <label className="text-xs font-medium text-gray-500 uppercase mb-2 block">Your Reply to Customer</label>
+                    <div className="bg-blue-50 border-l-4 border-blue-400 rounded-lg p-4">
+                      <p className="text-sm text-blue-700 leading-relaxed whitespace-pre-wrap">{selectedComplaint.company_reply}</p>
+                    </div>
+                  </div>
+                )}
+
                 {/* Reply Section - Only show if status is 'reviewed' and not resolved */}
                 {selectedComplaint.status === 'reviewed' && !selectedComplaint.resolved && (
                   <div>
@@ -511,14 +522,15 @@ export default function CompanyDashboard() {
                           }
 
                           toast.success('Reply sent successfully to customer')
+                          const sentReply = replyMessage.trim()
                           setReplyMessage('')
                           // Update local state
                           setComplaints(prev =>
                             prev.map(c =>
-                              c.id === selectedComplaint.id ? { ...c, status: 'replied' } : c
+                              c.id === selectedComplaint.id ? { ...c, status: 'replied', company_reply: sentReply } : c
                             )
                           )
-                          setSelectedComplaint({ ...selectedComplaint, status: 'replied' })
+                          setSelectedComplaint({ ...selectedComplaint, status: 'replied', company_reply: sentReply })
                         } catch (error: any) {
                           console.error('Error sending reply:', error)
                           toast.error(error.message || 'Failed to send reply')

@@ -24,6 +24,7 @@ interface CustomerCareComplaint {
   status?: string
   admin_comment?: string | null
   company_comment?: string | null
+  company_reply?: string | null
   last_reminder_sent_at?: string | null
   last_escalation_sent_at?: string | null
   holding_escalation_sent_at?: string | null

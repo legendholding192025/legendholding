@@ -195,10 +195,10 @@ export async function POST(
           );
         }
 
-        // Update complaint status to 'replied'
+        // Update complaint status to 'replied' and save the reply message
         const { error: updateError } = await supabase
           .from('customer_care_complaints')
-          .update({ status: 'replied' })
+          .update({ status: 'replied', company_reply: replyMessage.trim() })
           .eq('id', id);
 
         if (updateError) {
