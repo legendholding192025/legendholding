@@ -10,7 +10,7 @@ type CSRInitiative = {
   id: string
   title: string
   description: string
-  image: string
+  images: string[]
   icon: React.ReactNode
 }
 
@@ -20,7 +20,10 @@ const csrInitiatives: CSRInitiative[] = [
     title: "Community Engagement",
     description:
       "Supporting communities through year-round initiatives, including special Ramadan programs providing food, essential supplies, and support to families in need.",
-    image: "https://cdn.legendholding.com/images/cloudinary/cloudinary_683ea1e520f8a0.56379725_20250603_071901.jpg",
+    images: [
+      "https://cdn.legendholding.com/images/cdn_69a17ad3e613d7.44158312_20260227_110659.webp",
+      "https://cdn.legendholding.com/images/cdn_69a17bc26b4fb9.07957666_20260227_111058.webp",
+    ],
     icon: <Users className="h-6 w-6" />,
   },
   {
@@ -28,7 +31,10 @@ const csrInitiatives: CSRInitiative[] = [
     title: "Humanitarian Support",
     description:
       "Providing immediate emergency response and long-term support during natural disasters, including earthquake relief efforts, ensuring essential aid reaches affected communities.",
-    image: "https://cdn.legendholding.com/images/cloudinary/cloudinary_683ea24ace9db9.23851636_20250603_072042.jpg",
+    images: [
+      "https://cdn.legendholding.com/images/cdn_69a17b27510e03.36545535_20260227_110823.webp",
+      "https://cdn.legendholding.com/images/cdn_69a17c1921fca0.48443619_20260227_111225.webp",
+    ],
     icon: <Heart className="h-6 w-6" />,
   }
 ]
@@ -46,11 +52,31 @@ export function CSRSection() {
   const [mounted, setMounted] = useState(false)
   const [activeInitiative, setActiveInitiative] = useState(csrInitiatives[0].id)
   const [imageError, setImageError] = useState<Record<string, boolean>>({})
+  const [imageIndex, setImageIndex] = useState<Record<string, number>>({})
   const backgroundId = useId()
 
   useEffect(() => {
     setMounted(true)
   }, [])
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setImageIndex((prev) => {
+        const initiative = csrInitiatives.find((i) => i.id === activeInitiative)
+        if (!initiative || initiative.images.length === 0) return prev
+
+        const currentIndex = prev[activeInitiative] ?? 0
+        const nextIndex = (currentIndex + 1) % initiative.images.length
+
+        return {
+          ...prev,
+          [activeInitiative]: nextIndex,
+        }
+      })
+    }, 2000)
+
+    return () => clearInterval(interval)
+  }, [activeInitiative])
 
   const handleImageError = (initiativeId: string) => {
     setImageError((prev) => ({ ...prev, [initiativeId]: true }))
@@ -100,20 +126,24 @@ export function CSRSection() {
               <div
                 key={initiative.id}
                 className={cn(
-                  "absolute inset-0 transition-opacity duration-500",
+                  "absolute inset-0 transition-opacity duration-700 ease-in-out",
                   activeInitiative === initiative.id ? "opacity-100 z-10" : "opacity-0 z-0",
                 )}
               >
                 <Image
-                  src={imageError[initiative.id] ? "/placeholder.jpg" : initiative.image}
+                  src={
+                    imageError[initiative.id]
+                      ? "/placeholder.jpg"
+                      : initiative.images[imageIndex[initiative.id] ?? 0]
+                  }
                   alt={initiative.title}
                   fill
-                  className="object-cover"
+                  className="object-cover transition-transform duration-700 ease-in-out"
                   sizes="(max-width: 768px) 100vw, 50vw"
                   onError={() => handleImageError(initiative.id)}
                   priority={activeInitiative === initiative.id}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/20 to-transparent" />
                 <div className="absolute bottom-0 left-0 p-6 text-white">
                   <h3 className="text-2xl md:text-3xl font-bold mb-3">{initiative.title}</h3>
                   <p className="text-white/90 text-base md:text-lg">
