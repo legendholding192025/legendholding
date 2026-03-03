@@ -8,17 +8,17 @@ import Image from "next/image"
  
 const dealerships = [
   {
-    name: "Skywell",
-    image: "https://cdn.legendholding.com/images/cloudinary/cloudinary_683da0668d4af4.97651620_20250602_130022.jpg",
-    logo: "https://cdn.legendholding.com/images/cdn_68624b1e8f5a30.76588960_20250630_083022.png",
+    name: "212",
+    image: "https://cdn.legendholding.com/images/cloudinary/cloudinary_683da1530dd2f0.90644648_20250602_130419.jpg",
+    logo: "https://cdn.legendholding.com/images/cdn_68624d052a08a8.28527944_20250630_083829.png",
     description:
-      "Legend Motors is the exclusive distributor of Skywell vehicles in Dubai, offering comprehensive retail and fleet solutions across the emirate.",
+      "Legend Motors is the exclusive distributor for 212 vehicles in the UAE, managing both sales and after-sales service with a commitment to excellence.",
     detailedContent: [
-      "Legend Motors is the exclusive distributor of Skywell vehicles in UAE, offering comprehensive retail and fleet solutions across the emirate.",
-      "With a strong focus on expansion, the company is actively growing its presence through the launch of multiple new showrooms in Abu Dhabi and other key locations across the country."
+      "Legend Motors is expanding its automotive partnerships, recently adding 212 Brand in the Dealerships, serving as the exclusive importer and managing both sales and after-sales services with a strong commitment to excellence.",
+      "With an upcoming first showroom, this model is projected to achieve rapid growth in its first year, targeting adventure-seekers looking for a vehicle built to go anywhere."
     ],
-    imagePosition: "70% center",
-    website: "https://skywell-uae.com/",
+    imagePosition: "35% center",
+    website: "https://212uae.com/",
   },
   {
     name: "Kaiyi",
@@ -48,18 +48,20 @@ const dealerships = [
     website: "https://www.liautouae.com/",
   },
   {
-    name: "212",
-    image: "https://cdn.legendholding.com/images/cloudinary/cloudinary_683da1530dd2f0.90644648_20250602_130419.jpg",
-    logo: "https://cdn.legendholding.com/images/cdn_68624d052a08a8.28527944_20250630_083829.png",
+    name: "Skywell",
+    image: "https://cdn.legendholding.com/images/cloudinary/cloudinary_683da0668d4af4.97651620_20250602_130022.jpg",
+    logo: "https://cdn.legendholding.com/images/cdn_68624b1e8f5a30.76588960_20250630_083022.png",
     description:
-      "Legend Motors is the exclusive distributor for 212 vehicles in the UAE, managing both sales and after-sales service with a commitment to excellence.",
+      "Legend Motors is the exclusive distributor of Skywell vehicles in Dubai, offering comprehensive retail and fleet solutions across the emirate.",
     detailedContent: [
-      "Legend Motors is expanding its automotive partnerships, recently adding 212 Brand in the Dealerships, serving as the exclusive importer and managing both sales and after-sales services with a strong commitment to excellence.",
-      "With an upcoming first showroom, this model is projected to achieve rapid growth in its first year, targeting adventure-seekers looking for a vehicle built to go anywhere."
+      "Legend Motors is the exclusive distributor of Skywell vehicles in UAE, offering comprehensive retail and fleet solutions across the emirate.",
+      "With a strong focus on expansion, the company is actively growing its presence through the launch of multiple new showrooms in Abu Dhabi and other key locations across the country."
     ],
-    imagePosition: "35% center",
-    website: "https://212uae.com/",
+    imagePosition: "70% center",
+    website: "https://skywell-uae.com/",
   },
+  
+  
 ]
  
 export default function LegendMotorsDealershipPage() {
