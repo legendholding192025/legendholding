@@ -105,7 +105,7 @@ export default function MotorcyclesPage() {
                   <div className="md:w-2/5 relative group overflow-hidden">
                     <div className="h-full w-full relative overflow-hidden">
                       <Image
-                        src="https://cdn.legendholding.com/images/cdn_685659c0744167.39065701_20250621_070536.png"
+                        src="https://cdn.legendholding.com/images/cdn_69a6b325e69383.54924055_20260303_100837.webp"
                         width={800}
                         height={600}
                         alt="Legend Motorcycles - Premium Motorcycle Collection"

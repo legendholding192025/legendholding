@@ -56,7 +56,7 @@ export default function BusinessUnit() {
     },
     {
       name: "Legend Motorcycles",
-      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1761117846/cdn_685659c0744167.39065701_20250621_070536_v6ffzw.png",
+      image: "https://cdn.legendholding.com/images/cdn_69a6b325e69383.54924055_20260303_100837.webp",
       url: "/our-businesses/legend-motorcycles",
       bgColor: "bg-[#EE8900]",
     },
@@ -65,6 +65,12 @@ export default function BusinessUnit() {
       image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1761117871/cdn_68973ac1071c91.28595514_20250809_121041_jf99xz.png",
       url: "/our-businesses/legend-world-rent-a-car",
       bgColor: "bg-[#2B1C48]",
+    },
+    {
+      name: "Legend AutoHub",
+      image: "https://cdn.legendholding.com/images/cdn_685d52e26e48d1.08951618_20250626_140210.png",
+      url: "/our-businesses/legend-autohub",
+      bgColor: "bg-[#EE8900]",
     },
     {
       name: "Legend Auto Services",
@@ -98,7 +104,7 @@ export default function BusinessUnit() {
     },
     {
       name: "Legend Commercial Vehicles",
-      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1761118045/cdn_685bf75e7a3112.05639876_20250625_131926_tvpjau.jpg",
+      image: "https://cdn.legendholding.com/images/cdn_699c3f5c313fa9.62760585_20260223_115156.webp",
       url: "/our-businesses/legend-commercial-vehicles",
       bgColor: "bg-[#EE8900]/80",
     },
