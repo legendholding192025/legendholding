@@ -4,6 +4,7 @@ import { Footer } from '@/components/footer';
 import Image from 'next/image';
 import { PageBanner } from '@/components/page-banner';
 import { Metadata } from 'next';
+import { createClient } from '@supabase/supabase-js';
 
 export const metadata: Metadata = {
   title: 'Leadership Team | Legend Holding Group | Board of Directors & Management',
@@ -36,141 +37,85 @@ export const metadata: Metadata = {
 
 import { TeamDisplay } from '@/components/team-display';
 
-export default function LeadershipTeam() {
+type TeamMember = { name: string; role: string; company: string; image: string };
+
+const fallbackBoardData: TeamMember[] = [
+  { name: "Kai Zheng", role: "Founder & Chairman", company: "Legend Holding Group", image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1761054607/image_5_xtngrn.jpg" },
+  { name: "Mira Wu", role: "Co-Founder & Vice Chairman", company: "Legend Holding Group", image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1767593928/10_copy_2122_mssssq.png" },
+  { name: "Jonathan Stretton", role: "Chief Operating Officer", company: "Legend Holding Group", image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1767682094/Jonathan_r7nqeh.png" },
+  { name: "Cannon Wang", role: "VP Dealership & Strategy of LHG", company: "Legend Holding Group", image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1761054569/8_copy_wxobcr.jpg" },
+  { name: "Rejeesh Raveendran", role: "Group Finance Director", company: "Legend Holding Group", image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1764740125/5_copy_lgomsk.png" },
+  { name: "Nagaraj Ponnada", role: "General Manager", company: "Legend Holding Group", image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1761054540/image_8_swwqoy.jpg" },
+  { name: "Sonam Lama", role: "Group HR Director", company: "Legend Holding Group", image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1764143856/sonam_2_hpe4ou.png" },
+  { name: "Waseem Khalayleh", role: "Head of Brand", company: "Legend Holding Group", image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1763818241/WhatsApp_Image_2025-06-20_at_12.082222_asqhsk.png" },
+  { name: "Jade Li", role: "Managing Director", company: "Zul Energy", image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1763817365/WhatsApp_Image_2025-06-20_at_12.08_1_ch0zex.png" },
+  { name: "George Hua", role: "Head of Commercial Vehicles", company: "Legend Commercial Vehicles", image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1761054559/3_copy_mxnwc7.jpg" },
+  { name: "Tamer Khalil", role: "Head of After Sales", company: "Legend Auto Services", image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1761054567/4_copy_upgmzf.jpg" },
+  { name: "Sun Bo", role: "Business Development Manager", company: "Legend Holding Group", image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1766139126/02_3_whojcm.png" },
+  { name: "Pawan Rathi", role: "General Manager", company: "Legend Rent a Car", image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1763818661/656_ynivxt.png" },
+  { name: "Mohamed Baz", role: "Head of Motorcycles", company: "Legend Motorcycles", image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1765196419/Mohammed_Baz_z7qv1o.png" },
+  { name: "Shameel Wohadally", role: "Head of Internal Audit", company: "Legend Holding Group", image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1767940725/Shameel_1_ylaowu.png" },
+  { name: "Adrees Khan", role: "Corporate Tax Manager", company: "Legend Holding Group", image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1767787617/Adrees_nz1qnp.png" },
+];
+
+const fallbackTeamData: TeamMember[] = [
+  { name: "Xiaolong Ma", role: "Branch Manager", company: "Legend Holding Group - KSA", image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1765351058/5_copy55_ccgw0y.png" },
+  { name: "Turki Altalhi", role: "HR & Admin Manager", company: "Legend Holding Group - KSA", image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1766219042/turki_KSA_aupdzs.png" },
+];
+
+const fallbackChinaData: TeamMember[] = [
+  { name: "Junfu Gao", role: "General Manager of China Branch", company: "Legend Holding Group", image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1764161813/4_copy_ukrn7s.png" },
+  { name: "Xiaoya Zhao", role: "Deputy General Manager of China Branch", company: "Legend Holding Group", image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1764144502/4_copy2_exbafg.png" },
+];
+
+async function fetchTeamData(): Promise<{ board: TeamMember[]; ksa: TeamMember[]; china: TeamMember[] }> {
+  try {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    if (!supabaseUrl || !supabaseKey) throw new Error("Supabase not configured");
+
+    const supabase = createClient(supabaseUrl, supabaseKey, {
+      auth: { persistSession: false },
+    });
+
+    const { data, error } = await supabase
+      .from("team_members")
+      .select("name, role, company, image, category, sort_order")
+      .eq("is_visible", true)
+      .order("sort_order", { ascending: true });
+
+    if (error || !data || data.length === 0) throw new Error(error?.message || "No data");
+
+    const pick = (m: typeof data[number]): TeamMember => ({
+      name: m.name,
+      role: m.role,
+      company: m.company,
+      image: m.image,
+    });
+
+    return {
+      board: data.filter((m) => m.category === "board").map(pick),
+      ksa: data.filter((m) => m.category === "ksa").map(pick),
+      china: data.filter((m) => m.category === "china").map(pick),
+    };
+  } catch {
+    return {
+      board: fallbackBoardData,
+      ksa: fallbackTeamData,
+      china: fallbackChinaData,
+    };
+  }
+}
+
+export default async function LeadershipTeam() {
+  const { board: boardData, ksa: teamData, china: chinaData } = await fetchTeamData();
+
   const toSlug = (value: string) =>
     value
       .toLowerCase()
       .replace(/[^a-z0-9\s-]/g, '')
       .trim()
       .replace(/\s+/g, '-');
-  const boardData = [
-    {
-      name: "Kai Zheng",
-      role: "Founder & Chairman",
-      company: "Legend Holding Group",
-      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1761054607/image_5_xtngrn.jpg"
-    },
-    {
-      name: "Mira Wu",
-      role: "Co-Founder & Vice Chairman",
-      company: "Legend Holding Group",
-      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1767593928/10_copy_2122_mssssq.png"
-    },
-    {
-      name: "Jonathan Stretton",
-      role: "Chief Operating Officer",
-      company: "Legend Holding Group",
-      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1767682094/Jonathan_r7nqeh.png"
-    },
-    {
-      name: "Cannon Wang",
-      role: "VP Dealership & Strategy of LHG",
-      company: "Legend Holding Group",
-      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1761054569/8_copy_wxobcr.jpg"
-    },
-    {
-      name: "Rejeesh Raveendran",
-      role: "Group Finance Director",
-      company: "Legend Holding Group",
-      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1764740125/5_copy_lgomsk.png"
-    },
-    {
-      name: "Nagaraj Ponnada",
-      role: "General Manager",
-      company: "Legend Holding Group",
-      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1761054540/image_8_swwqoy.jpg"
-    },
-    {
-      name: "Sonam Lama",
-      role: "Group HR Director",
-      company: "Legend Holding Group",
-      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1764143856/sonam_2_hpe4ou.png"
-    },
-    {
-      name: "Waseem Khalayleh",
-      role: "Head of Brand",
-      company: "Legend Holding Group",
-      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1763818241/WhatsApp_Image_2025-06-20_at_12.082222_asqhsk.png"
-    },
-    {
-      name: "Jade Li",
-      role: "Managing Director",
-      company: "Zul Energy",
-      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1763817365/WhatsApp_Image_2025-06-20_at_12.08_1_ch0zex.png"
-    },
-    {
-      name: "George Hua",
-      role: "Head of Commercial Vehicles",
-      company: "Legend Commercial Vehicles",
-      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1761054559/3_copy_mxnwc7.jpg"
-    },
-    {
-      name: "Tamer Khalil",
-      role: "Head of After Sales",
-      company: "Legend Auto Services",
-      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1761054567/4_copy_upgmzf.jpg"
-    }, 
-    {
-      name: "Sun Bo",
-      role: "Business Development Manager",
-      company: "Legend Holding Group",
-      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1766139126/02_3_whojcm.png"
-    },
-    {
-      name: "Pawan Rathi",
-      role: "General Manager",
-      company: "Legend Rent a Car",
-      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1763818661/656_ynivxt.png"
-    },
-    {
-      name: "Mohamed Baz",
-      role: "Head of Motorcycles",
-      company: "Legend Motorcycles",
-      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1765196419/Mohammed_Baz_z7qv1o.png"
-    },
-    {
-      name: "Shameel Wohadally",
-      role: "Head of Internal Audit",
-      company: "Legend Holding Group",
-      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1767940725/Shameel_1_ylaowu.png"
-    },
-    {
-      name: "Adrees Khan",
-      role: "Corporate Tax Manager",
-      company: "Legend Holding Group",
-      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1767787617/Adrees_nz1qnp.png"
-    }
-  ];
-
-  const teamData = [
-    {
-      name: "Xiaolong Ma",
-      role: "Branch Manager",
-      company: "Legend Holding Group - KSA",
-      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1765351058/5_copy55_ccgw0y.png"
-    },
-    {
-      name: "Turki Altalhi",
-      role: "HR & Admin Manager",
-      company: "Legend Holding Group - KSA",
-      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1766219042/turki_KSA_aupdzs.png"
-    }
-  ];
-
-  const chinaData = [
-    {
-      name: "Junfu Gao",
-      role: "General Manager of China Branch",
-      company: "Legend Holding Group",
-      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1764161813/4_copy_ukrn7s.png"
-    },
-    {
-      name: "Xiaoya Zhao",
-      role: "Deputy General Manager of China Branch",
-      company: "Legend Holding Group",
-      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1764144502/4_copy2_exbafg.png"
-    }
-  ];
 
   // Structured data for SEO (Organization + WebPage + ItemList + Person with images and anchors)
   const pageUrl = 'https://legendholding.com/who-we-are/the-team';

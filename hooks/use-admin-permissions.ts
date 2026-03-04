@@ -16,6 +16,7 @@ export interface UserRole {
     settings?: boolean
     customer_care?: boolean
     management_profiles?: boolean
+    team_members?: boolean
   }
   created_at?: string
   updated_at?: string
@@ -38,7 +39,8 @@ function applyBusinessCardsOnlyOverride(roleData: UserRole, email: string | unde
       newsletters: false,
       settings: false,
       customer_care: false,
-      management_profiles: true
+      management_profiles: true,
+      team_members: false
     }
   }
 }
@@ -103,29 +105,32 @@ export function useAdminPermissions(): AdminPermissions {
           applications: false,
           newsletters: false,
           settings: false,
-          customer_care: false,
-          management_profiles: true
-        } : isSuperAdmin ? {
-          dashboard: true,
-          submissions: true,
-          news: true,
-          jobs: true,
-          applications: true,
-          newsletters: true,
-          settings: true,
-          customer_care: true,
-          management_profiles: true
-        } : {
-          dashboard: true,
-          submissions: false,
-          news: false,
-          jobs: true,
-          applications: true,
-          newsletters: false,
-          settings: false,
-          customer_care: false,
-          management_profiles: false
-        },
+      customer_care: false,
+      management_profiles: true,
+      team_members: false
+    } : isSuperAdmin ? {
+      dashboard: true,
+      submissions: true,
+      news: true,
+      jobs: true,
+      applications: true,
+      newsletters: true,
+      settings: true,
+      customer_care: true,
+      management_profiles: true,
+      team_members: true
+    } : {
+      dashboard: true,
+      submissions: false,
+      news: false,
+      jobs: true,
+      applications: true,
+      newsletters: false,
+      settings: false,
+      customer_care: false,
+      management_profiles: false,
+      team_members: false
+    },
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString()
       }
@@ -206,7 +211,8 @@ export function useAdminPermissions(): AdminPermissions {
               newsletters: false,
               settings: false,
               customer_care: false,
-              management_profiles: true
+              management_profiles: true,
+              team_members: false
             } : isSuperAdmin ? {
               dashboard: true,
               submissions: true,
@@ -216,7 +222,8 @@ export function useAdminPermissions(): AdminPermissions {
               newsletters: true,
               settings: true,
               customer_care: true,
-              management_profiles: true
+              management_profiles: true,
+              team_members: true
             } : {
               dashboard: true,
               submissions: false,
@@ -226,7 +233,8 @@ export function useAdminPermissions(): AdminPermissions {
               newsletters: false,
               settings: false,
               customer_care: false,
-              management_profiles: false
+              management_profiles: false,
+              team_members: false
             },
             created_at: new Date().toISOString(),
             updated_at: new Date().toISOString()
@@ -269,7 +277,8 @@ export function useAdminPermissions(): AdminPermissions {
       '/admin/newsletters': 'newsletters',
       '/admin/settings': 'settings',
       '/admin/customer-care': 'customer_care',
-      '/admin/management-profiles': 'management_profiles'
+      '/admin/management-profiles': 'management_profiles',
+      '/admin/team-members': 'team_members'
     }
 
     const permission = pathPermissions[path]

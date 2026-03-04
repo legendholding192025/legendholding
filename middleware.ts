@@ -58,6 +58,7 @@ export const config = {
     '/admin/settings',
     '/admin/customer-care',
     '/admin/management-profiles',
+    '/admin/team-members',
     '/company/dashboard'
   ],
 } 

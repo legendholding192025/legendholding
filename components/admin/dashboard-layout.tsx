@@ -18,7 +18,8 @@ import {
   ClipboardList,
   Shield,
   Headphones,
-  Contact
+  Contact,
+  Users
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -99,6 +100,13 @@ const menuItems = [
     href: "/admin/management-profiles",
     permission: "management_profiles" as const,
     superAdminOnly: false
+  },
+  {
+    title: "Team Members",
+    icon: Users,
+    href: "/admin/team-members",
+    permission: "team_members" as const,
+    superAdminOnly: true
   }
 ]
 
