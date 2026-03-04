@@ -52,6 +52,9 @@ export async function PATCH(
   }
   if (body.sort_order !== undefined) updates.sort_order = Number(body.sort_order);
   if (body.is_visible !== undefined) updates.is_visible = Boolean(body.is_visible);
+  if (body.is_spotlight !== undefined) updates.is_spotlight = Boolean(body.is_spotlight);
+  if (body.seo_description !== undefined) updates.seo_description = String(body.seo_description).trim();
+  if (body.linkedin !== undefined) updates.linkedin = String(body.linkedin).trim();
 
   const { data, error: updateError } = await supabase!
     .from("team_members")

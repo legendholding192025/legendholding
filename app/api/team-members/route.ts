@@ -15,7 +15,7 @@ export async function GET() {
 
   const { data, error } = await supabase
     .from("team_members")
-    .select("name, role, company, image, category, sort_order")
+    .select("name, role, company, image, category, sort_order, is_spotlight, seo_description, linkedin")
     .eq("is_visible", true)
     .order("sort_order", { ascending: true });
 

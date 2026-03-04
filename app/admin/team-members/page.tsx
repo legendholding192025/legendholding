@@ -42,7 +42,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
-import { Edit2, Trash2, Plus, Eye, EyeOff, ArrowUp, ArrowDown } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Edit2, Trash2, Plus, Eye, EyeOff, ArrowUp, ArrowDown, Star } from "lucide-react";
 
 interface TeamMember {
   id: string;
@@ -53,6 +55,9 @@ interface TeamMember {
   category: "board" | "ksa" | "china";
   sort_order: number;
   is_visible: boolean;
+  is_spotlight: boolean;
+  seo_description: string;
+  linkedin: string;
 }
 
 const emptyForm = {
@@ -61,6 +66,9 @@ const emptyForm = {
   company: "Legend Holding Group",
   image: "",
   category: "board" as "board" | "ksa" | "china",
+  seo_description: "",
+  is_spotlight: false,
+  linkedin: "",
 };
 
 const categoryLabels: Record<string, string> = {
@@ -242,6 +250,9 @@ export default function TeamMembersPage() {
       company: m.company,
       image: m.image,
       category: m.category,
+      seo_description: m.seo_description ?? "",
+      is_spotlight: m.is_spotlight ?? false,
+      linkedin: m.linkedin ?? "",
     });
   };
 
@@ -320,7 +331,14 @@ export default function TeamMembersPage() {
                           className="h-12 w-12 object-cover rounded"
                         />
                       </TableCell>
-                      <TableCell className="font-medium">{m.name}</TableCell>
+                      <TableCell className="font-medium">
+                        <span className="flex items-center gap-1.5">
+                          {m.name}
+                          {m.is_spotlight && (
+                            <Star className="h-3.5 w-3.5 text-amber-500 fill-amber-500" />
+                          )}
+                        </span>
+                      </TableCell>
                       <TableCell>{m.role}</TableCell>
                       <TableCell>{m.company}</TableCell>
                       <TableCell>
@@ -516,6 +534,50 @@ function MemberForm({
             <SelectItem value="china">China Team</SelectItem>
           </SelectContent>
         </Select>
+      </div>
+
+      <div className="border-t pt-4 mt-2">
+        <h4 className="text-sm font-semibold text-muted-foreground mb-3">SEO Settings</h4>
+
+        <div className="space-y-4">
+          <div>
+            <Label>LinkedIn URL</Label>
+            <Input
+              value={form.linkedin}
+              onChange={(e) => setForm((f) => ({ ...f, linkedin: e.target.value }))}
+              placeholder="https://www.linkedin.com/in/..."
+            />
+          </div>
+
+          <div>
+            <Label>SEO Description</Label>
+            <Textarea
+              value={form.seo_description}
+              onChange={(e) => setForm((f) => ({ ...f, seo_description: e.target.value }))}
+              placeholder="A short biography for search engines (Google). E.g. 'Kai Zheng, Founder and Chairman of Legend Holding Group, is an expert entrepreneur...'"
+              rows={3}
+            />
+            <p className="text-xs text-muted-foreground mt-1">
+              Appears in hidden SEO text and structured data. Leave blank to use a default description.
+            </p>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <Checkbox
+              id="is_spotlight"
+              checked={form.is_spotlight}
+              onCheckedChange={(checked) =>
+                setForm((f) => ({ ...f, is_spotlight: checked === true }))
+              }
+            />
+            <Label htmlFor="is_spotlight" className="cursor-pointer">
+              Spotlight on Google (featured Person schema)
+            </Label>
+            <p className="text-xs text-muted-foreground ml-1">
+              Adds a dedicated JSON-LD Person entry for stronger Google visibility.
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );

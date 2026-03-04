@@ -37,11 +37,19 @@ export const metadata: Metadata = {
 
 import { TeamDisplay } from '@/components/team-display';
 
-type TeamMember = { name: string; role: string; company: string; image: string };
+type TeamMember = {
+  name: string;
+  role: string;
+  company: string;
+  image: string;
+  is_spotlight?: boolean;
+  seo_description?: string;
+  linkedin?: string;
+};
 
 const fallbackBoardData: TeamMember[] = [
-  { name: "Kai Zheng", role: "Founder & Chairman", company: "Legend Holding Group", image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1761054607/image_5_xtngrn.jpg" },
-  { name: "Mira Wu", role: "Co-Founder & Vice Chairman", company: "Legend Holding Group", image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1767593928/10_copy_2122_mssssq.png" },
+  { name: "Kai Zheng", role: "Founder & Chairman", company: "Legend Holding Group", image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1761054607/image_5_xtngrn.jpg", is_spotlight: true, seo_description: "Kai Zheng, Co-founder and Chairman of Legend Holding Group, is an expert entrepreneur with extensive experience in developing companies and a clear vision for the future of technologies.", linkedin: "https://www.linkedin.com/in/kai-zheng-96087698/" },
+  { name: "Mira Wu", role: "Co-Founder & Vice Chairman", company: "Legend Holding Group", image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1767593928/10_copy_2122_mssssq.png", is_spotlight: true, seo_description: "Mira Wu, Co-Founder and Vice Chairman of Legend Holding Group, is the executive leader of multiple businesses within the group, bringing over 20 years of experience across the region.", linkedin: "https://www.linkedin.com/in/mira-wu-7497001b2/" },
   { name: "Jonathan Stretton", role: "Chief Operating Officer", company: "Legend Holding Group", image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1767682094/Jonathan_r7nqeh.png" },
   { name: "Cannon Wang", role: "VP Dealership & Strategy of LHG", company: "Legend Holding Group", image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1761054569/8_copy_wxobcr.jpg" },
   { name: "Rejeesh Raveendran", role: "Group Finance Director", company: "Legend Holding Group", image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1764740125/5_copy_lgomsk.png" },
@@ -80,7 +88,7 @@ async function fetchTeamData(): Promise<{ board: TeamMember[]; ksa: TeamMember[]
 
     const { data, error } = await supabase
       .from("team_members")
-      .select("name, role, company, image, category, sort_order")
+      .select("name, role, company, image, category, sort_order, is_spotlight, seo_description, linkedin")
       .eq("is_visible", true)
       .order("sort_order", { ascending: true });
 
@@ -91,6 +99,9 @@ async function fetchTeamData(): Promise<{ board: TeamMember[]; ksa: TeamMember[]
       role: m.role,
       company: m.company,
       image: m.image,
+      is_spotlight: m.is_spotlight ?? false,
+      seo_description: m.seo_description ?? "",
+      linkedin: m.linkedin ?? "",
     });
 
     return {
@@ -197,45 +208,28 @@ export default async function LeadershipTeam() {
     ]
   };
 
-  // Spotlight key leaders so search engines pick them up reliably
-  const keyLeadersData = [
-    {
+  const allMembers = [...boardData, ...teamData, ...chinaData];
+  const spotlightMembers = allMembers.filter((m) => m.is_spotlight);
+
+  const keyLeadersData = spotlightMembers.map((m) => {
+    const sameAs = ["https://legendholding.com"];
+    if (m.linkedin) sameAs.push(m.linkedin);
+    return {
       "@context": "https://schema.org",
       "@type": "Person",
-      name: "Kai Zheng",
-      jobTitle: "Founder & Chairman",
+      name: m.name,
+      jobTitle: m.role,
+      ...(m.seo_description ? { description: m.seo_description } : {}),
       worksFor: {
         "@type": "Organization",
-        name: "Legend Holding Group",
+        name: m.company,
         url: "https://legendholding.com"
       },
-      url: `${pageUrl}#${toSlug('Kai Zheng-Founder & Chairman')}`,
-      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1761054607/image_5_xtngrn.jpg",
-      sameAs: [
-        "https://legendholding.com",
-        "https://www.linkedin.com",
-        "https://www.crunchbase.com"
-      ]
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Person",
-      name: "Mira Wu",
-      jobTitle: "Co-Founder & Vice Chairman",
-      worksFor: {
-        "@type": "Organization",
-        name: "Legend Holding Group",
-        url: "https://legendholding.com"
-      },
-      url: `${pageUrl}#${toSlug('Mira Wu-Co-Founder & Vice Chairman')}`,
-      image: "https://res.cloudinary.com/dzfhqvxnf/image/upload/v1761054550/10_copy_xhh1bh.jpg",
-      sameAs: [
-        "https://legendholding.com",
-        "https://www.linkedin.com",
-        "https://www.crunchbase.com"
-      ]
-    }
-  ];
+      url: `${pageUrl}#${toSlug(`${m.name}-${m.role}`)}`,
+      image: m.image,
+      sameAs,
+    };
+  });
 
   return (
     <>
@@ -253,89 +247,73 @@ export default async function LeadershipTeam() {
         />
         <TeamDisplay teamData={teamData} boardData={boardData} chinaData={chinaData} />
         
-        {/* Hidden SEO content for better searchability */}
+        {/* Hidden SEO content — fully dynamic from database */}
         <div className="sr-only">
           <h1>Legend Holding Group Leadership Team</h1>
           <p>
-            Meet the executive leadership team of Legend Holding Group, a diversified UAE holding company. 
-            Our board of directors includes Kai Zheng (Founder & Chairman), Mira Wu (Co-Founder & Vice Chairman), 
-            Cannon Wang (VP Dealership & Strategy), Nagaraj Ponnada (General Manager), Rejeesh Raveendran (Group Finance Director), 
-            and Sonam Lama (Group HR Director).             Our management team features Jade Li (Managing Director of Zul Energy), 
-            George Hua (Head of Commercial Vehicles), Tamer Khalil (Head of After Sales), Mohamed Baz (Head of Motorcycles), 
-            Shameel Wohadally (Head of Internal Audit), Waseem Khalayleh (Brand Manager), Xiaolong Ma (Branch Manager - KSA), 
-            Turki Altalhi (HR & Admin Manager - KSA), Sun Bo (Business Development Manager), and Pawan Rathi (General Manager at Legend Rent a Car).
-            These experienced leaders drive innovation across automotive, energy, technology, and mobility sectors in the Middle East and Africa.
+            Meet the executive leadership team of Legend Holding Group, a diversified UAE holding company.
+            {' '}Our leadership includes{' '}
+            {allMembers.map((m, i) => (
+              <React.Fragment key={i}>
+                {i > 0 && (i === allMembers.length - 1 ? ', and ' : ', ')}
+                {m.name} ({m.role})
+              </React.Fragment>
+            ))}.
+            {' '}These experienced leaders drive innovation across automotive, energy, technology, and mobility sectors in the Middle East and Africa.
           </p>
-          
+
           <h2>Board of Directors and Executive Leadership</h2>
           <p>
-            The board of directors at Legend Holding Group is led by Kai Zheng, Founder & Chairman, who is an expert entrepreneur with extensive experience in developing companies and a clear vision for the future of technologies. Mira Wu serves as Co-Founder & Vice Chairman, and is the executive leader of multiple businesses within the group, bringing over 20 years of experience across the region. Cannon Wang leads as VP of Dealership & Strategy of Legend Holding Group, while Rejeesh Raveendran, Group Finance Director, has over 20 years of cross-industry experience and oversees the group's financial management. Nagaraj Ponnada serves as General Manager of Legend Holding Group, bringing over 20 years of automotive experience across the region. Sonam Lama leads human resources as Group HR Director.
+            {boardData.map((m, i) => (
+              <React.Fragment key={i}>
+                {m.seo_description
+                  ? `${m.seo_description} `
+                  : `${m.name} serves as ${m.role} at ${m.company}. `}
+              </React.Fragment>
+            ))}
           </p>
-          
-          <h2>Senior Management Team</h2>
-          <p>
-            Our senior management team includes Jade Li, Managing Director of Zul Energy division, George Hua who heads Commercial Vehicles operations at Legend Commercial Vehicles, 
-            Tamer Khalil leading After Sales services at Legend World Automobile Service, Mohamed Baz heading Motorcycles operations at Legend Motorcycles, 
-            Shameel Wohadally leading Internal Audit at Legend Holding Group, Waseem Khalayleh serving as Brand Manager of Legend Holding Group with over 15 years of experience across Automotive, Technology, and Media industries, Xiaolong Ma serving as Branch Manager for Legend Motors KSA operations, 
-            Turki Altalhi managing HR and Administration for Legend Holding Group in Saudi Arabia, Sun Bo leading Business Development initiatives at Legend Holding Group, and Pawan Rathi as General Manager of Legend Rent a Car.
-          </p>
-          
+
+          {teamData.length > 0 && (
+            <>
+              <h2>KSA Leadership Team</h2>
+              <p>
+                {teamData.map((m, i) => (
+                  <React.Fragment key={i}>
+                    {m.seo_description
+                      ? `${m.seo_description} `
+                      : `${m.name} serves as ${m.role} at ${m.company}. `}
+                  </React.Fragment>
+                ))}
+              </p>
+            </>
+          )}
+
+          {chinaData.length > 0 && (
+            <>
+              <h2>China Branch Leadership</h2>
+              <p>
+                {chinaData.map((m, i) => (
+                  <React.Fragment key={i}>
+                    {m.seo_description
+                      ? `${m.seo_description} `
+                      : `${m.name} serves as ${m.role} at ${m.company}. `}
+                  </React.Fragment>
+                ))}
+              </p>
+            </>
+          )}
+
           <h2>Complete Team Directory</h2>
-          <h3>Board of Directors</h3>
           <ul>
-            {boardData.map((member, index) => {
-              let description = `${member.name} is a key leader in the ${member.company} organization.`;
-              
-              // Add specific SEO descriptions for key members
-              if (member.name === "Kai Zheng") {
-                description = "Kai Zheng, Co-founder and Chairman of Legend Holding Group, is an expert entrepreneur with extensive experience in developing companies and a clear vision for the future of technologies.";
-              } else if (member.name === "Mira Wu") {
-                description = "Mira Wu, Co-Founder and CEO of Legend Holding Group, is the executive leader of multiple businesses within the group, bringing over 20 years of experience across the region.";
-              } else if (member.name === "Rejeesh Raveendran") {
-                description = "Rejeesh Raveendran, Head of Finance at Legend Holding Group, has over 20 years of cross-industry experience and oversees the group's financial management.";
-              } else if (member.name === "Nagaraj Ponnada") {
-                description = "Nagaraj Ponnada, Head of Legend Motors Trading, has over 20 years of automotive experience across the region, managing sales, business development, and other key departments.";
-              }
-              
-              return (
-                <li key={index}>
-                  <strong>{member.name}</strong> - {member.role} at {member.company}. {description}
-                </li>
-              );
-            })}
+            {allMembers.map((member, index) => (
+              <li key={index}>
+                <strong>{member.name}</strong> - {member.role} at {member.company}.
+                {member.seo_description
+                  ? ` ${member.seo_description}`
+                  : ` ${member.name} is a key leader in the ${member.company} organization.`}
+              </li>
+            ))}
           </ul>
-          
-          <h3>Leadership Team</h3>
-          <ul>
-            {teamData.map((member, index) => {
-              let description = `${member.name} plays a crucial role in ${member.company} operations and strategy.`;
-              
-              // Add specific SEO descriptions for key members
-              if (member.name === "Waseem Khalayleh") {
-                description = "Waseem Khalayleh, Brand Manager of Legend Holding Group, with over 15 years of experience across industries from Automotive, Technology, Media and Group companies.";
-              } else if (member.name === "Jade Li") {
-                description = "Jade Li serves as Managing Director of Zul Energy, leading the company's sustainable energy initiatives and strategic growth.";
-              } else if (member.name === "George Hua") {
-                description = "George Hua leads Legend Commercial Vehicles operations, bringing extensive expertise in commercial vehicle solutions and fleet management.";
-              } else if (member.name === "Pawan Rathi") {
-                description = "Pawan Rathi serves as General Manager of Legend Rent a Car, overseeing the premium car rental services and operations across the UAE.";
-              }
-              
-              return (
-                <li key={index}>
-                  <strong>{member.name}</strong> - {member.role} at {member.company}. {description}
-                </li>
-              );
-            })}
-          </ul>
-          
-          <h2>Company Divisions and Leadership</h2>
-          <p>
-            Legend Holding Group operates multiple divisions including Zul Energy led by Jade Li, Legend Commercial Vehicles managed by George Hua, 
-            Legend World Automobile Service under Tamer Khalil, Legend Motorcycles headed by Mohamed Baz, Legend Holding Group in KSA with Xiaolong Ma as Branch Manager and Turki Altalhi as HR & Admin Manager, 
-            Legend Rent a Car managed by Pawan Rathi, and various other subsidiaries. Each division is led by experienced professionals who bring expertise in automotive, energy, 
-            technology, and business development sectors. Our leadership team drives innovation and excellence across all business units.
-          </p>
         </div>
       </main>
       <Footer />

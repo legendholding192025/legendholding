@@ -48,7 +48,16 @@ export async function POST(request: Request) {
   if (error) return error;
 
   const body = await request.json().catch(() => ({}));
-  const { name, role, company = "Legend Holding Group", image, category = "board" } = body;
+  const {
+    name,
+    role,
+    company = "Legend Holding Group",
+    image,
+    category = "board",
+    seo_description = "",
+    is_spotlight = false,
+    linkedin = "",
+  } = body;
 
   if (!name || !role || !image) {
     return NextResponse.json(
@@ -81,6 +90,9 @@ export async function POST(request: Request) {
       category: String(category).trim(),
       sort_order,
       is_visible: true,
+      is_spotlight: Boolean(is_spotlight),
+      seo_description: String(seo_description).trim(),
+      linkedin: String(linkedin).trim(),
     })
     .select()
     .single();
