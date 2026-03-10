@@ -92,7 +92,7 @@ export function useAdminPermissions(): AdminPermissions {
       }
 
       // Create fallback role based on email
-      const isSuperAdmin = user.email === 'waseem.k@legendholding.com' || user.email === 'sonam.lama@legendholding.com'
+      const isSuperAdmin = user.email === 'mufeed.rahman@legendholding.com' || user.email === 'sonam.lama@legendholding.com'
       const isBusinessCardsOnly = user.email === BUSINESS_CARDS_ONLY_ADMIN_EMAIL
       const fallbackRole: UserRole = {
         id: 'fallback',
@@ -197,7 +197,7 @@ export function useAdminPermissions(): AdminPermissions {
       try {
         const { data: { user } } = await supabase.auth.getUser()
         if (user) {
-          const isSuperAdmin = user.email === 'waseem.k@legendholding.com' || user.email === 'sonam.lama@legendholding.com'
+          const isSuperAdmin = user.email === 'mufeed.rahman@legendholding.com' || user.email === 'sonam.lama@legendholding.com'
           const isBusinessCardsOnly = user.email === BUSINESS_CARDS_ONLY_ADMIN_EMAIL
           const fallbackRole: UserRole = {
             id: 'fallback',

@@ -12,7 +12,7 @@ BEGIN
             user_role TEXT := 'admin'; -- Default role
         BEGIN
             -- Check if this is a super admin
-            IF NEW.email = 'waseem.k@legendholding.com' THEN
+            IF NEW.email = 'mufeed.rahman@legendholding.com' THEN
                 user_role := 'super_admin';
             -- Add other super admin emails here if needed
             -- ELSIF NEW.email = 'another.superadmin@legendholding.com' THEN
@@ -71,7 +71,7 @@ BEGIN
         DECLARE
             user_role TEXT := 'admin';
         BEGIN
-            IF user_record.email = 'waseem.k@legendholding.com' THEN
+            IF user_record.email = 'mufeed.rahman@legendholding.com' THEN
                 user_role := 'super_admin';
             END IF;
 
