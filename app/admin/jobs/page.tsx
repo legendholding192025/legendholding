@@ -568,6 +568,7 @@ export default function JobsManagement() {
               onAssign={isSuperAdmin ? handleAssignJob : undefined}
               isSuperAdmin={isSuperAdmin}
               adminUsers={adminUsers}
+              currentUserId={userRole?.user_id}
             />
           </TabsContent>
           <TabsContent value="inactive">
@@ -579,6 +580,7 @@ export default function JobsManagement() {
               onAssign={isSuperAdmin ? handleAssignJob : undefined}
               isSuperAdmin={isSuperAdmin}
               adminUsers={adminUsers}
+              currentUserId={userRole?.user_id}
             />
           </TabsContent>
         </Tabs>

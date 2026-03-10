@@ -56,9 +56,10 @@ interface JobsTableProps {
   onAssign?: (jobId: string, adminId: string | null) => Promise<void>
   isSuperAdmin?: boolean
   adminUsers?: AdminUser[]
+  currentUserId?: string
 }
 
-export function JobsTable({ jobs = [], loading, onDelete, onUpdate, onAssign, isSuperAdmin = false, adminUsers = [] }: JobsTableProps) {
+export function JobsTable({ jobs = [], loading, onDelete, onUpdate, onAssign, isSuperAdmin = false, adminUsers = [], currentUserId }: JobsTableProps) {
   const [currentPage, setCurrentPage] = useState(1)
   const [editingJob, setEditingJob] = useState<Job | null>(null)
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null)
@@ -520,8 +521,17 @@ export function JobsTable({ jobs = [], loading, onDelete, onUpdate, onAssign, is
                 {assigningJob.assigned_to && (
                   <option value="unassign">-- Unassign (remove assignment) --</option>
                 )}
+                {currentUserId && currentUserId !== assigningJob.created_by && adminUsers.some(a => a.user_id === currentUserId) && (
+                  <option value={currentUserId}>
+                    Assign to Myself ({adminUsers.find(a => a.user_id === currentUserId)?.email})
+                  </option>
+                )}
                 {adminUsers
-                  .filter(admin => admin.role === 'admin' && admin.email.toLowerCase() !== 'admin@legendx.com')
+                  .filter(admin =>
+                    admin.email.toLowerCase() !== 'admin@legendx.com' &&
+                    admin.user_id !== currentUserId &&
+                    admin.user_id !== assigningJob.created_by
+                  )
                   .map((admin) => (
                     <option key={admin.user_id} value={admin.user_id}>
                       {admin.email}
