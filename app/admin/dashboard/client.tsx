@@ -30,12 +30,11 @@ export function DashboardClient() {
   const [newsArticlesCount, setNewsArticlesCount] = useState<number>(0)
 
   useEffect(() => {
+    if (permissionsLoading) return
     fetchJobApplicationsCount()
-    if (isSuperAdmin) {
-      fetchSubmissions()
-      fetchNewsArticlesCount()
-    }
-  }, [isSuperAdmin])
+    if (hasPermission("submissions")) fetchSubmissions()
+    if (hasPermission("news")) fetchNewsArticlesCount()
+  }, [permissionsLoading, userRole?.id])
 
 
 
@@ -136,9 +135,9 @@ export function DashboardClient() {
                     Welcome to Legend Holding Website Dashboard
                   </h1>
                   <p className="text-muted-foreground mt-2 max-w-xl">
-                    {isSuperAdmin
+                    {hasPermission("submissions") || hasPermission("news")
                       ? "Quick overview of contact submissions, job applications, and news articles. Use the sidebar to manage each area."
-                      : "Quick overview of job applications. Use the sidebar to manage your assigned jobs."}
+                      : "Quick overview of job applications. Use the sidebar to manage jobs and applications."}
                   </p>
                 </div>
               </div>
@@ -153,6 +152,7 @@ export function DashboardClient() {
               jobApplicationsCount={jobApplicationsCount}
               newsArticlesCount={newsArticlesCount}
               isSuperAdmin={isSuperAdmin}
+              hasPermission={hasPermission}
             />
           </section>
         </>

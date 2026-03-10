@@ -118,7 +118,7 @@ export function AdminDashboardLayout({ children, onSignOut }: AdminDashboardLayo
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const pathname = usePathname()
   const router = useRouter()
-  const { userRole, isLoading, isSuperAdmin, isBusinessCardsOnlyAdmin, hasPermission } = useAdminPermissions()
+  const { userRole, isLoading, isSuperAdmin, isBusinessCardsOnlyAdmin, hasPermission, roleLabel } = useAdminPermissions()
 
   // Business-cards-only admin: only allow /admin/management-profiles
   useEffect(() => {
@@ -164,7 +164,7 @@ export function AdminDashboardLayout({ children, onSignOut }: AdminDashboardLayo
             ) : isSuperAdmin ? (
               <div className="mt-4 flex items-center justify-center gap-2 text-xs text-blue-600 dark:text-blue-400 bg-blue-500/10 dark:bg-blue-500/20 px-3 py-1.5 rounded-lg">
                 <Shield className="h-3.5 w-3.5 shrink-0" />
-                <span>Super Admin</span>
+                <span>{roleLabel}</span>
               </div>
             ) : null}
           </SidebarHeader>

@@ -7,9 +7,11 @@ interface DashboardCardsProps {
   jobApplicationsCount?: number
   newsArticlesCount?: number
   isSuperAdmin?: boolean
+  /** If provided, cards are shown only when this returns true for their permission (e.g. submissions, news, applications). */
+  hasPermission?: (permission: 'submissions' | 'news' | 'applications') => boolean
 }
 
-export function DashboardCards({ submissions, jobApplicationsCount = 0, newsArticlesCount = 0, isSuperAdmin = false }: DashboardCardsProps) {
+export function DashboardCards({ submissions, jobApplicationsCount = 0, newsArticlesCount = 0, isSuperAdmin = false, hasPermission }: DashboardCardsProps) {
   const allCards = [
     {
       title: "Contact Submissions",
@@ -18,7 +20,7 @@ export function DashboardCards({ submissions, jobApplicationsCount = 0, newsArti
       color: "blue" as const,
       description: "View and manage contact form submissions",
       href: "/admin/submissions",
-      superAdminOnly: true
+      permission: "submissions" as const
     },
     {
       title: "Job Applications",
@@ -27,7 +29,7 @@ export function DashboardCards({ submissions, jobApplicationsCount = 0, newsArti
       color: "green" as const,
       description: "Review and process job applications",
       href: "/admin/applications",
-      superAdminOnly: false
+      permission: "applications" as const
     },
     {
       title: "News Articles",
@@ -36,11 +38,11 @@ export function DashboardCards({ submissions, jobApplicationsCount = 0, newsArti
       color: "purple" as const,
       description: "Manage published news articles",
       href: "/admin/news",
-      superAdminOnly: true
+      permission: "news" as const
     }
   ]
 
-  const cards = allCards.filter(card => !card.superAdminOnly || isSuperAdmin)
+  const cards = allCards.filter(card => !hasPermission || hasPermission(card.permission))
 
   const styles = {
     blue: {

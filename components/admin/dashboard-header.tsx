@@ -15,7 +15,7 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
 import { useRouter } from "next/navigation"
 
 export function DashboardHeader() {
-  const { userRole, isSuperAdmin } = useAdminPermissions()
+  const { userRole, roleLabel } = useAdminPermissions()
   const supabase = createClientComponentClient()
   const router = useRouter()
 
@@ -29,7 +29,7 @@ export function DashboardHeader() {
     }
   }
 
-  const title = isSuperAdmin ? "Super Admin Dashboard" : "Admin Dashboard"
+  const title = `${roleLabel} Dashboard`
 
   return (
     <header className="flex items-center justify-between p-4 pl-14 lg:pl-14 bg-background border-b border-border">

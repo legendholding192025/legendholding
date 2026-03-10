@@ -51,6 +51,8 @@ export interface AdminPermissions {
   isSuperAdmin: boolean
   isBusinessCardsOnlyAdmin: boolean
   isAdmin: boolean
+  /** Display label for the current user's role (e.g. "Super Admin", "HR Admin", "Admin") */
+  roleLabel: string
   hasPermission: (permission: keyof UserRole['permissions']) => boolean
   canAccess: (path: string) => boolean
 }
@@ -257,15 +259,27 @@ export function useAdminPermissions(): AdminPermissions {
   const isBusinessCardsOnlyAdmin = !isSuperAdmin && userRole?.email === BUSINESS_CARDS_ONLY_ADMIN_EMAIL
   const isAdmin = userRole?.role === 'admin' || isSuperAdmin
 
+  // Display label: limited super admins (jobs + applications only) get a different name
+  const roleLabel =
+    !userRole
+      ? 'Admin'
+      : userRole.role === 'super_admin' &&
+        userRole.permissions?.submissions !== true &&
+        userRole.permissions?.news !== true
+        ? 'HR Admin'
+        : userRole.role === 'super_admin'
+          ? 'Super Admin'
+          : 'Admin'
+
+  // Super admins have all permissions unless explicitly set to false (supports limited super admins like HR Admin)
   const hasPermission = (permission: keyof UserRole['permissions']): boolean => {
     if (!userRole) return false
-    if (isSuperAdmin) return true // Super admin has all permissions
-    return userRole.permissions[permission] || false
+    if (isSuperAdmin) return userRole.permissions[permission] !== false
+    return userRole.permissions[permission] === true
   }
 
   const canAccess = (path: string): boolean => {
     if (!userRole) return false
-    if (isSuperAdmin) return true // Super admin can access everything
 
     // Map paths to permissions
     const pathPermissions: Record<string, keyof UserRole['permissions']> = {
@@ -291,6 +305,7 @@ export function useAdminPermissions(): AdminPermissions {
     isSuperAdmin,
     isBusinessCardsOnlyAdmin,
     isAdmin,
+    roleLabel,
     hasPermission,
     canAccess
   }
