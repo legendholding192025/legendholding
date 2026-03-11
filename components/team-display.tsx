@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useCallback, useRef, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import Image from 'next/image';
 
 interface TeamMember {
@@ -55,19 +55,11 @@ function MemberCard({
   index: number;
   keyPrefix: string;
 }) {
-  const [loaded, setLoaded] = useState(false);
   const [errored, setErrored] = useState(false);
-  const imgRef = useRef<HTMLDivElement>(null);
   const objectPos = OBJECT_POSITIONS[member.name] ?? "object-center";
   const imageKey = `${keyPrefix}-${index}`;
 
-  const handleLoad = useCallback(() => setLoaded(true), []);
   const handleError = useCallback(() => setErrored(true), []);
-
-  useEffect(() => {
-    const img = imgRef.current?.querySelector("img");
-    if (img?.complete && img.naturalWidth > 0) setLoaded(true);
-  }, []);
 
   return (
     <div
@@ -75,23 +67,17 @@ function MemberCard({
       id={toSlug(`${member.name}-${member.role}`)}
       className="bg-white rounded-2xl shadow-lg p-4 sm:p-6 transform transition-all duration-300 hover:-translate-y-2 hover:shadow-xl flex flex-col h-full"
     >
-      <div ref={imgRef} className="relative mb-4 rounded-xl w-full aspect-[5/6] overflow-hidden bg-gray-100 flex-shrink-0">
-        {!loaded && (
-          <div className="absolute inset-0 z-10 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 animate-pulse" />
-        )}
+      <div className="relative mb-4 rounded-xl w-full aspect-[5/6] overflow-hidden bg-gray-100 flex-shrink-0">
         <Image
           src={errored ? "/placeholder.jpg" : member.image}
           alt={`${member.name} - ${member.role} at ${member.company}`}
           fill
-          className={`object-cover ${objectPos} transition-opacity duration-500 ${
-            loaded ? "opacity-100" : "opacity-0"
-          }`}
+          className={`object-cover ${objectPos}`}
           loading={index < 3 ? "eager" : "lazy"}
           priority={index < 3}
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           placeholder="blur"
           blurDataURL={BLUR_PLACEHOLDER}
-          onLoad={handleLoad}
           onError={handleError}
         />
       </div>

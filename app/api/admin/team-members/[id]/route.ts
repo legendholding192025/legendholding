@@ -2,6 +2,7 @@ import { createClient } from "@supabase/supabase-js";
 import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 
 async function requireSuperAdmin() {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -64,6 +65,7 @@ export async function PATCH(
     .single();
 
   if (updateError) return NextResponse.json({ error: updateError.message }, { status: 500 });
+  revalidatePath('/who-we-are/the-team');
   return NextResponse.json(data);
 }
 
@@ -77,5 +79,6 @@ export async function DELETE(
 
   const { error: deleteError } = await supabase!.from("team_members").delete().eq("id", id);
   if (deleteError) return NextResponse.json({ error: deleteError.message }, { status: 500 });
+  revalidatePath('/who-we-are/the-team');
   return NextResponse.json({ success: true });
 }

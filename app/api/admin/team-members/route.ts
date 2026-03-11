@@ -2,6 +2,7 @@ import { createClient } from "@supabase/supabase-js";
 import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 
 async function requireSuperAdmin() {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -98,5 +99,6 @@ export async function POST(request: Request) {
     .single();
 
   if (insertError) return NextResponse.json({ error: insertError.message }, { status: 500 });
+  revalidatePath('/who-we-are/the-team');
   return NextResponse.json(inserted);
 }

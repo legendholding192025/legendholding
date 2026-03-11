@@ -35,6 +35,8 @@ export const metadata: Metadata = {
   }
 };
 
+export const dynamic = 'force-dynamic';
+
 import { TeamDisplay } from '@/components/team-display';
 
 type TeamMember = {
